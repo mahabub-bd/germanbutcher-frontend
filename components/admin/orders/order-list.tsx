@@ -24,8 +24,10 @@ import { formatCurrencyEnglish, formatDateTime } from "@/lib/utils";
 import { fetchDataPagination } from "@/utils/api-utils";
 import type { Order } from "@/utils/types";
 import {
+  DollarSign,
   Eye,
   Filter,
+  List,
   MoreHorizontal,
   Pencil,
   Search,
@@ -224,10 +226,13 @@ export function OrderList({
             <TableHead className="hidden md:table-cell">Date</TableHead>
             <TableHead className="hidden md:table-cell">Order Status</TableHead>
             <TableHead className="hidden md:table-cell">
-              payment Status
+              Payment Status
             </TableHead>
             <TableHead className="hidden md:table-cell text-right">
               Total
+            </TableHead>
+            <TableHead className="hidden md:table-cell text-right">
+              Total Paid
             </TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
@@ -254,6 +259,9 @@ export function OrderList({
               <TableCell className="hidden md:table-cell text-right">
                 {formatCurrencyEnglish(order.totalValue)}
               </TableCell>
+               <TableCell className="hidden md:table-cell text-right">
+                {formatCurrencyEnglish(order.paidAmount)}
+              </TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -271,6 +279,18 @@ export function OrderList({
                     <DropdownMenuItem asChild>
                       <Link href={`/admin/order/${order.id}/edit`}>
                         <Pencil className="mr-2 h-4 w-4" /> Edit
+                      </Link>
+                    </DropdownMenuItem>
+                    {order.paidAmount < order.totalValue && (
+                      <DropdownMenuItem asChild>
+                        <Link href={`/admin/order/${order.id}/payment`}>
+                          <DollarSign className="mr-2 h-4 w-4" /> Update Payment
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem asChild>
+                      <Link href={`/admin/order/${order.id}/payments`}>
+                        <List className="mr-2 h-4 w-4" /> View Payments
                       </Link>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
