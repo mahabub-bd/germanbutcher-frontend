@@ -59,24 +59,6 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
       setIsPrinting(false);
     }, 100);
   };
-
-  const getOrderStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case OrderStatus.PENDING:
-        return "bg-yellow-100 text-yellow-800";
-      case OrderStatus.PROCESSING:
-        return "bg-blue-100 text-blue-800";
-      case OrderStatus.SHIPPED:
-        return "bg-purple-100 text-purple-800";
-      case OrderStatus.DELIVERED:
-        return "bg-green-100 text-green-800";
-      case OrderStatus.CANCELLED:
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
   const getStatusDotColor = (status: string) => {
     switch (status.toLowerCase()) {
       case OrderStatus.PENDING:
@@ -91,6 +73,102 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
         return "bg-red-500";
       default:
         return "bg-gray-500";
+    }
+  };
+
+  const generateOrderTimeline = () => {
+    // Create a map of all possible statuses
+    const allStatuses = [
+      OrderStatus.PENDING,
+      OrderStatus.PROCESSING,
+      OrderStatus.SHIPPED,
+      OrderStatus.DELIVERED,
+      OrderStatus.CANCELLED,
+    ];
+
+    // Get the current order status
+    const currentStatus = order.orderStatus.toLowerCase();
+
+    // If order is cancelled, only show statuses up to cancellation
+    if (currentStatus === OrderStatus.CANCELLED) {
+      return [OrderStatus.PENDING, OrderStatus.CANCELLED];
+    }
+
+    // For normal order flow, show all statuses up to the current one
+    const statusIndex = allStatuses.findIndex(
+      (status) => status === currentStatus
+    );
+    if (statusIndex >= 0) {
+      return allStatuses.slice(0, statusIndex + 1);
+    }
+
+    // Fallback to just showing the current status
+    return [currentStatus];
+  };
+
+  // Get the timestamp for a specific status from statusTracks
+  const getStatusTimestamp = (status: string) => {
+    const statusTrack = order.statusTracks.find(
+      (track) => track.status.toLowerCase() === status.toLowerCase()
+    );
+    return statusTrack ? statusTrack.createdAt : null;
+  };
+
+  // Get the note for a specific status from statusTracks
+  const getStatusNote = (status: string) => {
+    const statusTrack = order.statusTracks.find(
+      (track) => track.status.toLowerCase() === status.toLowerCase()
+    );
+    return statusTrack ? statusTrack.note : null;
+  };
+
+  // Get the user who updated a specific status
+  const getStatusUpdatedBy = (status: string) => {
+    const statusTrack = order.statusTracks.find(
+      (track) => track.status.toLowerCase() === status.toLowerCase()
+    );
+    return statusTrack ? statusTrack.updatedBy : null;
+  };
+
+  // Check if a status is active (current or past)
+  const isStatusActive = (status: string) => {
+    const currentStatus = order.orderStatus.toLowerCase();
+
+    // If order is cancelled, only pending and cancelled are active
+    if (currentStatus === OrderStatus.CANCELLED) {
+      return status === OrderStatus.PENDING || status === OrderStatus.CANCELLED;
+    }
+
+    // For normal flow, all statuses up to current are active
+    const allStatuses = [
+      OrderStatus.PENDING,
+      OrderStatus.PROCESSING,
+      OrderStatus.SHIPPED,
+      OrderStatus.DELIVERED,
+    ];
+
+    const statusIndex = allStatuses.indexOf(status as OrderStatus);
+    const currentIndex = allStatuses.indexOf(currentStatus as OrderStatus);
+
+    return statusIndex <= currentIndex;
+  };
+
+  // Generate the timeline statuses
+  const timelineStatuses = generateOrderTimeline();
+  const getOrderStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case OrderStatus.PENDING:
+        return "bg-yellow-100 text-yellow-800";
+      case OrderStatus.PROCESSING:
+        return "bg-blue-100 text-blue-800";
+      case OrderStatus.SHIPPED:
+        return "bg-purple-100 text-purple-800";
+      case OrderStatus.DELIVERED:
+        return "bg-green-100 text-green-800";
+      case OrderStatus.CANCELLED:
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -126,75 +204,6 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
     }
   };
 
-  const generateOrderTimeline = () => {
-    // Create a map of all possible statuses
-    const allStatuses = [
-      OrderStatus.PENDING,
-      OrderStatus.PROCESSING,
-      OrderStatus.SHIPPED,
-      OrderStatus.DELIVERED,
-      OrderStatus.CANCELLED,
-    ];
-
-    const currentStatus = order.orderStatus.toLowerCase();
-
-    if (currentStatus === OrderStatus.CANCELLED) {
-      return [OrderStatus.PENDING, OrderStatus.CANCELLED];
-    }
-
-    const statusIndex = allStatuses.findIndex(
-      (status) => status === currentStatus
-    );
-    if (statusIndex >= 0) {
-      return allStatuses.slice(0, statusIndex + 1);
-    }
-
-    return [currentStatus];
-  };
-
-  const getStatusTimestamp = (status: string) => {
-    const statusTrack = order.statusTracks.find(
-      (track) => track.status.toLowerCase() === status.toLowerCase()
-    );
-    return statusTrack ? statusTrack.createdAt : null;
-  };
-
-  const getStatusNote = (status: string) => {
-    const statusTrack = order.statusTracks.find(
-      (track) => track.status.toLowerCase() === status.toLowerCase()
-    );
-    return statusTrack ? statusTrack.note : null;
-  };
-
-  const getStatusUpdatedBy = (status: string) => {
-    const statusTrack = order.statusTracks.find(
-      (track) => track.status.toLowerCase() === status.toLowerCase()
-    );
-    return statusTrack ? statusTrack.updatedBy : null;
-  };
-
-  const isStatusActive = (status: string) => {
-    const currentStatus = order.orderStatus.toLowerCase();
-
-    if (currentStatus === OrderStatus.CANCELLED) {
-      return status === OrderStatus.PENDING || status === OrderStatus.CANCELLED;
-    }
-
-    const allStatuses = [
-      OrderStatus.PENDING,
-      OrderStatus.PROCESSING,
-      OrderStatus.SHIPPED,
-      OrderStatus.DELIVERED,
-    ];
-
-    const statusIndex = allStatuses.indexOf(status as OrderStatus);
-    const currentIndex = allStatuses.indexOf(currentStatus as OrderStatus);
-
-    return statusIndex <= currentIndex;
-  };
-
-  const timelineStatuses = generateOrderTimeline();
-
   const calculateOrderSummary = () => {
     let originalSubtotal = 0;
     let productDiscountTotal = 0;
@@ -229,7 +238,16 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
   };
 
   const orderSummary = calculateOrderSummary();
-
+  const calculateDiscountedPrice = (
+    price: number,
+    discountType: string,
+    discountValue: string
+  ) => {
+    if (discountType === "percentage") {
+      return price - price * (Number.parseFloat(discountValue) / 100);
+    }
+    return price - Number.parseFloat(discountValue);
+  };
   return (
     <div className={`${isPrinting ? "print-mode" : ""}`}>
       {/* Print Styles */}
@@ -304,7 +322,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
         <div className="border rounded-lg p-4 bg-background">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
             <div>
-              <h2 className="text-lg font-semibold">Order #{order.orderNo}</h2>
+              <h2 className="text-lg font-semibold">Order-{order.orderNo}</h2>
               <p className="text-sm text-muted-foreground">
                 Placed on {formatDateTime(order.createdAt)}
               </p>
@@ -333,6 +351,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Order Items */}
           <div className="md:col-span-2 space-y-6">
+            {/* Order Items */}
             <div className="border rounded-lg p-4 bg-background">
               <div className="pb-3">
                 <h3 className="text-base font-medium flex items-center">
@@ -342,69 +361,99 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
               </div>
               <div>
                 <div className="space-y-4">
-                  {order.items.map((item: OrderItem) => (
-                    <div
-                      key={item.id}
-                      className="flex items-start space-x-4 py-3 border-b last:border-0"
-                    >
-                      <div className="h-16 w-16 rounded-md overflow-hidden flex-shrink-0">
-                        {item.product.attachment ? (
-                          <Image
-                            src={
-                              item.product.attachment.url || "/placeholder.svg"
-                            }
-                            alt={item.product.name}
-                            width={64}
-                            height={64}
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          <div className="h-full w-full bg-muted flex items-center justify-center">
-                            <Package className="size-8 text-muted-foreground" />
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-medium">
-                          {item.product.name}
-                        </h4>
-                        <p className="text-xs text-muted-foreground">
-                          SKU: {item.product.productSku}
-                        </p>
-                        {item.product.discountValue && (
-                          <div className="flex items-center mt-1">
+                  {order.items.map((item: OrderItem) => {
+                    const discountedPrice = calculateDiscountedPrice(
+                      item.product.sellingPrice,
+                      item.product.discountType ?? "",
+                      (item.product.discountValue ?? 0).toString()
+                    );
+                    const hasDiscount =
+                      item.product.discountValue &&
+                      item.product.discountValue > 0;
+
+                    return (
+                      <div
+                        key={item.id}
+                        className="grid grid-cols-[64px_1fr_auto] gap-4 py-3 border-b last:border-0"
+                      >
+                        {/* Product Image */}
+                        <div className="relative h-16 w-16 rounded-md overflow-hidden bg-muted">
+                          {item.product.attachment ? (
+                            <Image
+                              src={
+                                item.product.attachment.url ||
+                                "/placeholder.svg"
+                              }
+                              alt={item.product.name}
+                              fill
+                              className="object-cover"
+                              sizes="(max-width: 768px) 64px, 96px"
+                            />
+                          ) : (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <Package className="size-6 text-muted-foreground" />
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Product Details */}
+                        <div className="space-y-1.5">
+                          <h4 className="text-sm font-semibold line-clamp-2">
+                            {item.product.name}
+                          </h4>
+                          <p className="text-xs text-muted-foreground line-clamp-2">
+                            {item.product.description}
+                          </p>
+                          {hasDiscount && (
                             <Badge
                               variant="outline"
-                              className="text-xs bg-green-50 text-green-700 border-green-200"
+                              className="mt-1 text-[0.7rem] bg-green-100 text-green-800 border-green-200"
                             >
                               {item.product.discountType === "percentage"
                                 ? `${item.product.discountValue}% OFF`
                                 : `${item.product.discountValue} OFF`}
                             </Badge>
+                          )}
+                        </div>
+
+                        {/* Pricing */}
+                        <div className="flex flex-col items-end space-y-1.5">
+                          <div className="flex items-center gap-2">
+                            {hasDiscount && (
+                              <span className="text-xs text-muted-foreground line-through">
+                                {formatCurrencyEnglish(
+                                  item.product.sellingPrice
+                                )}
+                              </span>
+                            )}
+                            <span
+                              className={`text-sm ${
+                                hasDiscount
+                                  ? "text-green-700 font-semibold"
+                                  : "font-medium"
+                              }`}
+                            >
+                              {formatCurrencyEnglish(discountedPrice)}
+                            </span>
                           </div>
-                        )}
-                      </div>
-                      <div className="text-right">
-                        <div className="text-sm font-medium">
-                          ৳{item.product.sellingPrice.toLocaleString()}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          Qty: {item.quantity}
-                        </div>
-                        <div className="text-sm font-medium mt-1">
-                          ৳
-                          {(
-                            item.product.sellingPrice * item.quantity
-                          ).toLocaleString()}
+                          <div className="text-sm font-medium">
+                            {formatCurrencyEnglish(
+                              discountedPrice * item.quantity
+                            )}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            × {item.quantity} {item.product.unit?.name || "pc"}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Payment Information */}
               <div className="border rounded-lg p-4 bg-background">
                 <div className="pb-3">
                   <h3 className="text-base font-medium flex items-center">
@@ -441,7 +490,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                           Amount Paid
                         </span>
                         <span className="text-sm font-medium">
-                          ৳{order.paidAmount.toLocaleString()}
+                          {formatCurrencyEnglish(order.paidAmount)}
                         </span>
                       </div>
                     )}
@@ -490,97 +539,111 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
               </div>
             </div>
 
-            {/* Order Status Timeline */}
             <div className="border rounded-lg p-4 bg-background">
               <div className="pb-3">
                 <h3 className="text-base font-medium flex items-center">
-                  <Clock className="size-5 mr-2" />
+                  <Tag className="size-5 mr-2" />
                   Order Status Timeline
                 </h3>
               </div>
               <div className="pl-2">
-                <Timeline>
-                  {timelineStatuses.map((status, index) => {
-                    const isActive = isStatusActive(status);
-                    const timestamp = getStatusTimestamp(status);
-                    const note = getStatusNote(status);
-                    const updatedBy = getStatusUpdatedBy(status);
+                {order.statusTracks.length > 0 ? (
+                  <Timeline>
+                    {timelineStatuses.map((status, index) => {
+                      const isActive = isStatusActive(status);
+                      const timestamp = getStatusTimestamp(status);
+                      const note = getStatusNote(status);
+                      const updatedBy = getStatusUpdatedBy(status);
 
-                    return (
-                      <TimelineItem key={status}>
-                        <TimelineSeparator>
-                          <TimelineDot
-                            className={
-                              isActive
-                                ? getStatusDotColor(status)
-                                : "bg-gray-300"
-                            }
-                          />
-                          {index < timelineStatuses.length - 1 && (
-                            <TimelineConnector
-                              className={isActive ? "" : "bg-gray-300"}
+                      return (
+                        <TimelineItem key={status}>
+                          <TimelineSeparator>
+                            <TimelineDot
+                              className={
+                                isActive
+                                  ? getStatusDotColor(status)
+                                  : "bg-gray-300"
+                              }
                             />
-                          )}
-                        </TimelineSeparator>
-                        <TimelineContent>
-                          <div className="ml-4">
-                            <div className="flex items-center justify-between">
-                              <h4
-                                className={`text-sm font-medium ${
-                                  !isActive ? "text-gray-400" : ""
-                                }`}
-                              >
-                                {status.charAt(0).toUpperCase() +
-                                  status.slice(1)}
-                              </h4>
-                              {timestamp ? (
-                                <span className="text-xs text-muted-foreground">
-                                  {formatDateTime(timestamp)}
-                                </span>
-                              ) : (
-                                isActive && (
+                            {index < timelineStatuses.length - 1 && (
+                              <TimelineConnector
+                                className={isActive ? "" : "bg-gray-300"}
+                              />
+                            )}
+                          </TimelineSeparator>
+                          <TimelineContent>
+                            <div className="ml-4">
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center">
+                                  {isActive && getStatusIcon(status)}
+                                  <h4
+                                    className={`text-sm font-medium ${
+                                      !isActive ? "text-gray-400" : ""
+                                    }`}
+                                  >
+                                    {status.charAt(0).toUpperCase() +
+                                      status.slice(1)}
+                                  </h4>
+                                </div>
+                                {timestamp ? (
                                   <span className="text-xs text-muted-foreground">
-                                    {status === order.orderStatus
-                                      ? "Current"
-                                      : ""}
+                                    {formatDateTime(timestamp)}
                                   </span>
-                                )
+                                ) : (
+                                  isActive && (
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs"
+                                    >
+                                      {status === order.orderStatus
+                                        ? "Current"
+                                        : ""}
+                                    </Badge>
+                                  )
+                                )}
+                              </div>
+                              {note && (
+                                <p className="text-sm text-muted-foreground mt-1">
+                                  {note}
+                                </p>
+                              )}
+                              {updatedBy ? (
+                                <div className="flex items-center mt-1 text-xs text-muted-foreground">
+                                  <User className="h-3 w-3 mr-1" />
+                                  Updated by: {updatedBy.name || "User"}
+                                </div>
+                              ) : (
+                                <div className="flex items-center mt-1 text-xs text-muted-foreground">
+                                  <User className="h-3 w-3 mr-1" />
+                                  Created by: {order.user.name || "User"}
+                                </div>
                               )}
                             </div>
-                            {note && (
-                              <p className="text-sm text-muted-foreground mt-1">
-                                {note}
-                              </p>
-                            )}
-                            {updatedBy ? (
-                              <div className="flex items-center mt-1 text-xs text-muted-foreground">
-                                <User className="size-3 mr-1" />
-                                Updated by: {updatedBy.name || "User"}
-                              </div>
-                            ) : (
-                              <div className="flex items-center mt-1 text-xs text-muted-foreground">
-                                <User className="size-3 mr-1" />
-                                Created by: {order.user.name || "User"}
-                              </div>
-                            )}
-                          </div>
-                        </TimelineContent>
-                      </TimelineItem>
-                    );
-                  })}
-                </Timeline>
+                          </TimelineContent>
+                        </TimelineItem>
+                      );
+                    })}
+                  </Timeline>
+                ) : (
+                  <p className="text-muted-foreground text-sm">
+                    No status updates available.
+                  </p>
+                )}
               </div>
             </div>
-
-            <div className="border rounded-lg p-4 bg-background">
-              <div className="pb-3">
-                <h3 className="text-base font-medium flex items-center">
-                  <CreditCard className="size-5 mr-2" />
-                  Payment History
-                </h3>
+            {order.payments && (
+              <div className="border rounded-lg p-4 bg-background">
+                <div className="pb-3">
+                  <h3 className="text-base font-medium flex items-center">
+                    <CreditCard className="size-5 mr-2" />
+                    Payment History
+                  </h3>
+                </div>
+                <div>
+                  <PaymentsTable payments={order.payments} />
+                </div>
               </div>
-              <PaymentsTable payments={order.payments ?? []} />
-            </div>
+            )}
           </div>
 
           {/* Customer and Order Summary */}
