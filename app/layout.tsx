@@ -3,7 +3,6 @@ import { getUser } from "@/actions/auth";
 import { Toaster } from "@/components/ui/sonner";
 import { CartProvider } from "@/providers/cart-provider";
 import { fetchProtectedData } from "@/utils/api-utils";
-import { Cart } from "@/utils/types";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import type React from "react";
@@ -22,7 +21,6 @@ export const metadata: Metadata = {
   creator: "Pure Pac",
   publisher: "Pure Pac",
 
-  // Open Graph (Facebook & LinkedIn)
   openGraph: {
     title: "Pure Pac",
     description: "Premium ecommerce for quality products",

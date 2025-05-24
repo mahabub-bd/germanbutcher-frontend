@@ -193,7 +193,7 @@ export async function formPostData<T = any>(
   formData?: FormData | Record<string, any>
 ): Promise<ApiResponse<T>> {
   const url = `${apiUrl}/${endpoint}`;
-
+  const token = await getToken();
   const headers: HeadersInit = {};
 
   let body: BodyInit;
@@ -207,7 +207,10 @@ export async function formPostData<T = any>(
   try {
     const response = await fetch(url, {
       method: "POST",
-      headers,
+
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body,
     });
 
