@@ -11,11 +11,9 @@ interface LoadingIndicatorProps {
 export function LoadingIndicator({
   message = "Loading...",
   className = "",
-  iconSize = 4,
+
   containerClassName = "py-12",
 }: LoadingIndicatorProps) {
-  const iconClasses = `h-${iconSize} w-${iconSize} animate-spin text-primary`;
-
   return (
     <div
       className={`flex justify-center items-center min-h-screen ${containerClassName}`}
