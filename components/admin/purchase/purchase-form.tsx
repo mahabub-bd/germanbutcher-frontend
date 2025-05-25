@@ -26,7 +26,6 @@ import {
 } from "@/components/ui/select";
 import { Section } from "../helper";
 
-import Loading from "@/app/loading";
 import { fetchData, patchData, postData } from "@/utils/api-utils";
 import { purchaseSchema } from "@/utils/form-validation";
 import type { Product, Purchase, Supplier } from "@/utils/types";
@@ -297,7 +296,7 @@ export function PurchaseForm({ mode, purchase }: PurchaseFormProps) {
                 disabled={!selectedSupplierId || isProductsLoading}
               >
                 {isProductsLoading ? (
-                  <Loading />
+                  <LoadingIndicator message="Loading Purchase..." />
                 ) : (
                   <Plus className="mr-2 h-4 w-4" />
                 )}

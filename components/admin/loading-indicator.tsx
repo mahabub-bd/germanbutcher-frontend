@@ -1,4 +1,5 @@
-import { Loader2 } from "lucide-react";
+import { GermanbutcherLogo } from "@/public/images";
+import Image from "next/image";
 
 interface LoadingIndicatorProps {
   message?: string;
@@ -13,12 +14,16 @@ export function LoadingIndicator({
   iconSize = 4,
   containerClassName = "py-12",
 }: LoadingIndicatorProps) {
+  const iconClasses = `h-${iconSize} w-${iconSize} animate-spin text-primary`;
+
   return (
-    <div className={`flex justify-center items-center ${containerClassName}`}>
+    <div
+      className={`flex justify-center items-center min-h-screen ${containerClassName}`}
+    >
       <div className={`flex flex-col items-center gap-2 ${className}`}>
-        <Loader2
-          className={`h-${iconSize} w-${iconSize} animate-spin text-primary`}
-        />
+        <Image src={GermanbutcherLogo} alt="logo" width={40} height={40} />
+
+        {/* Loading Message */}
         <p className="text-sm text-muted-foreground">{message}</p>
       </div>
     </div>

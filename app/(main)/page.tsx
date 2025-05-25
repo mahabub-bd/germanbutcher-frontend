@@ -1,9 +1,11 @@
+import { LoadingIndicator } from "@/components/admin/loading-indicator";
 import { HeadingPrimary } from "@/components/common/heading-primary";
 import { AnimatedCarousel } from "@/components/homepage/banner/hero/animated-carousel";
 import BrandList from "@/components/homepage/brands/brand-list";
 import CategoriesList from "@/components/homepage/Category/categories-list";
 import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
 import ProductList from "@/components/products/product-list";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -12,13 +14,17 @@ export default function Home() {
       {/* Categories Section */}
       <section className="md:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
-          <CategoriesList endpoint="categories">
-            <HeadingPrimary
-              title="FEATURED CATEGORIES"
-              subtitle="Get your desired product from featured category"
-              className="mb-8"
-            />
-          </CategoriesList>
+          <Suspense
+            fallback={<LoadingIndicator message="Loading Categories..." />}
+          >
+            <CategoriesList endpoint="categories">
+              <HeadingPrimary
+                title="FEATURED CATEGORIES"
+                subtitle="Get your desired product from featured category"
+                className="mb-8"
+              />
+            </CategoriesList>
+          </Suspense>
         </div>
       </section>
 

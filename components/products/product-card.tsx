@@ -84,7 +84,7 @@ export default async function ProductCard({ product }: { product: Product }) {
         {product.weight && product.weight > 0 && (
           <div className="flex items-center justify-center text-xs text-muted-foreground mt-1">
             <Weight className="w-3 h-3 mr-1" />
-            {`${product.weight} kg`}
+            {`${product.weight} ${product.unit.name}`}
           </div>
         )}
 
