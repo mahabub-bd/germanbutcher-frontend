@@ -1,36 +1,6 @@
-import { ProductFilters } from "@/components/products/product-filters";
-import ProductBarList from "@/components/products/product-grid";
-import { SortBar } from "@/components/products/sort-bar";
-import { fetchData } from "@/utils/api-utils";
-import { Brand, Category } from "@/utils/types";
-
-async function fetchCategories(): Promise<Category[]> {
-  try {
-    const data: Category[] = await fetchData("categories");
-    return data;
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    return [];
-  }
-}
-
-async function fetchBrands(): Promise<Brand[]> {
-  try {
-    const data: Brand[] = await fetchData("brands");
-    return data;
-  } catch (error) {
-    console.error("Error fetching brands:", error);
-    return [];
-  }
-}
-
-const priceRanges = [
-  { min: 0, max: 5000, label: "Under BDT 5,000" },
-  { min: 5000, max: 10000, label: "BDT 5,000 - 10,000" },
-  { min: 10000, max: 50000, label: "BDT 10,000 - 50,000" },
-  { min: 50000, max: 100000, label: "BDT 50,000 - 100,000" },
-  { min: 100000, max: Number.POSITIVE_INFINITY, label: "Above BDT 100,000" },
-];
+import { LoadingIndicator } from "@/components/admin/loading-indicator";
+import ProductsContent from "@/components/products/product-content";
+import { Suspense } from "react";
 
 export default async function ProductsPage({
   searchParams,
@@ -46,40 +16,11 @@ export default async function ProductsPage({
     maxPrice?: string;
   }>;
 }) {
-  const [categories, brands] = await Promise.all([
-    fetchCategories(),
-    fetchBrands(),
-  ]);
-
-  const filterParams = {
-    limit: (await searchParams).limit || "12",
-    page: (await searchParams).page || "1",
-    category: (await searchParams).category,
-    brand: (await searchParams).brand,
-    featured: (await searchParams).featured,
-    sort: (await searchParams).sort,
-    minPrice: (await searchParams).minPrice,
-    maxPrice: (await searchParams).maxPrice,
-  };
+  const resolvedSearchParams = await searchParams;
 
   return (
-    <div className="container mx-auto px-4 py-4">
-      <SortBar currentSort={(await searchParams).sort} />
-      <div className="flex flex-col md:flex-row justify-between gap-6">
-        <ProductFilters
-          categories={categories}
-          brands={brands}
-          priceRanges={priceRanges}
-          currentCategory={(await searchParams).category}
-          currentBrand={(await searchParams).brand}
-          currentFeatured={(await searchParams).featured === "true"}
-          currentPriceRange={{
-            min: (await searchParams).minPrice,
-            max: (await searchParams).maxPrice,
-          }}
-        />
-        <ProductBarList filterParams={filterParams} />
-      </div>
-    </div>
+    <Suspense fallback={<LoadingIndicator message="Loading Products..." />}>
+      <ProductsContent searchParams={resolvedSearchParams} />
+    </Suspense>
   );
 }

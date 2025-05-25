@@ -1,60 +1,91 @@
 import { getUser } from "@/actions/auth";
-
 import { Toaster } from "@/components/ui/sonner";
 import { CartProvider } from "@/providers/cart-provider";
 import { fetchProtectedData } from "@/utils/api-utils";
+import type { Cart } from "@/utils/types";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import type React from "react";
+
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "Pure Pac",
-    template: "%s | Pure Pac", // This will add prefix to child page titles
+    default: "German Butcher - GB",
+    template: "%s | German Butcher",
   },
-  description: "Premium ecommerce for quality products",
-  keywords: ["ecommerce", "shopping", "online store", "Pure Pac"],
-  authors: [{ name: "Pure Pac Team" }],
-  creator: "Pure Pac",
-  publisher: "Pure Pac",
+  description:
+    "In 1991, Ferenz Georgy started German Butcher in Bangladesh with a love for sausages noticing the unavailability of such products in our country. Since then, German Butcher is the pioneer of authentic German Sausages in Bangladesh and became the icon of premium quality gourmet sausages, cold cuts, ham, bacon, meatloaf, salami, pepperoni and so many meat based products",
+  keywords: [
+    "german butcher",
+    "German Butcher",
+    "GB",
+    "german-butcher",
+    "German-Butcher",
+    "germanbutcherbd",
+    "german butcher bd",
+    "beef",
+    "fish",
+    "steak",
+    "offer",
+    "meat",
+    "meatball",
+    "milk",
+    "dairy",
+    "gb product",
+    "chicken",
+    "sausages",
+    "cold cuts",
+    "ham",
+    "bacon",
+    "meatloaf",
+    "salami",
+    "pepperoni",
+    "authentic german sausages",
+    "premium quality",
+    "gourmet",
+    "bangladesh",
+  ],
+  authors: [{ name: "German Butcher Team" }],
+  creator: "German Butcher",
+  publisher: "German Butcher",
 
   openGraph: {
-    title: "Pure Pac",
-    description: "Premium ecommerce for quality products",
-    url: "https://yourdomain.com",
-    siteName: "Pure Pac",
+    title: "German Butcher - Premium German Sausages & Meat Products",
+    description:
+      "Pioneer of authentic German Sausages in Bangladesh since 1991. Premium quality gourmet sausages, cold cuts, ham, bacon, meatloaf, salami, pepperoni and meat based products.",
+    url: "https://www.germanbutcherbd.com",
+    siteName: "German Butcher",
     images: [
       {
-        url: "https://yourdomain.com/og-image.jpg", // Replace with your OG image
+        url: "https://www.germanbutcherbd.com/img/logo/logo-black.png",
         width: 1200,
         height: 630,
-        alt: "Pure Pac - Premium Ecommerce",
+        alt: "German Butcher - Premium German Sausages & Meat Products",
       },
     ],
     locale: "en_US",
     type: "website",
   },
 
-  // Twitter
   twitter: {
     card: "summary_large_image",
-    title: "Pure Pac",
-    description: "Premium ecommerce for quality products",
-    images: ["https://yourdomain.com/twitter-image.jpg"], // Replace with your Twitter image
-    creator: "@purepacofficial", // Your Twitter handle
+    title: "German Butcher - Premium German Sausages & Meat Products",
+    description:
+      "Pioneer of authentic German Sausages in Bangladesh since 1991. Premium quality gourmet sausages, cold cuts, ham, bacon and meat products.",
+    images: ["https://www.germanbutcherbd.com/img/logo/logo-black.png"],
+    creator: "@germanbutcherbd",
   },
 
-  // Favicons
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    icon: "/img/logo/logo-black.png",
+    shortcut: "/img/logo/logo-black.png",
+    apple: "/img/logo/logo-black.png",
   },
 
-  metadataBase: new URL("https://purepacbd.com"),
+  metadataBase: new URL("https://www.germanbutcherbd.com"),
   alternates: {
     canonical: "/",
   },
@@ -70,8 +101,9 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
+    google: "your-google-verification-code", // Replace with actual verification code
   },
+  category: "food",
 };
 
 export default async function RootLayout({
@@ -81,6 +113,7 @@ export default async function RootLayout({
 }>) {
   const user = await getUser();
   const cart = user ? await fetchProtectedData<Cart>("cart") : null;
+
   return (
     <html lang="en">
       <body className={inter.className}>

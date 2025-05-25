@@ -16,7 +16,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Filter, X } from "lucide-react";
+import { DollarSign, Filter, Grid3X3, Star, Tag, X } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ScrollArea } from "../ui/scroll-area";
@@ -51,11 +51,12 @@ interface ProductFiltersProps {
 }
 
 const PRICE_RANGES: PriceRange[] = [
-  { min: 0, max: 5000, label: "Under BDT 5,000" },
-  { min: 5000, max: 10000, label: "BDT 5,000 - 10,000" },
-  { min: 10000, max: 50000, label: "BDT 10,000 - 50,000" },
-  { min: 50000, max: 100000, label: "BDT 50,000 - 100,000" },
-  { min: 100000, max: Number.POSITIVE_INFINITY, label: "Above BDT 100,000" },
+  { min: 0, max: 500, label: "Under BDT 500" },
+  { min: 500, max: 1000, label: "BDT 500 - 1,000" },
+  { min: 1000, max: 2000, label: "BDT 1,000 - 2,000" },
+  { min: 2000, max: 3000, label: "BDT 2,000 - 3,000" },
+  { min: 3000, max: 4000, label: "BDT 3,000 - 4,000" },
+  { min: 4000, max: Number.POSITIVE_INFINITY, label: "Above BDT 4,000" },
 ];
 
 export function ProductFilters({
@@ -74,7 +75,6 @@ export function ProductFilters({
   );
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-  // Count active filters
   const activeFiltersCount = [
     currentCategory ? 1 : 0,
     currentBrand ? 1 : 0,
@@ -84,7 +84,7 @@ export function ProductFilters({
 
   const hasActiveFilters = activeFiltersCount > 0;
 
-  const MAX_PRICE = 100000;
+  const MAX_PRICE = 5000;
 
   const [priceRange, setPriceRange] = useState<[number, number]>([
     Number(currentPriceRange?.min || 0),
@@ -160,19 +160,14 @@ export function ProductFilters({
     setIsSheetOpen(false);
   };
 
-  const handleSliderPriceChange = (values: number[]) => {
-    setPriceRange([values[0], values[1]]);
-  };
-
-  const handleSliderPriceChangeCommitted = () => {
-    const min = priceRange[0];
-    const max = priceRange[1];
+  const handleSliderPriceChangeCommitted = (values: number[]) => {
+    const min = values[0];
+    const max = values[1];
 
     if (min === 0 && max === MAX_PRICE) {
       router.push(
         `${pathname}?${createQueryString({ minPrice: null, maxPrice: null })}`
       );
-      setIsSheetOpen(false);
       return;
     }
 
@@ -184,7 +179,6 @@ export function ProductFilters({
         maxPrice: maxValue,
       })}`
     );
-    setIsSheetOpen(false);
   };
 
   const handleResetFilters = () => {
@@ -192,7 +186,7 @@ export function ProductFilters({
     setIsSheetOpen(false);
   };
 
-  const formatPrice = (price: number) => {
+  const formatCurrencyEnglish = (price: number) => {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "BDT",
@@ -212,14 +206,47 @@ export function ProductFilters({
     ? brands.find((b) => b.id.toString() === currentBrand)?.name
     : null;
 
+  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(
+    null
+  );
+
+  const handleSliderPriceChangeWithDebounce = (values: number[]) => {
+    setPriceRange([values[0], values[1]]);
+
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+
+    const timer = setTimeout(() => {
+      handleSliderPriceChangeCommitted(values);
+    }, 500);
+
+    setDebounceTimer(timer);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
+    };
+  }, [debounceTimer]);
+
   const FilterContent = () => (
     <>
-      <div className="flex items-center justify-between mb-4  ">
-        <div className="flex items-center gap-2">
-          <Filter className="h-5 w-5 text-muted-foreground" />
-          <h3 className="text-lg font-semibold">Filters</h3>
+      <div className="flex items-center justify-between mb-6 p-4 bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 rounded-lg border border-red-100 dark:border-red-700">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-red-100 dark:bg-red-800/50 rounded-full">
+            <Filter className="h-5 w-5 text-red-700 dark:text-red-300" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-foreground">Filters</h3>
+          </div>
           {hasActiveFilters && (
-            <Badge variant="secondary" className="ml-2">
+            <Badge
+              variant="secondary"
+              className="ml-2 bg-red-100 text-red-800 border-red-200 dark:bg-red-800/50 dark:text-red-200 dark:border-red-600"
+            >
               {activeFiltersCount}
             </Badge>
           )}
@@ -229,7 +256,7 @@ export function ProductFilters({
             variant="ghost"
             size="sm"
             onClick={handleResetFilters}
-            className="h-8 text-xs flex items-center gap-1 text-muted-foreground hover:text-foreground"
+            className="h-8 text-xs flex items-center gap-1 text-muted-foreground hover:text-foreground hover:bg-destructive/10"
           >
             <X className="h-3.5 w-3.5" />
             Clear All
@@ -238,18 +265,23 @@ export function ProductFilters({
       </div>
 
       {hasActiveFilters && (
-        <div className="mb-6">
+        <div className="mb-6 p-4 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/30 dark:to-rose-950/30 rounded-lg border border-red-100 dark:border-red-700 border-dashed">
+          <h4 className="text-sm font-medium mb-3 text-foreground">
+            Active Filters
+          </h4>
           <div className="flex flex-wrap gap-2">
             {currentCategoryName && (
               <Badge
                 variant="outline"
-                className="flex items-center gap-1 pl-2 pr-1 py-1 bg-background hover:bg-muted transition-colors"
+                className="flex items-center gap-1 pl-3 pr-2 py-1.5 bg-background hover:bg-muted transition-colors border-red-200 text-red-800 dark:border-red-600 dark:text-red-200"
               >
-                <span className="text-xs">Category: {currentCategoryName}</span>
+                <span className="text-xs font-medium">
+                  Category: {currentCategoryName}
+                </span>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-4 w-4 ml-1 rounded-full"
+                  className="h-4 w-4 ml-1 rounded-full hover:bg-destructive/20"
                   onClick={() =>
                     handleCategoryChange(Number.parseInt(currentCategory!))
                   }
@@ -262,13 +294,15 @@ export function ProductFilters({
             {currentBrandName && (
               <Badge
                 variant="outline"
-                className="flex items-center gap-1 pl-2 pr-1 py-1 bg-background hover:bg-muted transition-colors"
+                className="flex items-center gap-1 pl-3 pr-2 py-1.5 bg-background hover:bg-muted transition-colors border-red-200 text-red-800 dark:border-red-600 dark:text-red-200"
               >
-                <span className="text-xs">Brand: {currentBrandName}</span>
+                <span className="text-xs font-medium">
+                  Brand: {currentBrandName}
+                </span>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-4 w-4 ml-1 rounded-full"
+                  className="h-4 w-4 ml-1 rounded-full hover:bg-destructive/20"
                   onClick={() =>
                     handleBrandChange(Number.parseInt(currentBrand!))
                   }
@@ -281,13 +315,13 @@ export function ProductFilters({
             {currentFeatured && (
               <Badge
                 variant="outline"
-                className="flex items-center gap-1 pl-2 pr-1 py-1 bg-background hover:bg-muted transition-colors"
+                className="flex items-center gap-1 pl-3 pr-2 py-1.5 bg-background hover:bg-muted transition-colors border-red-200 text-red-800 dark:border-red-600 dark:text-red-200"
               >
-                <span className="text-xs">Featured Only</span>
+                <span className="text-xs font-medium">Featured Only</span>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-4 w-4 ml-1 rounded-full"
+                  className="h-4 w-4 ml-1 rounded-full hover:bg-destructive/20"
                   onClick={() => handleFeaturedChange(false)}
                 >
                   <X className="h-3 w-3" />
@@ -298,24 +332,30 @@ export function ProductFilters({
             {(currentPriceRange?.min || currentPriceRange?.max) && (
               <Badge
                 variant="outline"
-                className="flex items-center gap-1 pl-2 pr-1 py-1 bg-background hover:bg-muted transition-colors"
+                className="flex items-center gap-1 pl-3 pr-2 py-1.5 bg-background hover:bg-muted transition-colors border-red-200 text-red-800 dark:border-red-600 dark:text-red-200"
               >
-                <span className="text-xs">
+                <span className="text-xs font-medium">
                   Price:{" "}
                   {currentPriceRange.min && currentPriceRange.max
-                    ? `${formatPrice(Number(currentPriceRange.min))} - ${
+                    ? `${formatCurrencyEnglish(
+                        Number(currentPriceRange.min)
+                      )} - ${
                         currentPriceRange.max === "Infinity"
-                          ? `${formatPrice(MAX_PRICE)}+`
-                          : formatPrice(Number(currentPriceRange.max))
+                          ? `${formatCurrencyEnglish(MAX_PRICE)}+`
+                          : formatCurrencyEnglish(Number(currentPriceRange.max))
                       }`
                     : currentPriceRange.min
-                    ? `Min ${formatPrice(Number(currentPriceRange.min))}`
-                    : `Max ${formatPrice(Number(currentPriceRange.max))}`}
+                    ? `Min ${formatCurrencyEnglish(
+                        Number(currentPriceRange.min)
+                      )}`
+                    : `Max ${formatCurrencyEnglish(
+                        Number(currentPriceRange.max)
+                      )}`}
                 </span>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-4 w-4 ml-1 rounded-full"
+                  className="h-4 w-4 ml-1 rounded-full hover:bg-destructive/20"
                   onClick={() =>
                     router.push(
                       `${pathname}?${createQueryString({
@@ -337,17 +377,25 @@ export function ProductFilters({
       <Separator className="mb-6" />
 
       <div className="space-y-6">
-        <div className="space-y-2">
+        <div className="space-y-3 p-4 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/20 dark:to-rose-950/20 rounded-lg border border-red-100 dark:border-red-700">
           <div className="flex items-center justify-between">
-            <h4 className="text-sm font-medium">Featured Products</h4>
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 bg-red-100 dark:bg-red-800/50 rounded-full">
+                <Star className="h-4 w-4 text-red-700 dark:text-red-300" />
+              </div>
+              <h4 className="text-sm font-medium text-red-800 dark:text-red-200">
+                Featured Products
+              </h4>
+            </div>
             <Switch
               id="featured"
               checked={currentFeatured || false}
               onCheckedChange={handleFeaturedChange}
+              className="data-[state=checked]:bg-red-800"
             />
           </div>
-          <p className="text-xs text-muted-foreground">
-            Show only featured products
+          <p className="text-xs text-red-700 dark:text-red-300">
+            Show only our handpicked featured products
           </p>
         </div>
 
@@ -356,9 +404,15 @@ export function ProductFilters({
           defaultValue={["categories", "brands", "price"]}
           className="space-y-4"
         >
-          <AccordionItem value="price" className="border rounded-md px-4 py-2">
-            <AccordionTrigger className="text-sm font-medium py-2 hover:no-underline">
-              Price Range
+          <AccordionItem
+            value="price"
+            className="border border-red-100 dark:border-red-700 rounded-lg px-4 py-2 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/30 dark:to-rose-950/30"
+          >
+            <AccordionTrigger className="text-sm font-medium py-3 hover:no-underline text-red-800 dark:text-red-200">
+              <div className="flex items-center gap-2">
+                <DollarSign className="h-4 w-4" />
+                Price Range
+              </div>
             </AccordionTrigger>
             <AccordionContent>
               <Tabs
@@ -403,30 +457,70 @@ export function ProductFilters({
                 </TabsContent>
                 <TabsContent value="slider">
                   <div className="space-y-6 pt-2 px-1">
-                    <Slider
-                      defaultValue={[0, MAX_PRICE]}
-                      value={priceRange}
-                      min={0}
-                      max={MAX_PRICE}
-                      step={1000}
-                      onValueChange={handleSliderPriceChange}
-                      onValueCommit={handleSliderPriceChangeCommitted}
-                      className="mb-6"
-                    />
-
-                    <div className="flex items-center justify-between">
-                      <div className="border rounded-md px-3 py-1.5">
-                        <span className="text-sm">
-                          {formatPrice(priceRange[0])}
-                        </span>
+                    <div className="space-y-4 p-4 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/30 dark:to-rose-950/30 rounded-lg border border-red-100 dark:border-red-700">
+                      <div className="text-center">
+                        <p className="text-sm font-medium text-foreground mb-2">
+                          Custom Price Range
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Drag to set your budget
+                        </p>
                       </div>
-                      <div className="text-sm text-muted-foreground">to</div>
-                      <div className="border rounded-md px-3 py-1.5">
-                        <span className="text-sm">
-                          {priceRange[1] === MAX_PRICE
-                            ? `${formatPrice(MAX_PRICE)}+`
-                            : formatPrice(priceRange[1])}
-                        </span>
+
+                      <Slider
+                        defaultValue={[0, MAX_PRICE]}
+                        value={priceRange}
+                        min={0}
+                        max={MAX_PRICE}
+                        step={100}
+                        onValueChange={handleSliderPriceChangeWithDebounce}
+                        className="mb-6 cursor-pointer [&_[role=slider]]:bg-red-800 [&_[role=slider]]:border-red-800"
+                      />
+
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="border border-red-100 bg-red-50 dark:border-red-600 dark:bg-red-950/50 rounded-lg px-3 py-2 shadow-sm">
+                          <span className="text-sm font-medium text-red-800 dark:text-red-200">
+                            {formatCurrencyEnglish(priceRange[0])}
+                          </span>
+                        </div>
+                        <div className="text-sm text-muted-foreground font-medium">
+                          to
+                        </div>
+                        <div className="border border-red-200 bg-red-50 dark:border-red-600 dark:bg-red-950/50 rounded-lg px-3 py-2 shadow-sm">
+                          <span className="text-sm font-medium text-red-800 dark:text-red-200">
+                            {priceRange[1] === MAX_PRICE
+                              ? `${formatCurrencyEnglish(MAX_PRICE)}+`
+                              : formatCurrencyEnglish(priceRange[1])}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() =>
+                            handleSliderPriceChangeCommitted(priceRange)
+                          }
+                          className="flex-1 bg-red-800 hover:bg-red-900 text-white"
+                          size="sm"
+                        >
+                          Apply Filter
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setPriceRange([0, MAX_PRICE]);
+                            router.push(
+                              `${pathname}?${createQueryString({
+                                minPrice: null,
+                                maxPrice: null,
+                              })}`
+                            );
+                          }}
+                          variant="outline"
+                          size="sm"
+                          className="px-3 hover:bg-red-50 hover:text-red-800 hover:border-red-300 dark:hover:bg-red-950/50 dark:hover:text-red-200 dark:hover:border-red-600"
+                        >
+                          Reset
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -436,10 +530,13 @@ export function ProductFilters({
           </AccordionItem>
           <AccordionItem
             value="categories"
-            className="border rounded-md px-4 py-2"
+            className="border border-red-100 dark:border-red-700 rounded-lg px-4 py-2 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/20 dark:to-rose-950/20"
           >
-            <AccordionTrigger className="text-sm font-medium py-2 hover:no-underline">
-              Categories
+            <AccordionTrigger className="text-sm font-medium py-3 hover:no-underline text-red-800 dark:text-red-200">
+              <div className="flex items-center gap-2">
+                <Grid3X3 className="h-4 w-4" />
+                Categories
+              </div>
             </AccordionTrigger>
             <AccordionContent>
               <div className="space-y-2 pt-2">
@@ -465,9 +562,15 @@ export function ProductFilters({
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="brands" className="border rounded-md px-4 py-2">
-            <AccordionTrigger className="text-sm font-medium py-2 hover:no-underline">
-              Brands
+          <AccordionItem
+            value="brands"
+            className="border border-rose-100 dark:border-rose-700 rounded-lg px-4 py-2 bg-gradient-to-br from-rose-50 to-red-50 dark:from-rose-950/20 dark:to-red-950/20"
+          >
+            <AccordionTrigger className="text-sm font-medium py-3 hover:no-underline text-red-800 dark:text-red-200">
+              <div className="flex items-center gap-2">
+                <Tag className="h-4 w-4" />
+                Brands
+              </div>
             </AccordionTrigger>
             <AccordionContent>
               <div className="space-y-2 pt-2">
@@ -535,7 +638,7 @@ export function ProductFilters({
           </SheetTrigger>
           <SheetContent
             side="right"
-            className=" sm:max-w-md overflow-y-auto p-6"
+            className="sm:max-w-md overflow-y-auto p-6 bg-red-50 dark:bg-red-950/20"
           >
             <div className="py-6">
               <FilterContent />
