@@ -5,6 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-primaryColor: #8a0000;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -121,4 +122,45 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+/* Underline active class setup */
+.underline-active {
+  position: relative;
+}
+
+.underline-active::before,
+.underline-active::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  height: 2px;
+  border-radius: 1px;
+  display: block;
+}
+
+/* Before - initial state */
+.underline-active::before {
+  width: 0%;
+  background-color: white;
+  left: 0;
+  right: 0;
+  margin: auto;
+  transition: width 0.3s ease-in-out;
+}
+
+/* Hover state: expands the underline */
+.underline-active:hover::before {
+  width: 100%;
+}
+
+/* Active state: keeps the underline full width */
+.underline-active.active::before {
+  width: 100%;
+}
+
+/* After - the small bar after the underline */
+.underline-active::after {
+  left: 12px;
+  width: 12px;
+  background-color: black;
 }

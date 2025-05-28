@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingBag, ShoppingCart, Tag, Trash2, X } from "lucide-react";
+import { ShoppingCart, Tag, Trash2, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -91,10 +91,10 @@ export function CartButtonHeader({
         <IconButton
           aria-label="Open cart"
           icon={
-            <ShoppingBag
+            <ShoppingCart
               className={cn(
-                "text-foreground/80 hover:text-primary transition-colors",
-                compact ? "size-4" : "size-5"
+                "text-white hover:text-white hover:!bg-black transition-colors",
+                compact ? "size-6" : "size-5"
               )}
             />
           }
@@ -143,7 +143,10 @@ export function CartButtonHeader({
           {itemCount > 0 ? (
             <div className="divide-y">
               {cart?.items.map((item: CartItem) => (
-                <div key={item?.product.id} className="py-3 px-4 sm:py-4 sm:px-6">
+                <div
+                  key={item?.product.id}
+                  className="py-3 px-4 sm:py-4 sm:px-6"
+                >
                   <CartItemProduct item={item} />
                 </div>
               ))}
