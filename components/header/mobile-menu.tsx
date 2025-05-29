@@ -29,7 +29,7 @@ export default function MobileMenu({ isAdmin }: { isAdmin?: boolean }) {
           size="icon"
           className="h-9 w-9 rounded-full p-0"
         >
-          <Menu className="size-5" />
+          <Menu className="size-5 text-white" />
           <span className="sr-only">Open menu</span>
         </Button>
       </SheetTrigger>

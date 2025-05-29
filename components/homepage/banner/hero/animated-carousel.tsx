@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { fetchDataPagination } from "@/utils/api-utils";
 import { Banner } from "@/utils/types";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
@@ -115,28 +115,33 @@ export function AnimatedCarousel({
                 priority={index === 0}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              <div className="absolute bottom-0 left-0 p-6 text-white">
-                <h2 className="text-4xl font-bold mb-2 animate-fadeIn text-yellow-500">
-                  {slide.title}
-                </h2>
-                <p className="animate-fadeIn animation-delay-200">
-                  {slide.description}
-                </p>
-                {slide.targetUrl && (
-                  <Button
-                    asChild
-                    variant="secondary"
-                    className="mt-4 animate-fadeIn animation-delay-400"
-                  >
-                    <Link
-                      href={slide.targetUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Learn More
-                    </Link>
-                  </Button>
-                )}
+              <div className="absolute top-0 left-0 p-6 w-full h-full text-white">
+                <div className=" flex container items-center h-full  xl:px-24 ">
+                  <div>
+                    <h2 className="lg:text-5xl text-3xl font-bold mb-2 animate-fadeIn text-whiteColor leading-[130%]  lg:leading-[150%]">
+                      {slide.title}
+                    </h2>
+                    <p className="animate-fadeIn text-base md:text-lg xl:text-2xl font-medium animation-delay-200">
+                      {slide.description}
+                    </p>
+                    {slide.targetUrl && (
+                      <button
+                        asChild
+                        variant="secondary"
+                        className="mt-10 !py-2 px-6 rounded-[8px] cursor-pointer text-base font-semibold bg-secondColor hover:bg-secondColor text-whiteColor animate-fadeIn animation-delay-400"
+                      >
+                        <Link
+                          href={slide.targetUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className=" flex items-center gap-2"
+                        >
+                          Explore Products <ArrowRight />
+                        </Link>
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           ))}
@@ -177,7 +182,7 @@ export function AnimatedCarousel({
               className={cn(
                 "w-2.5 h-2.5 rounded-full transition-all duration-300",
                 index === currentIndex
-                  ? "bg-white w-6"
+                  ? "bg-primaryColor w-8"
                   : "bg-white/50 hover:bg-white/80"
               )}
               onClick={() => goToSlide(index)}

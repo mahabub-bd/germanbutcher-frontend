@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface NavLinksProps {
   isAdmin?: boolean;
@@ -10,6 +11,8 @@ interface NavLinksProps {
 }
 
 export function NavLinks({ isAdmin, isMobile, onClick }: NavLinksProps) {
+  const pathname = usePathname();
+
   const commonLinks = [
     { href: "/", label: "Home" },
     { href: "/products", label: "Products" },
@@ -27,19 +30,24 @@ export function NavLinks({ isAdmin, isMobile, onClick }: NavLinksProps) {
 
   return (
     <>
-      {links.map((link) => (
-        <Link
-          key={link.href}
-          href={link.href}
-          className={cn(
-            "block text-base font-medium transition-colors hover:text-primary",
-            isMobile ? "block" : ""
-          )}
-          onClick={onClick}
-        >
-          {link.label}
-        </Link>
-      ))}
+      {links.map((link) => {
+        const isActive = pathname === link.href;
+
+        return (
+          <Link
+            key={link.href}
+            href={link.href}
+            onClick={onClick}
+            className={cn(
+              "relative block px-1 text-base font-medium transition-colors underline-active",
+              isMobile ? "text-white" : "text-white/80 hover:text-white",
+              isActive && "text-white active"
+            )}
+          >
+            {link.label}
+          </Link>
+        );
+      })}
     </>
   );
 }

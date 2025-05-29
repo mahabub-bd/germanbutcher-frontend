@@ -1,7 +1,7 @@
 "use client";
 
 import { logout } from "@/actions/auth";
-import { Avatar, AvatarFallback, AvatarImage ,} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -65,21 +65,21 @@ export default function AuthBtn({
 
   if (!user) {
     return (
-      <Button
-        variant={compact ? "ghost" : "default"}
+      <button
+        // variant={compact ? "ghost" : "default"}
         size="sm"
         className={cn(
           compact
-            ? "h-8 w-8 rounded-full p-0"
-            : "flex items-center gap-2 rounded-full px-4",
+            ? "h-8 w-8 rounded-full cursor-pointer p-0"
+            : "flex items-center gap-2 cursor-pointer rounded-full ",
           className
         )}
         onClick={() => router.push("/auth/sign-in")}
         aria-label="Sign in"
       >
-        <User className={cn("h-4 w-4", compact ? "" : "mr-1")} />
-        {!compact && <span>Sign in</span>}
-      </Button>
+        <User size={24} className={cn("h-6 w-6", compact ? "" : "")} />
+        {/* {!compact && <span>Sign in</span>} */}
+      </button>
     );
   }
 
@@ -97,24 +97,24 @@ export default function AuthBtn({
           disabled={isLoggingOut}
           aria-label="User menu"
         >
-        <Avatar className={cn(compact ? "h-8 w-8" : "h-9 w-9")}>
-  {user?.profilePhoto?.url ? (
-    <AvatarImage
-      src={user.profilePhoto.url}
-      alt={user.name || "User avatar"}
-      className="object-cover"
-      referrerPolicy="no-referrer"
-    />
-  ) : null}
-  <AvatarFallback
-    className={cn(
-      "text-xs font-medium",
-      compact ? "text-[10px]" : "text-xs"
-    )}
-  >
-    {user.name ? getInitials(user.name) : "US"}
-  </AvatarFallback>
-</Avatar>
+          <Avatar className={cn(compact ? "h-8 w-8" : "h-9 w-9")}>
+            {user?.profilePhoto?.url ? (
+              <AvatarImage
+                src={user.profilePhoto.url}
+                alt={user.name || "User avatar"}
+                className="object-cover"
+                referrerPolicy="no-referrer"
+              />
+            ) : null}
+            <AvatarFallback
+              className={cn(
+                "text-xs font-medium",
+                compact ? "text-[10px]" : "text-xs"
+              )}
+            >
+              {user.name ? getInitials(user.name) : "US"}
+            </AvatarFallback>
+          </Avatar>
           <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 ring-1 ring-white" />
         </Button>
       </DropdownMenuTrigger>

@@ -21,8 +21,8 @@ export const IconButton = React.forwardRef<HTMLDivElement, IconButtonProps>(
       <div
         ref={ref}
         className={cn(
-          "group relative flex h-9 w-9 items-center justify-center rounded-full p-0",
-          "hover:bg-muted/50 transition-colors cursor-pointer",
+          "group relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full p-0",
+          "",
           className
         )}
         aria-label={label}
