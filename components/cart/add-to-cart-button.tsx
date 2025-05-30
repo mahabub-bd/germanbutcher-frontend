@@ -1,9 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useCartContext } from "@/contexts/cart-context";
 import type { Product } from "@/utils/types";
-import { ShoppingCart } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 
 export function AddToCartButton({
@@ -28,10 +27,8 @@ export function AddToCartButton({
   };
 
   return (
-    <Button
-      size="sm"
-      variant="outline"
-      className="font-semibold text-[10px] xs:text-xs sm:text-sm border-primary text-primary hover:bg-primary/10 rounded h-8 xs:h-7 sm:h-8 cursor-pointer"
+    <button
+      className="text-primaryColor cursor-pointer rounded-md  border border-primaryColor hover:bg-red-50 mt-4 w-full py-1.5  text-lg flex items-center justify-center gap-2"
       onClick={handleAddToCart}
       disabled={disabled || isLoading}
     >
@@ -61,11 +58,12 @@ export function AddToCartButton({
         </span>
       ) : (
         <>
-          <ShoppingCart className="h-3 w-3 mr-1" />
-          Add
-          <span className="hidden xs:inline"> to Cart</span>
+          <span className="text-xl ">
+            <Plus size={20} />
+          </span>{" "}
+          Add to Cart
         </>
       )}
-    </Button>
+    </button>
   );
 }

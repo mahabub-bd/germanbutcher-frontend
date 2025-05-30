@@ -18,7 +18,7 @@ export function HeadingPrimary({
   return (
     <div className={`text-center py-4 ${className}`}>
       <h2
-        className={`font-SFProDisplaySemibold capitalize text-lg md:text-2xl ${titleClassName}`}
+        className={`font-semibold text-headerColor capitalize text-lg md:text-2xl lg:text-[36px] ${titleClassName}`}
       >
         {title}
       </h2>

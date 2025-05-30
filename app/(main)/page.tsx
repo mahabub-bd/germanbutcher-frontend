@@ -12,32 +12,22 @@ export default function Home() {
     <main className="min-h-screen">
       <AnimatedCarousel />
       {/* Categories Section */}
-      <section className="md:py-10 py-5 bg-gray-50">
-        <div className="container mx-auto ">
+      <section className="md:pt-18 pt-5 bg-gray-50">
+        <div className=" ">
           <Suspense
             fallback={<LoadingIndicator message="Loading Categories..." />}
           >
-            <CategoriesList endpoint="categories">
-              <HeadingPrimary
-                title="FEATURED CATEGORIES"
-                subtitle="Get your desired product from featured category"
-                className="mb-8"
-              />
-            </CategoriesList>
+            <HeadingPrimary title="All Category" className="" />
+            <CategoriesList endpoint="categories"></CategoriesList>
           </Suspense>
         </div>
       </section>
 
       {/* Best Selling Products Section */}
-      <section className="md:py-10 py-5">
+      <section className="md:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
           <ProductList endpoint="products">
-            <HeadingPrimary
-              title="BEST SELLERS"
-              subtitle="Top products loved by our customers"
-              className="mb-8"
-              titleClassName="text-red-600" // Add emphasis to best sellers
-            />
+            <HeadingPrimary title="Featured Products" className="mb-8" />
           </ProductList>
         </div>
       </section>
@@ -56,7 +46,7 @@ export default function Home() {
       </section>
 
       {/* Brands Section */}
-      <section className="md:py-10 py-5">
+      <section className="md:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
           <BrandList endpoint="brands">
             <HeadingPrimary

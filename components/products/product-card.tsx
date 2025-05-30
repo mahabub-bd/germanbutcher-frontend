@@ -1,10 +1,9 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { formatCurrencyEnglish } from "@/lib/utils";
 import { getBlurData } from "@/utils/blur-generator";
 import type { Product } from "@/utils/types";
 import { DiscountType } from "@/utils/types";
-import { Weight } from "lucide-react"; // Import weight icon
+import { Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { AddToCartButton } from "../cart/add-to-cart-button";
@@ -29,29 +28,26 @@ export default async function ProductCard({ product }: { product: Product }) {
       : null;
 
   return (
-    <div className="relative group text-center transition-all duration-300 bg-white bg-opacity-25 p-4 sm:p-3 flex flex-col justify-between items-center rounded-xl min-h-[280px] xs:min-h-[300px] sm:min-h-[320px] md:min-h-[340px] shadow-lg hover:shadow-md">
+    <div className="relative group  transition-all duration-300 border border-gray-200 hover:bg-[#FDFBF4] bg-gray-50  p-4 flex flex-col items-center rounded-lg shadow-sm hover:shadow-md">
       <Link
         href={`/products/${product.id}`}
-        className="flex flex-col justify-between items-center w-full h-full"
+        className="flex flex-col  w-full h-full"
       >
         {/* Image Container */}
-        <div className="w-[120px] h-[120px] xs:w-[140px] xs:h-[140px] sm:w-[160px] sm:h-[160px] md:w-[180px] md:h-[180px] relative my-2 sm:my-3">
+        <div className="w-full h-[180px] bg-gray-100 rounded-md overflow-hidden relative mb-3">
           {product?.attachment?.url && (
             <Image
-              src={product?.attachment?.url || "/placeholder.svg"}
+              src={product.attachment.url}
               alt={product.name}
               fill
-              sizes="(max-width: 640px) 120px, (max-width: 768px) 140px, (max-width: 1024px) 160px, 180px"
-              className="object-contain transition-transform duration-300 group-hover:scale-105"
-              priority={false}
-              blurDataURL={base64}
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
+              sizes="100%"
               placeholder="blur"
+              blurDataURL={base64}
             />
           )}
-        </div>
-
-        {/* Stock Badge */}
-        {product?.stock === 0 ? (
+          {/* {product?.stock === 0 ? (
           <Badge
             variant="destructive"
             className="absolute top-2 right-2 text-[10px] sm:text-xs"
@@ -64,60 +60,55 @@ export default async function ProductCard({ product }: { product: Product }) {
               In Stock
             </Badge>
           )
-        )}
+        )} */}
+        </div>
 
         {/* Discount Badge */}
         {isDiscountActive && product.discountType && product.discountValue && (
           <Badge className="absolute top-2 left-2 bg-orange-500 hover:bg-orange-600 text-[10px] sm:text-xs">
             {product.discountType === DiscountType.PERCENTAGE
               ? `${product.discountValue}% Off`
-              : ` Save ${formatCurrencyEnglish(product.discountValue)} `}
+              : `Save ${formatCurrencyEnglish(product.discountValue)}`}
           </Badge>
         )}
 
-        {/* Product Name */}
-        <p className="font-semibold text-xs sm:text-sm mt-4 sm:mt-5 px-2 line-clamp-2 flex items-center">
+        <p className="font-bold text-start text-sm sm:text-base uppercase text-gray-800 mt-2">
           {product.name}
         </p>
 
-        {/* Weight Display - Added this section */}
-        {product.weight && product.weight > 0 && (
-          <div className="flex items-center justify-center text-xs text-muted-foreground mt-1">
-            <Weight className="w-3 h-3 mr-1" />
-            {`${product.weight} ${product.unit.name}`}
-          </div>
-        )}
-
-        {/* Price */}
-        <div className="flex items-center justify-center my-2 sm:my-2 md:flex-row flex-col">
-          {discountedPrice ? (
-            <>
-              <p className="font-semibold text-sm sm:text-md text-primary transition-colors">
-                {formatCurrencyEnglish(discountedPrice)}
-              </p>
-              <p className="font-medium ml-2 text-[10px] sm:text-xs text-gray-500 line-through">
+        <div className=" flex justify-between items-center mt-4">
+          <div className="flex items-center justify-center  gap-2">
+            <p className="text-primary font-bold text-sm sm:text-base">
+              {formatCurrencyEnglish(discountedPrice || product.sellingPrice)}
+            </p>
+            {discountedPrice && (
+              <p className="line-through text-gray-400 text-xs sm:text-sm">
                 {formatCurrencyEnglish(product.sellingPrice)}
               </p>
-            </>
-          ) : (
-            <p className="font-semibold text-sm sm:text-md group-hover:text-primary transition-colors">
-              {formatCurrencyEnglish(product.sellingPrice)}
-            </p>
-          )}
+            )}
+          </div>
+
+          {/* Quantity Selector */}
+          <div className="flex justify-center items-center gap-2 ">
+            <button
+              size="icon"
+              className=" bg-white w-6 h-6 flex shadow justify-center items-center rounded-sm border "
+            >
+              <Minus size={16} />
+            </button>
+            <span className="font-semibold text-lg ">1</span>
+            <button
+              size="icon"
+              className=" bg-white w-6 h-6 flex shadow justify-center items-center rounded-sm border"
+            >
+              <Plus size={16} />
+            </button>
+          </div>
         </div>
       </Link>
 
-      {/* Action Buttons */}
-      <div className="grid grid-cols-2 gap-2 w-full mt-3 sm:mt-4">
-        <Button
-          size="sm"
-          className="font-semibold text-[10px] xs:text-xs sm:text-sm bg-primary hover:bg-primary/90 rounded h-8 xs:h-7 sm:h-8"
-          disabled={!product?.stock}
-        >
-          Buy Now
-        </Button>
-        <AddToCartButton product={product} disabled={!product?.stock} />
-      </div>
+      {/* Add to Cart */}
+      <AddToCartButton product={product} disabled={!product?.stock} />
     </div>
   );
 }
