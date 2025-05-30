@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { fetchDataPagination } from "@/utils/api-utils";
-import { Banner } from "@/utils/types";
+import type { Banner } from "@/utils/types";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,14 +13,14 @@ interface AnimatedCarouselProps {
   autoPlayInterval?: number;
   showControls?: boolean;
   showIndicators?: boolean;
-  activeOnly?: boolean; // New prop to filter active banners
+  activeOnly?: boolean;
 }
 
 export function AnimatedCarousel({
   autoPlayInterval = 5000,
   showControls = true,
   showIndicators = true,
-  activeOnly = true, // Default to only showing active banners
+  activeOnly = true,
 }: AnimatedCarouselProps) {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -41,7 +41,6 @@ export function AnimatedCarousel({
         setBanners(filteredBanners);
       } catch (err) {
         console.error("Failed to fetch banners:", err);
-      } finally {
       }
     };
 
@@ -62,28 +61,43 @@ export function AnimatedCarousel({
     [isAnimating, banners.length]
   );
 
+  // Manual navigation - bounded (doesn't loop)
   const goToNextSlide = useCallback(() => {
-    if (banners.length === 0) return;
-    const newIndex = (currentIndex + 1) % banners.length;
+    if (banners.length === 0 || currentIndex === banners.length - 1) return;
+    const newIndex = currentIndex + 1;
     goToSlide(newIndex);
   }, [currentIndex, goToSlide, banners.length]);
 
   const goToPrevSlide = useCallback(() => {
-    if (banners.length === 0) return;
-    const newIndex = (currentIndex - 1 + banners.length) % banners.length;
+    if (banners.length === 0 || currentIndex === 0) return;
+    const newIndex = currentIndex - 1;
     goToSlide(newIndex);
   }, [currentIndex, goToSlide, banners.length]);
 
-  // Auto-play functionality
+  // Auto-play functionality - with infinite loop
   useEffect(() => {
-    if (isPaused || banners.length === 0) return;
+    if (isPaused || banners.length <= 1) return;
 
     const interval = setInterval(() => {
-      goToNextSlide();
+      // For auto-play, we loop back to the first slide after reaching the end
+      const newIndex =
+        currentIndex === banners.length - 1 ? 0 : currentIndex + 1;
+      goToSlide(newIndex);
     }, autoPlayInterval);
 
     return () => clearInterval(interval);
-  }, [currentIndex, goToNextSlide, autoPlayInterval, isPaused, banners.length]);
+  }, [currentIndex, goToSlide, autoPlayInterval, isPaused, banners.length]);
+
+  // Helper function to get slide position
+  const getSlideTransform = (index: number) => {
+    if (index === currentIndex) {
+      return "translate-x-0";
+    } else if (index < currentIndex) {
+      return "-translate-x-full";
+    } else {
+      return "translate-x-full";
+    }
+  };
 
   return (
     <div
@@ -92,23 +106,23 @@ export function AnimatedCarousel({
       onMouseLeave={() => setIsPaused(false)}
     >
       {/* Carousel container */}
-      <div className="relative h-[600px] w-full overflow-hidden ">
+      <div className="relative h-[600px] w-full overflow-hidden">
         {banners &&
           banners.length > 0 &&
-          banners?.map((slide, index) => (
+          banners.map((slide, index) => (
             <div
               key={slide.id}
               className={cn(
-                "absolute inset-0 w-full h-full transition-transform duration-500 ease-in-out",
-                index === currentIndex
-                  ? "translate-x-0 opacity-100"
-                  : index < currentIndex
-                  ? "-translate-x-full opacity-0"
-                  : "translate-x-full opacity-0"
+                "absolute inset-0 w-full h-full transition-all duration-500 ease-in-out",
+                getSlideTransform(index),
+                index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
               )}
             >
               <Image
-                src={slide?.image?.url || "/placeholder.svg"}
+                src={
+                  slide?.image?.url ||
+                  "/placeholder.svg?height=600&width=1200&query=banner"
+                }
                 alt={slide.title}
                 fill
                 className="object-cover"
@@ -116,29 +130,29 @@ export function AnimatedCarousel({
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               <div className="absolute top-0 left-0 p-6 w-full h-full text-white">
-                <div className=" flex container items-center h-full  xl:px-24 ">
+                <div className="flex container items-center h-full xl:px-24">
                   <div>
-                    <h2 className="lg:text-5xl text-3xl font-bold mb-2 animate-fadeIn text-whiteColor leading-[130%]  lg:leading-[150%]">
+                    <h2 className="lg:text-5xl text-3xl font-bold mb-2 animate-fadeIn text-white leading-[130%] lg:leading-[150%]">
                       {slide.title}
                     </h2>
                     <p className="animate-fadeIn text-base md:text-lg xl:text-2xl font-medium animation-delay-200">
                       {slide.description}
                     </p>
                     {slide.targetUrl && (
-                      <button
+                      <Button
                         asChild
                         variant="secondary"
-                        className="mt-10 !py-2 px-6 rounded-[8px] cursor-pointer text-base font-semibold bg-secondColor hover:bg-secondColor text-whiteColor animate-fadeIn animation-delay-400"
+                        className="mt-10 !py-2 px-6 rounded-[8px] cursor-pointer text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white animate-fadeIn animation-delay-400"
                       >
                         <Link
                           href={slide.targetUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className=" flex items-center gap-2"
+                          className="flex items-center gap-2"
                         >
                           Explore Products <ArrowRight />
                         </Link>
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </div>
@@ -148,14 +162,19 @@ export function AnimatedCarousel({
       </div>
 
       {/* Navigation controls */}
-      {showControls && banners.length > 1 && (
+      {showControls && banners.length > 0 && (
         <>
           <Button
             variant="outline"
             size="icon"
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/40 border-none rounded-full"
+            className={cn(
+              "absolute left-4 top-1/2 -translate-y-1/2 backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg",
+              currentIndex === 0
+                ? "bg-black/20 text-white/40 cursor-not-allowed"
+                : "bg-black/40 hover:bg-black/60 text-white"
+            )}
             onClick={goToPrevSlide}
-            disabled={isAnimating}
+            disabled={isAnimating || currentIndex === 0}
           >
             <ChevronLeft className="h-6 w-6 text-white" />
             <span className="sr-only">Previous slide</span>
@@ -163,9 +182,14 @@ export function AnimatedCarousel({
           <Button
             variant="outline"
             size="icon"
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/40 border-none rounded-full"
+            className={cn(
+              "absolute right-4 top-1/2 -translate-y-1/2 backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg",
+              currentIndex === banners.length - 1
+                ? "bg-black/20 text-white/40 cursor-not-allowed"
+                : "bg-black/40 hover:bg-black/60 text-white"
+            )}
             onClick={goToNextSlide}
-            disabled={isAnimating}
+            disabled={isAnimating || currentIndex === banners.length - 1}
           >
             <ChevronRight className="h-6 w-6 text-white" />
             <span className="sr-only">Next slide</span>
@@ -175,14 +199,14 @@ export function AnimatedCarousel({
 
       {/* Indicators */}
       {showIndicators && banners.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
           {banners.map((_, index) => (
             <button
               key={index}
               className={cn(
                 "w-2.5 h-2.5 rounded-full transition-all duration-300",
                 index === currentIndex
-                  ? "bg-primaryColor w-8"
+                  ? "bg-blue-600 w-8"
                   : "bg-white/50 hover:bg-white/80"
               )}
               onClick={() => goToSlide(index)}

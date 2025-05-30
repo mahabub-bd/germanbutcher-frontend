@@ -39,7 +39,7 @@ export default async function ProductCard({ product }: { product: Product }) {
           {product?.attachment?.url && (
             <Image
               src={product?.attachment?.url || "/placeholder.svg"}
-              alt={product.name}
+              alt={product?.name}
               fill
               sizes="(max-width: 640px) 120px, (max-width: 768px) 140px, (max-width: 1024px) 160px, 180px"
               className="object-contain transition-transform duration-300 group-hover:scale-105"
@@ -77,14 +77,14 @@ export default async function ProductCard({ product }: { product: Product }) {
 
         {/* Product Name */}
         <p className="font-semibold text-xs sm:text-sm mt-4 sm:mt-5 px-2 line-clamp-2 flex items-center">
-          {product.name}
+          {product?.name}
         </p>
 
         {/* Weight Display - Added this section */}
         {product.weight && product.weight > 0 && (
           <div className="flex items-center justify-center text-xs text-muted-foreground mt-1">
             <Weight className="w-3 h-3 mr-1" />
-            {`${product.weight} ${product.unit.name}`}
+            {`${product?.weight} ${product.unit?.name}`}
           </div>
         )}
 
