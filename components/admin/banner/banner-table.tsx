@@ -36,6 +36,9 @@ export function BannerTable({ banners, onDeleteClick }: BannerTableProps) {
             <TableHead>Title</TableHead>
             <TableHead className="hidden md:table-cell">Type</TableHead>
             <TableHead className="hidden md:table-cell">Position</TableHead>
+            <TableHead className="hidden md:table-cell">
+              Display Order
+            </TableHead>
             <TableHead className="hidden md:table-cell">Status</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
@@ -44,7 +47,7 @@ export function BannerTable({ banners, onDeleteClick }: BannerTableProps) {
           {banners.map((banner) => (
             <TableRow key={banner.id}>
               <TableCell>
-                <div className="rounded-md overflow-hidden">
+                <div className=" overflow-hidden">
                   {banner?.image?.url ? (
                     <Image
                       src={banner.image.url}
@@ -73,6 +76,9 @@ export function BannerTable({ banners, onDeleteClick }: BannerTableProps) {
               </TableCell>
               <TableCell className="hidden md:table-cell">
                 {banner.position}
+              </TableCell>
+              <TableCell className="hidden md:table-cell">
+                {banner?.displayOrder}
               </TableCell>
               <TableCell className="hidden md:table-cell">
                 <Badge variant={banner.isActive ? "default" : "destructive"}>
