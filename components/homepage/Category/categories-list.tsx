@@ -14,7 +14,7 @@ export default async function CategoriesList({
   return (
     <div className=" pt-5 px-4 sm:px-6 md:pt-10 md:px-0">
       <div className="container mx-auto">{children}</div>
-      <div className="bg-[url(/img/mountains.jpg)] bg-[#F3D66E]/15 py-10 ">
+      <div className="bg-[url(/img/mountains.jpg)] bg-bgsecondColor py-10 ">
         <div className=" container mx-auto grid grid-cols-2  md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-7 gap-3 sm:gap-4 md:gap-6">
           {categories?.map((category: Category) => (
             <CategoryCard key={category?.id} category={category} />

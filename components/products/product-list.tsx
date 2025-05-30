@@ -1,6 +1,7 @@
 import { fetchData } from "@/utils/api-utils";
 import { Product } from "@/utils/types";
 import { ReactNode } from "react";
+import CustomViewAllButton from "../homepage/Category/CustomViewAllButton";
 import ProductCard from "./product-card";
 
 export default async function ProductList({
@@ -19,6 +20,9 @@ export default async function ProductList({
         {products?.slice(0, 10)?.map((product: Product) => (
           <ProductCard key={product.id} product={product} />
         ))}
+      </div>
+      <div className=" pt-6">
+        <CustomViewAllButton />
       </div>
     </div>
   );

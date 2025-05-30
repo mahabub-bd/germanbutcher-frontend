@@ -33,14 +33,10 @@ export default function Home() {
       </section>
 
       {/* Featured Products Section */}
-      <section className="md:py-10 py-5 bg-gray-50">
+      <section className="md:py-10 py-5 bg-bgsecondColor">
         <div className="container mx-auto ">
           <ProductList endpoint="products">
-            <HeadingPrimary
-              title="FEATURED PRODUCTS"
-              subtitle="Discover our most popular items"
-              className="mb-8"
-            />
+            <HeadingPrimary title="Popular Products" className="mb-10" />
           </ProductList>
         </div>
       </section>

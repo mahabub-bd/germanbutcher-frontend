@@ -7,6 +7,7 @@
 @theme inline {
   --color-primaryColor: #c70909;
   --color-whiteColor: #fff;
+  --color-bgsecondColor: #fdfbf4;
   --color-headerColor: #2b2b2b;
   --color-secondColor: #f8d75f;
   --color-background: var(--background);

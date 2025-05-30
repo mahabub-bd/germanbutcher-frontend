@@ -16,7 +16,7 @@ export function HeadingPrimary({
   subtitleClassName = "",
 }: HeadingProps) {
   return (
-    <div className={`text-center py-4 ${className}`}>
+    <div className={`text-center  ${className}`}>
       <h2
         className={`font-semibold text-headerColor capitalize text-lg md:text-2xl lg:text-[36px] ${titleClassName}`}
       >

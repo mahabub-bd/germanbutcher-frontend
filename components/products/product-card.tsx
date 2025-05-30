@@ -28,7 +28,7 @@ export default async function ProductCard({ product }: { product: Product }) {
       : null;
 
   return (
-    <div className="relative group  transition-all duration-300 border border-gray-200 hover:bg-[#FDFBF4] bg-gray-50  p-4 flex flex-col items-center rounded-lg shadow-sm hover:shadow-md">
+    <div className="relative group  transition-all duration-300 border border-gray-200 hover:bg-[#FDFBF4]  p-4 flex flex-col items-center rounded-lg shadow-sm hover:shadow-md">
       <Link
         href={`/products/${product.id}`}
         className="flex flex-col  w-full h-full"
