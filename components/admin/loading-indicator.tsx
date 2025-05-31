@@ -16,7 +16,7 @@ export function LoadingIndicator({
 }: LoadingIndicatorProps) {
   return (
     <div
-      className={`flex justify-center items-center min-h-screen ${containerClassName}`}
+      className={`flex justify-center items-center min-h-1/2 ${containerClassName}`}
     >
       <div className={`flex flex-col items-center gap-2 ${className}`}>
         <Image src={GermanbutcherLogo} alt="logo" width={40} height={40} />

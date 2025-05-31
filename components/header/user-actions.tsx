@@ -19,7 +19,7 @@ export default async function UserActions({
   const user = await getUser();
   // const cart = user ? await fetchProtectedData<Cart>("cart") : null;
 
-  const wishlistItemCount = 5;
+  // const wishlistItemCount = 5;
 
   return (
     <div

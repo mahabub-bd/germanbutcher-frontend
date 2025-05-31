@@ -67,7 +67,7 @@ export default function AuthBtn({
     return (
       <button
         // variant={compact ? "ghost" : "default"}
-        size="sm"
+        // size="sm"
         className={cn(
           compact
             ? "h-8 w-8 rounded-full cursor-pointer p-0"
