@@ -8,7 +8,11 @@ import Link from "next/link";
 import { AddToCartButton } from "../cart/add-to-cart-button";
 import ProductCount from "./ProductCount";
 
-export default async function ProductCard({ product }: { product: Product }) {
+export default async function RecommendedProductCard({
+  product,
+}: {
+  product: Product;
+}) {
   const { base64 } = await getBlurData(product?.attachment?.url);
 
   const isDiscountActive =
@@ -34,7 +38,7 @@ export default async function ProductCard({ product }: { product: Product }) {
         className="flex flex-col  w-full h-full"
       >
         {/* Image Container */}
-        <div className="w-full h-[180px] bg-gray-100 rounded-md overflow-hidden relative mb-3">
+        <div className=" w-[180px] h-[140px] absolute -top-[105px] left-1/2 -translate-x-1/2 bg-gray-100 rounded-md overflow-hidden  mb-3">
           {product?.attachment?.url && (
             <Image
               src={product.attachment.url}
@@ -62,39 +66,43 @@ export default async function ProductCard({ product }: { product: Product }) {
           )
         )} */}
         </div>
-
-        {/* Discount Badge */}
-        {isDiscountActive && product.discountType && product.discountValue && (
-          <Badge className="absolute top-2 left-2 bg-orange-500 hover:bg-orange-600 text-[10px] sm:text-xs">
-            {product.discountType === DiscountType.PERCENTAGE
-              ? `${product.discountValue}% Off`
-              : `Save ${formatCurrencyEnglish(product.discountValue)}`}
-          </Badge>
-        )}
-
-        <p className="font-bold text-start text-sm sm:text-base uppercase text-gray-800 mt-2">
-          {product.name}
-        </p>
-
-        <div className=" flex justify-between items-center mt-4">
-          <div className="flex items-center justify-center  gap-2">
-            <p className="text-primary font-bold text-sm sm:text-base">
-              {formatCurrencyEnglish(discountedPrice || product.sellingPrice)}
-            </p>
-            {discountedPrice && (
-              <p className="line-through text-gray-400 text-xs sm:text-sm">
-                {formatCurrencyEnglish(product.sellingPrice)}
-              </p>
+        <div className="pt-10">
+          {isDiscountActive &&
+            product.discountType &&
+            product.discountValue && (
+              <Badge className="absolute top-2 left-2 bg-orange-500 hover:bg-orange-600 text-[10px] sm:text-xs">
+                {product.discountType === DiscountType.PERCENTAGE
+                  ? `${product.discountValue}% Off`
+                  : `Save ${formatCurrencyEnglish(product.discountValue)}`}
+              </Badge>
             )}
-          </div>
 
-          {/* Quantity Selector */}
-          <ProductCount />
+          <p className="font-bold text-start text-sm sm:text-base uppercase text-gray-800 mt-2">
+            {product.name}
+          </p>
+
+          <div className=" flex justify-between items-center mt-4">
+            <div className="flex items-center justify-center  gap-2">
+              <p className="text-primary font-bold text-sm sm:text-base">
+                {formatCurrencyEnglish(discountedPrice || product.sellingPrice)}
+              </p>
+              {discountedPrice && (
+                <p className="line-through text-gray-400 text-xs sm:text-sm">
+                  {formatCurrencyEnglish(product.sellingPrice)}
+                </p>
+              )}
+            </div>
+
+            {/* Quantity Selector */}
+            <ProductCount />
+          </div>
         </div>
       </Link>
 
       {/* Add to Cart */}
-      <AddToCartButton product={product} disabled={!product?.stock} />
+      <div className="w-full">
+        <AddToCartButton product={product} disabled={!product?.stock} />
+      </div>
     </div>
   );
 }

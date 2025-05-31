@@ -12,58 +12,40 @@ export default function Home() {
     <main className="min-h-screen">
       <AnimatedCarousel />
       {/* Categories Section */}
-      <section className="md:py-10 py-5 bg-gray-50">
-        <div className="container mx-auto ">
+      <section className="md:pt-18 pt-5 bg-gray-50">
+        <div className=" ">
           <Suspense
             fallback={<LoadingIndicator message="Loading Categories..." />}
           >
-            <CategoriesList endpoint="categories?isMainCategory=true">
-              <HeadingPrimary
-                title="FEATURED CATEGORIES"
-                subtitle="Get your desired product from featured category"
-                className="mb-8"
-              />
-            </CategoriesList>
+            <HeadingPrimary title="All Category" className="" />
+            <CategoriesList endpoint="categories"></CategoriesList>
           </Suspense>
         </div>
       </section>
 
       {/* Best Selling Products Section */}
-      <section className="md:py-10 py-5">
+      <section className="md:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
           <ProductList endpoint="products">
-            <HeadingPrimary
-              title="BEST SELLERS"
-              subtitle="Top products loved by our customers"
-              className="mb-8"
-              titleClassName="text-red-600" // Add emphasis to best sellers
-            />
+            <HeadingPrimary title="Featured Products" className="mb-8" />
           </ProductList>
         </div>
       </section>
 
       {/* Featured Products Section */}
-      <section className="md:py-10 py-5 bg-gray-50">
+      <section className="md:py-10 py-5 bg-bgsecondColor">
         <div className="container mx-auto ">
           <ProductList endpoint="products">
-            <HeadingPrimary
-              title="FEATURED PRODUCTS"
-              subtitle="Discover our most popular items"
-              className="mb-8"
-            />
+            <HeadingPrimary title="Popular Products" className="mb-10" />
           </ProductList>
         </div>
       </section>
 
       {/* Brands Section */}
-      <section className="md:py-10 py-5">
+      <section className="md:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
           <BrandList endpoint="brands">
-            <HeadingPrimary
-              title="OUR BRANDS"
-              subtitle="Shop from trusted brands you love"
-              className="mb-8"
-            />
+            <HeadingPrimary title="Recommended for you" className="mb-40" />
           </BrandList>
         </div>
       </section>
@@ -74,7 +56,7 @@ export default function Home() {
             <HeadingPrimary
               title="SPECIAL OFFERS"
               subtitle="Limited-time deals just for you"
-              className="mb-8"
+              className="mb-40"
               titleClassName="text-green-600"
             />
           </ProductList>
