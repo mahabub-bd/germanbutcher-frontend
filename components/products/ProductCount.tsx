@@ -8,7 +8,6 @@ function ProductCount() {
     <div>
       <div className="flex justify-center items-center gap-2 ">
         <button
-          size="icon"
           onClick={() => setProductCount(Math.max(1, productCount - 1))}
           className=" bg-white cursor-pointer w-6 h-6 flex shadow justify-center items-center rounded-sm border "
         >
@@ -16,7 +15,6 @@ function ProductCount() {
         </button>
         <span className="font-semibold text-lg ">{productCount}</span>
         <button
-          size="icon"
           onClick={() => setProductCount(productCount + 1)}
           className=" bg-white cursor-pointer w-6 h-6 flex shadow justify-center items-center rounded-sm border"
         >
