@@ -1,7 +1,7 @@
 function CustomViewAllButton() {
   return (
     <div className=" flex justify-center items-center mt-6">
-      <button className="flex items-center gap-2 px-4 justify-center py-2 rounded-sm bg-primaryColor text-whiteColor font-medium ">
+      <button className="flex items-center cursor-pointer gap-2 px-4 justify-center py-2 rounded-sm bg-primaryColor text-whiteColor font-medium ">
         View All Products{" "}
         <svg
           xmlns="http://www.w3.org/2000/svg"
