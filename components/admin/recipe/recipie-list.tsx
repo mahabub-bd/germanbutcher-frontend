@@ -20,6 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatDateTime } from "@/lib/utils";
 import { deleteData, fetchDataPagination } from "@/utils/api-utils";
 import type { Recipe } from "@/utils/types";
 import {
@@ -274,7 +275,7 @@ export function RecipeList({
           {recipes?.map((recipe) => (
             <TableRow key={recipe.id}>
               <TableCell>
-                <div className="rounded-md overflow-hidden">
+                <div className=" overflow-hidden">
                   <Image
                     src={recipe?.attachment?.url || "/placeholder.svg"}
                     alt={recipe.title}
@@ -295,7 +296,7 @@ export function RecipeList({
                 {recipe.createdBy?.name || "Unknown"}
               </TableCell>
               <TableCell className="hidden md:table-cell">
-                {new Date(recipe.createdAt).toLocaleDateString()}
+                {formatDateTime(recipe.createdAt)}
               </TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
