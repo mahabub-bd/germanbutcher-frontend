@@ -51,29 +51,38 @@ export default function OrderPaymentsListPage() {
   return (
     <div className="w-full md:p-6 p-2 border rounded-sm">
       <div className="md:p-6 p-2">
-        <div className="flex justify-between items-center mb-6">
-          <PageHeader
-            title={`Payments for Order #${order.orderNo}`}
-            description={`Total: ${formatCurrencyEnglish(
-              order.totalValue
-            )} | Paid: ${formatCurrencyEnglish(
-              order.paidAmount
-            )} | Remaining: ${formatCurrencyEnglish(remainingAmount)}`}
-          />
-          <Button variant="default" asChild>
-            <Link href={`/admin/orders`}>
-              <ArrowLeft className="h-4 w-4" />
-              <span className="sr-only">Back</span>
-              Back To Orders
-            </Link>
-          </Button>
-          {remainingAmount > 0 && (
-            <Button asChild>
-              <Link href={`/admin/order/${orderId}/payment`}>
-                <Plus className="mr-2 h-4 w-4" /> Add Payment
+        <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
+          <div>
+            <PageHeader
+              title={`Payments for Order #${order.orderNo}`}
+              description={`Total: ${formatCurrencyEnglish(
+                order.totalValue
+              )} | Paid: ${formatCurrencyEnglish(
+                order.paidAmount
+              )} | Remaining: ${formatCurrencyEnglish(remainingAmount)}`}
+            />
+          </div>
+
+          <div className="flex gap-3">
+            <Button variant="secondary" asChild>
+              <Link href="/admin/orders" className="flex items-center gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                <span>Back to Orders</span>
               </Link>
             </Button>
-          )}
+
+            {remainingAmount > 0 && (
+              <Button asChild>
+                <Link
+                  href={`/admin/order/${orderId}/payment`}
+                  className="flex items-center gap-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  <span>Add Payment</span>
+                </Link>
+              </Button>
+            )}
+          </div>
         </div>
       </div>
       <div className="md:p-6 p-2">

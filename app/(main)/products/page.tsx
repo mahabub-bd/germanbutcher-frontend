@@ -19,7 +19,9 @@ export default async function ProductsPage({
   const resolvedSearchParams = await searchParams;
 
   return (
-    <Suspense fallback={<LoadingIndicator message="Loading Products..." />}>
+    <Suspense
+      fallback={<LoadingIndicator fullHeight message="Loading Products..." />}
+    >
       <ProductsContent searchParams={resolvedSearchParams} />
     </Suspense>
   );

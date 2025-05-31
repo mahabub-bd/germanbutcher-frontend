@@ -13,7 +13,7 @@ export default function AddUserPage() {
 
   const handleSuccess = () => {
     toast.success("User created successfully");
-    router.push("/admin/users/user-list");
+    router.push("/admin/user/user-list");
   };
 
   return (

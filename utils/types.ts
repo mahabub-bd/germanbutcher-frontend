@@ -479,3 +479,18 @@ export interface UserActivity {
   createdAt: string;
   user: User;
 }
+
+
+export interface Recipe {
+  id: number;
+  title: string;
+  details: string;
+  nutrition_details: string;
+  isPublished: boolean;
+  createdAt: string;  
+  updatedAt: string;  
+  attachment: Attachment;
+  category: Category;
+  createdBy: User;
+  updatedBy: User;
+}
