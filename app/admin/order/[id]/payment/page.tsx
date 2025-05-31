@@ -166,7 +166,7 @@ export default function AddOrderPaymentPage() {
   };
 
   if (loading) {
-    return <LoadingIndicator message="Loading Payment Form" />;
+    return <LoadingIndicator message="Loading Payment" />;
   }
 
   if (!order) {
@@ -182,19 +182,20 @@ export default function AddOrderPaymentPage() {
 
   return (
     <div className=" mx-auto p-6 space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" asChild>
-          <Link href={`/admin/order/${orderId}/payments`}>
-            <ArrowLeft className="h-4 w-4" />
-            <span className="sr-only">Back</span>
-          </Link>
-        </Button>
+      <div className="flex items-center justify-between gap-4">
         <PageHeader
           title="Add Payment"
           description={`For Order #${
             order.orderNo
           } | Remaining: ${formatCurrencyEnglish(remainingAmount)}`}
         />
+        <Button variant="default" asChild>
+          <Link href={`/admin/order/${orderId}/payments`}>
+            <ArrowLeft className="h-4 w-4" />
+            <span className="sr-only">Back</span>
+            Back to payment
+          </Link>
+        </Button>
       </div>
 
       <div className="space-y-8">
