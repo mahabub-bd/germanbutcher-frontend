@@ -64,10 +64,14 @@ export function UserForm({ user, mode, onSuccess }: UserFormProps) {
   }, []);
 
   const onSubmit = async (values: z.infer<typeof userSchema>) => {
+    const payload = {
+      ...values,
+      roleId: Number(values.roleId),
+    };
     setIsSubmitting(true);
     try {
       if (mode === "create") {
-        await postData("users", values);
+        await postData("users", payload);
         toast.success("User created successfully");
       } else if (mode === "edit" && user) {
         const payload = { ...values };
