@@ -142,7 +142,7 @@ export function AnimatedCarousel({
                       <Button
                         asChild
                         variant="secondary"
-                        className="mt-10 !py-2 px-6 rounded-[8px] cursor-pointer text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white animate-fadeIn animation-delay-400"
+                        className="mt-10 !py-2 px-6 rounded-[8px] cursor-pointer text-base font-semibold bg-primaryColor text-white animate-fadeIn animation-delay-400"
                       >
                         <Link
                           href={slide.targetUrl}
@@ -206,7 +206,7 @@ export function AnimatedCarousel({
               className={cn(
                 "w-2.5 h-2.5 rounded-full transition-all duration-300",
                 index === currentIndex
-                  ? "bg-blue-600 w-8"
+                  ? "bg-primaryColor w-8"
                   : "bg-white/50 hover:bg-white/80"
               )}
               onClick={() => goToSlide(index)}

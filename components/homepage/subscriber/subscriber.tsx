@@ -6,8 +6,6 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { postData } from "@/utils/api-utils";
 
 export function Subscription() {
@@ -64,26 +62,32 @@ export function Subscription() {
   return (
     <form
       onSubmit={handleSubscribe}
-      className="flex w-full  items-center space-x-2"
+      className="flex w-full  items-center  justify-end space-x-2"
     >
-      <Input
-        type="email"
-        placeholder="Enter your email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className={error ? "border-red-500" : ""}
-        disabled={isSubmitting}
-      />
-      <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : (
-          "Subscribe"
-        )}
-      </Button>
-      {error && (
-        <div className="absolute mt-16 text-sm text-red-500">{error}</div>
-      )}
+      <div className=" relative w-full md:w-[70%] ">
+        <input
+          type="email"
+          value={email}
+          required
+          onChange={(e) => setEmail(e.target.value)}
+          className={error ? "border-red-500" : ""}
+          disabled={isSubmitting}
+          className="border w-full  md:text-base lg:text-lg font-medium  border-gray-300 rounded-full py-2  px-2 md:py-4 md:px-4 focus:outline-none bg-[#FDFBF4] focus:border-blackColor"
+          placeholder="Enter your email"
+        />
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="bg-secondaryColor py-2 cursor-pointer md:py-3 lg:py-3 md:text-lg lg:text-xl font-medium px-5 md:px-6 lg:px-8 rounded-full text-whiteColor text-sm absolute right-1 top-1/2 -translate-y-1/2  flex items-center justify-center transition-colors duration-30 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isSubmitting ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            "Subscribe"
+          )}
+        </button>
+      </div>
     </form>
   );
 }
