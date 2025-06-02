@@ -32,6 +32,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   deleteData,
   fetchData,
+  fetchProtectedData,
   formPostData,
   patchData,
   postData,
@@ -144,14 +145,13 @@ export function ProductForm({
     const fetchInitialData = async () => {
       try {
         const [unitsResponse, suppliersResponse] = await Promise.all([
-          fetchData<Unit[]>("units"),
-          fetchData<Supplier[]>("suppliers"),
+          fetchProtectedData<Unit[]>("units"),
+          fetchProtectedData<Supplier[]>("suppliers"),
         ]);
 
         setUnits(unitsResponse);
         setSuppliers(suppliersResponse);
 
-        // Fetch gallery images if in edit mode and product has a gallery
         if (mode === "edit" && product?.gallery?.id) {
           try {
             const galleryResponse = await fetchData<Gallery>(

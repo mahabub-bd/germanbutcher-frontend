@@ -269,7 +269,7 @@ export function CategoryList({
           {categories.map((category) => (
             <TableRow key={category.id}>
               <TableCell>
-                <div className="rounded-md overflow-hidden">
+                <div className="overflow-hidden">
                   <Image
                     src={category?.attachment?.url || "/placeholder.svg"}
                     alt={category.name}

@@ -17,7 +17,7 @@ export default function Home() {
           <Suspense
             fallback={<LoadingIndicator message="Loading Categories..." />}
           >
-            <CategoriesList endpoint="categories">
+            <CategoriesList endpoint="categories?isMainCategory=true">
               <HeadingPrimary title="All Category" className="" />
             </CategoriesList>
           </Suspense>
