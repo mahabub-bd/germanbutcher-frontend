@@ -1,28 +1,27 @@
-import { Mail } from "lucide-react"; // Import the mail icon
 import { Subscription } from "./subscriber";
 
 export function NewsletterSection() {
   return (
     <section className="md:py-10 py-5">
-      <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-3">
-            <Mail className="inline-block mr-2 h-6 w-6 text-blue-600" />{" "}
-            {/* Add the Mail icon */}
-            Stay Updated with Our Newsletter
-          </h2>
-          <p className="text-gray-600 mb-6">
-            Join our community and be the first to receive exclusive updates,
-            special offers, and expert tips directly to your inbox.
-          </p>
+      <div className=" ">
+        <div className="container mx-auto md:grid md:grid-cols-12 md:gap-10 py-10  px-2.5 lg:px-0">
+          <div className="md:col-span-5  flex items-start md:items-center">
+            {/* <MdForwardToInbox size={80} /> */}
 
-          <div className="flex justify-center">
+            <div className="ml-2 md:ml-6 mb-2">
+              <h4 className="font-semibold text-xl md:text-[25px] lg:text-4xl  mb-2">
+                Subscribe Newsletter
+              </h4>
+              <p className=" md:text-base lg:text-lg font-medium text-sm">
+                We let you receive the latest information on as well as offers,
+                tips, and updates.
+              </p>
+            </div>
+          </div>
+          <div className="md:col-span-1"></div>
+          <div className="md:col-span-6 mt-2 md:mt-0 flex md:justify-end items-center">
             <Subscription />
           </div>
-
-          <p className="text-xs text-gray-500 mt-8">
-            We respect your privacy. You can unsubscribe at any time.
-          </p>
         </div>
       </div>
     </section>
