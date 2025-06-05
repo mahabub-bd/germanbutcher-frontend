@@ -88,8 +88,10 @@ export default async function ProductCard({ product }: { product: Product }) {
             )}
           </div>
 
-          {/* Quantity Selector */}
-          <ProductCount />
+     <div>
+         <h4 className=" text-base md:text-lg font-normal"><span className="font-semibold text-primaryColor">{Math.round(Number(product?.weight)) }</span> {product?.unit?.name}</h4>       
+      </div>        
+         
         </div>
       </Link>
 

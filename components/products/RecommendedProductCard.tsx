@@ -38,7 +38,8 @@ export default async function RecommendedProductCard({
         className="flex flex-col  w-full h-full"
       >
         {/* Image Container */}
-        <div className=" w-[180px] h-[140px] absolute -top-[105px] left-1/2 -translate-x-1/2 bg-gray-100 rounded-md overflow-hidden  mb-3">
+        <div className=" w-[180px] h-[140px] absolute -top-[90px] left-1/2 -translate-x-1/2 bg-gray-100 rounded-md overflow-hidden  mb-3">
+          <div>
           {product?.attachment?.url && (
             <Image
               src={product.attachment.url}
@@ -51,6 +52,17 @@ export default async function RecommendedProductCard({
               blurDataURL={base64}
             />
           )}
+ {isDiscountActive &&
+            product.discountType &&
+            product.discountValue && (
+              <Badge className="absolute top-2 left-2 bg-orange-500 hover:bg-orange-600 text-[10px] sm:text-xs">
+                {product.discountType === DiscountType.PERCENTAGE
+                  ? `${product.discountValue}% Off`
+                  : `Save ${formatCurrencyEnglish(product.discountValue)}`}
+              </Badge>
+            )}
+          </div>
+          
           {/* {product?.stock === 0 ? (
           <Badge
             variant="destructive"
@@ -66,16 +78,8 @@ export default async function RecommendedProductCard({
           )
         )} */}
         </div>
-        <div className="pt-10">
-          {isDiscountActive &&
-            product.discountType &&
-            product.discountValue && (
-              <Badge className="absolute top-2 left-2 bg-orange-500 hover:bg-orange-600 text-[10px] sm:text-xs">
-                {product.discountType === DiscountType.PERCENTAGE
-                  ? `${product.discountValue}% Off`
-                  : `Save ${formatCurrencyEnglish(product.discountValue)}`}
-              </Badge>
-            )}
+        <div className="pt-14">
+         
 
           <p className="font-bold text-start text-sm sm:text-base uppercase text-gray-800 mt-2">
             {product.name}
@@ -93,8 +97,9 @@ export default async function RecommendedProductCard({
               )}
             </div>
 
-            {/* Quantity Selector */}
-            <ProductCount />
+            <div>
+         <h4 className=" text-base md:text-lg font-normal"><span className="font-semibold text-primaryColor">{Math.round(Number(product?.weight)) }</span> {product?.unit?.name}</h4>       
+      </div>    
           </div>
         </div>
       </Link>
