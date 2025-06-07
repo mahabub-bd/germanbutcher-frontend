@@ -3,6 +3,8 @@ import ProductBarList from "@/components/products/product-grid";
 import { SortBar } from "@/components/products/sort-bar";
 import { fetchData } from "@/utils/api-utils";
 import type { Brand, Category } from "@/utils/types";
+import { memo, Suspense } from "react";
+import { LoadingIndicator } from "../admin/loading-indicator";
 
 async function fetchCategories(): Promise<Category[]> {
   try {
@@ -45,13 +47,15 @@ interface ProductsContentProps {
   };
 }
 
-export default async function ProductsContent({
-  searchParams,
-}: ProductsContentProps) {
-  const [categories, brands] = await Promise.all([
+async function ProductsContent({ searchParams }: ProductsContentProps) {
+  const [categoriesResult, brandsResult] = await Promise.allSettled([
     fetchCategories(),
     fetchBrands(),
   ]);
+
+  const categories =
+    categoriesResult.status === "fulfilled" ? categoriesResult.value : [];
+  const brands = brandsResult.status === "fulfilled" ? brandsResult.value : [];
 
   const filterParams = {
     limit: searchParams.limit || "12",
@@ -80,8 +84,17 @@ export default async function ProductsContent({
             max: searchParams.maxPrice,
           }}
         />
-        <ProductBarList filterParams={filterParams} />
+        <div className="flex-1">
+          <Suspense
+            fallback={
+              <LoadingIndicator fullHeight message="Loading Products..." />
+            }
+          ></Suspense>
+          <ProductBarList filterParams={filterParams} />
+        </div>
       </div>
     </div>
   );
 }
+
+export default memo(ProductsContent);
