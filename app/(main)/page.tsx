@@ -50,7 +50,7 @@ export default function Home() {
       <section className="md:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
           <BrandList endpoint="brands">
-            <HeadingPrimary title="Recommended for you" className="mb-40" />
+            <HeadingPrimary title="Recommended for you" className="mb-10" />
           </BrandList>
         </div>
       </section>
@@ -65,7 +65,7 @@ export default function Home() {
             <HeadingPrimary
               title="SPECIAL OFFERS"
               subtitle="Limited-time deals just for you"
-              className="mb-40"
+              className="mb-10"
               titleClassName="text-green-600"
             />
           </ProductList>

@@ -87,7 +87,9 @@ export interface Gallery {
 export interface Product {
   id: number;
   name: string;
+  slug?: string;
   description: string;
+  productDetails?: string;
   sellingPrice: number;
   purchasePrice: number;
   totalValueBySalePrice: number;
@@ -480,15 +482,14 @@ export interface UserActivity {
   user: User;
 }
 
-
 export interface Recipe {
   id: number;
   title: string;
   details: string;
   nutrition_details: string;
   isPublished: boolean;
-  createdAt: string;  
-  updatedAt: string;  
+  createdAt: string;
+  updatedAt: string;
   attachment: Attachment;
   category: Category;
   createdBy: User;

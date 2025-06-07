@@ -9,7 +9,7 @@ export default async function BrandPage() {
           <HeadingPrimary
             title="OUR BRANDS"
             subtitle="Shop from trusted brands you love"
-            className="mb-8"
+            className="my-10"
           />
         </BrandList>
       </div>

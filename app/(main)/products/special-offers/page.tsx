@@ -8,8 +8,7 @@ export default function SpecialOfferPage() {
         <HeadingPrimary
           title="SPECIAL OFFERS"
           subtitle="Limited-time deals just for you"
-          className="mb-40"
-          titleClassName="text-green-600"
+          className="mb-10"
         />
       </ProductList>
     </div>

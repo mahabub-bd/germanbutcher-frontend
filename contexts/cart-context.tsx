@@ -7,7 +7,7 @@ import { createContext, useContext } from "react";
 type CartContextType = {
   cart: Cart | { items: any[] };
   isLoading: boolean;
-  appliedCoupon: LocalCoupon | null; // Added coupon property
+  appliedCoupon: LocalCoupon | null;
   addItem: (product: Product, quantity?: number) => Promise<void>;
   updateItemQuantity: (
     itemId: number | string,

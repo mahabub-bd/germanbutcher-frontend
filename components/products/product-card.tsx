@@ -38,7 +38,7 @@ export default async function ProductCard({ product }: { product: Product }) {
         </button>
       </div>
 
-      <Link href={`/products/${product.id}`} className="block">
+      <Link href={`/product/${product?.slug}`} className="block">
         {/* Image Container */}
         <div className="w-full h-[220px] bg-gray-100  overflow-hidden relative mb-3">
           {product?.attachment?.url && (
@@ -89,7 +89,7 @@ export default async function ProductCard({ product }: { product: Product }) {
           </h3>
 
           {/* Price and Weight Row */}
-          <div className="flex items-end justify-between">
+          <div className="flex items-center justify-between">
             {/* Price Section */}
             <div className="flex items-baseline gap-2">
               <span className="text-xl font-bold text-primaryColor">
