@@ -1,12 +1,12 @@
 import { Badge } from "@/components/ui/badge";
-import { formatCurrencyEnglish } from "@/lib/utils";
+import { formatCurrencyEnglish, formatWeight } from "@/lib/utils";
 import { getBlurData } from "@/utils/blur-generator";
 import type { Product } from "@/utils/types";
 import { DiscountType } from "@/utils/types";
+import { Eye, Weight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { AddToCartButton } from "../cart/add-to-cart-button";
-import ProductCount from "./ProductCount";
 
 export default async function ProductCard({ product }: { product: Product }) {
   const { base64 } = await getBlurData(product?.attachment?.url);
@@ -27,14 +27,20 @@ export default async function ProductCard({ product }: { product: Product }) {
         : product.sellingPrice - (product.discountValue || 0)
       : null;
 
+  const isOutOfStock = !product?.stock;
+
   return (
-    <div className="relative group  transition-all duration-300 border border-gray-200 hover:bg-[#FDFBF4]  p-4 flex flex-col items-center rounded-lg shadow-sm hover:shadow-md">
-      <Link
-        href={`/products/${product.id}`}
-        className="flex flex-col  w-full h-full"
-      >
+    <div className="group relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-gray-200 transition-all duration-500 overflow-hidden">
+      {/* Quick Actions */}
+      <div className="absolute top-3 right-3 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <button className="w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white hover:scale-110 transition-all duration-200">
+          <Eye size={16} className="text-gray-600 hover:text-blue-500" />
+        </button>
+      </div>
+
+      <Link href={`/products/${product.id}`} className="block">
         {/* Image Container */}
-        <div className="w-full h-[180px] bg-gray-100 rounded-md overflow-hidden relative mb-3">
+        <div className="w-full h-[220px] bg-gray-100  overflow-hidden relative mb-3">
           {product?.attachment?.url && (
             <Image
               src={product.attachment.url}
@@ -47,54 +53,72 @@ export default async function ProductCard({ product }: { product: Product }) {
               blurDataURL={base64}
             />
           )}
-          {/* {product?.stock === 0 ? (
-          <Badge
-            variant="destructive"
-            className="absolute top-2 right-2 text-[10px] sm:text-xs"
-          >
-            Out of Stock
-          </Badge>
-        ) : (
-          product.stock > 0 && (
-            <Badge className="absolute top-2 right-2 bg-green-500 hover:bg-green-600 text-[10px] sm:text-xs">
-              In Stock
-            </Badge>
-          )
-        )} */}
+
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+          {/* Out of Stock Overlay */}
+          {isOutOfStock && (
+            <div className="absolute inset-0 bg-black/10 flex items-center justify-center backdrop-blur-xs">
+              <Badge
+                variant="destructive"
+                className="text-sm font-semibold px-4 py-2 rounded-full"
+              >
+                Out of Stock
+              </Badge>
+            </div>
+          )}
+
+          {/* Discount Badge */}
+          {isDiscountActive &&
+            product.discountType &&
+            product.discountValue && (
+              <Badge className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-pink-500 text-white border-0 shadow-lg font-semibold px-3 py-1 rounded-full">
+                {product.discountType === DiscountType.PERCENTAGE
+                  ? `${product.discountValue}% OFF`
+                  : `Save ${formatCurrencyEnglish(product.discountValue)}`}
+              </Badge>
+            )}
         </div>
 
-        {/* Discount Badge */}
-        {isDiscountActive && product.discountType && product.discountValue && (
-          <Badge className="absolute top-2 left-2 bg-orange-500 hover:bg-orange-600 text-[10px] sm:text-xs">
-            {product.discountType === DiscountType.PERCENTAGE
-              ? `${product.discountValue}% Off`
-              : `Save ${formatCurrencyEnglish(product.discountValue)}`}
-          </Badge>
-        )}
+        {/* Content Section */}
+        <div className="p-5 space-y-3">
+          {/* Product Name */}
+          <h3 className="font-semibold text-gray-900 text-base leading-tight line-clamp-2 group-hover:text-primaryColor transition-colors duration-200">
+            {product.name}
+          </h3>
 
-        <p className="font-bold text-start text-sm sm:text-base uppercase text-gray-800 mt-2">
-          {product.name}
-        </p>
+          {/* Price and Weight Row */}
+          <div className="flex items-end justify-between">
+            {/* Price Section */}
+            <div className="flex items-baseline gap-2">
+              <span className="text-xl font-bold text-primaryColor">
+                {formatCurrencyEnglish(discountedPrice || product.sellingPrice)}
+              </span>
+              {discountedPrice && (
+                <span className="text-sm text-gray-400 line-through">
+                  {formatCurrencyEnglish(product.sellingPrice)}
+                </span>
+              )}
+            </div>
 
-        <div className=" flex justify-between items-center mt-4">
-          <div className="flex items-center justify-center  gap-2">
-            <p className="text-primary font-bold text-sm sm:text-base">
-              {formatCurrencyEnglish(discountedPrice || product.sellingPrice)}
-            </p>
-            {discountedPrice && (
-              <p className="line-through text-gray-400 text-xs sm:text-sm">
-                {formatCurrencyEnglish(product.sellingPrice)}
-              </p>
+            {/* Weight Display */}
+            {product?.weight && product?.unit?.name && (
+              <div className="flex items-center gap-1 px-2 py-1 bg-gray-50 rounded-full">
+                <Weight size={12} className="text-gray-500" />
+                <span className="text-xs font-medium text-gray-600">
+                  {formatWeight(product.weight, product.unit.name)}
+                </span>
+              </div>
             )}
           </div>
-
-          {/* Quantity Selector */}
-          <ProductCount />
         </div>
       </Link>
 
-      {/* Add to Cart */}
-      <AddToCartButton product={product} disabled={!product?.stock} />
+      {/* Add to Cart Button */}
+      <div className="px-5 pb-5">
+        <AddToCartButton product={product} disabled={isOutOfStock} />
+      </div>
     </div>
   );
 }

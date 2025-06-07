@@ -76,3 +76,18 @@ export const getRoleColor = (roleName: string | undefined) => {
   const normalizedRole = roleName.toLowerCase();
   return roleColors[normalizedRole] || roleColors.default;
 };
+
+export function formatWeight(weight: any, unit: string): string {
+  const parsedWeight = typeof weight === "number" ? weight : parseFloat(weight);
+
+  if (isNaN(parsedWeight)) {
+    return "Invalid weight";
+  }
+
+  const formattedWeight =
+    parsedWeight % 1 === 0 ? parsedWeight.toFixed(0) : parsedWeight.toFixed(1);
+
+  const displayUnit = unit.toLowerCase();
+
+  return `${formattedWeight} ${displayUnit}`;
+}

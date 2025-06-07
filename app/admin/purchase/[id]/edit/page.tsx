@@ -3,7 +3,8 @@
 import { PurchaseForm } from "@/components/admin/purchase/purchase-form";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardTitle } from "@/components/ui/card";
-import { fetchData } from "@/utils/api-utils";
+import { fetchProtectedData } from "@/utils/api-utils";
+
 import type { Purchase } from "@/utils/types";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -19,7 +20,9 @@ export default function EditPurchasePage() {
 
   const fetchPurchase = async () => {
     try {
-      const response = await fetchData<Purchase>(`purchases/${purchaseId}`);
+      const response = await fetchProtectedData<Purchase>(
+        `purchases/${purchaseId}`
+      );
       setPurchase(response);
     } catch (error) {
       console.error("Error fetching purchase:", error);

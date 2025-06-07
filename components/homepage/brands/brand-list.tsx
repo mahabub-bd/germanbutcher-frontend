@@ -2,7 +2,6 @@ import RecommendedProductCard from "@/components/products/RecommendedProductCard
 import { fetchData } from "@/utils/api-utils";
 import { Product } from "@/utils/types";
 import { ReactNode, Suspense } from "react";
-import CustomViewAllButton from "../Category/CustomViewAllButton";
 import BrandSkeleton from "./brand-skeleton";
 
 export default async function BrandList({
@@ -32,9 +31,6 @@ export default async function BrandList({
             <RecommendedProductCard key={product.id} product={product} />
           ))}
         </Suspense>
-      </div>
-      <div className=" pt-6">
-        <CustomViewAllButton />
       </div>
     </div>
   );
