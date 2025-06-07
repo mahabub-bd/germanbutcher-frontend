@@ -89,8 +89,9 @@ async function ProductsContent({ searchParams }: ProductsContentProps) {
             fallback={
               <LoadingIndicator fullHeight message="Loading Products..." />
             }
-          ></Suspense>
-          <ProductBarList filterParams={filterParams} />
+          >
+            <ProductBarList filterParams={filterParams} />
+          </Suspense>
         </div>
       </div>
     </div>
