@@ -77,7 +77,7 @@ export const getRoleColor = (roleName: string | undefined) => {
   return roleColors[normalizedRole] || roleColors.default;
 };
 
-export function formatWeight(weight: any, unit: string): string {
+export function formatWeight(weight: number, unit: string): string {
   const parsedWeight = typeof weight === "number" ? weight : parseFloat(weight);
 
   if (isNaN(parsedWeight)) {

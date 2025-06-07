@@ -19,16 +19,13 @@ export function AddToCartButton({
   className,
 }: AddToCartButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [isAdded, setIsAdded] = useState(false);
+
   const { addItem } = useCartContext();
 
   const handleAddToCart = async () => {
     setIsLoading(true);
     try {
       await addItem(product);
-      setIsAdded(true);
-      // Reset the success state after 2 seconds
-      setTimeout(() => setIsAdded(false), 2000);
     } catch (error) {
       console.error("Error adding to cart:", error);
     } finally {
