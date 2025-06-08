@@ -51,7 +51,7 @@ export default function Home() {
       {/* Brands Section */}
       <section className="md:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
-          <BrandList endpoint="brands">
+          <BrandList endpoint="products">
             <HeadingPrimary title="Recommended for you" className="mb-10" />
           </BrandList>
         </div>

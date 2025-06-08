@@ -1,13 +1,13 @@
 import { Badge } from "@/components/ui/badge";
-import { formatCurrencyEnglish } from "@/lib/utils";
+import { formatCurrencyEnglish, formatWeight } from "@/lib/utils";
 import { getBlurData } from "@/utils/blur-generator";
 import type { Product } from "@/utils/types";
 import { DiscountType } from "@/utils/types";
 import Image from "next/image";
 import Link from "next/link";
 
+import { Weight } from "lucide-react";
 import { AddToCartButton } from "../cart/add-to-cart-button";
-import ProductCount from "./ProductCount";
 
 export default async function RecommendedProductCard({
   product,
@@ -33,7 +33,7 @@ export default async function RecommendedProductCard({
       : null;
 
   return (
-    <div className="relative group  transition-all duration-300 border border-gray-200 hover:bg-[#FDFBF4]  p-4 flex flex-col items-center rounded-lg shadow-sm hover:shadow-md">
+    <div className="relative group mt-20 mb-5  transition-all duration-300 border border-gray-200 hover:bg-[#FDFBF4]  p-4 flex flex-col items-center rounded-lg shadow-sm hover:shadow-md">
       <Link
         href={`/products/${product.id}`}
         className="flex flex-col  w-full h-full"
@@ -79,29 +79,41 @@ export default async function RecommendedProductCard({
           )
         )} */}
         </div>
-        <div className="pt-14">
-         
-
-          <p className="font-bold text-start text-sm sm:text-base uppercase text-gray-800 mt-2">
+         <div className="p-5 pt-15 space-y-3">
+          {/* Product Name */}
+          <h3 className="font-semibold text-gray-900 text-base leading-tight line-clamp-2 group-hover:text-primaryColor transition-colors duration-200">
             {product.name}
-          </p>
+          </h3>
 
-          <div className=" flex justify-between items-center mt-4">
-            <div className="flex items-center justify-center  gap-2">
-              <p className="text-primary font-bold text-sm sm:text-base">
+          {/* Price and Weight Row */}
+          <div className="flex items-center justify-between">
+            {/* Price Section */}
+            <div className="flex items-baseline gap-2">
+              <span className="text-xl font-bold text-primaryColor">
                 {formatCurrencyEnglish(discountedPrice || product.sellingPrice)}
-              </p>
+              </span>
               {discountedPrice && (
-                <p className="line-through text-gray-400 text-xs sm:text-sm">
+                <span className="text-sm text-gray-400 line-through">
                   {formatCurrencyEnglish(product.sellingPrice)}
-                </p>
+                </span>
               )}
             </div>
 
-            <div>
-         <h4 className=" text-base md:text-lg font-normal"><span className="font-semibold text-primaryColor">{Math.round(Number(product?.weight)) }</span> {product?.unit?.name}</h4>       
-      </div>    
+            {/* Weight Display */}
+            {product?.weight && product?.unit?.name && (
+              <div className="flex items-center gap-1 px-2 py-1 bg-gray-50 rounded-full">
+                <Weight size={12} className="text-gray-500" />
+                <span className="text-xs font-medium text-gray-600">
+                  {formatWeight(product.weight, product.unit.name)}
+                </span>
+              </div>
+            )}
           </div>
+
+     <div>
+         <h4 className=" text-base md:text-lg font-normal"><span className="font-semibold text-primaryColor">{Math.round(Number(product?.weight)) }</span> {product?.unit?.name}</h4>       
+      </div>        
+         
         </div>
       </Link>
 
