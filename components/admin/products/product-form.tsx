@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+
 import {
   Select,
   SelectContent,
@@ -38,11 +39,11 @@ import {
   postData,
 } from "@/utils/api-utils";
 import {
-  Attachment,
-  DiscountType,
-  Gallery,
+  type Attachment,
   type Brand,
   type Category,
+  DiscountType,
+  type Gallery,
   type Product,
   type Supplier,
   type Unit,
@@ -50,6 +51,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import { DatePicker } from "@/components/ui/date-picker";
+import RichTextEditor from "@/components/ui/jodit-editor";
 import { productSchema } from "@/utils/form-validation";
 import { InfoBox, Section } from "../helper";
 
@@ -85,13 +87,13 @@ export function ProductForm({
 
   const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
-  console.log(galleryFiles);
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: {
       name: product?.name || "",
       description: product?.description || "",
+      productDetails: product?.productDetails || "",
       sellingPrice: product?.sellingPrice || 0,
       purchasePrice: product?.purchasePrice || 0,
       stock: product?.stock || 0,
@@ -130,7 +132,6 @@ export function ProductForm({
           setSelectedMainCategory(mainCategory.id);
           await fetchSubCategories(mainCategory.id);
 
-          // If category has a parent, it's a subcategory
           if (product.category.parentId) {
             form.setValue("categoryId", product.category.id);
           }
@@ -202,7 +203,6 @@ export function ProductForm({
 
     if (selectedCategory) {
       await fetchSubCategories(mainCategoryId);
-
       form.setValue("categoryId", 0);
     }
   };
@@ -247,7 +247,6 @@ export function ProductForm({
     const newFiles = Array.from(selectedFiles);
     setGalleryFiles((prev) => [...prev, ...newFiles]);
 
-    // Create preview URLs for the new files
     const newPreviews = newFiles.map((file) => URL.createObjectURL(file));
     setGalleryPreviews((prev) => [...prev, ...newPreviews]);
   };
@@ -270,7 +269,6 @@ export function ProductForm({
 
       toast.success("Image deleted successfully");
 
-      // Refresh gallery images
       const galleryResponse = await fetchData<Gallery>(
         `galleries/${product.gallery.id}`
       );
@@ -419,11 +417,31 @@ export function ProductForm({
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="productDetails"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Product Details</FormLabel>
+                  <FormControl>
+                    <RichTextEditor
+                      value={field.value ?? ""}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                  <p className="text-xs text-muted-foreground">
+                    Use the rich text editor to format your content. Supports
+                    text formatting, lists, links, images, and more.
+                  </p>
+                </FormItem>
+              )}
+            />
           </Section>
 
           <Section title="Product Identification">
             <div className="grid grid-cols-1 gap-6">
-              {/* Row 1: SKU and Unit */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -431,7 +449,7 @@ export function ProductForm({
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel>SKU</FormLabel>
-                      <div className="grid gap-4  grid-cols-2 w-full">
+                      <div className="grid gap-4 grid-cols-2 w-full">
                         <FormControl className="w-full">
                           <Input
                             placeholder="Enter product SKU"
@@ -491,7 +509,6 @@ export function ProductForm({
                 />
               </div>
 
-              {/* Row 2: Supplier and Brand */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -568,7 +585,6 @@ export function ProductForm({
                 />
               </div>
 
-              {/* Row 3: Main Category and Sub Category */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormItem className="w-full">
                   <FormLabel>Main Category</FormLabel>
@@ -704,6 +720,7 @@ export function ProductForm({
               description="Stock levels will automatically update when orders are processed. You can manually adjust stock levels at any time."
             />
           </Section>
+
           <Section title="Discount">
             <FormField
               control={form.control}
@@ -806,6 +823,7 @@ export function ProductForm({
               </div>
             )}
           </Section>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Section title="Media">
               <FormField
@@ -866,7 +884,6 @@ export function ProductForm({
                   <FormLabel>Gallery Images</FormLabel>
                   <div className="flex flex-col gap-4">
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                      {/* Display existing gallery images from the server */}
                       {mode === "edit" &&
                         product?.gallery?.id &&
                         galleryPreviews.map((preview, index) => (
@@ -888,7 +905,6 @@ export function ProductForm({
                               size="icon"
                               className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
                               onClick={() => {
-                                // If product has gallery and we have attachment IDs
                                 if (
                                   product?.gallery?.attachments &&
                                   product.gallery.attachments[index]?.id
@@ -897,7 +913,6 @@ export function ProductForm({
                                     product.gallery.attachments[index].id
                                   );
                                 } else {
-                                  // If we don't have attachment IDs, just remove from UI
                                   const newPreviews = [...galleryPreviews];
                                   newPreviews.splice(index, 1);
                                   setGalleryPreviews(newPreviews);
@@ -909,7 +924,6 @@ export function ProductForm({
                           </div>
                         ))}
 
-                      {/* Display newly uploaded images */}
                       {galleryFiles.map((_, index) => (
                         <div key={`new-${index}`} className="relative group">
                           <div className="relative w-full h-24 border rounded-md overflow-hidden bg-gray-50">
