@@ -1,6 +1,4 @@
-import { LoadingIndicator } from "@/components/admin/loading-indicator";
 import ProductsContent from "@/components/products/product-content";
-import { Suspense } from "react";
 
 export default async function ProductsPage({
   searchParams,
@@ -18,11 +16,5 @@ export default async function ProductsPage({
 }) {
   const resolvedSearchParams = await searchParams;
 
-  return (
-    <Suspense
-      fallback={<LoadingIndicator fullHeight message="Loading Products..." />}
-    >
-      <ProductsContent searchParams={resolvedSearchParams} />
-    </Suspense>
-  );
+  return <ProductsContent searchParams={resolvedSearchParams} />;
 }

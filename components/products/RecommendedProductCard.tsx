@@ -5,6 +5,7 @@ import type { Product } from "@/utils/types";
 import { DiscountType } from "@/utils/types";
 import Image from "next/image";
 import Link from "next/link";
+
 import { AddToCartButton } from "../cart/add-to-cart-button";
 import ProductCount from "./ProductCount";
 

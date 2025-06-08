@@ -9,6 +9,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
@@ -16,14 +17,25 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DollarSign, Filter, Grid3X3, Star, Tag, X } from "lucide-react";
+import {
+  ChevronRight,
+  DollarSign,
+  Filter,
+  Grid3X3,
+  Star,
+  Tag,
+  X,
+} from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ScrollArea } from "../ui/scroll-area";
 
 interface Category {
   id: number;
   name: string;
+  parentId?: number | null;
+  isMainCategory: boolean;
+  children?: Category[];
 }
 
 interface Brand {
@@ -74,6 +86,24 @@ export function ProductFilters({
     "range"
   );
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [openCategories, setOpenCategories] = useState<Set<number>>(new Set());
+
+  // Organize categories into hierarchical structure
+  const organizedCategories = useMemo(() => {
+    const mainCategories = categories.filter(
+      (cat) => cat.isMainCategory && !cat.parentId
+    );
+    const subCategories = categories.filter(
+      (cat) => !cat.isMainCategory && cat.parentId
+    );
+
+    return mainCategories.map((mainCat) => ({
+      ...mainCat,
+      children: subCategories.filter(
+        (subCat) => subCat.parentId === mainCat.id
+      ),
+    }));
+  }, [categories]);
 
   const activeFiltersCount = [
     currentCategory ? 1 : 0,
@@ -100,6 +130,18 @@ export function ProductFilters({
     ]);
   }, [currentPriceRange]);
 
+  // Auto-expand parent categories if their children are selected
+  useEffect(() => {
+    if (currentCategory) {
+      const selectedCat = categories.find(
+        (cat) => cat.id.toString() === currentCategory
+      );
+      if (selectedCat?.parentId) {
+        setOpenCategories((prev) => new Set([...prev, selectedCat.parentId!]));
+      }
+    }
+  }, [currentCategory, categories]);
+
   const createQueryString = (params: Record<string, string | null>) => {
     const newParams = new URLSearchParams(searchParams.toString());
 
@@ -120,6 +162,7 @@ export function ProductFilters({
         categoryId.toString() === currentCategory
           ? null
           : categoryId.toString(),
+      page: "1", // Reset to first page when filtering
     };
     router.push(`${pathname}?${createQueryString(params)}`);
     setIsSheetOpen(false);
@@ -128,6 +171,7 @@ export function ProductFilters({
   const handleBrandChange = (brandId: number) => {
     const params = {
       brand: brandId.toString() === currentBrand ? null : brandId.toString(),
+      page: "1",
     };
     router.push(`${pathname}?${createQueryString(params)}`);
     setIsSheetOpen(false);
@@ -136,6 +180,7 @@ export function ProductFilters({
   const handleFeaturedChange = (checked: boolean) => {
     const params = {
       featured: checked ? "true" : null,
+      page: "1",
     };
     router.push(`${pathname}?${createQueryString(params)}`);
     setIsSheetOpen(false);
@@ -144,7 +189,11 @@ export function ProductFilters({
   const handlePriceRangeChange = (value: string) => {
     if (!value) {
       router.push(
-        `${pathname}?${createQueryString({ minPrice: null, maxPrice: null })}`
+        `${pathname}?${createQueryString({
+          minPrice: null,
+          maxPrice: null,
+          page: "1",
+        })}`
       );
       setIsSheetOpen(false);
       return;
@@ -155,6 +204,7 @@ export function ProductFilters({
       `${pathname}?${createQueryString({
         minPrice: min,
         maxPrice: max === "Infinity" ? max : max,
+        page: "1",
       })}`
     );
     setIsSheetOpen(false);
@@ -166,7 +216,11 @@ export function ProductFilters({
 
     if (min === 0 && max === MAX_PRICE) {
       router.push(
-        `${pathname}?${createQueryString({ minPrice: null, maxPrice: null })}`
+        `${pathname}?${createQueryString({
+          minPrice: null,
+          maxPrice: null,
+          page: "1",
+        })}`
       );
       return;
     }
@@ -177,6 +231,7 @@ export function ProductFilters({
       `${pathname}?${createQueryString({
         minPrice: min.toString(),
         maxPrice: maxValue,
+        page: "1",
       })}`
     );
   };
@@ -231,6 +286,18 @@ export function ProductFilters({
       }
     };
   }, [debounceTimer]);
+
+  const toggleCategoryOpen = (categoryId: number) => {
+    setOpenCategories((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(categoryId)) {
+        newSet.delete(categoryId);
+      } else {
+        newSet.add(categoryId);
+      }
+      return newSet;
+    });
+  };
 
   const FilterContent = () => (
     <>
@@ -528,6 +595,7 @@ export function ProductFilters({
               </Tabs>
             </AccordionContent>
           </AccordionItem>
+
           <AccordionItem
             value="categories"
             className="border border-red-100 dark:border-red-700 rounded-lg px-4 py-2 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/20 dark:to-rose-950/20"
@@ -539,23 +607,71 @@ export function ProductFilters({
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <div className="space-y-2 pt-2">
-                {categories.map((category) => (
-                  <div
-                    key={category.id}
-                    className="flex items-center space-x-2"
-                  >
-                    <Checkbox
-                      id={`category-${category.id}`}
-                      checked={category.id.toString() === currentCategory}
-                      onCheckedChange={() => handleCategoryChange(category.id)}
-                    />
-                    <Label
-                      htmlFor={`category-${category.id}`}
-                      className="text-sm font-normal cursor-pointer"
-                    >
-                      {category.name}
-                    </Label>
+              <div className="space-y-3 pt-2">
+                {organizedCategories.map((category) => (
+                  <div key={category.id} className="space-y-2">
+                    {/* Main Category */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`category-${category.id}`}
+                          checked={category.id.toString() === currentCategory}
+                          onCheckedChange={() =>
+                            handleCategoryChange(category.id)
+                          }
+                        />
+                        <Label
+                          htmlFor={`category-${category.id}`}
+                          className="text-sm font-medium cursor-pointer"
+                        >
+                          {category.name}
+                        </Label>
+                      </div>
+                      {category.children && category.children.length > 0 && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => toggleCategoryOpen(category.id)}
+                          className="h-6 w-6 p-0"
+                        >
+                          <ChevronRight
+                            className={`h-4 w-4 transition-transform ${
+                              openCategories.has(category.id) ? "rotate-90" : ""
+                            }`}
+                          />
+                        </Button>
+                      )}
+                    </div>
+
+                    {/* Subcategories */}
+                    {category.children && category.children.length > 0 && (
+                      <Collapsible open={openCategories.has(category.id)}>
+                        <CollapsibleContent className="ml-6 space-y-2 border-l-2 border-red-100 dark:border-red-800 pl-4">
+                          {category.children.map((subCategory) => (
+                            <div
+                              key={subCategory.id}
+                              className="flex items-center space-x-2"
+                            >
+                              <Checkbox
+                                id={`category-${subCategory.id}`}
+                                checked={
+                                  subCategory.id.toString() === currentCategory
+                                }
+                                onCheckedChange={() =>
+                                  handleCategoryChange(subCategory.id)
+                                }
+                              />
+                              <Label
+                                htmlFor={`category-${subCategory.id}`}
+                                className="text-sm font-normal cursor-pointer text-muted-foreground"
+                              >
+                                {subCategory.name}
+                              </Label>
+                            </div>
+                          ))}
+                        </CollapsibleContent>
+                      </Collapsible>
+                    )}
                   </div>
                 ))}
               </div>
@@ -611,8 +727,8 @@ export function ProductFilters({
 
   return (
     <>
-      <ScrollArea className="min-w-76 shadow-none p-2 md:flex hidden h-[100vh]  absolute top-2">
-        <div className="p-2 ">
+      <ScrollArea className="min-w-76 shadow-none p-2 md:flex hidden h-[100vh] absolute top-2">
+        <div className="p-2">
           <FilterContent />
         </div>
       </ScrollArea>
@@ -622,7 +738,7 @@ export function ProductFilters({
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
             <Button
-              className="rounded-full h-10 w-10  shadow-lg flex items-center justify-center"
+              className="rounded-full h-10 w-10 shadow-lg flex items-center justify-center"
               size="icon"
             >
               <Filter className="h-4 w-4" />

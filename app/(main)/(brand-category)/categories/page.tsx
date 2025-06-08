@@ -9,7 +9,6 @@ export default function CategoryPage() {
           <HeadingPrimary
             title="FEATURED CATEGORIES"
             subtitle="Get your desired product from featured category"
-            className="mb-8"
           />
         </CategoriesList>
       </div>

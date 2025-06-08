@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select";
 import { Section } from "../helper";
 
-import { fetchData, patchData, postData } from "@/utils/api-utils";
+import { fetchProtectedData, patchData, postData } from "@/utils/api-utils";
 import { purchaseSchema } from "@/utils/form-validation";
 import type { Product, Purchase, Supplier } from "@/utils/types";
 import { LoadingIndicator } from "../loading-indicator";
@@ -76,12 +76,12 @@ export function PurchaseForm({ mode, purchase }: PurchaseFormProps) {
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
-        const suppliers = await fetchData<Supplier[]>("suppliers");
+        const suppliers = await fetchProtectedData<Supplier[]>("suppliers");
         setSuppliers(suppliers);
 
         if (purchase?.supplier?.id) {
           setIsProductsLoading(true);
-          const supplierProducts = await fetchData<Product[]>(
+          const supplierProducts = await fetchProtectedData<Product[]>(
             `products?supplier=${purchase.supplier.id}`
           );
           setProducts(supplierProducts);
@@ -101,7 +101,7 @@ export function PurchaseForm({ mode, purchase }: PurchaseFormProps) {
   const handleSupplierChange = async (supplierId: number) => {
     try {
       setIsProductsLoading(true);
-      const products = await fetchData<Product[]>(
+      const products = await fetchProtectedData<Product[]>(
         `products?supplier=${supplierId}`
       );
       setProducts(products);
@@ -306,7 +306,7 @@ export function PurchaseForm({ mode, purchase }: PurchaseFormProps) {
           </Section>
 
           <Section title="Purchase Details">
-            <div className="space-y-4">
+            <div className="space-y-4 grid md:grid-cols-3 grid-cols-1 gap-4 items-center">
               <FormField
                 control={form.control}
                 name="purchaseDate"

@@ -342,3 +342,7 @@ export function buildQueryString(
 export async function fetchOrderById(id: string) {
   return fetchData(`orders/${id}`);
 }
+
+export async function fetchProductBySlug(slug: string) {
+  return fetchData(`products/${slug}`);
+}

@@ -4,6 +4,7 @@ import { AnimatedCarousel } from "@/components/homepage/banner/hero/animated-car
 import BrandList from "@/components/homepage/brands/brand-list";
 import CategoriesList from "@/components/homepage/Category/categories-list";
 import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
+import { TestimonialSection } from "@/components/homepage/testimonial/testimonial-section";
 import ProductList from "@/components/products/product-list";
 import { Suspense } from "react";
 
@@ -24,10 +25,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Best Selling Products Section */}
+      {/* Features Products Section */}
       <section className="md:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
-          <ProductList endpoint="products">
+          <ProductList
+            endpoint="products?featured=true"
+            isHomePage
+            href="/products/featured"
+          >
             <HeadingPrimary title="Featured Products" className="mb-8" />
           </ProductList>
         </div>
@@ -36,7 +41,7 @@ export default function Home() {
       {/* Featured Products Section */}
       <section className="md:py-10 py-5 bg-bgsecondColor">
         <div className="container mx-auto ">
-          <ProductList endpoint="products">
+          <ProductList endpoint="products" isHomePage href="/products/popular">
             <HeadingPrimary title="Popular Products" className="mb-10" />
           </ProductList>
         </div>
@@ -45,30 +50,33 @@ export default function Home() {
       {/* Brands Section */}
       <section className="md:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
-          <BrandList endpoint="products">
-            <HeadingPrimary title="Recommended for you" className="mb-40" />
+          <BrandList endpoint="brands">
+            <HeadingPrimary title="Recommended for you" className="mb-10" />
           </BrandList>
         </div>
       </section>
 
       <section className="md:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
-          <ProductList endpoint="products/discounted?page=1&limit=20">
+          <ProductList
+            endpoint="products/discounted?page=1&limit=20"
+            isHomePage
+            href="/products/special-offers"
+          >
             <HeadingPrimary
               title="SPECIAL OFFERS"
               subtitle="Limited-time deals just for you"
-              className="mb-40"
+              className="mb-10"
               titleClassName="text-green-600"
             />
           </ProductList>
         </div>
       </section>
       {/* Subscribe Section */}
-      <section className="md:py-10 py-5 ">
-        <div className="container mx-auto ">
-          <NewsletterSection />
-        </div>
-      </section>
+
+      <NewsletterSection />
+
+      <TestimonialSection />
     </main>
   );
 }

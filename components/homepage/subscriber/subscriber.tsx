@@ -20,10 +20,8 @@ export function Subscription() {
   async function handleSubscribe(e: React.FormEvent) {
     e.preventDefault();
 
-    // Reset error state
     setError(null);
 
-    // Validate email
     if (!email) {
       setError("Please enter your email address");
       return;
@@ -70,7 +68,9 @@ export function Subscription() {
           value={email}
           required
           onChange={(e) => setEmail(e.target.value)}
-          className={`${error ? "border-red-500" : ""} border w-full  md:text-base lg:text-lg font-medium  border-gray-300 rounded-full py-2  px-2 md:py-4 md:px-4 focus:outline-none bg-[#FDFBF4] focus:border-blackColor`}
+          className={`${
+            error ? "border-red-500" : ""
+          } border-primaryColor border w-full  md:text-base lg:text-lg font-medium  rounded-full py-2  px-2 md:py-4 md:px-4 focus:outline-none bg-[#FDFBF4] focus:border-blackColor`}
           disabled={isSubmitting}
           placeholder="Enter your email"
         />
