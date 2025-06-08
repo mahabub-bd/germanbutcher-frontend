@@ -4,6 +4,7 @@ import { AnimatedCarousel } from "@/components/homepage/banner/hero/animated-car
 import BrandList from "@/components/homepage/brands/brand-list";
 import CategoriesList from "@/components/homepage/Category/categories-list";
 import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
+import { TestimonialSection } from "@/components/homepage/testimonial/testimonial-section";
 import ProductList from "@/components/products/product-list";
 import { Suspense } from "react";
 
@@ -72,11 +73,10 @@ export default function Home() {
         </div>
       </section>
       {/* Subscribe Section */}
-      <section className="md:py-10 py-5 ">
-        <div className="container mx-auto ">
-          <NewsletterSection />
-        </div>
-      </section>
+
+      <NewsletterSection />
+
+      <TestimonialSection />
     </main>
   );
 }
