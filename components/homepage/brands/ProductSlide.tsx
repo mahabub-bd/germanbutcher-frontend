@@ -1,12 +1,12 @@
-import React, { Suspense } from 'react'
-import BrandSkeleton from './brand-skeleton'
-import RecommendedProductCard from '@/components/products/RecommendedProductCard'
+          import RecommendedProductCard from '@/components/products/RecommendedProductCard'
 import { Product } from '@/utils/types'
+import { Suspense } from 'react'
+import BrandSkeleton from './brand-skeleton'
 
 function ProductSlide({product}:any) {
   return (
     <div>
-         <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-4  xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
+                     <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-4  xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
         <Suspense
           fallback={
             <div className="col-span-full grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-4  xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
