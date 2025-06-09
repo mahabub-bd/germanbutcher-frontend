@@ -10,7 +10,7 @@ interface DesktopHeaderProps {
 
 export function DesktopHeader({ isAdminUser }: DesktopHeaderProps) {
   return (
-    <div className="hidden bg-primaryColor  md:block  py-4 ">
+    <div className="hidden   md:block  py-4 ">
       <div className="container mx-auto flex justify-between items-center px-4 md:px-8 lg:px-12">
         <div className="flex items-center">
           <Link href="/" className="flex items-center mr-6">
@@ -20,7 +20,6 @@ export function DesktopHeader({ isAdminUser }: DesktopHeaderProps) {
               width={60}
               height={60}
               className="w-10 h-10 lg:w-[60px] lg:h-[60px]"
-              priority
             />
           </Link>
 

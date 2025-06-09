@@ -93,7 +93,7 @@ export function CartButtonHeader({
           icon={
             <ShoppingCart
               className={cn(
-                "text-white hover:text-white hover:!bg-black transition-colors",
+                "text-white hover:text-white transition-colors",
                 compact ? "size-6" : "size-5"
               )}
             />

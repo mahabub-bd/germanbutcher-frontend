@@ -8,7 +8,7 @@ export async function Header() {
   const isAdminUser = user?.isAdmin;
 
   return (
-    <header className="sticky border-b top-0 z-50 w-full bg-primaryColor backdrop-blur ">
+    <header className="sticky top-0 z-50 w-full bg-primaryColor shadow-2xl">
       <DesktopHeader isAdminUser={isAdminUser} />
       <MobileHeader isAdminUser={isAdminUser} />
     </header>
