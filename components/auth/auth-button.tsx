@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { logout } from "@/actions/auth";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { logout } from '@/actions/auth';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,14 +11,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
-import type { authResponse, UserTypes } from "@/utils/types";
-import { Heart, LogOut, Settings, User, UserCircle } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
+} from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
+import type { authResponse, UserTypes } from '@/utils/types';
+import { Heart, LogOut, Settings, User, UserCircle } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface AuthBtnProps {
   user: UserTypes | null;
@@ -38,18 +38,18 @@ export default function AuthBtn({
     try {
       setIsLoggingOut(true);
       const result: authResponse = await logout();
-      console.log("Logout result:", result); // Debugging line
+      console.log('Logout result:', result); // Debugging line
 
       if (result.statusCode === 200) {
-        toast.success("Logged out successfully");
-        router.push("/auth/sign-in");
+        toast.success('Logged out successfully');
+        router.push('/auth/sign-in');
         router.refresh(); // Ensure client state updates
       } else {
-        toast.error("Failed to log out");
+        toast.error('Failed to log out');
       }
     } catch (error) {
-      toast.error("Failed to log out");
-      console.error("Logout error:", error);
+      toast.error('Failed to log out');
+      console.error('Logout error:', error);
     } finally {
       setIsLoggingOut(false);
     }
@@ -57,9 +57,9 @@ export default function AuthBtn({
 
   const getInitials = (name: string): string => {
     return name
-      .split(" ")
-      .map((n) => n[0]?.toUpperCase() ?? "")
-      .join("")
+      .split(' ')
+      .map((n) => n[0]?.toUpperCase() ?? '')
+      .join('')
       .substring(0, 2);
   };
 
@@ -70,14 +70,16 @@ export default function AuthBtn({
         // size="sm"
         className={cn(
           compact
-            ? "h-8 w-8 rounded-full cursor-pointer p-0"
-            : "flex items-center gap-2 cursor-pointer rounded-full ",
+            ? 'h-8 w-8 rounded-full flex items-center justify-end cursor-pointer p-0 text-center'
+            : 'flex items-center justify-center  cursor-pointer rounded-full ',
           className
         )}
-        onClick={() => router.push("/auth/sign-in")}
-        aria-label="Sign in"
+        onClick={() => router.push('/auth/sign-in')}
       >
-        <User size={24} className={cn("h-6 w-6", compact ? "" : "")} />
+        <User
+          size={24}
+          className={cn('lg:h-6 w-5 h-5 lg:w-6', compact ? ' text-center' : '')}
+        />
         {/* {!compact && <span>Sign in</span>} */}
       </button>
     );
@@ -90,29 +92,29 @@ export default function AuthBtn({
           variant="ghost"
           size="sm"
           className={cn(
-            "relative rounded-full border p-0 hover:bg-muted/50 focus-visible:ring-0 focus-visible:ring-offset-0",
-            compact ? "h-8 w-8" : "h-9 w-9",
+            'relative rounded-full border p-0 hover:bg-muted/50 focus-visible:ring-0 focus-visible:ring-offset-0',
+            compact ? 'h-8 w-8' : 'h-9 w-9',
             className
           )}
           disabled={isLoggingOut}
           aria-label="User menu"
         >
-          <Avatar className={cn(compact ? "h-8 w-8" : "h-9 w-9")}>
+          <Avatar className={cn(compact ? 'h-8 w-8' : 'h-9 w-9')}>
             {user?.profilePhoto?.url ? (
               <AvatarImage
                 src={user.profilePhoto.url}
-                alt={user.name || "User avatar"}
+                alt={user.name || 'User avatar'}
                 className="object-cover"
                 referrerPolicy="no-referrer"
               />
             ) : null}
             <AvatarFallback
               className={cn(
-                "text-xs font-medium",
-                compact ? "text-[10px]" : "text-xs"
+                'text-xs font-medium',
+                compact ? 'text-[10px]' : 'text-xs'
               )}
             >
-              {user.name ? getInitials(user.name) : "US"}
+              {user.name ? getInitials(user.name) : 'US'}
             </AvatarFallback>
           </Avatar>
           <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 ring-1 ring-white" />
@@ -127,7 +129,7 @@ export default function AuthBtn({
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none truncate">
-              {user.name || "User"}
+              {user.name || 'User'}
             </p>
             {user.email && (
               <p className="text-xs leading-none text-muted-foreground truncate">
@@ -150,7 +152,7 @@ export default function AuthBtn({
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link
-              href={user?.isAdmin ? "/admin/dashboard" : "/user/dashboard"}
+              href={user?.isAdmin ? '/admin/dashboard' : '/user/dashboard'}
               className="flex cursor-pointer items-center"
               prefetch={false}
             >
@@ -178,7 +180,7 @@ export default function AuthBtn({
           className="text-red-600 focus:bg-red-50 focus:text-red-600 dark:focus:bg-red-950 dark:focus:text-red-400"
         >
           <LogOut className="mr-2 h-4 w-4" />
-          <span>{isLoggingOut ? "Signing out..." : "Sign out"}</span>
+          <span>{isLoggingOut ? 'Signing out...' : 'Sign out'}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

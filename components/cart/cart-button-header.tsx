@@ -94,7 +94,7 @@ export function CartButtonHeader({
             <ShoppingCart
               className={cn(
                 "text-white hover:text-white hover:!bg-black transition-colors",
-                compact ? "size-6" : "size-5"
+                compact ? "lg:size-6  size-5" : " size-4 lg:size-5"
               )}
             />
           }

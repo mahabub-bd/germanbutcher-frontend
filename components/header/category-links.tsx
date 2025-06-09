@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { fetchData } from "@/utils/api-utils";
-import { Category } from "@/utils/types";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { fetchData } from '@/utils/api-utils';
+import { Category } from '@/utils/types';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 interface CategoryLinksProps {
   onClick?: () => void;
@@ -16,10 +16,10 @@ const CategoryLinks: React.FC<CategoryLinksProps> = ({ onClick }) => {
   useEffect(() => {
     const loadCategories = async () => {
       try {
-        const data: Category[] = await fetchData("categories");
+        const data: Category[] = await fetchData('categories');
         setCategories(data);
       } catch (error) {
-        console.error("Failed to load categories:", error);
+        console.error('Failed to load categories:', error);
       } finally {
         setLoading(false);
       }
@@ -37,7 +37,7 @@ const CategoryLinks: React.FC<CategoryLinksProps> = ({ onClick }) => {
         <Link
           key={category.id}
           href={`/category/${category.slug || category.id}`}
-          className="block text-base font-medium transition-colors hover:text-primary "
+          className="block text-base font-medium transition-colors text-whiteColor  "
           onClick={onClick}
         >
           {category.name}
