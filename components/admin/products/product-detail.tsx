@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Clock,
   Edit,
+  FileText,
   History,
   Info,
   Layers,
@@ -63,26 +64,22 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     setCurrentImageIndex(newIndex);
   };
 
-  // Determine if there's a discount and what type it is
   const hasDiscount =
     (product.discountType === "fixed" && (product.discountValue ?? 0) > 0) ||
     (product.discountType === "percentage" && (product.discountValue ?? 0) > 0);
 
-  // Calculate the discounted price and savings
   let discountedPrice = product.sellingPrice;
   let savingsAmount = 0;
   let savingsPercentage = 0;
 
   if (hasDiscount) {
     if (product.discountType === "fixed" && product.discountValue) {
-      // Fixed amount discount
       savingsAmount = product.discountValue;
       discountedPrice = product.sellingPrice - savingsAmount;
       savingsPercentage = Math.round(
         (savingsAmount / product.sellingPrice) * 100
       );
     } else if (product.discountType === "percentage" && product.discountValue) {
-      // Percentage discount
       savingsPercentage = product.discountValue;
       savingsAmount = Math.round(
         (savingsPercentage / 100) * product.sellingPrice
@@ -183,7 +180,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 </Badge>
               )}
 
-              {/* Show discount badge on image if there's a discount */}
               {hasDiscount && (
                 <Badge className="absolute bottom-2 left-2 z-10 bg-red-500 text-white">
                   {product.discountType === "percentage" ? (
@@ -213,7 +209,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </Button>
             </div>
 
-            {/* Gallery Images */}
             <div className="grid grid-cols-5 gap-2 mt-4">
               <div
                 className={`relative aspect-square overflow-hidden rounded-md border cursor-pointer transition-all ${
@@ -397,7 +392,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                {/* Price display with discount handling */}
                 <div>
                   <p className="text-sm text-muted-foreground">Selling Price</p>
                   <div className="flex items-baseline gap-2">
@@ -427,7 +421,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   </p>
                 </div>
 
-                {/* Discount information based on type */}
                 {hasDiscount && (
                   <div>
                     <p className="text-sm text-muted-foreground">Discount</p>
@@ -472,7 +465,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   </div>
                 )}
 
-                {/* Show discount period if available */}
                 {hasDiscount &&
                   product.discountStartDate &&
                   product.discountEndDate && (
@@ -499,10 +491,17 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           </div>
 
           <Tabs defaultValue="details" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="details" className="flex items-center gap-1">
                 <Info className="h-4 w-4" />
                 Details
+              </TabsTrigger>
+              <TabsTrigger
+                value="productDetails"
+                className="flex items-center gap-1"
+              >
+                <FileText className="h-4 w-4" />
+                Product Details
               </TabsTrigger>
               <TabsTrigger value="supplier" className="flex items-center gap-1">
                 <Building className="h-4 w-4" />
@@ -597,6 +596,30 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </div>
             </TabsContent>
 
+            <TabsContent value="productDetails" className="pt-4">
+              <div className="bg-white p-4 rounded-lg border shadow-sm">
+                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  Product Details
+                </h3>
+                {product.productDetails ? (
+                  <div
+                    className="prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: product.productDetails }}
+                  />
+                ) : (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>No detailed product information available.</p>
+                    <p className="text-sm mt-1">
+                      Add product details in the edit form to provide more
+                      information about this product.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+
             <TabsContent value="supplier" className="pt-4">
               <div className="bg-white p-4 rounded-lg border shadow-sm">
                 <div className="flex items-center gap-4">
@@ -647,6 +670,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                             <Image
                               src={
                                 product.createdBy.profilePhoto.url ||
+                                "/placeholder.svg" ||
                                 "/placeholder.svg"
                               }
                               alt={product.createdBy.name}
@@ -679,6 +703,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                             <Image
                               src={
                                 product.updatedBy.profilePhoto.url ||
+                                "/placeholder.svg" ||
                                 "/placeholder.svg"
                               }
                               alt={product.updatedBy.name}

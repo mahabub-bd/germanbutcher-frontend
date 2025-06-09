@@ -1,60 +1,88 @@
-"use client";
+import { Marquee } from "@/components/ui/marquee"
+import { fetchData } from "@/utils/api-utils"
+import { Client } from "@/utils/types"
+import Image from "next/image"
+import type React from "react"
 
-import Image from "next/image";
-import styles from "./lientLogos.module.css";
+interface ClientMarqueeProps {
+  children?: React.ReactNode
+}
 
-const logos = [
-  "/clients/c1.png",
-  "/clients/c2.png",
-  "/clients/c3.png",
-  "/clients/c4.png",
-  "/clients/c5.png",
-  "/clients/c6.png",
-  "/clients/c7.png",
-  "/clients/c8.png",
-  "/clients/c9.png",
-  "/clients/c10.png",
-];
+async function getClients(): Promise<Client[]> {
+  try {
+    const response = await fetchData("clients")
+    if (Array.isArray(response)) {
+      return response as Client[]
+    } else {
+      return []
+    }
+  } catch (error) {
+    console.error("Error fetching clients:", error)
+    return []
+  }
+}
 
-const ClientS = ({children}) => {
-  return (
-    <div className="">
+export default async function ClientMarquee({ children }: ClientMarqueeProps) {
+  const clients = await getClients()
+  
+
+  const midPoint = Math.ceil(clients.length / 2)
+  const firstRowClients = clients.slice(0, midPoint)
+  const secondRowClients = clients.slice(midPoint)
+
+
+  if (clients.length === 0) {
+    return (
+      <div className="w-full py-8 md:py-12">
         {children}
-      <div className="container mx-auto px-4">
-        <div className={`${styles.marqueeWrapper} mb-6`}>
-          <div className={`${styles.marquee} ${styles.leftToRight}`}>
-            {[...logos, ...logos].map((logo, i) => (
-              <div key={`top-${i}`} className="w-[70px] md:w-[100px] lg:w-[120px] flex-shrink-0">
-                <Image
-                  src={logo}
-                  alt={`Logo ${i}`}
-                  width={120}
-                  height={80}
-                  className="mx-2 md:mx-4 lg:mx-6 transition duration-300"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className={styles.marqueeWrapper}>
-          <div className={`${styles.marquee} ${styles.rightToLeft}`}>
-            {[...logos, ...logos].map((logo, i) => (
-              <div key={`bottom-${i}`} className="w-[70px] md:w-[100px] lg:w-[120px] flex-shrink-0">
-                <Image
-                  src={logo}
-                  alt={`Logo ${i}`}
-                  width={120}
-                  height={80}
-                  className="mx-2 md:mx-4 lg:mx-6 transition duration-300"
-                />
-              </div>
-            ))}
+        <div className="container mx-auto px-4">
+          <div className="text-center text-gray-500">
+            <p>No client logos available</p>
           </div>
         </div>
       </div>
-    </div>
-  );
-};
+    )
+  }
 
-export default ClientS;
+  return (
+    <div className="w-full py-8 md:py-12">
+      {children}
+      <div className="container mx-auto px-4">
+        {/* First marquee - left to right (first half of clients) */}
+        <Marquee pauseOnHover className="[--duration:40s] mb-4 md:mb-6">
+          {firstRowClients.map((client) => (
+            <div
+              key={`top-${client.Id}`}
+              className="flex h-12 w-20 items-center justify-center sm:h-16 sm:w-28 md:h-20 md:w-32 lg:h-24 lg:w-36 mx-4 md:mx-6 lg:mx-8"
+            >
+              <Image
+                src={client.Image?.url || "/placeholder.svg"}
+                alt={`${client.name} logo`}
+                width={144}
+                height={96}
+                className="h-full w-full object-contain transition-opacity duration-300 hover:opacity-100 dark:brightness-0 dark:invert"
+              />
+            </div>
+          ))}
+        </Marquee>
+
+        <Marquee reverse pauseOnHover className="[--duration:40s]">
+          {secondRowClients.map((client) => (
+            <div
+              key={`bottom-${client.Id}`}
+              className="flex h-12 w-20 items-center justify-center sm:h-16 sm:w-28 md:h-20 md:w-32 lg:h-24 lg:w-36 mx-4 md:mx-6 lg:mx-8"
+            >
+              <Image
+                src={client.Image?.url || "/placeholder.svg"}
+                alt={`${client.name} logo`}
+                width={144}
+                height={96}
+                className="h-full w-full object-contain transition-opacity duration-300 hover:opacity-100 dark:brightness-0 dark:invert"
+              />
+            </div>
+          ))}
+        </Marquee>
+      </div>
+    </div>
+  )
+}

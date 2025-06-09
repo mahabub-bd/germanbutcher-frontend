@@ -20,7 +20,6 @@ export function DesktopHeader({ isAdminUser }: DesktopHeaderProps) {
               width={60}
               height={60}
               className="w-10 h-10 lg:w-[60px] lg:h-[60px]"
-              priority
             />
           </Link>
 

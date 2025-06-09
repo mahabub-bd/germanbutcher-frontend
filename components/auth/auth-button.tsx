@@ -92,7 +92,7 @@ export default function AuthBtn({
           variant="ghost"
           size="sm"
           className={cn(
-            'relative rounded-full border p-0 hover:bg-muted/50 focus-visible:ring-0 focus-visible:ring-offset-0',
+            'relative rounded-full border p-0 hover:bg-muted/50 focus-visible:ring-0 focus-visible:ring-offset-0 text-primaryColor',
             compact ? 'h-8 w-8' : 'h-9 w-9',
             className
           )}

@@ -260,7 +260,16 @@ export interface Banner {
   createdBy: User;
   updatedBy: User;
 }
-
+export interface Client {
+  Id: number;
+  name: string;
+  order: number;
+  isActive: boolean;
+  Image?: Attachment
+ 
+  createdAt?: string;
+  updatedAt?: string;
+}
 export interface PurchaseItem {
   id: number;
   unitPrice: string;

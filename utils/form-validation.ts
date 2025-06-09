@@ -86,6 +86,7 @@ const productSchema = z
   .object({
     name: z.string().min(1, "Product name is required"),
     description: z.string().min(1, "Description is required"),
+    productDetails: z.string().optional(),
     sellingPrice: z.coerce
       .number()
       .min(0.01, "Unit price must be greater than 0"),
