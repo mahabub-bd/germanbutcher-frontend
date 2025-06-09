@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import type { Product } from "@/utils/types";
+import type { Attachment, Product } from "@/utils/types";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -64,7 +64,7 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
           />
         </div>
 
-        {product.gallery?.attachments?.map((image) => (
+        {product.gallery?.attachments?.map((image: Attachment) => (
           <div
             key={image.id}
             className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${
@@ -76,7 +76,7 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
           >
             <Image
               src={image.url || "/placeholder.svg"}
-              alt={image.originalName}
+              alt={image.fileName}
               width={64}
               height={64}
               className="object-cover w-full h-full"

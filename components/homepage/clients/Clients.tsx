@@ -1,7 +1,7 @@
 "use client";
 
+import { Marquee } from "@/components/ui/marquee";
 import Image from "next/image";
-import styles from "./lientLogos.module.css";
 
 const logos = [
   "/clients/c1.png",
@@ -15,46 +15,55 @@ const logos = [
   "/clients/c9.png",
   "/clients/c10.png",
 ];
+const firstRowLogos = logos.slice(0, 5) 
+const secondRowLogos = logos.slice(5, 10) 
+interface ClientMarqueeProps {
+  children?: React.ReactNode
+}
 
-const ClientS = ({children}) => {
+export default function Client({ children }: ClientMarqueeProps) {
   return (
-    <div className="">
-        {children}
-      <div className="container mx-auto px-4">
-        <div className={`${styles.marqueeWrapper} mb-6`}>
-          <div className={`${styles.marquee} ${styles.leftToRight}`}>
-            {[...logos, ...logos].map((logo, i) => (
-              <div key={`top-${i}`} className="w-[70px] md:w-[100px] lg:w-[120px] flex-shrink-0">
-                <Image
-                  src={logo}
-                  alt={`Logo ${i}`}
-                  width={120}
-                  height={80}
-                  className="mx-2 md:mx-4 lg:mx-6 transition duration-300"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+    <div className="w-full py-8 md:py-12">
+      {children}
+      <div className="container mx-auto">
+        {/* First marquee - left to right */}
+        <Marquee pauseOnHover className="[--duration:40s] mb-4 md:mb-6">
+          {firstRowLogos.map((logo, i) => (
+            <div
+              key={`top-${i}`}
+              className="flex h-12 w-20 items-center justify-center sm:h-16 sm:w-28 md:h-20 md:w-32 lg:h-24 lg:w-36"
+            >
+              <Image
+                src={logo || "/placeholder.svg"}
+                alt={`Client logo ${i + 1}`}
+                width={144}
+                height={96}
+                className="h-full w-full object-contain  transition-opacity duration-300 hover:opacity-100 dark:brightness-0 dark:invert"
+              />
+            </div>
+          ))}
+        </Marquee>
 
-        <div className={styles.marqueeWrapper}>
-          <div className={`${styles.marquee} ${styles.rightToLeft}`}>
-            {[...logos, ...logos].map((logo, i) => (
-              <div key={`bottom-${i}`} className="w-[70px] md:w-[100px] lg:w-[120px] flex-shrink-0">
-                <Image
-                  src={logo}
-                  alt={`Logo ${i}`}
-                  width={120}
-                  height={80}
-                  className="mx-2 md:mx-4 lg:mx-6 transition duration-300"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Second marquee - right to left */}
+        <Marquee reverse pauseOnHover className="[--duration:40s]">
+          {secondRowLogos.map((logo, i) => (
+            <div
+              key={`bottom-${i}`}
+              className="flex h-12 w-20 items-center justify-center sm:h-16 sm:w-28 md:h-20 md:w-32 lg:h-24 lg:w-36"
+            >
+              <Image
+                src={logo || "/placeholder.svg"}
+                alt={`Client logo ${i + 1}`}
+                width={144}
+                height={96}
+                className="h-full w-full object-contain  transition-opacity duration-300 hover:opacity-100 dark:brightness-0 dark:invert"
+              />
+            </div>
+          ))}
+        </Marquee>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ClientS;
+
