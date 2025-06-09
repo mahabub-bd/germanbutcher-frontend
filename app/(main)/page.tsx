@@ -3,6 +3,7 @@ import { HeadingPrimary } from "@/components/common/heading-primary";
 import { AnimatedCarousel } from "@/components/homepage/banner/hero/animated-carousel";
 import BrandList from "@/components/homepage/brands/brand-list";
 import CategoriesList from "@/components/homepage/Category/categories-list";
+import ClientS from "@/components/homepage/clients/Clients";
 import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
 import { TestimonialSection } from "@/components/homepage/testimonial/testimonial-section";
 import ProductList from "@/components/products/product-list";
@@ -50,7 +51,7 @@ export default function Home() {
       {/* Brands Section */}
       <section className="md:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
-          <BrandList endpoint="brands">
+          <BrandList endpoint="products">
             <HeadingPrimary title="Recommended for you" className="mb-10" />
           </BrandList>
         </div>
@@ -72,7 +73,13 @@ export default function Home() {
           </ProductList>
         </div>
       </section>
-      {/* Subscribe Section */}
+      {/* Subscribe Section */} 
+      <section className="md:py-10 lg:py-24 py-5 bg-whiteColor">
+
+      <ClientS>
+        <HeadingPrimary title="Our Prominent Clients" className="mb-10" />
+      </ClientS>
+      </section>
 
       <NewsletterSection />
 
