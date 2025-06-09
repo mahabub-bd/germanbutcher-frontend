@@ -1,13 +1,13 @@
-import { LoadingIndicator } from "@/components/admin/loading-indicator";
-import { HeadingPrimary } from "@/components/common/heading-primary";
-import { AnimatedCarousel } from "@/components/homepage/banner/hero/animated-carousel";
-import BrandList from "@/components/homepage/brands/brand-list";
-import CategoriesList from "@/components/homepage/Category/categories-list";
-import ClientS from "@/components/homepage/clients/Clients";
-import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
-import { TestimonialSection } from "@/components/homepage/testimonial/testimonial-section";
-import ProductList from "@/components/products/product-list";
-import { Suspense } from "react";
+import { LoadingIndicator } from '@/components/admin/loading-indicator';
+import { HeadingPrimary } from '@/components/common/heading-primary';
+import { AnimatedCarousel } from '@/components/homepage/banner/hero/animated-carousel';
+import BrandList from '@/components/homepage/brands/brand-list';
+import CategoriesList from '@/components/homepage/Category/categories-list';
+import ClientS from '@/components/homepage/clients/Clients';
+import { NewsletterSection } from '@/components/homepage/subscriber/newsletter';
+import { TestimonialSection } from '@/components/homepage/testimonial/testimonial-section';
+import ProductList from '@/components/products/product-list';
+import { Suspense } from 'react';
 
 export default function Home() {
   return (
@@ -49,7 +49,7 @@ export default function Home() {
       </section>
 
       {/* Brands Section */}
-      <section className="md:py-10 py-5 bg-gray-50">
+      <section className="lg:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
           <BrandList endpoint="products">
             <HeadingPrimary title="Recommended for you" className="mb-10" />
@@ -57,7 +57,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="md:py-10 py-5 bg-gray-50">
+      <section className="lg:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
           <ProductList
             endpoint="products/discounted?page=1&limit=20"
@@ -73,12 +73,11 @@ export default function Home() {
           </ProductList>
         </div>
       </section>
-      {/* Subscribe Section */} 
+      {/* Subscribe Section */}
       <section className="md:py-10 lg:py-24 py-5 bg-whiteColor">
-
-      <ClientS>
-        <HeadingPrimary title="Our Prominent Clients" className="mb-10" />
-      </ClientS>
+        <ClientS>
+          <HeadingPrimary title="Our Prominent Clients" className="mb-10" />
+        </ClientS>
       </section>
 
       <NewsletterSection />

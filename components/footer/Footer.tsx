@@ -3,7 +3,7 @@ import {
   FooterImageThree,
   FooterImageTwo,
   GermanbutcherLogo,
-} from "@/public/images";
+} from '@/public/images';
 import {
   Facebook,
   Linkedin,
@@ -12,9 +12,9 @@ import {
   Phone,
   Twitter,
   Youtube,
-} from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+} from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
@@ -23,14 +23,14 @@ export default function Footer() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.02)_0%,transparent_50%)] pointer-events-none"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.02)_0%,transparent_50%)] pointer-events-none"></div>
 
-      <div className="relative px-6 py-16 md:px-20">
+      <div className="relative px-6 py-16 lg:px-20">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
           {/* Logo and Description */}
-          <div className="space-y-6 col-span-1 md:col-span-4 flex  flex-col md:justify-start justify-center">
+          <div className="space-y-6 col-span-1 md:col-span-12 lg:col-span-4 flex  flex-col md:justify-start justify-center">
             <div className="group">
               <div className="p-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 inline-block transition-all duration-300 group-hover:bg-white/15 group-hover:scale-105">
                 <Image
-                  src={GermanbutcherLogo || "/placeholder.svg"}
+                  src={GermanbutcherLogo || '/placeholder.svg'}
                   alt="German Butcher Logo"
                   width={120}
                   height={96}
@@ -47,7 +47,7 @@ export default function Footer() {
                     className="p-2 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 transition-all duration-300 hover:bg-white/15 hover:scale-110 hover:rotate-3"
                   >
                     <Image
-                      src={img || "/placeholder.svg"}
+                      src={img || '/placeholder.svg'}
                       alt={`Certification ${index + 1}`}
                       width={45}
                       height={45}
@@ -75,7 +75,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="col-span-1 md:col-span-2">
+          <div className="col-span-1 md:col-span-3 lg:col-span-2">
             <div className="relative">
               <h3 className="font-bold text-xl mb-6 bg-gradient-to-r from-white to-red-200 bg-clip-text text-transparent">
                 Quick Links
@@ -83,7 +83,7 @@ export default function Footer() {
               <div className="absolute -left-2 top-0 w-1 h-8 bg-gradient-to-b from-[#c70909] to-red-400 rounded-full"></div>
             </div>
             <ul className="space-y-4">
-              {["About Us", "Our Gallery", "Our Blogs", "FAQ"].map(
+              {['About Us', 'Our Gallery', 'Our Blogs', 'FAQ'].map(
                 (link, index) => (
                   <li key={index} className="group">
                     <Link
@@ -100,7 +100,7 @@ export default function Footer() {
           </div>
 
           {/* Our Menu */}
-          <div className="col-span-1 md:col-span-2">
+          <div className="col-span-1 md:col-span-4 lg:col-span-2">
             <div className="relative">
               <h3 className="font-bold text-xl mb-6 bg-gradient-to-r from-white to-red-200 bg-clip-text text-transparent">
                 Our Menu
@@ -109,10 +109,10 @@ export default function Footer() {
             </div>
             <ul className="space-y-4">
               {[
-                "German Sausages",
-                "Cold Cuts",
-                "Premium Meat",
-                "Fresh Products",
+                'German Sausages',
+                'Cold Cuts',
+                'Premium Meat',
+                'Fresh Products',
               ].map((item, index) => (
                 <li key={index} className="group">
                   <Link
@@ -128,7 +128,7 @@ export default function Footer() {
           </div>
 
           {/* Contact Us - Now with more width */}
-          <div className="col-span-1 md:col-span-4">
+          <div className="col-span-1 md:col-span-5 lg:col-span-4">
             <div className="relative">
               <h3 className="font-bold text-xl mb-6 bg-gradient-to-r from-white to-red-200 bg-clip-text text-transparent">
                 Contact Us
@@ -191,10 +191,10 @@ export default function Footer() {
               © 2025 German Butcher. All rights reserved.
             </p>
             <div className="flex space-x-4 mt-4 md:mt-0">
-              {["Terms & Conditions", "Privacy Policy"].map((text, index) => (
+              {['Terms & Conditions', 'Privacy Policy'].map((text, index) => (
                 <button
                   key={index}
-                  className="relative px-6 py-2 text-sm text-red-100 border border-white/20 rounded-full backdrop-blur-sm transition-all duration-300 hover:bg-[#c70909] hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-[#c70909]/20 group overflow-hidden"
+                  className="relative px-3 md:px-6 py-2 text-sm text-red-100 border border-white/20 rounded-full backdrop-blur-sm transition-all duration-300 hover:bg-[#c70909] hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-[#c70909]/20 group overflow-hidden"
                 >
                   <span className="relative z-10">{text}</span>
                   <div className="absolute inset-0 bg-gradient-to-r from-[#c70909]/20 to-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

@@ -1,11 +1,11 @@
-import { getUser } from "@/actions/auth";
-import { cn } from "@/lib/utils";
+import { getUser } from '@/actions/auth';
+import { cn } from '@/lib/utils';
 
-import { Search } from "lucide-react";
-import AuthBtn from "../auth/auth-button";
+import { Search } from 'lucide-react';
+import AuthBtn from '../auth/auth-button';
 
-import Link from "next/link";
-import { CartButtonHeaderWrapper } from "../cart/cart-button-header-wrapper";
+import Link from 'next/link';
+import { CartButtonHeaderWrapper } from '../cart/cart-button-header-wrapper';
 
 interface UserActionsProps {
   compact?: boolean;
@@ -24,8 +24,8 @@ export default async function UserActions({
   return (
     <div
       className={cn(
-        "flex items-center text-white",
-        compact ? "gap-1" : "gap-5",
+        'flex items-center text-white',
+        compact ? 'gap-3' : 'gap-5',
         className
       )}
     >
@@ -41,11 +41,15 @@ export default async function UserActions({
       <AuthBtn user={user} compact={compact} />
       <CartButtonHeaderWrapper compact={compact} />
       {/* Auth Button */}
-      <Search />
+
+      <div className=" hidden lg:block">
+        <Search className="lg:h-6 w-5 h-5 lg:w-6 flex justify-center items-center" />
+      </div>
+
       <div>
         <Link
           href="/auth/sign-up"
-          className="py-2 px-6 border font-semibold text-base lg:text-lg border-white rounded-[8px]"
+          className="md:py-2 md:px-6 py-1.5 px-3 border font-semibold text-sm sm:text-base lg:text-lg border-white rounded-[8px]"
         >
           Register
         </Link>

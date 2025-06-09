@@ -1,12 +1,12 @@
-import { Badge } from "@/components/ui/badge";
-import { formatCurrencyEnglish, formatWeight } from "@/lib/utils";
-import { getBlurData } from "@/utils/blur-generator";
-import type { Product } from "@/utils/types";
-import { DiscountType } from "@/utils/types";
-import { Eye, Weight } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { AddToCartButton } from "../cart/add-to-cart-button";
+import { Badge } from '@/components/ui/badge';
+import { formatCurrencyEnglish, formatWeight } from '@/lib/utils';
+import { getBlurData } from '@/utils/blur-generator';
+import type { Product } from '@/utils/types';
+import { DiscountType } from '@/utils/types';
+import { Eye, Weight } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { AddToCartButton } from '../cart/add-to-cart-button';
 
 export default async function ProductCard({ product }: { product: Product }) {
   const { base64 } = await getBlurData(product?.attachment?.url);
@@ -40,7 +40,7 @@ export default async function ProductCard({ product }: { product: Product }) {
 
       <Link href={`/product/${product?.slug}`} className="block">
         {/* Image Container */}
-        <div className="w-full h-[220px] bg-gray-100  overflow-hidden relative mb-3">
+        <div className="w-full h-[220px] md:h-[180px] lg:h-[220px] bg-gray-100  overflow-hidden relative mb-3">
           {product?.attachment?.url && (
             <Image
               src={product.attachment.url}
@@ -82,7 +82,7 @@ export default async function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* Content Section */}
-        <div className="p-5 space-y-3">
+        <div className="p-5 md:p-3 lg:p-5 space-y-3">
           {/* Product Name */}
           <h3 className="font-semibold text-gray-900 text-base leading-tight line-clamp-2 group-hover:text-primaryColor transition-colors duration-200">
             {product.name}
@@ -113,10 +113,14 @@ export default async function ProductCard({ product }: { product: Product }) {
             )}
           </div>
 
-     <div>
-         <h4 className=" text-base md:text-lg font-normal"><span className="font-semibold text-primaryColor">{Math.round(Number(product?.weight)) }</span> {product?.unit?.name}</h4>       
-      </div>        
-         
+          <div>
+            <h4 className=" text-base md:text-lg font-normal">
+              <span className="font-semibold text-primaryColor">
+                {Math.round(Number(product?.weight))}
+              </span>{' '}
+              {product?.unit?.name}
+            </h4>
+          </div>
         </div>
       </Link>
 

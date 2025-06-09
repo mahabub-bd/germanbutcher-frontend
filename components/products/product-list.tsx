@@ -1,8 +1,8 @@
-import { fetchData } from "@/utils/api-utils";
-import type { Product } from "@/utils/types";
-import type { ReactNode } from "react";
-import ViewAllButton from "../homepage/Category/CustomViewAllButton";
-import ProductCard from "./product-card";
+import { fetchData } from '@/utils/api-utils';
+import type { Product } from '@/utils/types';
+import type { ReactNode } from 'react';
+import ViewAllButton from '../homepage/Category/CustomViewAllButton';
+import ProductCard from './product-card';
 
 export default async function ProductList({
   children,
@@ -18,16 +18,18 @@ export default async function ProductList({
   const products: Product[] = await fetchData(endpoint);
 
   return (
-    <div className="container mx-auto py-4  sm:px-1 md:py-8 lg:py-10 md:px-0">
+    <div className="container mx-auto py-4  sm:px-1 md:py-8 lg:py-10 md:px-2">
       {children}
-      <div className="grid grid-cols-2 md:px-0 px-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  2xl:grid-cols-5 sm:gap-8 md:gap-5 lg:gap-6 gap-6">
-        {products?.slice(0, 10)?.map((product: Product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+      <div className="grid grid-cols-1 md:px-0 px-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  2xl:grid-cols-5 sm:gap-8 md:gap-5 lg:gap-6 gap-6">
+        {products
+          ?.slice(0, 10)
+          ?.map((product: Product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
       </div>
       {isHomePage && (
         <div className=" pt-6">
-          <ViewAllButton href={href || "/products"} />
+          <ViewAllButton href={href || '/products'} />
         </div>
       )}
     </div>

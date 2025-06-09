@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { ShoppingCart, Tag, Trash2, X } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import { toast } from "sonner";
+import { ShoppingCart, Tag, Trash2, X } from 'lucide-react';
+import Link from 'next/link';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { IconButton } from "@/components/ui/icon-button";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { IconButton } from '@/components/ui/icon-button';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 import {
   Sheet,
   SheetContent,
@@ -17,12 +17,12 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { useCartContext } from "@/contexts/cart-context";
-import { cn, formatCurrencyEnglish } from "@/lib/utils";
-import type { Cart, CartItem } from "@/utils/types";
-import { CartItemProduct } from "./cart-item";
-import { EmptyCart } from "./empty-cart";
+} from '@/components/ui/sheet';
+import { useCartContext } from '@/contexts/cart-context';
+import { cn, formatCurrencyEnglish } from '@/lib/utils';
+import type { Cart, CartItem } from '@/utils/types';
+import { CartItemProduct } from './cart-item';
+import { EmptyCart } from './empty-cart';
 
 export function CartButtonHeader({
   cart,
@@ -41,7 +41,7 @@ export function CartButtonHeader({
   } = useCartContext();
   const [isOpen, setIsOpen] = useState(false);
   const [isRemovingAll, setIsRemovingAll] = useState(false);
-  const [couponCode, setCouponCode] = useState("");
+  const [couponCode, setCouponCode] = useState('');
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
 
   const { itemCount, originalSubtotal, discountedSubtotal, productDiscounts } =
@@ -53,7 +53,7 @@ export function CartButtonHeader({
     setIsApplyingCoupon(true);
     try {
       await applyCartCoupon(couponCode, discountedSubtotal);
-      setCouponCode("");
+      setCouponCode('');
     } catch (error) {
       console.error(error);
       // Error is already handled in the context
@@ -64,7 +64,7 @@ export function CartButtonHeader({
 
   const handleRemoveCoupon = () => {
     removeCoupon();
-    setCouponCode("");
+    setCouponCode('');
   };
 
   const handleRemoveAll = async () => {
@@ -73,12 +73,12 @@ export function CartButtonHeader({
     setIsRemovingAll(true);
     try {
       await clearCart();
-      toast.success("Cart cleared");
+      toast.success('Cart cleared');
       setIsOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Error", {
-        description: "Something went wrong",
+      toast.error('Error', {
+        description: 'Something went wrong',
       });
     } finally {
       setIsRemovingAll(false);
@@ -93,12 +93,12 @@ export function CartButtonHeader({
           icon={
             <ShoppingCart
               className={cn(
-                "text-white hover:text-white transition-colors",
-                compact ? "size-6" : "size-5"
+                'text-white hover:text-white transition-colors',
+                compact ? 'size-6' : 'size-5'
               )}
             />
           }
-          label={compact ? "" : "Cart"}
+          label={compact ? '' : 'Cart'}
           count={itemCount}
           alwaysShowCount
         />
@@ -116,7 +116,7 @@ export function CartButtonHeader({
                 <span>Your Cart</span>
                 {itemCount > 0 && (
                   <Badge variant="secondary" className="ml-2">
-                    {itemCount} {itemCount === 1 ? "item" : "items"}
+                    {itemCount} {itemCount === 1 ? 'item' : 'items'}
                   </Badge>
                 )}
               </SheetTitle>
@@ -132,7 +132,7 @@ export function CartButtonHeader({
                   disabled={isRemovingAll}
                 >
                   <Trash2 className="h-3 w-3 mr-1" />
-                  {isRemovingAll ? "Clearing..." : "Clear Cart"}
+                  {isRemovingAll ? 'Clearing...' : 'Clear Cart'}
                 </Button>
               </div>
             )}
@@ -175,8 +175,8 @@ export function CartButtonHeader({
                       onChange={(e) => setCouponCode(e.target.value)}
                       disabled={isApplyingCoupon || !!appliedCoupon}
                       className={cn(
-                        "pr-8 h-9",
-                        appliedCoupon && "border-green-500 bg-green-50/50"
+                        'pr-8 h-9',
+                        appliedCoupon && 'border-green-500 bg-green-50/50'
                       )}
                     />
                     {appliedCoupon && (
@@ -197,7 +197,7 @@ export function CartButtonHeader({
                     size="sm"
                     className="whitespace-nowrap h-9"
                   >
-                    {isApplyingCoupon ? "Applying..." : "Apply"}
+                    {isApplyingCoupon ? 'Applying...' : 'Apply'}
                   </Button>
                 </div>
                 {appliedCoupon && (

@@ -1,0 +1,53 @@
+{
+  // Theme
+  "workbench.colorTheme": "Learn with Sumit - Peace of the eye",
+
+  // File Explorer
+  "explorer.confirmDelete": false,
+
+  // Default Formatter
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // Format on Save
+  "editor.formatOnSave": true,
+
+  // ESLint and Import Actions on Save
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+
+  // ESLint settings
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.run": "onSave",
+
+  // Disable built-in validation (using ESLint instead)
+  "javascript.validate.enable": false,
+  "typescript.validate.enable": false,
+
+  // Emmet support in JS files
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "typescript": "typescriptreact"
+  },
+
+  // Prettier-specific settings (optional override if not using .prettierrc)
+  "prettier.semi": true,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "es5",
+  "prettier.printWidth": 80,
+  "prettier.tabWidth": 2,
+  "prettier.useTabs": false,
+
+  // Path autocomplete plugin support
+  "path-autocomplete.extensionOnImport": true,
+  "path-autocomplete.excludedItems": {
+    "*/.js": {
+      "when": "**"
+    },
+    "*/.jsx": {
+      "when": "**"
+    }
+  }
+}
