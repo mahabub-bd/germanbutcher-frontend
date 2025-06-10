@@ -3,7 +3,7 @@ import { formatCurrencyEnglish, formatWeight } from '@/lib/utils';
 import { getBlurData } from '@/utils/blur-generator';
 import type { Product } from '@/utils/types';
 import { DiscountType } from '@/utils/types';
-import { Eye, Weight } from 'lucide-react';
+import { Weight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AddToCartButton } from '../cart/add-to-cart-button';
@@ -31,16 +31,9 @@ export default async function ProductCard({ product }: { product: Product }) {
 
   return (
     <div className="group relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-gray-200 transition-all duration-500 overflow-hidden">
-      {/* Quick Actions */}
-      <div className="absolute top-3 right-3 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <button className="w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white hover:scale-110 transition-all duration-200">
-          <Eye size={16} className="text-gray-600 hover:text-blue-500" />
-        </button>
-      </div>
-
       <Link href={`/product/${product?.slug}`} className="block">
         {/* Image Container */}
-        <div className="w-full h-[220px] md:h-[180px] lg:h-[220px] bg-gray-100  overflow-hidden relative mb-3">
+        <div className="w-full h-[220px] md:h-[180px] lg:h-[220px] bg-gray-100  overflow-hidden relative md:mb-3 mb-1">
           {product?.attachment?.url && (
             <Image
               src={product.attachment.url}
@@ -82,9 +75,9 @@ export default async function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* Content Section */}
-        <div className="p-5 md:p-3 lg:p-5 space-y-3">
+        <div className="p-1 md:p-3 lg:p-5 space-y-3">
           {/* Product Name */}
-          <h3 className="font-semibold text-gray-900 text-base leading-tight line-clamp-2 group-hover:text-primaryColor transition-colors duration-200">
+          <h3 className="font-semibold text-gray-900 md:text-base  leading-tight line-clamp-2 group-hover:text-primaryColor transition-colors duration-200">
             {product.name}
           </h3>
 
@@ -112,20 +105,11 @@ export default async function ProductCard({ product }: { product: Product }) {
               </div>
             )}
           </div>
-
-          <div>
-            <h4 className=" text-base md:text-lg font-normal">
-              <span className="font-semibold text-primaryColor">
-                {Math.round(Number(product?.weight))}
-              </span>{' '}
-              {product?.unit?.name}
-            </h4>
-          </div>
         </div>
       </Link>
 
       {/* Add to Cart Button */}
-      <div className="px-5 pb-5">
+      <div className="px-5 py-5">
         <AddToCartButton product={product} disabled={isOutOfStock} />
       </div>
     </div>
