@@ -26,20 +26,20 @@ export function MobileMenu() {
         <Button
           variant="ghost"
           size="icon"
-          className="h-9 w-9 rounded-full p-0 hover:bg-black/5 transition-colors"
+          className="size-10 rounded-lg p-0 hover:bg-black/5 bg-black/10  transition-colors shadow-2xl"
           aria-label="Open navigation menu"
         >
           <Menu className="size-5 text-white" />
         </Button>
       </SheetTrigger>
 
-      <SheetContent side="right" className="w-[375px] p-0">
+      <SheetContent side="left" className="w-[375px] p-0">
         {/* Hidden title for accessibility */}
         <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
 
         <div className="flex flex-col h-full bg-primaryColor">
           {/* Header Section */}
-          <div className=" border-b bg-golden-radial border-gray-200 p-2">
+          <div className=" border-b bg-golden-radial  p-2">
             <div className="flex items-center justify-center">
               <Link
                 href="/"
@@ -53,8 +53,8 @@ export function MobileMenu() {
                     "/placeholder.svg?height=80&width=80&query=German Butcher logo"
                   }
                   alt="German Butcher Logo"
-                  width={80}
-                  height={80}
+                  width={60}
+                  height={60}
                   className="object-contain"
                 />
               </Link>

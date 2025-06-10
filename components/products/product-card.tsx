@@ -30,7 +30,7 @@ export default async function ProductCard({ product }: { product: Product }) {
   const isOutOfStock = !product?.stock;
 
   return (
-    <div className="group relative bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-gray-200 transition-all duration-500 overflow-hidden">
+    <div className="group relative bg-white rounded-md border border-gray-100 shadow-sm hover:shadow-xl hover:border-gray-200 transition-all duration-500 overflow-hidden">
       <Link href={`/product/${product?.slug}`} className="block">
         {/* Image Container */}
         <div className="w-full h-[220px] md:h-[180px] lg:h-[220px] bg-gray-100  overflow-hidden relative md:mb-3 mb-1">
@@ -75,9 +75,9 @@ export default async function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* Content Section */}
-        <div className="p-1 md:p-3 lg:p-5 space-y-3">
+        <div className="p-1 md:p-3 lg:p-3 flex flex-col gap-2">
           {/* Product Name */}
-          <h3 className="font-semibold text-gray-900 md:text-base  leading-tight line-clamp-2 group-hover:text-primaryColor transition-colors duration-200">
+          <h3 className="font-semibold text-gray-900 md:text-base text-sm  leading-tight line-clamp-2 group-hover:text-primaryColor transition-colors duration-200">
             {product.name}
           </h3>
 
@@ -109,7 +109,7 @@ export default async function ProductCard({ product }: { product: Product }) {
       </Link>
 
       {/* Add to Cart Button */}
-      <div className="px-5 py-5">
+      <div className="lg:p-5 p-3">
         <AddToCartButton product={product} disabled={isOutOfStock} />
       </div>
     </div>

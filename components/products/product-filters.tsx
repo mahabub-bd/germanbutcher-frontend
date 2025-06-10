@@ -13,7 +13,12 @@ import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -733,18 +738,19 @@ export function ProductFilters({
       </ScrollArea>
 
       {/* Mobile view - Sheet component that slides in from the right */}
-      <div className="md:hidden fixed top-32 left-4 z-50">
+
+      <div className="md:hidden fixed top-24 left-4 z-50">
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
             <Button
-              className="rounded-full h-10 w-10 shadow-lg flex items-center justify-center"
+              className="relative rounded-full h-10 w-10 shadow-lg flex items-center justify-center bg-primaryColor hover:bg-secondaryColor"
               size="icon"
             >
               <Filter className="h-4 w-4" />
               {hasActiveFilters && (
                 <Badge
                   variant="destructive"
-                  className="absolute -top-2 -right-2 h-4 w-4 flex items-center justify-center p-0 rounded-full"
+                  className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 rounded-full text-xs font-semibold"
                 >
                   {activeFiltersCount}
                 </Badge>
@@ -755,6 +761,7 @@ export function ProductFilters({
             side="right"
             className="sm:max-w-md overflow-y-auto p-6 bg-red-50 dark:bg-red-950/20"
           >
+            <SheetTitle className="sr-only">Filter Menu</SheetTitle>
             <div className="py-6">
               <FilterContent />
             </div>

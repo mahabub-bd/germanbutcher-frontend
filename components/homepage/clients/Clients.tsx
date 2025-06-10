@@ -43,7 +43,7 @@ export default async function ClientMarquee({ children }: ClientMarqueeProps) {
   }
 
   return (
-    <div className="w-full py-8 md:py-12">
+    <div className="w-full py-8 md:py-12 ">
       {children}
       <div className="container mx-auto px-4">
         <Marquee pauseOnHover className="[--duration:40s] mb-4 md:mb-6">

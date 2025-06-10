@@ -68,7 +68,7 @@ function CategoryItem({
       className="group flex flex-col items-center p-3 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/50"
       onClick={onClick}
     >
-      <div className="w-16 h-16 relative bg-white rounded-lg overflow-hidden mb-2 border border-gray-200">
+      <div className="w-16 h-16 relative bg-white rounded-lg overflow-hidden mb-2 ">
         {category.attachment?.url ? (
           <Image
             src={category.attachment.url || "/placeholder.svg"}
