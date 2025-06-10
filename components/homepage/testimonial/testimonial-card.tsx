@@ -1,5 +1,5 @@
-import { Quote, Star } from "lucide-react";
-import Image from "next/image";
+import { Quote, Star } from 'lucide-react';
+import Image from 'next/image';
 
 interface TestimonialProps {
   testimonial: {
@@ -36,8 +36,8 @@ export function TestimonialCard({ testimonial }: TestimonialProps) {
                 key={i}
                 className={`w-5 h-5 ${
                   i < testimonial.rating
-                    ? "text-yellow-400 fill-yellow-400"
-                    : "text-gray-300"
+                    ? 'text-yellow-400 fill-yellow-400'
+                    : 'text-gray-300'
                 }`}
               />
             ))}
@@ -53,7 +53,7 @@ export function TestimonialCard({ testimonial }: TestimonialProps) {
             <div className="relative">
               <div className="w-16 h-16 rounded-full overflow-hidden mr-4 shadow-lg relative">
                 <Image
-                  src={testimonial.image || "/placeholder.svg"}
+                  src={testimonial.image || '/placeholder.svg'}
                   alt={testimonial.name}
                   width={64}
                   height={64}
@@ -63,9 +63,9 @@ export function TestimonialCard({ testimonial }: TestimonialProps) {
               {/* Online indicator */}
             </div>
             <div>
-              <h4 className="font-bold text-gray-900 text-lg">
+              <h1 className="font-bold text-gray-900 text-lg">
                 {testimonial.name}
-              </h4>
+              </h1>
               <p className="text-gray-500 font-medium">{testimonial.role}</p>
             </div>
           </div>

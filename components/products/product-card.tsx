@@ -1,12 +1,12 @@
-import { Badge } from "@/components/ui/badge";
-import { formatCurrencyEnglish, formatWeight } from "@/lib/utils";
-import { getBlurData } from "@/utils/blur-generator";
-import type { Product } from "@/utils/types";
-import { DiscountType } from "@/utils/types";
-import { Weight } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { AddToCartButton } from "../cart/add-to-cart-button";
+import { Badge } from '@/components/ui/badge';
+import { formatCurrencyEnglish, formatWeight } from '@/lib/utils';
+import { getBlurData } from '@/utils/blur-generator';
+import type { Product } from '@/utils/types';
+import { DiscountType } from '@/utils/types';
+import { Weight } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { AddToCartButton } from '../cart/add-to-cart-button';
 
 export default async function ProductCard({ product }: { product: Product }) {
   const { base64 } = await getBlurData(product?.attachment?.url);
@@ -89,7 +89,7 @@ export default async function ProductCard({ product }: { product: Product }) {
                 {formatCurrencyEnglish(discountedPrice || product.sellingPrice)}
               </span>
               {discountedPrice && (
-                <span className="text-sm text-gray-400 line-through">
+                <span className="text-sm text-gray-600 line-through">
                   {formatCurrencyEnglish(product.sellingPrice)}
                 </span>
               )}

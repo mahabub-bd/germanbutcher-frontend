@@ -22,8 +22,9 @@ import {
   ChevronLeft,
   LogOut,
   Menu,
-  RouteIcon,
+  Package,
   Settings,
+  User,
   UserCircle,
   X,
 } from 'lucide-react';
@@ -47,19 +48,13 @@ interface UserTypes {
 interface SidebarProps {
   className?: string;
   user: UserTypes;
-  collapsed: boolean;
-  setCollapsed: (collapsed: boolean) => void;
 }
 
-export function SidebarMenu({
-  className,
-  user,
-  collapsed,
-  setCollapsed,
-}: SidebarProps) {
+export function SidebarMenu({ className, user }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
 
+  const [collapsed, setCollapsed] = useState(false);
   const [menuData, setMenuData] = useState<MenuItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -108,13 +103,6 @@ export function SidebarMenu({
     setMobileOpen(false);
   }, [pathname]);
 
-  // Close all submenus when sidebar collapses
-  useEffect(() => {
-    if (collapsed) {
-      setOpenSubMenus({});
-    }
-  }, [collapsed]);
-
   const sidebarTitle = user?.isAdmin ? 'German Butcher' : 'My Account';
 
   const getInitials = (name: string): string => {
@@ -126,9 +114,6 @@ export function SidebarMenu({
   };
 
   const toggleSubMenu = (itemName: string) => {
-    // Don't allow submenu toggle when collapsed
-    if (collapsed) return;
-
     setOpenSubMenus((prev) => ({
       ...prev,
       [itemName]: !prev[itemName],
@@ -172,7 +157,7 @@ export function SidebarMenu({
     <>
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-30  bg-background/80 backdrop-blur-sm md:hidden"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -187,15 +172,14 @@ export function SidebarMenu({
       </Button>
 
       <div className="flex h-16 items-center justify-center md:hidden fixed top-0 left-0 right-0 bg-background z-40">
-        <Link href="/" className="font-semibold">
-          {sidebarTitle}
-        </Link>
+        <span className="font-semibold">{sidebarTitle}</span>
       </div>
 
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-30 pt-4 flex flex-col border-r transition-all duration-300 ease-in-out',
-          collapsed ? 'w-[80px]' : 'w-[250px]',
+          'fixed inset-y-0 left-0 z-30 pt-4  flex flex-col border-r transition-all duration-300 ease-in-out',
+
+          collapsed ? 'w-[70px]' : 'w-[250px]',
           mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
           className
         )}
@@ -208,16 +192,23 @@ export function SidebarMenu({
             )}
           >
             {collapsed ? (
-              <RouteIcon />
+              <div className="flex items-center justify-center rounded-md bg-primary">
+                {user?.isAdmin ? (
+                  <Package className="h-5 w-5 text-primary-foreground" />
+                ) : (
+                  <User className="h-5 w-5 text-primary-foreground" />
+                )}
+              </div>
             ) : (
               <div className="flex items-center gap-2 py-2">
                 <Image
-                  src={GermanbutcherLogo || '/placeholder.svg'}
+                  src={GermanbutcherLogo}
                   alt="Logo"
                   width={40}
                   height={40}
                   className="h-auto w-auto"
                 />
+
                 <span className="font-medium">{sidebarTitle}</span>
               </div>
             )}
@@ -225,12 +216,12 @@ export function SidebarMenu({
           <Button
             variant="ghost"
             size="icon"
-            className="hidden md:flex hover:bg-transparent"
+            className="hidden md:flex"
             onClick={() => setCollapsed(!collapsed)}
           >
             <ChevronLeft
               className={cn(
-                'h-4 w-4 transition-transform   bg-transparent',
+                'h-5 w-5 transition-transform',
                 collapsed && 'rotate-180'
               )}
             />
@@ -254,130 +245,51 @@ export function SidebarMenu({
                         const isOpen = openSubMenus[item?.name] || false;
 
                         return (
-                          <div key={item.name} className="relative">
+                          <div key={item.name} className="flex flex-col">
                             {hasSubMenu ? (
-                              <>
-                                {collapsed ? (
-                                  // Collapsed state: Show dropdown menu on hover
-                                  <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                      <button
-                                        className={cn(
-                                          'group flex h-10 w-full items-center justify-center rounded-md px-2 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
-                                          isActive || isSubActive
-                                            ? 'bg-primary/10 text-primary font-medium'
-                                            : 'transparent'
-                                        )}
-                                      >
-                                        {item.icon && (
-                                          <IconRenderer
-                                            name={item.icon}
-                                            className="h-5 w-5 shrink-0"
-                                          />
-                                        )}
-                                        <span className="sr-only">
-                                          {item.name}
-                                        </span>
-                                      </button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent
-                                      side="right"
-                                      align="start"
-                                      className="w-48"
-                                      sideOffset={8}
-                                    >
-                                      <DropdownMenuLabel>
-                                        {item.name}
-                                      </DropdownMenuLabel>
-                                      <DropdownMenuSeparator />
-                                      {item?.children?.map((subItem) => {
-                                        const isSubItemActive =
-                                          pathname === subItem.url ||
-                                          pathname.startsWith(
-                                            `${subItem.url}/`
-                                          );
-
-                                        return (
-                                          <DropdownMenuItem
-                                            key={subItem.name}
-                                            asChild
-                                            className={cn(
-                                              isSubItemActive &&
-                                                'bg-primary/5 text-primary font-medium'
-                                            )}
-                                          >
-                                            <Link href={subItem.url}>
-                                              {subItem.name}
-                                            </Link>
-                                          </DropdownMenuItem>
-                                        );
-                                      })}
-                                    </DropdownMenuContent>
-                                  </DropdownMenu>
-                                ) : (
-                                  // Expanded state: Show collapsible submenu
-                                  <>
-                                    <button
-                                      onClick={() => toggleSubMenu(item.name)}
-                                      className={cn(
-                                        'group flex h-10 w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground justify-between',
-                                        isActive || isSubActive
-                                          ? 'bg-primary/10 text-primary font-medium'
-                                          : 'transparent'
-                                      )}
-                                    >
-                                      <div className="flex items-center">
-                                        {item.icon && (
-                                          <IconRenderer
-                                            name={item.icon}
-                                            className="h-5 w-5 shrink-0 mr-2"
-                                          />
-                                        )}
-                                        <span>{item.name}</span>
-                                      </div>
-                                      <ChevronDown
-                                        className={cn(
-                                          'h-4 w-4 transition-transform',
-                                          isOpen ? 'rotate-180' : ''
-                                        )}
-                                      />
-                                    </button>
-
-                                    {isOpen && (
-                                      <div className="ml-6 mt-1 border-l pl-3 space-y-1">
-                                        {item?.children.map((subItem) => {
-                                          const isSubItemActive =
-                                            pathname === subItem.url ||
-                                            pathname.startsWith(
-                                              `${subItem.url}/`
-                                            );
-
-                                          return (
-                                            <Link
-                                              key={subItem.name}
-                                              href={subItem.url}
-                                              className={cn(
-                                                'flex h-8 items-center rounded-md px-3 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground',
-                                                isSubItemActive
-                                                  ? 'bg-primary/5 text-primary font-medium'
-                                                  : 'text-muted-foreground'
-                                              )}
-                                            >
-                                              {subItem.name}
-                                            </Link>
-                                          );
-                                        })}
-                                      </div>
-                                    )}
-                                  </>
+                              <button
+                                onClick={() => toggleSubMenu(item.name)}
+                                className={cn(
+                                  'group flex h-10 items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
+                                  isActive || isSubActive
+                                    ? 'bg-primary/10 text-primary font-medium'
+                                    : 'transparent',
+                                  collapsed
+                                    ? 'justify-center'
+                                    : 'justify-between'
                                 )}
-                              </>
+                              >
+                                <div className="flex items-center">
+                                  {item.icon && (
+                                    <IconRenderer
+                                      name={item.icon}
+                                      className={cn(
+                                        'h-5 w-5 shrink-0',
+                                        collapsed ? 'mr-0' : 'mr-2'
+                                      )}
+                                    />
+                                  )}
+                                  {!collapsed && <span>{item.name}</span>}
+                                </div>
+                                {!collapsed && (
+                                  <ChevronDown
+                                    className={cn(
+                                      'h-4 w-4 transition-transform',
+                                      isOpen ? 'rotate-180' : ''
+                                    )}
+                                  />
+                                )}
+                                {collapsed && (
+                                  <div className="absolute left-full ml-6 hidden rounded-md border bg-popover px-3 py-2 text-popover-foreground shadow-md group-hover:flex">
+                                    {item.name}
+                                  </div>
+                                )}
+                              </button>
                             ) : (
-                              // Regular menu item without submenu
                               <Link
                                 href={item?.url}
                                 className={cn(
-                                  'group flex h-10 items-center rounded-md px-2 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground relative',
+                                  'group flex h-10 items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
                                   isActive
                                     ? 'bg-primary/10 text-primary font-medium'
                                     : 'transparent',
@@ -393,13 +305,69 @@ export function SidebarMenu({
                                     )}
                                   />
                                 )}
+
                                 {!collapsed && <span>{item.name}</span>}
                                 {collapsed && (
-                                  <div className="absolute left-full ml-2 hidden rounded-md border bg-popover px-3 py-2 text-popover-foreground shadow-md group-hover:flex whitespace-nowrap z-50">
+                                  <div className="absolute left-full ml-6 hidden rounded-md border bg-popover px-3 py-2 text-popover-foreground shadow-md group-hover:flex">
                                     {item.name}
                                   </div>
                                 )}
                               </Link>
+                            )}
+
+                            {hasSubMenu && !collapsed && isOpen && (
+                              <div className="ml-6 mt-1 border-l pl-3 space-y-1">
+                                {item?.children.map((subItem) => {
+                                  const isSubItemActive =
+                                    pathname === subItem.url ||
+                                    pathname.startsWith(`${subItem.url}/`);
+
+                                  return (
+                                    <Link
+                                      key={subItem.name}
+                                      href={subItem.url}
+                                      className={cn(
+                                        'flex h-8 items-center rounded-md px-3 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground',
+                                        isSubItemActive
+                                          ? 'bg-primary/5 text-primary font-medium'
+                                          : 'text-muted-foreground'
+                                      )}
+                                    >
+                                      {subItem.name}
+                                    </Link>
+                                  );
+                                })}
+                              </div>
+                            )}
+
+                            {hasSubMenu && collapsed && (
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="hidden absolute left-full ml-6 rounded-md border bg-popover px-3 py-2 text-popover-foreground shadow-md group-hover:flex"
+                                  >
+                                    <ChevronDown className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent
+                                  side="right"
+                                  align="start"
+                                  className="w-48"
+                                >
+                                  {item?.children?.map((subItem) => (
+                                    <DropdownMenuItem
+                                      key={subItem.name}
+                                      asChild
+                                    >
+                                      <Link href={subItem.url}>
+                                        {subItem.name}
+                                      </Link>
+                                    </DropdownMenuItem>
+                                  ))}
+                                </DropdownMenuContent>
+                              </DropdownMenu>
                             )}
                           </div>
                         );
@@ -416,8 +384,8 @@ export function SidebarMenu({
               <Button
                 variant="ghost"
                 className={cn(
-                  'w-full hover:bg-accent',
-                  collapsed ? 'justify-center px-2' : 'justify-start px-3'
+                  'w-full justify-start hover:bg-accent',
+                  collapsed && 'justify-center px-0'
                 )}
               >
                 <div

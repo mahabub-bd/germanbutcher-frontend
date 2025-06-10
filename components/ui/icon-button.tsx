@@ -1,27 +1,28 @@
-import { cn } from "@/lib/utils";
-import React from "react";
+import { cn } from '@/lib/utils';
+import React from 'react';
 
-interface IconButtonProps extends React.HTMLAttributes<HTMLDivElement> {
+// Solution 1: Using button element (recommended)
+interface IconButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon: React.ReactNode;
   label: string;
   count?: number;
   alwaysShowCount?: boolean;
 }
 
-export const IconButton = React.forwardRef<HTMLDivElement, IconButtonProps>(
+export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
   (
     { icon, label, count, alwaysShowCount = false, className, ...props },
     ref
   ) => {
     const showCount =
-      typeof count === "number" && (alwaysShowCount ? count >= 0 : count > 0);
+      typeof count === 'number' && (alwaysShowCount ? count >= 0 : count > 0);
 
     return (
-      <div
+      <button
         ref={ref}
         className={cn(
-          "group relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full p-0",
-          "",
+          'group relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full p-0 border-0 bg-transparent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
           className
         )}
         aria-label={label}
@@ -30,7 +31,57 @@ export const IconButton = React.forwardRef<HTMLDivElement, IconButtonProps>(
         {icon}
         {showCount && (
           <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-medium text-primary-foreground">
-            {count > 99 ? "99+" : count}
+            {count > 99 ? '99+' : count}
+          </span>
+        )}
+      </button>
+    );
+  }
+);
+
+IconButton.displayName = 'IconButton';
+
+// Alternative Solution 2: Keep div but add proper role
+interface IconButtonDivProps extends React.HTMLAttributes<HTMLDivElement> {
+  icon: React.ReactNode;
+  label: string;
+  count?: number;
+  alwaysShowCount?: boolean;
+}
+
+export const IconButtonDiv = React.forwardRef<
+  HTMLDivElement,
+  IconButtonDivProps
+>(
+  (
+    { icon, label, count, alwaysShowCount = false, className, ...props },
+    ref
+  ) => {
+    const showCount =
+      typeof count === 'number' && (alwaysShowCount ? count >= 0 : count > 0);
+
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          'group relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full p-0 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+          className
+        )}
+        role="button"
+        tabIndex={0}
+        aria-label={label}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            (e.target as HTMLElement).click();
+          }
+        }}
+        {...props}
+      >
+        {icon}
+        {showCount && (
+          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-medium text-primary-foreground">
+            {count > 99 ? '99+' : count}
           </span>
         )}
       </div>
@@ -38,4 +89,4 @@ export const IconButton = React.forwardRef<HTMLDivElement, IconButtonProps>(
   }
 );
 
-IconButton.displayName = "IconButton";
+IconButtonDiv.displayName = 'IconButtonDiv';

@@ -1,18 +1,18 @@
-import { getUser } from "@/actions/auth";
-import { SidebarMenu } from "@/components/admin/sidebar-menu";
-import type { Metadata } from "next";
-import type React from "react";
+import { getUser } from '@/actions/auth';
+import { SidebarMenu } from '@/components/admin/sidebar-menu';
+import type { Metadata } from 'next';
+import type React from 'react';
 
 export const metadata: Metadata = {
-  title: "Admin Dashboard",
-  description: "User panel for managing the application",
+  title: 'User Dashboard',
+  description: 'User panel for managing the application',
 
-  keywords: ["admin", "dashboard", "management"],
+  keywords: ['admin', 'dashboard', 'management'],
 
-  robots: "noindex, nofollow",
+  robots: 'noindex, nofollow',
 };
 
-export default async function AdminLayout({
+export default async function UserLayout({
   children,
 }: {
   children: React.ReactNode;
