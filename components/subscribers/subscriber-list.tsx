@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { PaginationComponent } from "@/components/common/pagination";
-import { Button } from "@/components/ui/button";
+import { PaginationComponent } from '@/components/common/pagination';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 import {
   Table,
   TableBody,
@@ -15,16 +15,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { formatDateTime } from "@/lib/utils";
-import { deleteData, fetchDataPagination } from "@/utils/api-utils";
-import type { Subscriber } from "@/utils/types";
-import { Mail, MoreHorizontal, Trash2 } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { toast } from "sonner";
-import DeleteConfirmationDialog from "../admin/delete-confirmation-dialog";
-import { LoadingIndicator } from "../admin/loading-indicator";
+} from '@/components/ui/table';
+import { formatDateTime } from '@/lib/utils';
+import { deleteData, fetchDataPagination } from '@/utils/api-utils';
+import type { Subscriber } from '@/utils/types';
+import { Mail, MoreHorizontal, Trash2 } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import DeleteConfirmationDialog from '../admin/delete-confirmation-dialog';
+import { LoadingIndicator } from '../admin/loading-indicator';
 
 interface SubscriberListProps {
   initialPage: number;
@@ -50,17 +50,17 @@ export function SubscriberList({
 
   const updateUrl = useCallback(() => {
     const params = new URLSearchParams();
-    params.set("page", currentPage.toString());
-    params.set("limit", limit.toString());
+    params.set('page', currentPage.toString());
+    params.set('limit', limit.toString());
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   }, [router, pathname, currentPage, limit]);
 
-  const fetchSubscribers = async () => {
+  const fetchSubscribers = useCallback(async () => {
     setIsLoading(true);
     try {
       const params = new URLSearchParams();
-      params.append("page", currentPage.toString());
-      params.append("limit", limit.toString());
+      params.append('page', currentPage.toString());
+      params.append('limit', limit.toString());
 
       const response = await fetchDataPagination<{
         data: Subscriber[];
@@ -71,22 +71,21 @@ export function SubscriberList({
       setTotalItems(response.total);
       setTotalPages(response.totalPages);
     } catch (error) {
-      console.error("Error fetching subscribers:", error);
-      toast.error("Failed to load subscribers. Please try again.");
+      console.error('Error fetching subscribers:', error);
+      toast.error('Failed to load subscribers. Please try again.');
       setSubscribers([]);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentPage, limit]);
 
   useEffect(() => {
     fetchSubscribers();
-  }, []);
+  }, [fetchSubscribers]);
 
   useEffect(() => {
-    fetchSubscribers();
     updateUrl();
-  }, [currentPage, limit, updateUrl]);
+  }, [updateUrl]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -101,12 +100,12 @@ export function SubscriberList({
     if (!selectedSubscriber) return;
 
     try {
-      await deleteData("subscribers", selectedSubscriber.id);
+      await deleteData('subscribers', selectedSubscriber.id);
       fetchSubscribers();
-      toast.success("Subscriber deleted successfully");
+      toast.success('Subscriber deleted successfully');
     } catch (error) {
-      console.error("Error deleting subscriber:", error);
-      toast.error("Failed to delete subscriber. Please try again.");
+      console.error('Error deleting subscriber:', error);
+      toast.error('Failed to delete subscriber. Please try again.');
     } finally {
       setIsDeleteDialogOpen(false);
     }
@@ -144,7 +143,7 @@ export function SubscriberList({
               <TableCell className="hidden md:table-cell">
                 {subscriber.createdAt
                   ? formatDateTime(subscriber.createdAt)
-                  : "N/A"}
+                  : 'N/A'}
               </TableCell>
 
               <TableCell className="text-right">

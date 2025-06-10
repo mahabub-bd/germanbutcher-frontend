@@ -1,5 +1,6 @@
 'use client';
 
+import { Input } from '@/components/ui/input';
 import { useGlobalSearch } from '@/hooks/use-global-search';
 import { Search, X } from 'lucide-react';
 import type React from 'react';
@@ -27,13 +28,13 @@ export function SearchBar() {
     <div className="relative group">
       <div className="relative flex items-center">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 group-focus-within:text-primaryColor transition-colors" />
-        <input
+        <Input
           type="text"
-          placeholder="Search products..."
+          placeholder="Search Here"
           value={searchQuery}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          className="w-64 xl:w-100 pl-10 pr-10 py-1 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-primaryColor text-gray-900 placeholder-gray-500 transition-all duration-200 hover:border-gray-300"
+          className="w-64 xl:w-100 pl-10 pr-10 py-1 bg-white border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-primaryColor text-gray-900 placeholder-gray-500 transition-all duration-200 hover:border-gray-300"
           autoComplete="off"
           spellCheck="false"
         />
