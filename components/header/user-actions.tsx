@@ -1,7 +1,6 @@
 import { getUser } from '@/actions/auth';
 import { cn } from '@/lib/utils';
 
-import { Search } from 'lucide-react';
 import AuthBtn from '../auth/auth-button';
 
 import Link from 'next/link';
@@ -41,10 +40,6 @@ export default async function UserActions({
       <AuthBtn user={user} compact={compact} />
       <CartButtonHeaderWrapper compact={compact} />
       {/* Auth Button */}
-
-      <div className=" hidden lg:block">
-        <Search className="lg:h-6 w-5 h-5 lg:w-6 flex justify-center items-center" />
-      </div>
 
       <div>
         <Link

@@ -1,6 +1,7 @@
 import { GermanbutcherLogo } from '@/public/images';
 import Image from 'next/image';
 import Link from 'next/link';
+import { SearchBar } from '../homepage/search/search-bar';
 import { NavLinks } from './nav-links';
 import UserActions from './user-actions';
 
@@ -28,8 +29,8 @@ export function DesktopHeader({ isAdminUser }: DesktopHeaderProps) {
           </nav>
         </div>
 
-        <div className="flex items-center space-x-4">
-          {/* {!isAdminUser && <SearchBar className="w-[320px]" />} */}
+        <div className="flex items-center space-x-6">
+          <SearchBar />
           <UserActions compact={false} />
         </div>
       </div>

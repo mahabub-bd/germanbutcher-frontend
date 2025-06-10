@@ -22,8 +22,7 @@ export function NavLinks({ isAdmin, isMobile, onClick }: NavLinksProps) {
 
   const adminLinks = [
     { href: '/admin/dashboard', label: 'Dashboard' },
-    { href: '/admin/user/user-list', label: 'Users' },
-    { href: '/admin/order/order-list', label: 'Orders' },
+   
   ];
 
   const links = isAdmin ? [...commonLinks, ...adminLinks] : commonLinks;

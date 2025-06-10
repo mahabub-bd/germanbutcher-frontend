@@ -1,0 +1,110 @@
+'use client';
+
+import type React from 'react';
+
+import { LoadingIndicator } from '@/components/admin/loading-indicator';
+import { useGlobalSearch } from '@/hooks/use-global-search';
+import type { Product } from '@/utils/types';
+import { Search, X } from 'lucide-react';
+import { EmptySearchState } from './empty-search-state';
+import { ProductSearchItem } from './product-search-item';
+
+export function SearchModal() {
+  const {
+    isOpen,
+    setIsOpen,
+    searchQuery,
+    products,
+    loading,
+    error,
+    clearSearch,
+  } = useGlobalSearch();
+
+  if (!isOpen) return null;
+
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      setIsOpen(false);
+    }
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-20 px-4"
+      onClick={handleBackdropClick}
+    >
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden animate-in slide-in-from-top-4 duration-200">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50/50">
+          <div className="flex items-center space-x-3">
+            <Search className="w-5 h-5 text-blue-500" />
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">
+                Search Results
+              </h2>
+              {searchQuery && (
+                <p className="text-sm text-gray-500">for &quot;{searchQuery}&quot;</p>
+              )}
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            {searchQuery && (
+              <button
+                onClick={clearSearch}
+                className="px-3 py-1.5 text-xs text-gray-600 hover:text-gray-800 border border-gray-200 rounded-md hover:bg-gray-50 transition-colors"
+              >
+                Clear
+              </button>
+            )}
+            <button
+              onClick={handleClose}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              aria-label="Close search"
+            >
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="overflow-y-auto max-h-[calc(80vh-80px)]">
+          {loading && <LoadingIndicator message="Searching products..." />}
+
+          {error && (
+            <div className="flex items-center justify-center py-12">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <X className="w-6 h-6 text-red-500" />
+                </div>
+                <p className="text-gray-600 font-medium mb-1">Search Error</p>
+                <p className="text-sm text-gray-500">{error}</p>
+              </div>
+            </div>
+          )}
+
+          {!loading && !error && products.length === 0 && searchQuery && (
+            <EmptySearchState searchQuery={searchQuery} />
+          )}
+
+          {!loading && products.length > 0 && (
+            <div className="p-4">
+              <div className="space-y-2">
+                {products.map((product: Product) => (
+                  <ProductSearchItem
+                    key={product.id}
+                    product={product}
+                    onClose={handleClose}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

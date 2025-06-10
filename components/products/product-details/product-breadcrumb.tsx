@@ -8,42 +8,52 @@ interface ProductBreadcrumbProps {
 
 export function ProductBreadcrumb({ product }: ProductBreadcrumbProps) {
   return (
-    <div className="bg-gradient-to-r from-white to-gray-50/50 border-b border-gray-200/60 sticky top-0 z-10 shadow-sm backdrop-blur-sm">
-      <div className="container mx-auto px-4 py-4">
-        <nav className="flex items-center text-sm bg-white/80 backdrop-blur-sm rounded-lg px-4 py-3 border border-gray-100 shadow-sm">
+    <div className="  sticky top-0 z-10 ">
+      <div className="container mx-auto  py-2 sm:py-3 lg:py-4">
+        <nav className="flex items-center text-xs sm:text-sm  rounded-lg px-2 sm:px-3 lg:px-4 py-2 sm:py-3   overflow-x-auto">
+          {/* Home Link */}
           <Link
             href="/"
-            className="flex items-center text-gray-600 hover:text-primaryColor hover:bg-primaryColor/5 transition-all duration-200 rounded-md px-2 py-1 group"
+            className="flex items-center text-gray-600 hover:text-primaryColor hover:bg-primaryColor/5 transition-all duration-200 rounded-md px-1 sm:px-2 py-1 group flex-shrink-0"
           >
-            <div className="p-1 rounded-md bg-gray-100 group-hover:bg-primaryColor/10 transition-colors mr-2">
-              <Home className="h-3 w-3" />
+            <div className="p-0.5 sm:p-1 rounded-md bg-gray-100 group-hover:bg-primaryColor/10 transition-colors mr-1 sm:mr-2">
+              <Home className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
             </div>
-            <span className="font-medium">Home</span>
+            <span className="font-medium hidden sm:inline">Home</span>
+            <span className="font-medium sm:hidden">Home</span>
           </Link>
 
-          <div className="flex items-center mx-2">
-            <ChevronRight className="h-4 w-4 text-gray-300" />
+          {/* Separator */}
+          <div className="flex items-center mx-1 sm:mx-2 flex-shrink-0">
+            <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 text-gray-300" />
           </div>
 
+          {/* Category Link */}
           <Link
             href={`/categories/${product.category.slug}`}
-            className="flex items-center text-gray-600 hover:text-primaryColor hover:bg-primaryColor/5 transition-all duration-200 rounded-md px-2 py-1 group"
+            className="flex items-center text-gray-600 hover:text-primaryColor hover:bg-primaryColor/5 transition-all duration-200 rounded-md px-1 sm:px-2 py-1 group flex-shrink-0 min-w-0"
           >
-            <div className="p-1 rounded-md bg-gray-100 group-hover:bg-primaryColor/10 transition-colors mr-2">
-              <Tag className="h-3 w-3" />
+            <div className="p-0.5 sm:p-1 rounded-md bg-gray-100 group-hover:bg-primaryColor/10 transition-colors mr-1 sm:mr-2 flex-shrink-0">
+              <Tag className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
             </div>
-            <span className="font-medium">{product.category.name}</span>
+            <span className="font-medium truncate max-w-[80px] sm:max-w-[120px] lg:max-w-none">
+              {product.category.name}
+            </span>
           </Link>
 
-          <div className="flex items-center mx-2">
-            <ChevronRight className="h-4 w-4 text-gray-300" />
+          {/* Separator */}
+          <div className="flex items-center mx-1 sm:mx-2 flex-shrink-0">
+            <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 text-gray-300" />
           </div>
 
-          <div className="flex items-center text-gray-900 px-2 py-1">
-            <div className="p-1 rounded-md bg-primaryColor/10 mr-2">
-              <Package2 className="h-3 w-3 text-primaryColor" />
+          {/* Current Product */}
+          <div className="flex items-center text-gray-900 px-1 sm:px-2 py-1 min-w-0 flex-1">
+            <div className="p-0.5 sm:p-1 rounded-md bg-primaryColor/10 mr-1 sm:mr-2 flex-shrink-0">
+              <Package2 className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-primaryColor" />
             </div>
-            <span className="font-semibold text-gray-900">{product.name}</span>
+            <span className="font-semibold text-gray-900 truncate">
+              {product.name}
+            </span>
           </div>
         </nav>
       </div>

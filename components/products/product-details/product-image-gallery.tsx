@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import type { Attachment, Product } from "@/utils/types";
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState, type MouseEvent } from "react";
 
 interface ProductImageGalleryProps {
   product: Product;
@@ -11,6 +11,9 @@ interface ProductImageGalleryProps {
 
 export function ProductImageGallery({ product }: ProductImageGalleryProps) {
   const [selectedImage, setSelectedImage] = useState(product.attachment.url);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
+  const imageRef = useRef<HTMLDivElement>(null);
 
   const discountAmount =
     product.discountType === "fixed"
@@ -24,22 +27,77 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
     100
   ).toFixed(0);
 
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    if (!imageRef.current) return;
+
+    const rect = imageRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+    setZoomPosition({ x, y });
+  };
+
+  const handleMouseEnter = () => {
+    setIsZoomed(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsZoomed(false);
+  };
+
   return (
     <div className="sticky top-16">
-      <div className="relative w-full h-80 bg-white rounded-xl overflow-hidden shadow-md border">
+      <div
+        ref={imageRef}
+        className="relative w-full h-80 bg-white rounded-xl overflow-hidden shadow-md border cursor-zoom-in"
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {/* Main Image */}
         <Image
           src={selectedImage || "/placeholder.svg"}
           alt={product.name}
           fill
-          className="object-cover hover:scale-105 transition-transform duration-300"
+          className="object-cover transition-transform duration-300"
         />
+
+        {/* Zoomed Image Overlay */}
+        {isZoomed && (
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: `url(${selectedImage || "/placeholder.svg"}) no-repeat`,
+              backgroundSize: "200%",
+              backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
+              opacity: 0.8,
+            }}
+          />
+        )}
+
+        {/* Zoom Lens */}
+        {isZoomed && (
+          <div
+            className="absolute w-32 h-32 border-2 border-white rounded-full pointer-events-none shadow-lg"
+            style={{
+              left: `calc(${zoomPosition.x}% - 64px)`,
+              top: `calc(${zoomPosition.y}% - 64px)`,
+              background: `url(${selectedImage || "/placeholder.svg"}) no-repeat`,
+              backgroundSize: "400%",
+              backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
+              transform: "translate(0, 0)",
+            }}
+          />
+        )}
+
+        {/* Badges */}
         {discountAmount > 0 && (
-          <Badge className="absolute top-3 left-3 bg-red-500 text-white font-semibold">
+          <Badge className="absolute top-3 left-3 bg-red-500 text-white font-semibold z-10">
             -{discountPercentage}% OFF
           </Badge>
         )}
         {product.stock <= 5 && product.stock > 0 && (
-          <Badge className="absolute top-3 right-3 bg-orange-500 text-white">
+          <Badge className="absolute top-3 right-3 bg-orange-500 text-white z-10">
             Only {product.stock} left
           </Badge>
         )}

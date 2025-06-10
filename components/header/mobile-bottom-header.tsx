@@ -17,15 +17,15 @@ interface NavigationItem {
 const navigationItems: NavigationItem[] = [
   {
     name: "Category",
-    href: "/category",
+    href: "/categories",
     icon: Grid3X3,
-    activePattern: /^\/category/,
+    activePattern: /^\/categories/,
   },
   {
     name: "Recipe",
     href: "/recipe",
     icon: ChefHat,
-    activePattern: /^\/recipes/,
+    activePattern: /^\/recipe/,
   },
   {
     name: "Home",
