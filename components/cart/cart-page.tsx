@@ -102,7 +102,7 @@ export function CartPage({ cart }: { cart?: Cart }) {
           {itemCount > 0 ? (
             <div className="space-y-6">
               {cart?.items.map((item: CartItem) => (
-                <CartItemProductPage key={item.id} item={item} />
+                <CartItemProductPage key={item.product?.id} item={item} />
               ))}
             </div>
           ) : (

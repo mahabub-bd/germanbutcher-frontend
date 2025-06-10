@@ -1,40 +1,45 @@
-import { GermanbutcherLogo } from '@/public/images';
-import Image from 'next/image';
-import Link from 'next/link';
-import MobileMenu from './mobile-menu';
-import SearchBar from './search';
-import UserActions from './user-actions';
+import { Search } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
-interface MobileHeaderProps {
-  isAdminUser: boolean;
-}
+import { GermanbutcherLogo } from "@/public/images";
+import { MobileMenu } from "./mobile-menu";
 
-export function MobileHeader({ isAdminUser }: MobileHeaderProps) {
+export function MobileHeader() {
   return (
-    <div className="lg:hidden flex flex-col bg-primaryColor">
+    <header className="lg:hidden flex flex-col bg-primaryColor">
       <div className="flex items-center justify-between py-2 px-4">
-        <div className=" flex items-center gap-3 ">
-          <MobileMenu isAdmin={isAdminUser} />
-          <Link href="/" className="flex items-center  w-8 h-8">
-            <Image
-              src={GermanbutcherLogo || '/placeholder.svg'}
-              alt="PurePac logo"
-              width={50}
-              height={50}
-              className="h-auto w-auto"
-              priority
-            />
-          </Link>
-        </div>
+        {/* Logo */}
+        <Link
+          href="/"
+          className="flex items-center justify-center w-16 h-16 rounded-md hover:bg-black/5 transition-colors"
+          aria-label="Go to homepage"
+        >
+          <Image
+            src={
+              GermanbutcherLogo ||
+              "/placeholder.svg?height=64&width=64&query=German Butcher logo"
+            }
+            alt="German Butcher logo"
+            width={64}
+            height={64}
+            className="max-w-full max-h-full object-contain"
+            priority
+          />
+        </Link>
 
-        <UserActions compact />
+        {/* Search Button */}
+        <button
+          className="flex items-center justify-center w-12 h-12 rounded-full hover:bg-black/5 transition-colors"
+          aria-label="Search products"
+          type="button"
+        >
+          <Search className="w-6 h-6 text-white" />
+        </button>
+
+        {/* Mobile Menu */}
+        <MobileMenu />
       </div>
-
-      {!isAdminUser && (
-        <div className="px-4 pb-2">
-          <SearchBar />
-        </div>
-      )}
-    </div>
+    </header>
   );
 }

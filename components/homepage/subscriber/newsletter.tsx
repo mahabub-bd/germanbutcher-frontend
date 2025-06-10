@@ -21,9 +21,9 @@ export function NewsletterSection() {
       {/* Content */}
       <div className="relative z-10 flex items-center min-h-[400px] md:min-h-[500px] lg:min-h-[600px]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Left Content */}
-            <div className="lg:col-span-6 xl:col-span-5">
+            <div className="w-full">
               <div className="flex flex-col sm:flex-row items-start sm:items-center">
                 {/* Icon */}
                 <div className="flex-shrink-0 mb-4 sm:mb-0 sm:mr-6">
@@ -49,9 +49,9 @@ export function NewsletterSection() {
             </div>
 
             {/* Right Content - Subscription Form */}
-            <div className="lg:col-span-6 xl:col-span-7 lg:col-start-7 xl:col-start-7">
+            <div className="w-full">
               <div className="flex justify-start lg:justify-end">
-                <div className="w-full ">
+                <div className="w-full">
                   <Subscription />
                 </div>
               </div>

@@ -1,35 +1,33 @@
-import { Marquee } from "@/components/ui/marquee"
-import { fetchData } from "@/utils/api-utils"
-import { Client } from "@/utils/types"
-import Image from "next/image"
-import type React from "react"
+import { Marquee } from "@/components/ui/marquee";
+import { fetchData } from "@/utils/api-utils";
+import { Client } from "@/utils/types";
+import Image from "next/image";
+import type React from "react";
 
 interface ClientMarqueeProps {
-  children?: React.ReactNode
+  children?: React.ReactNode;
 }
 
 async function getClients(): Promise<Client[]> {
   try {
-    const response = await fetchData("clients")
+    const response = await fetchData("clients");
     if (Array.isArray(response)) {
-      return response as Client[]
+      return response as Client[];
     } else {
-      return []
+      return [];
     }
   } catch (error) {
-    console.error("Error fetching clients:", error)
-    return []
+    console.error("Error fetching clients:", error);
+    return [];
   }
 }
 
 export default async function ClientMarquee({ children }: ClientMarqueeProps) {
-  const clients = await getClients()
-  
+  const clients = await getClients();
 
-  const midPoint = Math.ceil(clients.length / 2)
-  const firstRowClients = clients.slice(0, midPoint)
-  const secondRowClients = clients.slice(midPoint)
-
+  const midPoint = Math.ceil(clients.length / 2);
+  const firstRowClients = clients.slice(0, midPoint);
+  const secondRowClients = clients.slice(midPoint);
 
   if (clients.length === 0) {
     return (
@@ -41,14 +39,13 @@ export default async function ClientMarquee({ children }: ClientMarqueeProps) {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <div className="w-full py-8 md:py-12">
       {children}
       <div className="container mx-auto px-4">
-        {/* First marquee - left to right (first half of clients) */}
         <Marquee pauseOnHover className="[--duration:40s] mb-4 md:mb-6">
           {firstRowClients.map((client) => (
             <div
@@ -84,5 +81,5 @@ export default async function ClientMarquee({ children }: ClientMarqueeProps) {
         </Marquee>
       </div>
     </div>
-  )
+  );
 }

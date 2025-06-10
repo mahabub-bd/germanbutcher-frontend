@@ -130,7 +130,6 @@ export function ProductFilters({
     ]);
   }, [currentPriceRange]);
 
-  // Auto-expand parent categories if their children are selected
   useEffect(() => {
     if (currentCategory) {
       const selectedCat = categories.find(
@@ -162,7 +161,7 @@ export function ProductFilters({
         categoryId.toString() === currentCategory
           ? null
           : categoryId.toString(),
-      page: "1", // Reset to first page when filtering
+      page: "1",
     };
     router.push(`${pathname}?${createQueryString(params)}`);
     setIsSheetOpen(false);
@@ -412,12 +411,12 @@ export function ProductFilters({
                           : formatCurrencyEnglish(Number(currentPriceRange.max))
                       }`
                     : currentPriceRange.min
-                    ? `Min ${formatCurrencyEnglish(
-                        Number(currentPriceRange.min)
-                      )}`
-                    : `Max ${formatCurrencyEnglish(
-                        Number(currentPriceRange.max)
-                      )}`}
+                      ? `Min ${formatCurrencyEnglish(
+                          Number(currentPriceRange.min)
+                        )}`
+                      : `Max ${formatCurrencyEnglish(
+                          Number(currentPriceRange.max)
+                        )}`}
                 </span>
                 <Button
                   variant="ghost"

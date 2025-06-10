@@ -10,7 +10,7 @@ export async function Header() {
   return (
     <header className="sticky top-0 z-50 w-full bg-primaryColor shadow-2xl">
       <DesktopHeader isAdminUser={isAdminUser} />
-      <MobileHeader isAdminUser={isAdminUser} />
+      <MobileHeader />
     </header>
   );
 }

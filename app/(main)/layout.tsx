@@ -1,5 +1,7 @@
 import Footer from "@/components/footer/Footer";
 import { Header } from "@/components/header";
+import { MobileBottomHeader } from "@/components/header/mobile-bottom-header";
+
 import type React from "react";
 
 export default function MainLayout({
@@ -11,6 +13,7 @@ export default function MainLayout({
     <div>
       <Header />
       <main className="flex-1">{children}</main>
+      <MobileBottomHeader />
       <Footer />
     </div>
   );

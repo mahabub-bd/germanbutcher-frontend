@@ -1,12 +1,12 @@
-import { Badge } from '@/components/ui/badge';
-import { formatCurrencyEnglish, formatWeight } from '@/lib/utils';
-import { getBlurData } from '@/utils/blur-generator';
-import type { Product } from '@/utils/types';
-import { DiscountType } from '@/utils/types';
-import { Weight } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { AddToCartButton } from '../cart/add-to-cart-button';
+import { Badge } from "@/components/ui/badge";
+import { formatCurrencyEnglish, formatWeight } from "@/lib/utils";
+import { getBlurData } from "@/utils/blur-generator";
+import type { Product } from "@/utils/types";
+import { DiscountType } from "@/utils/types";
+import { Weight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { AddToCartButton } from "../cart/add-to-cart-button";
 
 export default async function ProductCard({ product }: { product: Product }) {
   const { base64 } = await getBlurData(product?.attachment?.url);
@@ -30,7 +30,7 @@ export default async function ProductCard({ product }: { product: Product }) {
   const isOutOfStock = !product?.stock;
 
   return (
-    <div className="group relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-gray-200 transition-all duration-500 overflow-hidden">
+    <div className="group relative bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-gray-200 transition-all duration-500 overflow-hidden">
       <Link href={`/product/${product?.slug}`} className="block">
         {/* Image Container */}
         <div className="w-full h-[220px] md:h-[180px] lg:h-[220px] bg-gray-100  overflow-hidden relative md:mb-3 mb-1">

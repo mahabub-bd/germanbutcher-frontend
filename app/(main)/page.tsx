@@ -1,29 +1,27 @@
-import { LoadingIndicator } from '@/components/admin/loading-indicator';
-import { HeadingPrimary } from '@/components/common/heading-primary';
-import { AnimatedCarousel } from '@/components/homepage/banner/hero/animated-carousel';
-import BrandList from '@/components/homepage/brands/brand-list';
-import CategoriesList from '@/components/homepage/Category/categories-list';
-import ClientS from '@/components/homepage/clients/Clients';
-import { NewsletterSection } from '@/components/homepage/subscriber/newsletter';
-import { TestimonialSection } from '@/components/homepage/testimonial/testimonial-section';
-import ProductList from '@/components/products/product-list';
-import { Suspense } from 'react';
+import { LoadingIndicator } from "@/components/admin/loading-indicator";
+import { HeadingPrimary } from "@/components/common/heading-primary";
+import { AnimatedCarousel } from "@/components/homepage/banner/hero/animated-carousel";
+import BrandList from "@/components/homepage/brands/brand-list";
+import CategoriesList from "@/components/homepage/Category/categories-list";
+import Client from "@/components/homepage/clients/Clients";
+import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
+import { TestimonialSection } from "@/components/homepage/testimonial/testimonial-section";
+import ProductList from "@/components/products/product-list";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
     <main className="min-h-screen">
       <AnimatedCarousel />
       {/* Categories Section */}
-      <section className="md:pt-18 pt-5 bg-gray-50">
-        <div className=" ">
-          <Suspense
-            fallback={<LoadingIndicator message="Loading Categories..." />}
-          >
-            <CategoriesList endpoint="categories?isMainCategory=true">
-              <HeadingPrimary title="All Category" className="" />
-            </CategoriesList>
-          </Suspense>
-        </div>
+      <section className="md:pt-18 pt-5 bg-bgsecondColor">
+        <Suspense
+          fallback={<LoadingIndicator message="Loading Categories..." />}
+        >
+          <CategoriesList endpoint="categories?isMainCategory=true">
+            <HeadingPrimary title="All Category" />
+          </CategoriesList>
+        </Suspense>
       </section>
 
       {/* Features Products Section */}
@@ -75,9 +73,9 @@ export default function Home() {
       </section>
       {/* Subscribe Section */}
       <section className="md:py-10 lg:py-24 py-5 bg-whiteColor">
-        <ClientS>
+        <Client>
           <HeadingPrimary title="Our Prominent Clients" className="mb-10" />
-        </ClientS>
+        </Client>
       </section>
 
       <NewsletterSection />

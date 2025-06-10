@@ -1,91 +1,70 @@
-'use client';
-import { useState } from 'react';
+"use client";
 
-import { Menu } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
+import { Menu } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { cn } from '@/lib/utils';
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { GermanbutcherLogo } from "@/public/images";
+import { CategoryLinks } from "./category-links";
 
-import { GermanbutcherLogo } from '@/public/images';
-import CategoryLinks from './category-links';
-import { NavLinks } from './nav-links';
-
-type TabType = 'main' | 'categories';
-
-export default function MobileMenu({ isAdmin }: { isAdmin?: boolean }) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<TabType>('main');
+export function MobileMenu() {
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleClose = () => setIsOpen(false);
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger asChild id="closeIcon">
+      <SheetTrigger asChild>
         <Button
           variant="ghost"
           size="icon"
-          className="h-9 w-9 rounded-full p-0"
+          className="h-9 w-9 rounded-full p-0 hover:bg-black/5 transition-colors"
+          aria-label="Open navigation menu"
         >
           <Menu className="size-5 text-white" />
-          <span className="sr-only">Open menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-[280px] sm:w-[350px] p-0">
+
+      <SheetContent side="right" className="w-[375px] p-0">
+        {/* Hidden title for accessibility */}
+        <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+
         <div className="flex flex-col h-full bg-primaryColor">
-          {/* Header with Logo and Close Button */}
-          <div className="flex items-center justify-between p-4 border-b">
-            <Link href="/" className="flex items-center" onClick={handleClose}>
-              <Image
-                src={GermanbutcherLogo || '/placeholder.svg'}
-                alt="PurePac Logo"
-                width={40}
-                height={40}
-                className=" p-1"
-              />
-            </Link>
+          {/* Header Section */}
+          <div className=" border-b bg-golden-radial border-gray-200 p-2">
+            <div className="flex items-center justify-center">
+              <Link
+                href="/"
+                className="flex items-center justify-center p-2 rounded-lg  transition-colors"
+                onClick={handleClose}
+                aria-label="Go to homepage"
+              >
+                <Image
+                  src={
+                    GermanbutcherLogo ||
+                    "/placeholder.svg?height=80&width=80&query=German Butcher logo"
+                  }
+                  alt="German Butcher Logo"
+                  width={80}
+                  height={80}
+                  className="object-contain"
+                />
+              </Link>
+            </div>
           </div>
 
-          {/* Tab Navigation */}
-          <div className="flex border-b">
-            <button
-              className={cn(
-                'flex-1 py-3 text-center font-medium transition-colors',
-                activeTab === 'main'
-                  ? 'border-b-2 border-whiteColor text-whiteColor'
-                  : 'text-whiteColor '
-              )}
-              onClick={() => setActiveTab('main')}
-              aria-selected={activeTab === 'main'}
-              role="tab"
-            >
-              Main Menu
-            </button>
-            <button
-              className={cn(
-                'flex-1 py-3 text-center font-medium transition-colors',
-                activeTab === 'categories'
-                  ? 'border-b-2 border-whiteColor text-whiteColor'
-                  : 'text-whiteColor '
-              )}
-              onClick={() => setActiveTab('categories')}
-              aria-selected={activeTab === 'categories'}
-              role="tab"
-            >
-              Categories
-            </button>
-          </div>
-
-          {/* Menu Content */}
-          <div className="flex-1  overflow-auto p-6">
-            <div className="space-y-6">
-              {activeTab === 'main' ? (
-                <NavLinks isAdmin={isAdmin} isMobile onClick={handleClose} />
-              ) : (
-                <CategoryLinks onClick={handleClose} />
-              )}
+          {/* Navigation Content */}
+          <div className="flex-1 overflow-auto">
+            <div className="p-6">
+              <CategoryLinks onCategoryClick={handleClose} />
             </div>
           </div>
         </div>
