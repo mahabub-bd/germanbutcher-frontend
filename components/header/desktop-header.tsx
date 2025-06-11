@@ -5,11 +5,7 @@ import { SearchBar } from '../homepage/search/search-bar';
 import { NavLinks } from './nav-links';
 import UserActions from './user-actions';
 
-interface DesktopHeaderProps {
-  isAdminUser: boolean;
-}
-
-export function DesktopHeader({ isAdminUser }: DesktopHeaderProps) {
+export function DesktopHeader() {
   return (
     <div className="hidden bg-primaryColor  lg:block  py-4 ">
       <div className="container mx-auto flex justify-between items-center px-4 md:px-8 lg:px-12">
@@ -25,7 +21,7 @@ export function DesktopHeader({ isAdminUser }: DesktopHeaderProps) {
           </Link>
 
           <nav className="flex items-center space-x-8 ml-20">
-            <NavLinks isAdmin={isAdminUser} />
+            <NavLinks />
           </nav>
         </div>
 
