@@ -22,7 +22,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       <button
         ref={ref}
         className={cn(
-          'group relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full p-0 border-0 bg-transparent focus:outline-none ',
+          'group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full p-0 border-0 bg-transparent focus:outline-none ',
           className
         )}
         aria-label={label}
@@ -30,7 +30,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       >
         {icon}
         {showCount && (
-          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-medium text-primary-foreground">
+          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full  px-1 text-[10px] font-medium bg-white text-primaryColor">
             {count > 99 ? '99+' : count}
           </span>
         )}

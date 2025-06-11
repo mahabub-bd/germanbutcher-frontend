@@ -13,7 +13,7 @@ export function CategoryCard({ category }: { category: Category }) {
         <div className="relative w-[150px] h-[150px] rounded-full p-2 flex items-center justify-center bg-white border-2 border-dashed border-primaryColor">
           <Image
             src={category?.attachment?.url || '/category-placeholder.svg'}
-            alt={category?.name}
+            alt={`${category?.name} category icon`}
             width={600}
             height={600}
             className="object-cover w-full h-full rounded-full transition-transform duration-300 group-hover:scale-105"

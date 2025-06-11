@@ -34,7 +34,7 @@ export function SearchModal() {
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center md:pt-20 pt-36 px-4"
+      className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center md:pt-24 pt-36 px-4"
       onClick={handleBackdropClick}
     >
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden animate-in slide-in-from-top-4 duration-200">

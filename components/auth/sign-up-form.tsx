@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { register } from "@/actions/auth";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { CheckIcon, EyeIcon, EyeOffIcon, XIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
+import { register } from '@/actions/auth';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { CheckIcon, EyeIcon, EyeOffIcon, XIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function SignUpForm() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    mobileNumber: "",
-    password: "",
-    confirmPassword: "",
+    name: '',
+    email: '',
+    mobileNumber: '',
+    password: '',
+    confirmPassword: '',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -25,23 +25,23 @@ export default function SignUpForm() {
   // Password strength requirements
   const passwordRequirements = [
     {
-      label: "At least 8 characters",
+      label: 'At least 8 characters',
       test: (pass: string) => pass.length >= 8,
     },
     {
-      label: "At least one uppercase letter",
+      label: 'At least one uppercase letter',
       test: (pass: string) => /[A-Z]/.test(pass),
     },
     {
-      label: "At least one lowercase letter",
+      label: 'At least one lowercase letter',
       test: (pass: string) => /[a-z]/.test(pass),
     },
     {
-      label: "At least one number",
+      label: 'At least one number',
       test: (pass: string) => /[0-9]/.test(pass),
     },
     {
-      label: "At least one special character",
+      label: 'At least one special character',
       test: (pass: string) => /[^A-Za-z0-9]/.test(pass),
     },
   ];
@@ -50,8 +50,8 @@ export default function SignUpForm() {
     const { name, value } = e.target;
 
     // Special handling for phone number to only allow digits
-    if (name === "mobileNumber") {
-      const digitsOnly = value.replace(/\D/g, "");
+    if (name === 'mobileNumber') {
+      const digitsOnly = value.replace(/\D/g, '');
       setFormData({ ...formData, [name]: digitsOnly });
     } else {
       setFormData({ ...formData, [name]: value });
@@ -75,7 +75,7 @@ export default function SignUpForm() {
 
       if (result.success) {
         toast.success(result.message);
-        router.push(result.redirect || "/auth/sign-in");
+        router.push(result.redirect || '/auth/sign-in');
       } else {
         if (result.errors) {
           // Handle field-specific errors
@@ -83,18 +83,18 @@ export default function SignUpForm() {
             ([field, messages]) => {
               if (messages && Array.isArray(messages) && messages.length > 0) {
                 toast.error(`Invalid ${field}`, {
-                  description: messages.join(", "),
+                  description: messages.join(', '),
                 });
               }
             }
           );
         } else {
-          toast.error(result.message || "Registration failed");
+          toast.error(result.message || 'Registration failed');
         }
       }
     } catch (error) {
-      toast.error("An unexpected error occurred");
-      console.error("Registration error:", error);
+      toast.error('An unexpected error occurred');
+      console.error('Registration error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -157,7 +157,7 @@ export default function SignUpForm() {
           <Input
             id="password"
             name="password"
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             placeholder="••••••••"
             value={formData.password}
             onChange={handleChange}
@@ -177,7 +177,7 @@ export default function SignUpForm() {
               <EyeIcon className="h-4 w-4 text-muted-foreground" />
             )}
             <span className="sr-only">
-              {showPassword ? "Hide password" : "Show password"}
+              {showPassword ? 'Hide password' : 'Show password'}
             </span>
           </Button>
         </div>
@@ -196,8 +196,8 @@ export default function SignUpForm() {
                 <span
                   className={
                     req.test(formData.password)
-                      ? "text-green-500"
-                      : "text-muted-foreground"
+                      ? 'text-green-500'
+                      : 'text-muted-foreground'
                   }
                 >
                   {req.label}
@@ -214,7 +214,7 @@ export default function SignUpForm() {
           <Input
             id="confirmPassword"
             name="confirmPassword"
-            type={showConfirmPassword ? "text" : "password"}
+            type={showConfirmPassword ? 'text' : 'password'}
             placeholder="••••••••"
             value={formData.confirmPassword}
             onChange={handleChange}
@@ -234,7 +234,7 @@ export default function SignUpForm() {
               <EyeIcon className="h-4 w-4 text-muted-foreground" />
             )}
             <span className="sr-only">
-              {showConfirmPassword ? "Hide password" : "Show password"}
+              {showConfirmPassword ? 'Hide password' : 'Show password'}
             </span>
           </Button>
         </div>
@@ -247,8 +247,12 @@ export default function SignUpForm() {
           )}
       </div>
 
-      <Button type="submit" className="w-full mt-6" disabled={isLoading}>
-        {isLoading ? "Creating Account..." : "Create Account"}
+      <Button
+        type="submit"
+        className="w-full mt-6 bg-primaryColor text-white"
+        disabled={isLoading}
+      >
+        {isLoading ? 'Creating Account...' : 'Create Account'}
       </Button>
     </form>
   );

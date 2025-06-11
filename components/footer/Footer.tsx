@@ -77,9 +77,9 @@ export default function Footer() {
           {/* Quick Links */}
           <div className="col-span-1 md:col-span-3 lg:col-span-2">
             <div className="relative">
-              <h3 className="font-bold text-xl mb-6 bg-gradient-to-r from-white to-red-200 bg-clip-text text-transparent">
+              <h2 className="font-bold text-xl mb-6 bg-gradient-to-r from-white to-red-200 bg-clip-text text-transparent">
                 Quick Links
-              </h3>
+              </h2>
               <div className="absolute -left-2 top-0 w-1 h-8 bg-gradient-to-b from-[#c70909] to-red-400 rounded-full"></div>
             </div>
             <ul className="space-y-4">

@@ -65,21 +65,21 @@ export default function AuthBtn({
 
   if (!user) {
     return (
-      <button
+      <Button
         className={cn(
           compact
-            ? 'h-8 w-8 rounded-full flex items-center justify-end cursor-pointer p-0 text-center'
-            : 'flex items-center justify-center cursor-pointer rounded-full',
+            ? 'h-8 w-8 rounded-full flex items-center justify-end cursor-pointer p-0 text-center '
+            : 'flex items-center justify-center cursor-pointer rounded-full  border border-amber-50 bg-primaryColor hover:bg-primaryColor',
           className
         )}
         onClick={() => router.push('/auth/sign-in')}
         aria-label="Sign in to your account"
       >
         <User
-          size={24}
           className={cn('lg:h-6 w-5 h-5 lg:w-6', compact ? 'text-center' : '')}
         />
-      </button>
+        Login
+      </Button>
     );
   }
 
