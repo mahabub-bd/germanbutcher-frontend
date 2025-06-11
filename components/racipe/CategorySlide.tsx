@@ -29,7 +29,6 @@ function CategorySlide({
 
   return (
     <div className="pt-5 bg-whiteColor px-4 sm:px-6 md:pt-10 xl:px-0 container mx-auto">
-      <div className="">{children}</div>
       <div className="py-10 ">
         <Swiper
           slidesPerView={2}

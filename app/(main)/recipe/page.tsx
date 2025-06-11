@@ -1,20 +1,19 @@
 import { LoadingIndicator } from '@/components/admin/loading-indicator';
-import { HeadingPrimary } from '@/components/common/heading-primary';
 import { AnimatedCarousel } from '@/components/homepage/banner/hero/animated-carousel';
 import CategorySlide from '@/components/racipe/CategorySlide';
+import RacipeSearch from '@/components/racipe/RacipeSearch';
 import { Suspense } from 'react';
 
 export default function RecipePage() {
   return (
     <div>
       <AnimatedCarousel />
-      <section className="md:pt-18 pt-5 ">
+      <RacipeSearch />
+      <section className=" ">
         <Suspense
           fallback={<LoadingIndicator message="Loading Categories..." />}
         >
-          <CategorySlide endpoint="categories?isMainCategory=true">
-            <HeadingPrimary title="All Category" />
-          </CategorySlide>
+          <CategorySlide endpoint="categories?isMainCategory=true" />
         </Suspense>
       </section>
       <h1>hello</h1>
