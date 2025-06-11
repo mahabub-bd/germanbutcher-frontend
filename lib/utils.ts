@@ -91,3 +91,11 @@ export function formatWeight(weight: number, unit: string): string {
 
   return `${formattedWeight} ${displayUnit}`;
 }
+
+
+export function formatSlugToTitle(slug: string): string {
+  return slug
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ")
+}

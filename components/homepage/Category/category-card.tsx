@@ -10,7 +10,7 @@ export function CategoryCard({ category }: { category: Category }) {
     >
       {/* Image Container - LCP Element */}
       <div className="flex w-full items-center justify-center">
-        <div className="relative w-[150px] h-[150px] rounded-full p-2 flex items-center justify-center bg-white border-2 border-dashed border-primaryColor">
+        <div className="relative md:w-[150px] md:h-[150px] w-[100px] h-[100px] rounded-full p-2 flex items-center justify-center bg-white border-2 border-dashed border-primaryColor">
           <Image
             src={category?.attachment?.url || '/category-placeholder.svg'}
             alt={`${category?.name} category icon`}
@@ -25,7 +25,7 @@ export function CategoryCard({ category }: { category: Category }) {
 
       {/* Category Name */}
       <div className="p-2 text-center">
-        <h3 className="text-md xs:text-base sm:text-lg font-semibold md:text-xl text-primaryColor group-hover:text-primary transition-colors line-clamp-2 h-[40px] flex items-center justify-center">
+        <h3 className="text-md  sm:text-lg font-semibold md:text-xl text-primaryColor group-hover:text-primary transition-colors line-clamp-2 h-[50px] flex items-center justify-center">
           {category?.name}
         </h3>
       </div>

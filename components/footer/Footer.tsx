@@ -18,7 +18,7 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="relative bg-gradient-to-br from-[#8a0000] via-[#6d0000] to-[#8a0000] text-white overflow-hidden">
+    <footer className="relative bg-gradient-to-br from-[#8a0000] via-[#6d0000] to-[#8a0000] text-white overflow-hidden md:pb-0 pb-10">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.02)_0%,transparent_50%)] pointer-events-none"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.02)_0%,transparent_50%)] pointer-events-none"></div>

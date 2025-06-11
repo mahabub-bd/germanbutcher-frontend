@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import type React from "react";
+import type React from 'react';
 
-import { useCartContext } from "@/contexts/cart-context";
-import { ChefHat, Grid3X3, Home, ShoppingCart, User } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useCartContext } from '@/contexts/cart-context';
+import { ChefHat, Grid3X3, Home, ShoppingCart, User } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface NavigationItem {
   name: string;
@@ -16,32 +16,32 @@ interface NavigationItem {
 
 const navigationItems: NavigationItem[] = [
   {
-    name: "Category",
-    href: "/categories",
+    name: 'Category',
+    href: '/categories',
     icon: Grid3X3,
     activePattern: /^\/categories/,
   },
   {
-    name: "Recipe",
-    href: "/recipe",
+    name: 'Products',
+    href: '/products',
     icon: ChefHat,
-    activePattern: /^\/recipe/,
+    activePattern: /^\/products/,
   },
   {
-    name: "Home",
-    href: "/",
+    name: 'Home',
+    href: '/',
     icon: Home,
-    activePattern: "/",
+    activePattern: '/',
   },
   {
-    name: "Cart",
-    href: "/cart",
+    name: 'Cart',
+    href: '/cart',
     icon: ShoppingCart,
-    activePattern: "/cart",
+    activePattern: '/cart',
   },
   {
-    name: "Account",
-    href: "/account",
+    name: 'Account',
+    href: '/account',
     icon: User,
     activePattern: /^\/account/,
   },
@@ -54,7 +54,7 @@ export function MobileBottomHeader() {
   const { itemCount } = getCartTotals();
 
   const isActive = (item: NavigationItem): boolean => {
-    if (typeof item.activePattern === "string") {
+    if (typeof item.activePattern === 'string') {
       return pathname === item.activePattern;
     }
     return item.activePattern.test(pathname);
@@ -66,7 +66,7 @@ export function MobileBottomHeader() {
         {navigationItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(item);
-          const isCartItem = item.name === "Cart";
+          const isCartItem = item.name === 'Cart';
 
           return (
             <Link
@@ -74,23 +74,23 @@ export function MobileBottomHeader() {
               href={item.href}
               className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-all duration-200 min-w-0 flex-1 relative ${
                 active
-                  ? "text-primaryColor bg-primaryColor/10"
-                  : "text-gray-600 hover:text-primaryColor hover:bg-gray-50"
+                  ? 'text-primaryColor bg-primaryColor/10'
+                  : 'text-gray-600 hover:text-primaryColor hover:bg-gray-50'
               }`}
-              aria-label={`Go to ${item.name}${isCartItem && itemCount > 0 ? ` (${itemCount} items)` : ""}`}
+              aria-label={`Go to ${item.name}${isCartItem && itemCount > 0 ? ` (${itemCount} items)` : ''}`}
             >
               <div className="relative">
                 <Icon
-                  className={`w-6 h-6 mb-1 ${active ? "text-primaryColor" : "text-gray-600"}`}
+                  className={`w-6 h-6 mb-1 ${active ? 'text-primaryColor' : 'text-gray-600'}`}
                 />
                 {isCartItem && itemCount > 0 && (
                   <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1 border-2 border-white shadow-sm">
-                    {itemCount > 99 ? "99+" : itemCount}
+                    {itemCount > 99 ? '99+' : itemCount}
                   </div>
                 )}
               </div>
               <span
-                className={`text-xs font-medium truncate ${active ? "text-primaryColor" : "text-gray-600"}`}
+                className={`text-xs font-medium truncate ${active ? 'text-primaryColor' : 'text-gray-600'}`}
               >
                 {item.name}
               </span>

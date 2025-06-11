@@ -1,8 +1,11 @@
 import { ProductFilters } from '@/components/products/product-filters';
 import ProductBarList from '@/components/products/product-grid';
+
 import { SortBar } from '@/components/products/sort-bar';
+import { formatSlugToTitle } from '@/lib/utils';
 import { fetchData } from '@/utils/api-utils';
 import type { Brand, Category } from '@/utils/types';
+import { ProductsBreadcrumb } from './product-breadcrumb';
 
 async function fetchCategories(): Promise<Category[]> {
   try {
@@ -21,6 +24,26 @@ async function fetchBrands(): Promise<Brand[]> {
   } catch (error) {
     console.error('Error fetching brands:', error);
     return [];
+  }
+}
+
+async function fetchCategoryById(id: string): Promise<Category | null> {
+  try {
+    const data: Category = await fetchData(`categories/${id}`);
+    return data;
+  } catch (error) {
+    console.error('Error fetching category:', error);
+    return null;
+  }
+}
+
+async function fetchBrandById(id: string): Promise<Brand | null> {
+  try {
+    const data: Brand = await fetchData(`brands/${id}`);
+    return data;
+  } catch (error) {
+    console.error('Error fetching brand:', error);
+    return null;
   }
 }
 
@@ -46,10 +69,8 @@ export default async function ProductsPage({
     maxPrice?: string;
   }>;
 }) {
-  // Resolve search params
   const resolvedSearchParams = await searchParams;
 
-  // Fetch data server-side
   const [categoriesResult, brandsResult] = await Promise.allSettled([
     fetchCategories(),
     fetchBrands(),
@@ -58,6 +79,15 @@ export default async function ProductsPage({
   const categories =
     categoriesResult.status === 'fulfilled' ? categoriesResult.value : [];
   const brands = brandsResult.status === 'fulfilled' ? brandsResult.value : [];
+
+  let categoryInfo = null;
+  let brandInfo = null;
+  if (resolvedSearchParams.category) {
+    categoryInfo = await fetchCategoryById(resolvedSearchParams.category);
+  }
+  if (resolvedSearchParams.brand) {
+    brandInfo = await fetchBrandById(resolvedSearchParams.brand);
+  }
 
   const filterParams = {
     limit: resolvedSearchParams.limit || '12',
@@ -72,7 +102,26 @@ export default async function ProductsPage({
 
   return (
     <div className="container mx-auto px-4 py-4">
-      <SortBar currentSort={resolvedSearchParams.sort} />
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
+        <ProductsBreadcrumb
+          categoryName={
+            categoryInfo?.name ||
+            (resolvedSearchParams.category
+              ? formatSlugToTitle(resolvedSearchParams.category)
+              : undefined)
+          }
+          categorySlug={resolvedSearchParams.category}
+          brandName={
+            brandInfo?.name ||
+            (resolvedSearchParams.brand
+              ? formatSlugToTitle(resolvedSearchParams.brand)
+              : undefined)
+          }
+          brandSlug={resolvedSearchParams.brand}
+        />
+        <SortBar currentSort={resolvedSearchParams.sort} />
+      </div>
+
       <div className="flex flex-col md:flex-row justify-between gap-6">
         <ProductFilters
           categories={categories}

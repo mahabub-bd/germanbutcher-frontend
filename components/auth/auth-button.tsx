@@ -108,7 +108,7 @@ export default function AuthBtn({
             ) : null}
             <AvatarFallback
               className={cn(
-                'text-xs font-medium',
+                'text-xs font-medium ring-white ring-2 ',
                 compact ? 'text-[10px]' : 'text-xs'
               )}
             >

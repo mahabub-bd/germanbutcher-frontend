@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Select,
@@ -6,8 +6,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+} from '@/components/ui/select';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export function SortBar({ currentSort }: { currentSort?: string }) {
   const router = useRouter();
@@ -21,18 +21,18 @@ export function SortBar({ currentSort }: { currentSort?: string }) {
   };
 
   const handleSortChange = (value: string) => {
-    router.push(`${pathname}?${createQueryString("sort", value)}`);
+    router.push(`${pathname}?${createQueryString('sort', value)}`);
   };
 
   return (
-    <div className="flex justify-end mb-6">
-      <div className="flex items-center gap-2">
-        <span className="text-sm font-medium">Sort by:</span>
+    <div className="flex justify-center sm:justify-end w-full sm:w-auto">
+      <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+        <span className="text-sm font-medium whitespace-nowrap">Sort by:</span>
         <Select
-          value={currentSort || "featured"}
+          value={currentSort || 'featured'}
           onValueChange={handleSortChange}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px] min-w-[160px]">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>

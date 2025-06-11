@@ -60,7 +60,7 @@ export function MobileHeader() {
 
         <Link
           href="/"
-          className="flex items-center justify-center w-20 h-20 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-200 shadow-lg"
+          className="flex items-center justify-center size-16 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-200 shadow-lg"
           aria-label="Go to homepage"
         >
           <Image
