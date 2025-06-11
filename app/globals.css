@@ -211,3 +211,34 @@
 #closeIcon .mobile {
   color: #fff !important;
 }
+
+.swiper {
+  padding: 27px 0 !important;
+}
+/* category-slider.css */
+.categorySwiper .swiper-pagination {
+  margin-top: 20px; /* 🔽 moves the dots downward */
+  text-align: center;
+}
+.swiper-pagination-fraction,
+.swiper-pagination-custom,
+.swiper-horizontal > .swiper-pagination-bullets,
+.swiper-pagination-bullets.swiper-pagination-horizontal {
+  bottom: var(--swiper-pagination-bottom, 0px);
+}
+.category-swiper .swiper-pagination-bullet {
+  width: 20px;
+  height: 8px;
+  background-color: #f9caca; /* soft red */
+  opacity: 1;
+  border-radius: 99px;
+  margin: 0 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+.category-swiper .swiper-pagination-bullet-active {
+  width: 40px;
+  height: 8px;
+  background-color: #c80000; /* deep red */
+  border-radius: 9999px; /* pill shape */
+}
