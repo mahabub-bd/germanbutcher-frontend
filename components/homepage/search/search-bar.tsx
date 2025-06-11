@@ -34,7 +34,7 @@ export function SearchBar() {
           value={searchQuery}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          className="w-64 xl:w-100 pl-10 pr-10 py-1 bg-white border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-primaryColor text-gray-900 placeholder-gray-500 transition-all duration-200 hover:border-gray-300"
+          className="lg:w-30 xl:w-80 2xl:w-100 pl-10 pr-10 py-1 bg-white border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-primaryColor text-gray-900 placeholder-gray-500 transition-all duration-200 hover:border-gray-300"
           autoComplete="off"
           spellCheck="false"
         />

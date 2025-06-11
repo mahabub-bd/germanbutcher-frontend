@@ -5,27 +5,19 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 interface NavLinksProps {
-  isAdmin?: boolean;
   isMobile?: boolean;
   onClick?: () => void;
 }
 
-export function NavLinks({ isAdmin, isMobile, onClick }: NavLinksProps) {
+export function NavLinks({ isMobile, onClick }: NavLinksProps) {
   const pathname = usePathname();
 
-  const commonLinks = [
+  const links = [
     { href: '/', label: 'Home' },
     { href: '/products', label: 'Products' },
     { href: '/recipe', label: 'Recipe' },
     { href: '/where-to-buy', label: 'Where to Buy' },
   ];
-
-  const adminLinks = [
-    { href: '/admin/dashboard', label: 'Dashboard' },
-   
-  ];
-
-  const links = isAdmin ? [...commonLinks, ...adminLinks] : commonLinks;
 
   return (
     <>

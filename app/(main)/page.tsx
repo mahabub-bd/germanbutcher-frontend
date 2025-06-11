@@ -1,18 +1,21 @@
-import { LoadingIndicator } from "@/components/admin/loading-indicator";
-import { HeadingPrimary } from "@/components/common/heading-primary";
-import { AnimatedCarousel } from "@/components/homepage/banner/hero/animated-carousel";
-import BrandList from "@/components/homepage/brands/brand-list";
-import CategoriesList from "@/components/homepage/Category/categories-list";
-import Client from "@/components/homepage/clients/Clients";
-import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
-import { TestimonialSection } from "@/components/homepage/testimonial/testimonial-section";
-import ProductList from "@/components/products/product-list";
-import { Suspense } from "react";
+import { LoadingIndicator } from '@/components/admin/loading-indicator';
+import { HeadingPrimary } from '@/components/common/heading-primary';
+import { AnimatedCarousel } from '@/components/homepage/banner/hero/animated-carousel';
+import BrandList from '@/components/homepage/brands/brand-list';
+import CategoriesList from '@/components/homepage/Category/categories-list';
+import Client from '@/components/homepage/clients/Clients';
+import { NewsletterSection } from '@/components/homepage/subscriber/newsletter';
+import { TestimonialSection } from '@/components/homepage/testimonial/testimonial-section';
+import ProductList from '@/components/products/product-list';
+import { Suspense } from 'react';
 
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <AnimatedCarousel />
+      <div>
+        <AnimatedCarousel />
+      </div>
+
       {/* Categories Section */}
       <section className="md:pt-18 pt-5 bg-bgsecondColor">
         <Suspense

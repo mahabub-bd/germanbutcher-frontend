@@ -39,7 +39,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Get search query from URL params on mount
+
   useEffect(() => {
     const query = searchParams.get('search');
     if (query) {
@@ -48,7 +48,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
     }
   }, [searchParams]);
 
-  // Fetch products when search query changes
+
   useEffect(() => {
     if (!searchQuery.trim()) {
       setProducts([]);

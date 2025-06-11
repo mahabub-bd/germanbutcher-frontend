@@ -22,7 +22,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       <button
         ref={ref}
         className={cn(
-          'group relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full p-0 border-0 bg-transparent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+          'group relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full p-0 border-0 bg-transparent focus:outline-none ',
           className
         )}
         aria-label={label}
