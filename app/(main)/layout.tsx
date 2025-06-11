@@ -1,8 +1,9 @@
-import Footer from "@/components/footer/Footer";
-import { Header } from "@/components/header";
-import { MobileBottomHeader } from "@/components/header/mobile-bottom-header";
+import Footer from '@/components/footer/Footer';
+import { Header } from '@/components/header';
+import { MobileBottomHeader } from '@/components/header/mobile-bottom-header';
+import { GoToTop } from '@/components/ui/go-to-top';
 
-import type React from "react";
+import type React from 'react';
 
 export default function MainLayout({
   children,
@@ -13,6 +14,7 @@ export default function MainLayout({
     <div>
       <Header />
       <main className="flex-1">{children}</main>
+      <GoToTop />
       <MobileBottomHeader />
       <Footer />
     </div>

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import type React from "react";
+import type React from 'react';
 
 import {
   Pagination,
@@ -10,8 +10,8 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
-import { useMemo } from "react";
+} from '@/components/ui/pagination';
+import { useMemo } from 'react';
 
 interface PaginationComponentProps {
   currentPage: number;
@@ -24,7 +24,7 @@ interface PaginationComponentProps {
 export function PaginationComponent({
   currentPage,
   totalPages,
-  baseUrl = "?page=",
+  baseUrl = '?page=',
   paginationUrls,
   onPageChange,
 }: PaginationComponentProps) {
@@ -74,7 +74,7 @@ export function PaginationComponent({
             tabIndex={currentPage <= 1 ? -1 : undefined}
             className={
               currentPage <= 1
-                ? "pointer-events-none opacity-50 cursor-pointer"
+                ? 'pointer-events-none opacity-50 cursor-pointer'
                 : undefined
             }
             onClick={(e) => currentPage > 1 && handleClick(currentPage - 1, e)}
@@ -117,7 +117,7 @@ export function PaginationComponent({
             tabIndex={currentPage >= totalPages ? -1 : undefined}
             className={
               currentPage >= totalPages
-                ? "pointer-events-none opacity-50 cursor-pointer"
+                ? 'pointer-events-none opacity-50 cursor-pointer'
                 : undefined
             }
             onClick={(e) =>
