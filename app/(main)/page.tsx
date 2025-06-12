@@ -31,16 +31,20 @@ export default function Home() {
       {/* Features Products Section */}
       <section className="md:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
-          <ProductList endpoint="products?featured=true">
+          <ProductList
+            endpoint="products?featured=true"
+            isHomePage
+            href="products/featured/"
+          >
             <HeadingPrimary title="Featured Products" className="mb-8" />
           </ProductList>
         </div>
       </section>
 
-      {/* Featured Products Section */}
+      {/* Popular Products Section */}
       <section className="md:py-10 py-5 bg-bgsecondColor">
         <div className="container mx-auto ">
-          <ProductList endpoint="products">
+          <ProductList endpoint="products" isHomePage href="products/popular">
             <HeadingPrimary title="Popular Products" className="mb-10" />
           </ProductList>
         </div>
@@ -57,7 +61,7 @@ export default function Home() {
 
       <section className="lg:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
-          <ProductList endpoint="products/discounted?page=1&limit=20">
+          <ProductList endpoint="products/discounted?page=1&limit=20" isHomePage href="products/special-offers">
             <HeadingPrimary
               title="SPECIAL OFFERS"
               subtitle="Limited-time deals just for you"
