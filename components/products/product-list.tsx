@@ -1,9 +1,9 @@
-import { fetchData } from '@/utils/api-utils';
-import type { Product } from '@/utils/types';
-import type { ReactNode } from 'react';
+import { fetchData } from "@/utils/api-utils";
+import type { Product } from "@/utils/types";
+import type { ReactNode } from "react";
 
-import ViewAllButton from '../homepage/category/view-all-button';
-import ProductCard from './product-card';
+import ViewAllButton from "../homepage/category/view-all-button";
+import ProductCard from "./product-card";
 
 export default async function ProductList({
   children,
@@ -31,7 +31,7 @@ export default async function ProductList({
       </div>
       {isHomePage && (
         <div className=" pt-6">
-          <ViewAllButton href={href || '/products'} variant="outline" />
+          <ViewAllButton href={href || "/products"} variant="outline" />
         </div>
       )}
     </div>
