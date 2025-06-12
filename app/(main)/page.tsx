@@ -2,7 +2,7 @@ import { LoadingIndicator } from "@/components/admin/loading-indicator";
 import { HeadingPrimary } from "@/components/common/heading-primary";
 import { AnimatedCarousel } from "@/components/homepage/banner/hero/animated-carousel";
 import BrandList from "@/components/homepage/brands/brand-list";
-import CategoryList from "@/components/homepage/category/category-list";
+import CategoryList from "@/components/homepage/Category/category-list";
 
 import Client from "@/components/homepage/clients/Clients";
 import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
