@@ -739,7 +739,7 @@ export function ProductFilters({
 
       {/* Mobile view - Sheet component that slides in from the right */}
 
-      <div className="md:hidden fixed top-24 left-4 z-50">
+      <div className="md:hidden fixed top-24 right-4 z-50">
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
             <Button
