@@ -1,52 +1,47 @@
-"use client"
+"use client";
 
-import { SupplierForm } from "@/components/admin/supplier/supplier-form"
-import { Button } from "@/components/ui/button"
-import { CardDescription, CardTitle } from "@/components/ui/card"
-import { fetchData } from "@/utils/api-utils"
-import { Supplier } from "@/utils/types"
+import { LoadingIndicator } from "@/components/admin/loading-indicator";
+import { SupplierForm } from "@/components/admin/supplier/supplier-form";
+import { Button } from "@/components/ui/button";
+import { CardDescription, CardTitle } from "@/components/ui/card";
+import { fetchData } from "@/utils/api-utils";
+import { Supplier } from "@/utils/types";
 
-import { Loader2 } from "lucide-react"
-import Link from "next/link"
-import { useParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function EditSupplierPage() {
-  const params = useParams()
-  const supplierId = params.id as string
+  const params = useParams();
+  const supplierId = params.id as string;
 
-  const [supplier, setSupplier] = useState<Supplier | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [supplier, setSupplier] = useState<Supplier | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchSupplier = async () => {
     try {
-      const response = await fetchData<Supplier>(`suppliers/${supplierId}`)
-      setSupplier(response)
+      const response = await fetchData<Supplier>(`suppliers/${supplierId}`);
+      setSupplier(response);
     } catch (error) {
-      console.error("Error fetching supplier:", error)
+      console.error("Error fetching supplier:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchSupplier()
-  }, [supplierId])
+    fetchSupplier();
+  }, [supplierId]);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    )
+    return <LoadingIndicator message="Loading Supplier" />;
   }
-
   if (!supplier) {
     return (
       <div className="flex items-center justify-center h-screen">
         <p>Supplier not found</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -65,5 +60,5 @@ export default function EditSupplierPage() {
 
       <SupplierForm mode="edit" supplier={supplier} />
     </div>
-  )
+  );
 }

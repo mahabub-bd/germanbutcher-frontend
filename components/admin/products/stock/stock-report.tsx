@@ -26,7 +26,11 @@ import {
 
 import { PaginationComponent } from "@/components/common/pagination";
 import { formatCurrencyEnglish } from "@/lib/utils";
-import { fetchData, fetchDataPagination } from "@/utils/api-utils";
+import {
+  fetchData,
+  fetchDataPagination,
+  fetchProtectedData,
+} from "@/utils/api-utils";
 import type { Brand, Category, Product, Supplier } from "@/utils/types";
 import { Filter, Package, Search, XCircle } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -161,7 +165,7 @@ export function StockReport({
 
   const fetchSuppliers = async () => {
     try {
-      const response = await fetchData<Supplier[]>("suppliers");
+      const response = await fetchProtectedData<Supplier[]>("suppliers");
       if (Array.isArray(response)) {
         setSuppliers(response);
       }

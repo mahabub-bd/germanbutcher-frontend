@@ -1,10 +1,10 @@
 "use client";
 
+import { LoadingIndicator } from "@/components/admin/loading-indicator";
 import { ProductForm } from "@/components/admin/products/product-form";
 import { Button } from "@/components/ui/button";
 import { fetchData } from "@/utils/api-utils";
 import type { Brand, Category } from "@/utils/types";
-import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -44,13 +44,8 @@ export default function AddProductPage() {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
+    return <LoadingIndicator message="Loading Products" />;
   }
-
   return (
     <div className="md:p-6 p:2 space-y-6 border rouunded-sm">
       <div className=" md:p-6 p:2">

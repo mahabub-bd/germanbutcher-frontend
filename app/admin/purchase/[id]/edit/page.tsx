@@ -1,12 +1,12 @@
 "use client";
 
+import { LoadingIndicator } from "@/components/admin/loading-indicator";
 import { PurchaseForm } from "@/components/admin/purchase/purchase-form";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { fetchProtectedData } from "@/utils/api-utils";
 
 import type { Purchase } from "@/utils/types";
-import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -36,11 +36,7 @@ export default function EditPurchasePage() {
   }, [purchaseId]);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
+    return <LoadingIndicator message="Loading Purchase" />;
   }
 
   if (!purchase) {

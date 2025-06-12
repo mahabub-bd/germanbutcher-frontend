@@ -1,6 +1,7 @@
 import { LoadingIndicator } from "@/components/admin/loading-indicator";
 import { HeadingPrimary } from "@/components/common/heading-primary";
-import { AnimatedCarousel } from "@/components/homepage/banner/hero/animated-carousel";
+import { CarouselBanner } from "@/components/homepage/banner/hero/carousel-banner";
+
 import BrandList from "@/components/homepage/brands/brand-list";
 import CategoryList from "@/components/homepage/Category/category-list";
 
@@ -14,7 +15,7 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       <div>
-        <AnimatedCarousel />
+        <CarouselBanner />
       </div>
 
       {/* Categories Section */}
@@ -61,7 +62,11 @@ export default function Home() {
 
       <section className="lg:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
-          <ProductList endpoint="products/discounted?page=1&limit=20" isHomePage href="products/special-offers">
+          <ProductList
+            endpoint="products/discounted?page=1&limit=20"
+            isHomePage
+            href="products/special-offers"
+          >
             <HeadingPrimary
               title="SPECIAL OFFERS"
               subtitle="Limited-time deals just for you"

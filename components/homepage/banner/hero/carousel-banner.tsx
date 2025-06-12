@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { fetchDataPagination } from '@/utils/api-utils';
-import type { Banner } from '@/utils/types';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { fetchDataPagination } from "@/utils/api-utils";
+import type { Banner } from "@/utils/types";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
 
 interface AnimatedCarouselProps {
   autoPlayInterval?: number;
@@ -16,7 +16,7 @@ interface AnimatedCarouselProps {
   activeOnly?: boolean;
 }
 
-export function AnimatedCarousel({
+export function CarouselBanner({
   autoPlayInterval = 3000,
   showControls = true,
   showIndicators = true,
@@ -30,7 +30,7 @@ export function AnimatedCarousel({
   useEffect(() => {
     const fetchBanners = async () => {
       try {
-        const response = (await fetchDataPagination('banners')) as {
+        const response = (await fetchDataPagination("banners")) as {
           data: Banner[];
         };
 
@@ -40,7 +40,7 @@ export function AnimatedCarousel({
 
         setBanners(filteredBanners);
       } catch (err) {
-        console.error('Failed to fetch banners:', err);
+        console.error("Failed to fetch banners:", err);
       }
     };
 
@@ -87,11 +87,11 @@ export function AnimatedCarousel({
 
   const getSlideTransform = (index: number) => {
     if (index === currentIndex) {
-      return 'translate-x-0';
+      return "translate-x-0";
     } else if (index < currentIndex) {
-      return '-translate-x-full';
+      return "-translate-x-full";
     } else {
-      return 'translate-x-full';
+      return "translate-x-full";
     }
   };
 
@@ -109,15 +109,15 @@ export function AnimatedCarousel({
             <div
               key={slide.id}
               className={cn(
-                'absolute inset-0 w-full h-full transition-all duration-500 ease-in-out',
+                "absolute inset-0 w-full h-full transition-all duration-500 ease-in-out",
                 getSlideTransform(index),
-                index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
               )}
             >
               <Image
                 src={
                   slide?.image?.url ||
-                  '/placeholder.svg?height=600&width=1200&query=banner'
+                  "/placeholder.svg?height=600&width=1200&query=banner"
                 }
                 alt={slide.title}
                 fill
@@ -163,10 +163,10 @@ export function AnimatedCarousel({
             variant="outline"
             size="icon"
             className={cn(
-              'absolute left-4 top-1/2 -translate-y-1/2 backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg',
+              "absolute left-4 top-1/2 -translate-y-1/2 backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg",
               currentIndex === 0
-                ? 'bg-black/20 text-white/40 cursor-not-allowed'
-                : 'bg-black/40 hover:bg-black/60 text-white'
+                ? "bg-black/20 text-white/40 cursor-not-allowed"
+                : "bg-black/40 hover:bg-black/60 text-white"
             )}
             onClick={goToPrevSlide}
             disabled={isAnimating || currentIndex === 0}
@@ -178,10 +178,10 @@ export function AnimatedCarousel({
             variant="outline"
             size="icon"
             className={cn(
-              'absolute right-4 top-1/2 -translate-y-1/2 backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg',
+              "absolute right-4 top-1/2 -translate-y-1/2 backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg",
               currentIndex === banners.length - 1
-                ? 'bg-black/20 text-white/40 cursor-not-allowed'
-                : 'bg-black/40 hover:bg-black/60 text-white'
+                ? "bg-black/20 text-white/40 cursor-not-allowed"
+                : "bg-black/40 hover:bg-black/60 text-white"
             )}
             onClick={goToNextSlide}
             disabled={isAnimating || currentIndex === banners.length - 1}
@@ -198,10 +198,10 @@ export function AnimatedCarousel({
             <button
               key={index}
               className={cn(
-                'w-2.5 h-2.5 rounded-full transition-all duration-300',
+                "w-2.5 h-2.5 rounded-full transition-all duration-300",
                 index === currentIndex
-                  ? 'bg-primaryColor w-8'
-                  : 'bg-white/50 hover:bg-white/80'
+                  ? "bg-primaryColor w-8"
+                  : "bg-white/50 hover:bg-white/80"
               )}
               onClick={() => goToSlide(index)}
               aria-label={`Go to slide ${index + 1}`}
