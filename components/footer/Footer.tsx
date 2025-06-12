@@ -23,7 +23,7 @@ export default function Footer() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.02)_0%,transparent_50%)] pointer-events-none"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.02)_0%,transparent_50%)] pointer-events-none"></div>
 
-      <div className="relative px-6 py-16 lg:px-20">
+      <div className=" container mx-auto relative py-16 md:px-0 px-4 ">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
           {/* Logo and Description */}
           <div className="space-y-6 col-span-1 md:col-span-12 lg:col-span-4 flex  flex-col md:justify-start justify-center">

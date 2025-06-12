@@ -1,5 +1,5 @@
-import { HeadingPrimary } from "@/components/common/heading-primary";
-import CategoriesList from "@/components/homepage/Category/categories-list";
+import { HeadingPrimary } from '@/components/common/heading-primary';
+import CategoriesList from '@/components/homepage/category/categories-list';
 
 export default function CategoryPage() {
   return (

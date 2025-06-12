@@ -15,7 +15,7 @@ export function NavLinks({ isMobile, onClick }: NavLinksProps) {
   const links = [
     { href: '/', label: 'Home' },
     { href: '/products', label: 'Products' },
-    { href: '/recipe', label: 'Recipe' },
+    { href: '/recipes', label: 'Recipe' },
     { href: '/where-to-buy', label: 'Where to Buy' },
   ];
 

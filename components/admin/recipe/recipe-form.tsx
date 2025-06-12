@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -8,57 +8,57 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
 import {
   fetchData,
   formPostData,
   patchData,
   postData,
-} from "@/utils/api-utils";
-import type { Category, Recipe } from "@/utils/types";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Upload } from "lucide-react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import type React from "react";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-import { Section } from "../helper";
+} from '@/utils/api-utils';
+import type { Category, Recipe } from '@/utils/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2, Upload } from 'lucide-react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { Section } from '../helper';
 
 const recipeSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  details: z.string().min(1, "Details are required"),
+  title: z.string().min(1, 'Title is required'),
+  details: z.string().min(1, 'Details are required'),
   nutrition_details: z.string().optional(),
   isPublished: z.boolean().default(false),
   imageUrl: z.string().optional(),
-  categoryId: z.string().min(1, "Category is required"),
+  categoryId: z.string().min(1, 'Category is required'),
 });
 
 type RecipeFormValues = z.infer<typeof recipeSchema>;
 
 interface RecipeFormProps {
-  mode: "create" | "edit";
+  mode: 'create' | 'edit';
   recipe?: Recipe;
 }
 
 export function RecipeForm({ mode, recipe }: RecipeFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [file, setFile] = useState<File | null>(null);
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState('');
   const [imagePreview, setImagePreview] = useState(
-    recipe?.attachment?.url || ""
+    recipe?.attachment?.url || ''
   );
   const [categories, setCategories] = useState<Category[]>([]);
   const router = useRouter();
@@ -66,12 +66,12 @@ export function RecipeForm({ mode, recipe }: RecipeFormProps) {
   const form = useForm<RecipeFormValues>({
     resolver: zodResolver(recipeSchema),
     defaultValues: {
-      title: recipe?.title || "",
-      details: recipe?.details || "",
-      nutrition_details: recipe?.nutrition_details || "",
+      title: recipe?.title || '',
+      details: recipe?.details || '',
+      nutrition_details: recipe?.nutrition_details || '',
       isPublished: recipe?.isPublished ?? false,
-      imageUrl: recipe?.attachment?.url || "",
-      categoryId: recipe?.category?.id?.toString() || "",
+      imageUrl: recipe?.attachment?.url || '',
+      categoryId: recipe?.category?.id?.toString() || '',
     },
   });
 
@@ -79,12 +79,12 @@ export function RecipeForm({ mode, recipe }: RecipeFormProps) {
     const fetchCategories = async () => {
       try {
         const response = await fetchData<Category[]>(
-          "categories?isMainCategory=true"
+          'categories?isMainCategory=true'
         );
         setCategories(response);
       } catch (error) {
-        console.error("Error fetching categories:", error);
-        toast.error("Failed to load categories");
+        console.error('Error fetching categories:', error);
+        toast.error('Failed to load categories');
       }
     };
 
@@ -101,7 +101,7 @@ export function RecipeForm({ mode, recipe }: RecipeFormProps) {
     const fileUrl = URL.createObjectURL(selectedFile);
     setImagePreview(fileUrl);
 
-    form.setValue("imageUrl", "");
+    form.setValue('imageUrl', '');
   };
 
   const handleSubmit = async (data: RecipeFormValues) => {
@@ -112,8 +112,8 @@ export function RecipeForm({ mode, recipe }: RecipeFormProps) {
 
       if (file) {
         const formData = new FormData();
-        formData.append("file", file);
-        const result = await formPostData("attachment", formData);
+        formData.append('file', file);
+        const result = await formPostData('attachment', formData);
         attachmentId = result.data.id;
       }
 
@@ -123,24 +123,24 @@ export function RecipeForm({ mode, recipe }: RecipeFormProps) {
         category: data.categoryId,
       };
 
-      const endpoint = mode === "create" ? "recipes" : `recipes/${recipe?.id}`;
-      const method = mode === "create" ? postData : patchData;
+      const endpoint = mode === 'create' ? 'recipes' : `recipes/${recipe?.id}`;
+      const method = mode === 'create' ? postData : patchData;
 
       const response = await method(endpoint, recipeData);
 
       if (response?.statusCode === 200 || response?.statusCode === 201) {
         const successMessage =
-          mode === "create"
-            ? "Recipe created successfully"
-            : "Recipe updated successfully";
+          mode === 'create'
+            ? 'Recipe created successfully'
+            : 'Recipe updated successfully';
         toast.success(successMessage);
         router.back();
       } else {
-        toast.error(response?.message || "An error occurred");
+        toast.error(response?.message || 'An error occurred');
       }
     } catch (error) {
-      console.error("Error submitting recipe form:", error);
-      toast.error("An unexpected error occurred");
+      console.error('Error submitting recipe form:', error);
+      toast.error('An unexpected error occurred');
     } finally {
       setIsSubmitting(false);
     }
@@ -148,7 +148,7 @@ export function RecipeForm({ mode, recipe }: RecipeFormProps) {
 
   useEffect(() => {
     return () => {
-      if (imagePreview && !imagePreview.startsWith("http")) {
+      if (imagePreview && !imagePreview.startsWith('http')) {
         URL.revokeObjectURL(imagePreview);
       }
     };
@@ -269,7 +269,7 @@ export function RecipeForm({ mode, recipe }: RecipeFormProps) {
                         {imagePreview ? (
                           <div className="relative w-32 h-32 border rounded-md overflow-hidden bg-gray-50">
                             <Image
-                              src={imagePreview || "/placeholder.svg"}
+                              src={imagePreview || '/placeholder.svg'}
                               alt="Recipe preview"
                               fill
                               className="object-cover"
@@ -286,14 +286,14 @@ export function RecipeForm({ mode, recipe }: RecipeFormProps) {
                             variant="outline"
                             className="w-full sm:w-auto"
                             onClick={() =>
-                              document.getElementById("recipe-upload")?.click()
+                              document.getElementById('recipe-upload')?.click()
                             }
                           >
                             <Upload className="mr-2 h-4 w-4" />
                             Choose File
                           </Button>
                           <span className="text-sm text-muted-foreground">
-                            {fileName || "No file chosen"}
+                            {fileName || 'No file chosen'}
                           </span>
                         </div>
                       </div>
@@ -330,7 +330,7 @@ export function RecipeForm({ mode, recipe }: RecipeFormProps) {
           </div>
         </div>
 
-        <div className="flex justify-end px-6 w-full max-w-4xl mx-auto">
+        <div className="flex justify-end px-6 w-full  mx-auto">
           <Button
             type="submit"
             disabled={isSubmitting}
@@ -339,10 +339,10 @@ export function RecipeForm({ mode, recipe }: RecipeFormProps) {
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {mode === "create" ? "Creating..." : "Updating..."}
+                {mode === 'create' ? 'Creating...' : 'Updating...'}
               </>
             ) : (
-              <>{mode === "create" ? "Create Recipe" : "Update Recipe"}</>
+              <>{mode === 'create' ? 'Create Recipe' : 'Update Recipe'}</>
             )}
           </Button>
         </div>

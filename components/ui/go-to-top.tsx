@@ -37,7 +37,7 @@ export function GoToTop({ threshold = 300, className }: GoToTopProps) {
     <button
       onClick={scrollToTop}
       className={cn(
-        'fixed bottom-6 right-6 p-3 rounded-full bg-black text-white shadow-lg z-50 transition-all duration-300 hover:bg-primaryColor/90',
+        'fixed bottom-6 right-6 p-3 rounded-full  text-white shadow-lg z-50 transition-all duration-300 bg-primaryColor hover:bg-primaryColor/90',
         isVisible
           ? 'opacity-100 translate-y-0'
           : 'opacity-0 translate-y-10 pointer-events-none',

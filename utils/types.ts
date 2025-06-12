@@ -68,6 +68,7 @@ export interface Category {
   createdAt: string;
   updatedAt: string;
   products: Product[];
+  recipes: Recipe[]
 }
 
 export enum DiscountType {
