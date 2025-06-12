@@ -1,4 +1,3 @@
-import { LoadingIndicator } from "@/components/admin/loading-indicator";
 import { HeadingPrimary } from "@/components/common/heading-primary";
 import { CarouselBanner } from "@/components/homepage/banner/hero/carousel-banner";
 
@@ -9,7 +8,6 @@ import Client from "@/components/homepage/clients/Clients";
 import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
 import { TestimonialSection } from "@/components/homepage/testimonial/testimonial-section";
 import ProductList from "@/components/products/product-list";
-import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -20,13 +18,9 @@ export default function Home() {
 
       {/* Categories Section */}
       <section className="md:pt-18 pt-5 bg-bgsecondColor">
-        <Suspense
-          fallback={<LoadingIndicator message="Loading Categories..." />}
-        >
-          <CategoryList endpoint="categories?isMainCategory=true">
-            <HeadingPrimary title="All Category" />
-          </CategoryList>
-        </Suspense>
+        <CategoryList endpoint="categories?isMainCategory=true">
+          <HeadingPrimary title="All Category" />
+        </CategoryList>
       </section>
 
       {/* Features Products Section */}
