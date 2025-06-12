@@ -2,7 +2,7 @@ import { LoadingIndicator } from "@/components/admin/loading-indicator";
 import { HeadingPrimary } from "@/components/common/heading-primary";
 import { AnimatedCarousel } from "@/components/homepage/banner/hero/animated-carousel";
 import BrandList from "@/components/homepage/brands/brand-list";
-import CategoriesList from "@/components/homepage/category/categories-list";
+import CategoryList from "@/components/homepage/category/category-list";
 
 import Client from "@/components/homepage/clients/Clients";
 import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
@@ -22,9 +22,9 @@ export default function Home() {
         <Suspense
           fallback={<LoadingIndicator message="Loading Categories..." />}
         >
-          <CategoriesList endpoint="categories?isMainCategory=true">
+          <CategoryList endpoint="categories?isMainCategory=true">
             <HeadingPrimary title="All Category" />
-          </CategoriesList>
+          </CategoryList>
         </Suspense>
       </section>
 

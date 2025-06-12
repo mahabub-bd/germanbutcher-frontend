@@ -2,7 +2,7 @@ import { fetchData } from "@/utils/api-utils";
 import { Category } from "@/utils/types";
 import { CategoryCard } from "./category-card";
 
-export default async function CategoriesList({
+export default async function CategoryList({
   children,
   endpoint,
 }: {
