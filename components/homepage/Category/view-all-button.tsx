@@ -42,7 +42,7 @@ function ViewAllButton({
             'relative overflow-hidden transition-all duration-300 ease-out',
             'hover:scale-105 active:scale-95',
             'font-semibold tracking-wide rounded-full',
-            'focus:outline-none focus:ring-2 focus:ring-primaryColor/50 focus:ring-offset-2',
+            'focus:outline-none focus:ring-2 focus:ring-primaryColor/50 focus:ring-offset-2 cursor-pointer',
             buttonVariants[variant],
             sizeVariants[size],
             className

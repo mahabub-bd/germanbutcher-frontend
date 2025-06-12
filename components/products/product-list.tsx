@@ -2,7 +2,7 @@ import { fetchData } from '@/utils/api-utils';
 import type { Product } from '@/utils/types';
 import type { ReactNode } from 'react';
 
-import ViewAllButton from '../homepage/category/CustomViewAllButton';
+import ViewAllButton from '../homepage/category/view-all-button';
 import ProductCard from './product-card';
 
 export default async function ProductList({
