@@ -2,7 +2,7 @@ import { LoadingIndicator } from '@/components/admin/loading-indicator';
 import { HeadingPrimary } from '@/components/common/heading-primary';
 import { AnimatedCarousel } from '@/components/homepage/banner/hero/animated-carousel';
 import BrandList from '@/components/homepage/brands/brand-list';
-import CategoriesListHomePage from '@/components/homepage/category/categories-list';
+// import CategoriesListHomePage from '@/components/homepage/category/categories-list';
 
 
 import Client from '@/components/homepage/clients/Clients';
@@ -19,7 +19,7 @@ export default function Home() {
       </div>
 
       {/* Categories Section */}
-      <section className="md:pt-18 pt-5 bg-bgsecondColor">
+      {/* <section className="md:pt-18 pt-5 bg-bgsecondColor">
         <Suspense
           fallback={<LoadingIndicator message="Loading Categories..." />}
         >
@@ -27,7 +27,7 @@ export default function Home() {
             <HeadingPrimary title="All Category" />
           </CategoriesListHomePage>
         </Suspense>
-      </section>
+      </section> */}
 
       {/* Features Products Section */}
       <section className="md:py-10 py-5 bg-gray-50">
