@@ -31,7 +31,7 @@ export default async function ProductList({
       </div>
       {isHomePage && (
         <div className=" pt-6">
-          <ViewAllButton href={href || "/products"} variant="outline" />
+          <ViewAllButton href={href || "/products"} />
         </div>
       )}
     </div>
