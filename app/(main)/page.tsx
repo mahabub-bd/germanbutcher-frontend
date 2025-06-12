@@ -1,15 +1,12 @@
-import { LoadingIndicator } from '@/components/admin/loading-indicator';
-import { HeadingPrimary } from '@/components/common/heading-primary';
-import { AnimatedCarousel } from '@/components/homepage/banner/hero/animated-carousel';
-import BrandList from '@/components/homepage/brands/brand-list';
+import { HeadingPrimary } from "@/components/common/heading-primary";
+import { AnimatedCarousel } from "@/components/homepage/banner/hero/animated-carousel";
+import BrandList from "@/components/homepage/brands/brand-list";
 // import CategoriesListHomePage from '@/components/homepage/category/categories-list';
 
-
-import Client from '@/components/homepage/clients/Clients';
-import { NewsletterSection } from '@/components/homepage/subscriber/newsletter';
-import { TestimonialSection } from '@/components/homepage/testimonial/testimonial-section';
-import ProductList from '@/components/products/product-list';
-import { Suspense } from 'react';
+import Client from "@/components/homepage/clients/Clients";
+import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
+import { TestimonialSection } from "@/components/homepage/testimonial/testimonial-section";
+import ProductList from "@/components/products/product-list";
 
 export default function Home() {
   return (
@@ -32,11 +29,7 @@ export default function Home() {
       {/* Features Products Section */}
       <section className="md:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
-          <ProductList
-            endpoint="products?featured=true"
-            isHomePage
-            href="/products/featured"
-          >
+          <ProductList endpoint="products?featured=true">
             <HeadingPrimary title="Featured Products" className="mb-8" />
           </ProductList>
         </div>
@@ -45,7 +38,7 @@ export default function Home() {
       {/* Featured Products Section */}
       <section className="md:py-10 py-5 bg-bgsecondColor">
         <div className="container mx-auto ">
-          <ProductList endpoint="products" isHomePage href="/products/popular">
+          <ProductList endpoint="products">
             <HeadingPrimary title="Popular Products" className="mb-10" />
           </ProductList>
         </div>
@@ -62,11 +55,7 @@ export default function Home() {
 
       <section className="lg:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
-          <ProductList
-            endpoint="products/discounted?page=1&limit=20"
-            isHomePage
-            href="/products/special-offers"
-          >
+          <ProductList endpoint="products/discounted?page=1&limit=20">
             <HeadingPrimary
               title="SPECIAL OFFERS"
               subtitle="Limited-time deals just for you"

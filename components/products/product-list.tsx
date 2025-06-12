@@ -2,19 +2,15 @@ import { fetchData } from "@/utils/api-utils";
 import type { Product } from "@/utils/types";
 import type { ReactNode } from "react";
 
-import ViewAllButton from "../homepage/category/view-all-button";
 import ProductCard from "./product-card";
 
 export default async function ProductList({
   children,
   endpoint,
-  isHomePage = false,
-  href,
 }: {
   children: ReactNode;
   endpoint: string;
-  isHomePage?: boolean;
-  href?: string;
+ 
 }) {
   const products: Product[] = await fetchData(endpoint);
 
@@ -29,11 +25,6 @@ export default async function ProductList({
               <ProductCard key={product.id} product={product} />
             ))}
       </div>
-      {isHomePage && (
-        <div className=" pt-6">
-          <ViewAllButton href={href || "/products"} />
-        </div>
-      )}
     </div>
   );
 }
