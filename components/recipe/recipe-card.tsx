@@ -1,12 +1,11 @@
-import { getBlurData } from '@/utils/blur-generator';
-import { Recipe } from '@/utils/types';
-import { ArrowRight } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-
+import { getBlurData } from "@/utils/blur-generator";
+import { Recipe } from "@/utils/types";
+import { ArrowRight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 interface RecipeProps {
- recipe:Recipe
+  recipe: Recipe;
 }
 export default async function RecipeCard({ recipe }: RecipeProps) {
   const { base64 } = await getBlurData(recipe?.attachment?.url);
@@ -22,20 +21,20 @@ export default async function RecipeCard({ recipe }: RecipeProps) {
             src={recipe?.attachment?.url}
             alt={recipe?.title}
             fill
-            placeholder='blur'
+            placeholder="blur"
             blurDataURL={base64}
             className="object-cover transition-transform duration-300 group-hover:scale-110"
           />
           <div className="absolute bottom-5 left-1/2 -translate-x-1/2 w-[90%] py-3 lg:py-4 px-5 bg-secondaryColor rounded-lg z-10">
             <div className="flex justify-between items-center">
               <div>
-                <h3 className="text-lg md:text-xl font-semibold text-whiteColor">
+                <h3 className="text-lg  font-semibold text-whiteColor">
                   {recipe?.title}
                 </h3>
               </div>
               <div>
-                <button className="w-[25px] h-[25px] md:w-[35px] md:h-[35px] lg:w-[40px] lg:h-[40px] text-white rounded-full border border-whiteColor cursor-pointer flex items-center justify-center">
-                  <ArrowRight />
+                <button className="size-9 text-white rounded-full border border-whiteColor cursor-pointer flex items-center justify-center">
+                  <ArrowRight size={16} />
                 </button>
               </div>
             </div>

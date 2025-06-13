@@ -59,8 +59,8 @@ export default function CategoryList({
   };
 
   return (
-    <div className="pt-5 bg-whiteColor px-4 sm:px-6 md:pt-10 xl:px-0 container mx-auto">
-      <div className="py-10">
+    <div className=" px-4 sm:px-6 md:pt-10 xl:px-0 container mx-auto">
+      <div className="py-5">
         <Carousel
           opts={{
             align: "start",

@@ -1,9 +1,13 @@
-import { HeadingPrimary } from '@/components/common/heading-primary';
-import CategoryList from '@/components/recipe/category-list';
-import RecipeList from '@/components/recipe/recipe-list';
-import SearchForm from '@/components/recipe/search-form';
-import { BreadcrumbItem, PageBreadcrumb } from '@/components/ui/page-breadcrumb';
-import { ChefHat } from 'lucide-react';
+import { HeadingPrimary } from "@/components/common/heading-primary";
+import CategoryList from "@/components/recipe/category-list";
+import RecipeList from "@/components/recipe/recipe-list";
+import SearchForm from "@/components/recipe/search-form";
+import {
+  BreadcrumbItem,
+  PageBreadcrumb,
+} from "@/components/ui/page-breadcrumb";
+import { ChefHat } from "lucide-react";
+import Link from "next/link";
 
 export default async function RecipePage({
   searchParams,
@@ -11,12 +15,12 @@ export default async function RecipePage({
   searchParams: Promise<{ recipesearch?: string; categorySlug?: string }>;
 }) {
   const params = await searchParams;
-  const searchQuery = params.recipesearch || '';
-  const categorySlug = params.categorySlug || '';
+  const searchQuery = params.recipesearch || "";
+  const categorySlug = params.categorySlug || "";
 
   // Build endpoint with both search and category filters
   const buildEndpoint = () => {
-    const baseEndpoint = 'recipes?isPublished=true';
+    const baseEndpoint = "recipes?isPublished=true";
     const filters = [];
 
     if (searchQuery) {
@@ -28,7 +32,7 @@ export default async function RecipePage({
     }
 
     return filters.length > 0
-      ? `${baseEndpoint}&${filters.join('&')}`
+      ? `${baseEndpoint}&${filters.join("&")}`
       : baseEndpoint;
   };
 
@@ -36,19 +40,19 @@ export default async function RecipePage({
 
   const getCategoryDisplayName = (slug: string) => {
     return slug
-      .split('-')
+      .split("-")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+      .join(" ");
   };
 
   const pageTitle = categorySlug
     ? `${getCategoryDisplayName(categorySlug)} Recipes`
     : searchQuery
       ? `Search Results for "${searchQuery}"`
-      : 'All Recipes';
+      : "All Recipes";
   const breadcrumbItems: BreadcrumbItem[] = [
     {
-      label: 'Recipe',
+      label: "Recipe",
       icon: <ChefHat className="h-2.5 w-2.5 sm:h-3 sm:w-3" />,
       isActive: true,
     },
@@ -68,16 +72,16 @@ export default async function RecipePage({
           {categorySlug && (
             <div className="flex items-center gap-2 bg-secondaryColor/10 text-secondaryColor px-3 py-1 rounded-full text-sm">
               <span>Category: {getCategoryDisplayName(categorySlug)}</span>
-              <a
+              <Link
                 href={
                   searchQuery
                     ? `/recipes?recipesearch=${encodeURIComponent(searchQuery)}`
-                    : '/recipes'
+                    : "/recipes"
                 }
                 className="hover:bg-secondaryColor/20 rounded-full p-1"
               >
                 ×
-              </a>
+              </Link>
             </div>
           )}
           {searchQuery && (
@@ -87,7 +91,7 @@ export default async function RecipePage({
                 href={
                   categorySlug
                     ? `/recipes?categorySlug=${encodeURIComponent(categorySlug)}`
-                    : '/recipes'
+                    : "/recipes"
                 }
                 className="hover:bg-blue-200 rounded-full p-1"
               >
