@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import type React from 'react';
+import type React from "react";
 
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from '@/components/ui/carousel';
-import { fetchData } from '@/utils/api-utils';
-import { Category } from '@/utils/types';
-import Autoplay from 'embla-carousel-autoplay';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { CategoryCard } from './category-card';
+} from "@/components/ui/carousel";
+import { fetchData } from "@/utils/api-utils";
+import { Category } from "@/utils/types";
+import Autoplay from "embla-carousel-autoplay";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { CategoryCard } from "./category-card";
 
 interface CategorySlideProps {
   children?: React.ReactNode;
@@ -23,7 +23,7 @@ interface CategorySlideProps {
 export default function CategoryList({
   children,
   endpoint,
-  activeCategory = '',
+  activeCategory = "",
 }: CategorySlideProps) {
   const [categories, setCategories] = useState<Category[]>([]);
   const router = useRouter();
@@ -39,22 +39,22 @@ export default function CategoryList({
   }, [endpoint]);
 
   const handleCategoryClick = (slug: string) => {
-    const currentSearch = searchParams.get('recipesearch');
+    const currentSearch = searchParams.get("recipesearch");
     const params = new URLSearchParams();
 
     if (slug === activeCategory) {
       if (currentSearch) {
-        params.set('recipesearch', currentSearch);
+        params.set("recipesearch", currentSearch);
       }
     } else {
-      params.set('categorySlug', slug);
+      params.set("categorySlug", slug);
       if (currentSearch) {
-        params.set('recipesearch', currentSearch);
+        params.set("recipesearch", currentSearch);
       }
     }
 
     const queryString = params.toString();
-    const newUrl = queryString ? `/recipes?${queryString}` : '/recipes';
+    const newUrl = queryString ? `/recipes?${queryString}` : "/recipes";
     router.push(newUrl);
   };
 
@@ -63,7 +63,7 @@ export default function CategoryList({
       <div className="py-10">
         <Carousel
           opts={{
-            align: 'start',
+            align: "start",
             loop: true,
           }}
           plugins={[

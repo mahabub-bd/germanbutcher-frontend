@@ -1,7 +1,7 @@
-import { fetchData } from '@/utils/api-utils';
-import type { Recipe } from '@/utils/types';
-import type { ReactNode } from 'react';
-import RecipeCard from './recipe-card';
+import { fetchData } from "@/utils/api-utils";
+import type { Recipe } from "@/utils/types";
+import type { ReactNode } from "react";
+import RecipeCard from "./recipe-card";
 
 export default async function RecipeList({
   children,
@@ -88,7 +88,7 @@ export default async function RecipeList({
     <div className="container mx-auto py-4 sm:px-1 md:py-8 lg:py-10 md:px-2">
       {children}
       <div className="grid grid-cols-1 md:px-0 px-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 sm:gap-8 md:gap-5 lg:gap-6 gap-4">
-        {recipes.map((recipe: Recipe) => (
+        {recipes?.map((recipe: Recipe) => (
           <RecipeCard key={recipe.id} recipe={recipe} />
         ))}
       </div>

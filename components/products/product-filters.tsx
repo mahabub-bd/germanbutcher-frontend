@@ -731,7 +731,7 @@ export function ProductFilters({
 
   return (
     <>
-      <ScrollArea className="min-w-76 shadow-none p-2 md:flex hidden h-[100vh] absolute top-2">
+      <ScrollArea className="min-w-76 shadow-none p-2 md:flex hidden  absolute top-2">
         <div className="p-2">
           <FilterContent />
         </div>
