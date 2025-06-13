@@ -6,7 +6,7 @@ import { Search, X } from "lucide-react";
 import type React from "react";
 
 export function SearchBar() {
-  const { searchQuery, setSearchQuery, handleSearch, clearSearch, loading } =
+  const { searchQuery, setSearchQuery, handleSearch, clearSearch } =
     useGlobalSearch();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
