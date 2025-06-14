@@ -54,7 +54,6 @@ function EmptyCategories() {
   );
 }
 
-// Individual category item component
 function CategoryItem({
   category,
   onClick,
@@ -75,7 +74,6 @@ function CategoryItem({
             alt={`${category.name} category`}
             fill
             className="object-cover"
-            sizes="64px"
           />
         ) : (
           <div className="w-full h-full bg-gray-200 flex items-center justify-center">

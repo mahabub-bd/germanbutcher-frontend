@@ -39,23 +39,25 @@ export function MobileMenu() {
 
         <div className="flex flex-col h-full bg-primaryColor">
           {/* Header Section */}
-          <div className=" border-b bg-golden-radial  p-2">
+          <div className=" border-b  p-2">
             <div className="flex items-center justify-center">
               <Link
                 href="/"
-                className="flex items-center justify-center p-2 rounded-lg  transition-colors"
-                onClick={handleClose}
+                className="flex items-center justify-center size-16 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-200 shadow-lg"
                 aria-label="Go to homepage"
               >
                 <Image
                   src={
                     GermanbutcherLogo ||
-                    "/placeholder.svg?height=80&width=80&query=German Butcher logo"
+                    "/placeholder.svg?height=48&width=48&query=German Butcher logo" ||
+                    "/placeholder.svg" ||
+                    "/placeholder.svg"
                   }
-                  alt="German Butcher Logo"
-                  width={60}
-                  height={60}
-                  className="object-contain"
+                  alt="German Butcher logo"
+                  width={80}
+                  height={80}
+                  className="max-w-full max-h-full object-contain"
+                  priority
                 />
               </Link>
             </div>

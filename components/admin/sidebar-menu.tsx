@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { logout } from '@/actions/auth';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import { logout } from "@/actions/auth";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,13 +10,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Skeleton } from '@/components/ui/skeleton';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
-import { GermanbutcherLogo } from '@/public/images';
-import { fetchProtectedData } from '@/utils/api-utils';
-import type { authResponse, MenuItem } from '@/utils/types';
+import { GermanbutcherLogo } from "@/public/images";
+import { fetchProtectedData } from "@/utils/api-utils";
+import type { authResponse, MenuItem } from "@/utils/types";
 import {
   ChevronDown,
   ChevronLeft,
@@ -27,13 +27,13 @@ import {
   User,
   UserCircle,
   X,
-} from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import { IconRenderer } from '../common/IconRenderer';
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { IconRenderer } from "../common/IconRenderer";
 
 interface UserTypes {
   id: number;
@@ -70,7 +70,7 @@ export function SidebarMenu({ className, user }: SidebarProps) {
         const response: MenuItem[] = await fetchProtectedData(endpoint);
         setMenuData(response);
       } catch (error) {
-        console.error('Error fetching menu data:', error);
+        console.error("Error fetching menu data:", error);
       } finally {
         setIsLoading(false);
       }
@@ -85,15 +85,15 @@ export function SidebarMenu({ className, user }: SidebarProps) {
       const result: authResponse = await logout();
 
       if (result.statusCode === 200) {
-        toast.success('Logged out successfully');
-        router.push('/auth/sign-in');
+        toast.success("Logged out successfully");
+        router.push("/auth/sign-in");
         router.refresh();
       } else {
-        toast.error('Failed to log out');
+        toast.error("Failed to log out");
       }
     } catch (error) {
-      toast.error('Failed to log out');
-      console.error('Logout error:', error);
+      toast.error("Failed to log out");
+      console.error("Logout error:", error);
     } finally {
       setIsLoggingOut(false);
     }
@@ -103,13 +103,13 @@ export function SidebarMenu({ className, user }: SidebarProps) {
     setMobileOpen(false);
   }, [pathname]);
 
-  const sidebarTitle = user?.isAdmin ? 'German Butcher' : 'My Account';
+  const sidebarTitle = user?.isAdmin ? "German Butcher" : "My Account";
 
   const getInitials = (name: string): string => {
     return name
-      .split(' ')
-      .map((n) => n[0]?.toUpperCase() ?? '')
-      .join('')
+      .split(" ")
+      .map((n) => n[0]?.toUpperCase() ?? "")
+      .join("")
       .substring(0, 2);
   };
 
@@ -177,18 +177,18 @@ export function SidebarMenu({ className, user }: SidebarProps) {
 
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-30 pt-4  flex flex-col border-r transition-all duration-300 ease-in-out',
+          "fixed inset-y-0 left-0 z-30 pt-4  flex flex-col border-r transition-all duration-300 ease-in-out",
 
-          collapsed ? 'w-[70px]' : 'w-[250px]',
-          mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
+          collapsed ? "w-[70px]" : "w-[250px]",
+          mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
           className
         )}
       >
         <div className="flex items-center justify-between px-4">
           <div
             className={cn(
-              'flex items-center gap-2',
-              collapsed && 'justify-center w-full'
+              "flex items-center gap-2",
+              collapsed && "justify-center w-full"
             )}
           >
             {collapsed ? (
@@ -221,8 +221,8 @@ export function SidebarMenu({ className, user }: SidebarProps) {
           >
             <ChevronLeft
               className={cn(
-                'h-5 w-5 transition-transform',
-                collapsed && 'rotate-180'
+                "h-5 w-5 transition-transform",
+                collapsed && "rotate-180"
               )}
             />
           </Button>
@@ -250,13 +250,13 @@ export function SidebarMenu({ className, user }: SidebarProps) {
                               <button
                                 onClick={() => toggleSubMenu(item.name)}
                                 className={cn(
-                                  'group flex h-10 items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
+                                  "group flex h-10 items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
                                   isActive || isSubActive
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'transparent',
+                                    ? "bg-primary/10 text-primary font-medium"
+                                    : "transparent",
                                   collapsed
-                                    ? 'justify-center'
-                                    : 'justify-between'
+                                    ? "justify-center"
+                                    : "justify-between"
                                 )}
                               >
                                 <div className="flex items-center">
@@ -264,8 +264,8 @@ export function SidebarMenu({ className, user }: SidebarProps) {
                                     <IconRenderer
                                       name={item.icon}
                                       className={cn(
-                                        'h-5 w-5 shrink-0',
-                                        collapsed ? 'mr-0' : 'mr-2'
+                                        "h-5 w-5 shrink-0",
+                                        collapsed ? "mr-0" : "mr-2"
                                       )}
                                     />
                                   )}
@@ -274,8 +274,8 @@ export function SidebarMenu({ className, user }: SidebarProps) {
                                 {!collapsed && (
                                   <ChevronDown
                                     className={cn(
-                                      'h-4 w-4 transition-transform',
-                                      isOpen ? 'rotate-180' : ''
+                                      "h-4 w-4 transition-transform",
+                                      isOpen ? "rotate-180" : ""
                                     )}
                                   />
                                 )}
@@ -289,19 +289,19 @@ export function SidebarMenu({ className, user }: SidebarProps) {
                               <Link
                                 href={item?.url}
                                 className={cn(
-                                  'group flex h-10 items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
+                                  "group flex h-10 items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
                                   isActive
-                                    ? 'bg-primary/10 text-primary font-medium'
-                                    : 'transparent',
-                                  collapsed ? 'justify-center' : 'justify-start'
+                                    ? "bg-primary/10 text-primary font-medium"
+                                    : "transparent",
+                                  collapsed ? "justify-center" : "justify-start"
                                 )}
                               >
                                 {item.icon && (
                                   <IconRenderer
                                     name={item.icon}
                                     className={cn(
-                                      'h-5 w-5 shrink-0',
-                                      collapsed ? 'mr-0' : 'mr-2'
+                                      "h-5 w-5 shrink-0",
+                                      collapsed ? "mr-0" : "mr-2"
                                     )}
                                   />
                                 )}
@@ -327,10 +327,10 @@ export function SidebarMenu({ className, user }: SidebarProps) {
                                       key={subItem.name}
                                       href={subItem.url}
                                       className={cn(
-                                        'flex h-8 items-center rounded-md px-3 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground',
+                                        "flex h-8 items-center rounded-md px-3 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
                                         isSubItemActive
-                                          ? 'bg-primary/5 text-primary font-medium'
-                                          : 'text-muted-foreground'
+                                          ? "bg-primary/5 text-primary font-medium"
+                                          : "text-muted-foreground"
                                       )}
                                     >
                                       {subItem.name}
@@ -384,34 +384,34 @@ export function SidebarMenu({ className, user }: SidebarProps) {
               <Button
                 variant="ghost"
                 className={cn(
-                  'w-full justify-start hover:bg-accent',
-                  collapsed && 'justify-center px-0'
+                  "w-full justify-start hover:bg-accent",
+                  collapsed && "justify-center px-0"
                 )}
               >
                 <div
                   className={cn(
-                    'flex items-center',
-                    collapsed ? 'justify-center' : ''
+                    "flex items-center",
+                    collapsed ? "justify-center" : ""
                   )}
                 >
                   <Avatar
-                    className={cn('h-8 w-8', collapsed ? 'mr-0' : 'mr-2')}
+                    className={cn("h-8 w-8", collapsed ? "mr-0" : "mr-2")}
                   >
                     {user?.profilePhoto?.url && (
                       <AvatarImage
-                        src={user?.profilePhoto?.url || '/placeholder.svg'}
-                        alt={user.name || 'User avatar'}
+                        src={user?.profilePhoto?.url || "/placeholder.svg"}
+                        alt={user.name || "User avatar"}
                         referrerPolicy="no-referrer"
                       />
                     )}
                     <AvatarFallback className="text-xs font-medium">
-                      {user.name ? getInitials(user.name) : 'US'}
+                      {user.name ? getInitials(user.name) : "US"}
                     </AvatarFallback>
                   </Avatar>
                   {!collapsed && (
                     <div className="flex flex-col items-start">
                       <span className="text-sm font-medium truncate">
-                        {user.name || 'User'}
+                        {user.name || "User"}
                       </span>
                       {user.email && (
                         <span className="text-xs text-muted-foreground truncate">
@@ -424,15 +424,15 @@ export function SidebarMenu({ className, user }: SidebarProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              align={collapsed ? 'center' : 'end'}
+              align={collapsed ? "center" : "end"}
               className="w-56"
-              side={collapsed ? 'right' : 'top'}
+              side={collapsed ? "right" : "top"}
               sideOffset={collapsed ? 16 : 0}
             >
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">
-                    {user.name || 'User'}
+                    {user.name || "User"}
                   </p>
                   {user.email && (
                     <p className="text-xs leading-none text-muted-foreground">
@@ -461,7 +461,7 @@ export function SidebarMenu({ className, user }: SidebarProps) {
                 className="text-red-600 focus:bg-red-50 focus:text-red-600 dark:focus:bg-red-950 dark:focus:text-red-400"
               >
                 <LogOut className="mr-2 h-4 w-4" />
-                <span>{isLoggingOut ? 'Signing out...' : 'Sign out'}</span>
+                <span>{isLoggingOut ? "Signing out..." : "Sign out"}</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
