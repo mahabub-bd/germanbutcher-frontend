@@ -4,7 +4,7 @@ export default function CategoryPage() {
   return (
     <section className="md:py-10 py-5 bg-gray-50">
       <div className="container mx-auto px-4">
-        <CategoryList endpoint="categories">
+        <CategoryList endpoint="categories?isMainCategory=true">
           <HeadingPrimary
             title="FEATURED CATEGORIES"
             subtitle="Get your desired product from featured category"
