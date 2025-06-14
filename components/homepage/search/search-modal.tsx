@@ -1,13 +1,14 @@
-'use client';
+"use client";
 
-import type React from 'react';
+import type React from "react";
 
-import { LoadingIndicator } from '@/components/admin/loading-indicator';
-import { useGlobalSearch } from '@/hooks/use-global-search';
-import type { Product } from '@/utils/types';
-import { Search, X } from 'lucide-react';
-import { EmptySearchState } from './empty-search-state';
-import { ProductSearchItem } from './product-search-item';
+import { LoadingIndicator } from "@/components/admin/loading-indicator";
+import { useGlobalSearch } from "@/hooks/use-global-search";
+import type { Product } from "@/utils/types";
+import { ArrowRight, Search, X } from "lucide-react";
+import Link from "next/link";
+import { EmptySearchState } from "./empty-search-state";
+import { ProductSearchItem } from "./product-search-item";
 
 export function SearchModal() {
   const {
@@ -32,6 +33,10 @@ export function SearchModal() {
     setIsOpen(false);
   };
 
+  // Show only first 4 products
+  const displayedProducts = products.slice(0, 4);
+  const hasMoreProducts = products.length > 4;
+
   return (
     <div
       className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center md:pt-24 pt-36 px-4"
@@ -49,6 +54,12 @@ export function SearchModal() {
               {searchQuery && (
                 <p className="text-sm text-gray-500">
                   for &quot;{searchQuery}&quot;
+                  {products.length > 0 && (
+                    <span className="ml-1 text-blue-600 font-medium">
+                      ({products.length}{" "}
+                      {products.length === 1 ? "result" : "results"})
+                    </span>
+                  )}
                 </p>
               )}
             </div>
@@ -92,10 +103,10 @@ export function SearchModal() {
             <EmptySearchState searchQuery={searchQuery} />
           )}
 
-          {!loading && products.length > 0 && (
+          {!loading && displayedProducts.length > 0 && (
             <div className="p-4">
               <div className="space-y-2">
-                {products.map((product: Product) => (
+                {displayedProducts.map((product: Product) => (
                   <ProductSearchItem
                     key={product.id}
                     product={product}
@@ -103,6 +114,20 @@ export function SearchModal() {
                   />
                 ))}
               </div>
+
+              {/* View All Results Link */}
+              {hasMoreProducts && (
+                <div className="mt-6 pt-4 border-t border-gray-200">
+                  <Link
+                    href={`/products/search/${encodeURIComponent(searchQuery)}`}
+                    onClick={handleClose}
+                    className="flex items-center justify-center w-full py-2 px-4 bg-gradient-to-r from-primaryColor to-secondaryColor hover:from-secondaryColor  hover:to-primaryColor text-white font-medium rounded-lg transition-all duration-200 hover:shadow-lg group"
+                  >
+                    <span>View All {products.length} </span>
+                    <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </div>
+              )}
             </div>
           )}
         </div>

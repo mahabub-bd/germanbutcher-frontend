@@ -8,7 +8,7 @@ import UserActions from "./user-actions";
 export function DesktopHeader() {
   return (
     <div className="hidden bg-primaryColor  lg:block  py-4 ">
-      <div className="container mx-auto flex justify-between items-center px-4 md:px-8 lg:px-12">
+      <div className="container mx-auto flex justify-between items-center  md:px-0 px-4 ">
         <div className="flex items-center">
           <Link href="/" className="flex items-center mr-6">
             <div className="p-2 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 inline-block transition-all duration-300 group-hover:bg-white/15 group-hover:scale-105">

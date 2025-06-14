@@ -739,18 +739,21 @@ export function ProductFilters({
 
       {/* Mobile view - Sheet component that slides in from the right */}
 
-      <div className="md:hidden fixed top-24 right-4 z-50">
+      <div className="md:hidden z-50">
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
             <Button
-              className="relative rounded-full h-10 w-10 shadow-lg flex items-center justify-center bg-primaryColor hover:bg-secondaryColor"
-              size="icon"
+              className="relative group shadow-xl border-0 bg-gradient-to-r from-primaryColor to-primaryColor/90 hover:from-primaryColor/90 hover:to-secondaryColor text-white font-medium px-4 py-2 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl"
+              size="lg"
             >
-              <Filter className="h-4 w-4" />
+              <div className="flex items-center gap-2">
+                <Filter className="h-4 w-4 transition-transform group-hover:rotate-12" />
+                <span className="text-sm font-semibold">Filters</span>
+              </div>
               {hasActiveFilters && (
                 <Badge
                   variant="destructive"
-                  className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 rounded-full text-xs font-semibold"
+                  className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 rounded-full text-xs font-bold bg-red-500 text-white border-2 border-white animate-pulse"
                 >
                   {activeFiltersCount}
                 </Badge>
