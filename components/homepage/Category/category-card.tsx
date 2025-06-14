@@ -1,10 +1,9 @@
-import { getBlurData } from "@/utils/blur-generator";
 import { Category } from "@/utils/types";
 import Image from "next/image";
 import Link from "next/link";
 
 export async function CategoryCard({ category }: { category: Category }) {
-  const { base64 } = await getBlurData(category?.attachment?.url);
+  // const { base64 } = await getBlurData(category?.attachment?.url);
   return (
     <Link
       href={`/categories/${category.slug || category.id}`}
@@ -18,10 +17,6 @@ export async function CategoryCard({ category }: { category: Category }) {
             width={600}
             height={600}
             className="object-cover w-full  h-full rounded-full transition-transform duration-300 group-hover:scale-105"
-            priority={true}
-            loading="eager"
-            placeholder="blur"
-            blurDataURL={base64}
           />
         </div>
       </div>

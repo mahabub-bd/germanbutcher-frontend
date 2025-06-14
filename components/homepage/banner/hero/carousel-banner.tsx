@@ -121,7 +121,7 @@ export function CarouselBanner({
                 }
                 alt={slide.title}
                 fill
-                className="object-cover"
+                className=""
                 priority={index === 0}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
