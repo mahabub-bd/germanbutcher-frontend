@@ -110,7 +110,7 @@ export function OrderSummary({
       <Button
         onClick={onSubmit}
         size="lg"
-        className="w-full"
+        className="w-full bg-primaryColor hover:bg-secondaryColor"
         disabled={isSubmitting}
       >
         {isSubmitting ? (

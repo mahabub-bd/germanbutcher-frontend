@@ -207,7 +207,11 @@ export function CartPage({ cart }: { cart?: Cart }) {
               </div>
             </div>
 
-            <Button asChild size="lg" className="mt-6 w-full">
+            <Button
+              asChild
+              size="lg"
+              className="mt-6 w-full bg-primaryColor hover:bg-secondaryColor"
+            >
               <Link href="/checkout">Proceed to Checkout</Link>
             </Button>
           </div>
