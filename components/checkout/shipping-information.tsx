@@ -63,7 +63,7 @@ export function ShippingInformation({
         )}
 
         {showAddressForm && (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-4 text-md">
             <div>
               <Label htmlFor="address">Address *</Label>
               <Input
