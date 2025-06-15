@@ -40,6 +40,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
 
 
+
   useEffect(() => {
     const query = searchParams.get('search');
     if (query) {

@@ -26,9 +26,9 @@ export function DesktopHeader() {
             <NavLinks />
           </nav>
         </div>
-
+        <SearchBar />
         <div className="flex items-center space-x-6">
-          <SearchBar />
+
           <UserActions compact={false} />
         </div>
       </div>

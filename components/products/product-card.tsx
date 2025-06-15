@@ -75,7 +75,7 @@ export default async function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* Content Section */}
-        <div className="p-1 md:p-3 lg:p-3 flex flex-col gap-2">
+        <div className="p-1 md:p-2 lg:p-3 flex flex-col gap-2">
           {/* Product Name */}
           <h3 className="font-semibold text-gray-900 md:text-base text-sm  leading-tight line-clamp-2 group-hover:text-primaryColor transition-colors duration-200">
             {product.name}

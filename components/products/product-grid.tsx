@@ -63,7 +63,7 @@ export default async function ProductBarList({
     <div className="container mx-auto py-4 sm:px-1 md:py-5 md:px-0">
       {response.data && response.data.length > 0 ? (
         <>
-          <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-4 gap-2 xs:gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-7">
+          <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-2 xs:gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-7">
             {response.data.map((product: Product) => (
               <ProductCard key={product.id} product={product} />
             ))}
