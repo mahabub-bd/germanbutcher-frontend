@@ -33,7 +33,6 @@ export function SearchModal() {
     setIsOpen(false);
   };
 
-  // Show only first 4 products
   const displayedProducts = products.slice(0, 4);
   const hasMoreProducts = products.length > 4;
 
