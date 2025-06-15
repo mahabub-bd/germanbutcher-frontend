@@ -1,8 +1,7 @@
 import { fetchData } from "@/utils/api-utils";
 import { Category } from "@/utils/types";
 import { CategoryCard } from "./category-card";
-import { Suspense } from "react";
-import {LoadingSpinner} from "@/components/ui/loading-spinner";
+
 
 export default async function CategoryList({
   children,

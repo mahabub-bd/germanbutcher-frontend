@@ -5,16 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6bead807-fc3c-46f8-a710-3274ce92934a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/loading.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/header/desktop-header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/header/desktop-header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/homepage/Category/category-list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/homepage/Category/category-list.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/homepage/search/search-bar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/homepage/search/search-bar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/homepage/search/search-modal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/homepage/search/search-modal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/products/product-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/products/product-card.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/products/product-grid.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/products/product-grid.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/products/product-list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/products/product-list.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +24,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -68,6 +60,23 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="QodanaHighlightedReportService">
+    <option name="localRunNotPublishedPersistedInfo">
+      <LocalReportPersistedInfo>
+        <option name="path" value="C:\Users\mahabub\AppData\Local\Temp\qodana_output\qodana.sarif.json" />
+        <option name="reportGuid" value="ae77c555-0f11-4ec4-8bb3-b5794be202ca" />
+        <option name="reportName" value="germanbutcher-frontend/qodana/2025-06-15" />
+      </LocalReportPersistedInfo>
+    </option>
+  </component>
+  <component name="QodanaIsSelectedPersistenceService">
+    <option name="selectedOrLoading" value="true" />
+  </component>
+  <component name="QodanaReportsService">
+    <option name="descriptions">
+      <ReportDescription localRun="true" path="C:\Users\mahabub\AppData\Local\Temp\qodana_output\qodana.sarif.json" reportGuid="ae77c555-0f11-4ec4-8bb3-b5794be202ca" reportId="germanbutcher-frontend/qodana/2025-06-15" />
+    </option>
+  </component>
   <component name="RunManager" selected="npm.Next.js: server-side">
     <configuration name="Next.js: debug client-side" type="JavascriptDebugType" uri="http://localhost:3002/">
       <method v="2" />
@@ -98,7 +107,7 @@
       <option name="presentableId" value="Default" />
       <updated>1749992618978</updated>
       <workItem from="1749992623584" duration="170000" />
-      <workItem from="1749992816684" duration="4651000" />
+      <workItem from="1749992816684" duration="5567000" />
     </task>
     <servers />
   </component>
