@@ -97,10 +97,9 @@ export function CarouselBanner({
 
   return (
     <div
-      className="relative overflow-hidden w-full min-h-[200px] sm:min-h-[300px]"
+      className="relative overflow-hidden w-full h-[400px] sm:h-[700px]"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      style={{ aspectRatio: "2/1" }}
     >
       {/* Carousel container */}
       <div className="relative w-full h-full overflow-hidden">
@@ -129,21 +128,20 @@ export function CarouselBanner({
               <div className="absolute top-0 left-0 p-3 sm:p-4 lg:p-6 xl:p-8 w-full h-full text-white">
                 <div className="flex container items-center justify-center sm:justify-start h-full xl:px-24">
                   <div className="max-w-3xl text-center sm:text-left">
-                    <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-1 sm:mb-2 animate-fadeIn text-white leading-tight">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-1 sm:mb-2 animate-fadeIn text-white leading-tight">
                       {slide.title}
                     </h2>
-                    <p className="animate-fadeIn text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-medium animation-delay-200 mb-3 sm:mb-4 lg:mb-6">
+                    <p className="animate-fadeIn text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-medium animation-delay-200 mb-3 sm:mb-4 lg:mb-6">
                       {slide.description}
                     </p>
                     {slide.targetUrl && (
                       <Button
                         asChild
                         variant="secondary"
-                        className="mt-2 sm:mt-4 lg:mt-6 !py-1.5 sm:!py-2 px-3 sm:px-4 lg:px-6 rounded-[8px] cursor-pointer text-xs sm:text-sm lg:text-base font-semibold bg-primaryColor text-white animate-fadeIn animation-delay-400 inline-flex"
+                        className="mt-2 sm:mt-4 lg:mt-6 !py-1.5 sm:!py-2 px-3 sm:px-4 lg:px-6 rounded-[8px] cursor-pointer text-sm sm:text-base lg:text-lg font-semibold bg-primaryColor hover:bg-secondaryColor text-white animate-fadeIn animation-delay-400 inline-flex"
                       >
                         <Link
                           href={slide.targetUrl}
-                          target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-1 sm:gap-2"
                         >
@@ -165,7 +163,7 @@ export function CarouselBanner({
             variant="outline"
             size="icon"
             className={cn(
-              "absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg w-8 h-8 sm:w-10 sm:h-10",
+              "absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg w-8 h-8 sm:w-10 sm:h-10 hidden sm:flex",
               currentIndex === 0
                 ? "bg-black/20 text-white/40 cursor-not-allowed"
                 : "bg-black/40 hover:bg-black/60 text-white"
@@ -180,7 +178,7 @@ export function CarouselBanner({
             variant="outline"
             size="icon"
             className={cn(
-              "absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg w-8 h-8 sm:w-10 sm:h-10",
+              "absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg w-8 h-8 sm:w-10 sm:h-10 hidden sm:flex",
               currentIndex === banners.length - 1
                 ? "bg-black/20 text-white/40 cursor-not-allowed"
                 : "bg-black/40 hover:bg-black/60 text-white"
@@ -214,3 +212,4 @@ export function CarouselBanner({
     </div>
   );
 }
+export default CarouselBanner;

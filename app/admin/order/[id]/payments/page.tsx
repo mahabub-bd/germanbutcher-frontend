@@ -17,7 +17,7 @@ export default function OrderPaymentsListPage() {
   const orderId = params.id as string;
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
-  console.log("Order ID:", order);
+ 
   useEffect(() => {
     const fetchOrderData = async () => {
       try {

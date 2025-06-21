@@ -62,7 +62,7 @@ export function RecipeForm({ mode, recipe }: RecipeFormProps) {
   );
   const [categories, setCategories] = useState<Category[]>([]);
   const router = useRouter();
-  console.log(recipe);
+
 
   const form = useForm<RecipeFormValues>({
     resolver: zodResolver(recipeSchema),
@@ -107,7 +107,7 @@ export function RecipeForm({ mode, recipe }: RecipeFormProps) {
 
   const handleSubmit = async (data: RecipeFormValues) => {
     setIsSubmitting(true);
-    console.log(data);
+
     try {
       let attachmentId = recipe?.attachment?.id;
 

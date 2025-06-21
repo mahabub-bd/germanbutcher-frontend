@@ -42,10 +42,5 @@ export default function OrderPage() {
     );
   }
 
-  return (
-    <OrderView
-      order={order}
-      onBack={() => console.log("Back button clicked")}
-    />
-  );
+  return <OrderView order={order} />;
 }

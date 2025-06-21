@@ -64,7 +64,6 @@ export function localCartToBackendFormat(localCart: LocalCart) {
 }
 
 export function saveCouponToLocalStorage(coupon: LocalCoupon | null): void {
-  console.log("Saving coupon to localStorage:", coupon);
   if (typeof window === "undefined") return;
 
   if (coupon === null) {
