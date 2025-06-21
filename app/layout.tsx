@@ -1,7 +1,7 @@
 import { getUser } from "@/actions/auth";
 import { SearchModal } from "@/components/homepage/search/search-modal";
 import { Toaster } from "@/components/ui/sonner";
-import { SearchProvider } from "@/hooks/use-global-search";
+
 import { CartProvider } from "@/providers/cart-provider";
 import { fetchProtectedData } from "@/utils/api-utils";
 import type { Cart } from "@/utils/types";
@@ -9,6 +9,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import type React from "react";
 
+import { SearchProvider } from "@/providers/search-provider";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });

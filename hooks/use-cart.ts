@@ -268,7 +268,7 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
       } else {
         setLocalCart({ items: [], lastUpdated: Date.now() });
         saveCartToLocalStorage({ items: [], lastUpdated: Date.now() });
-        // Also clear any applied coupon
+
         setAppliedCoupon(null);
         clearLocalCoupon();
       }
@@ -284,7 +284,6 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
     }
   };
 
-  // New method to apply a coupon
   const applyCoupon = async (code: string, subtotal: number) => {
     if (!code.trim()) return;
     setIsLoading(true);
@@ -306,7 +305,6 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
 
         setAppliedCoupon(couponData);
 
-        // Make sure to save the coupon to localStorage for non-logged in users
         if (!isLoggedIn) {
           saveCouponToLocalStorage(couponData);
         } else {

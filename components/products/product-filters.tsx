@@ -12,7 +12,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -20,14 +19,12 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   ChevronRight,
   DollarSign,
   Filter,
   Grid3X3,
-  Star,
   Tag,
   X,
 } from "lucide-react";
@@ -445,31 +442,7 @@ export function ProductFilters({
         </div>
       )}
 
-      <Separator className="mb-6" />
-
       <div className="space-y-6">
-        <div className="space-y-3 p-4 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/20 dark:to-rose-950/20 rounded-lg border border-red-100 dark:border-red-700">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="p-1.5 bg-red-100 dark:bg-red-800/50 rounded-full">
-                <Star className="h-4 w-4 text-red-700 dark:text-red-300" />
-              </div>
-              <h4 className="text-sm font-medium text-red-800 dark:text-red-200">
-                Featured Products
-              </h4>
-            </div>
-            <Switch
-              id="featured"
-              checked={currentFeatured || false}
-              onCheckedChange={handleFeaturedChange}
-              className="data-[state=checked]:bg-red-800"
-            />
-          </div>
-          <p className="text-xs text-red-700 dark:text-red-300">
-            Show only our handpicked featured products
-          </p>
-        </div>
-
         <Accordion
           type="multiple"
           defaultValue={["categories", "brands", "price"]}
