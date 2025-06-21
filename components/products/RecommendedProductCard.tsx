@@ -1,13 +1,13 @@
-import { Badge } from '@/components/ui/badge';
-import { formatCurrencyEnglish, formatWeight } from '@/lib/utils';
-import { getBlurData } from '@/utils/blur-generator';
-import type { Product } from '@/utils/types';
-import { DiscountType } from '@/utils/types';
-import Image from 'next/image';
-import Link from 'next/link';
+import { Badge } from "@/components/ui/badge";
+import { formatCurrencyEnglish, formatWeight } from "@/lib/utils";
+import { getBlurData } from "@/utils/blur-generator";
+import type { Product } from "@/utils/types";
+import { DiscountType } from "@/utils/types";
+import Image from "next/image";
+import Link from "next/link";
 
-import { Weight } from 'lucide-react';
-import { AddToCartButton } from '../cart/add-to-cart-button';
+import { Weight } from "lucide-react";
+import { AddToCartButton } from "../cart/add-to-cart-button";
 
 export default async function RecommendedProductCard({
   product,
@@ -35,7 +35,7 @@ export default async function RecommendedProductCard({
   return (
     <div className="relative group mt-20 mb-5  transition-all duration-300 border border-gray-200 hover:bg-[#FDFBF4]  p-4 flex flex-col items-center rounded-lg shadow-sm hover:shadow-md">
       <Link
-        href={`/products/${product.id}`}
+        href={`/products/${product.slug}`}
         className="flex flex-col  w-full h-full"
       >
         {/* Image Container */}
@@ -63,21 +63,6 @@ export default async function RecommendedProductCard({
                 </Badge>
               )}
           </div>
-
-          {/* {product?.stock === 0 ? (
-          <Badge
-            variant="destructive"
-            className="absolute top-2 right-2 text-[10px] sm:text-xs"
-          >
-            Out of Stock
-          </Badge>
-        ) : (
-          product.stock > 0 && (
-            <Badge className="absolute top-2 right-2 bg-green-500 hover:bg-green-600 text-[10px] sm:text-xs">
-              In Stock
-            </Badge>
-          )
-        )} */}
         </div>
         <div className="p-5 pt-15 space-y-3">
           {/* Product Name */}

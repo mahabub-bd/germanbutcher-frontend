@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import { ArrowUp } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { cn } from "@/lib/utils";
+import { ArrowUp } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface GoToTopProps {
   threshold?: number;
@@ -21,15 +21,15 @@ export function GoToTop({ threshold = 300, className }: GoToTopProps) {
       }
     };
 
-    window.addEventListener('scroll', toggleVisibility);
+    window.addEventListener("scroll", toggleVisibility);
 
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    return () => window.removeEventListener("scroll", toggleVisibility);
   }, [threshold]);
 
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
@@ -37,15 +37,15 @@ export function GoToTop({ threshold = 300, className }: GoToTopProps) {
     <button
       onClick={scrollToTop}
       className={cn(
-        'fixed bottom-6 right-6 p-3 rounded-full  text-white shadow-lg z-50 transition-all duration-300 bg-primaryColor hover:bg-primaryColor/90',
+        "fixed bottom-4 right-4 p-2 rounded-full text-white shadow-md z-50 transition-all duration-300 bg-primaryColor hover:bg-primaryColor/90",
         isVisible
-          ? 'opacity-100 translate-y-0'
-          : 'opacity-0 translate-y-10 pointer-events-none',
+          ? "opacity-100 translate-y-0"
+          : "opacity-0 translate-y-8 pointer-events-none",
         className
       )}
       aria-label="Go to top"
     >
-      <ArrowUp className="h-5 w-5" />
+      <ArrowUp className="h-4 w-4" />
     </button>
   );
 }
