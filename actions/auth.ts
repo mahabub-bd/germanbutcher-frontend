@@ -146,6 +146,7 @@ export async function register(formData: RegisterFormData) {
 
   try {
     const response = await postData("auth/register", validatedFields.data);
+    console.log("Registration response:", response);
 
     return {
       success: true,

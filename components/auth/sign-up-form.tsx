@@ -66,7 +66,7 @@ export default function SignUpForm() {
       const registrationData = {
         name: formData.name,
         email: formData.email,
-        mobileNumber: `880${formData.mobileNumber}`, // This is correct
+        mobileNumber: `+880${formData.mobileNumber}`,
         password: formData.password,
         confirmPassword: formData.confirmPassword,
       };
