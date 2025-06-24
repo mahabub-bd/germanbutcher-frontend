@@ -27,10 +27,10 @@ const UserAdmin: React.FC<AdminLayoutProps> = ({ children }) => {
     },
   ];
   return (
-    <div className="w-full   relative my-10 ">
-      <div className="relative max-w-[1240px] lg:mx-auto lg:flex h-full border border-primaryColor mx-2.5 ">
+    <div className="w-full  bg-gray-100 relative py-10 lg:py-20 ">
+      <div className="relative max-w-[1240px] lg:mx-auto lg:flex h-full gap-8 mx-2.5 ">
         <div
-          className={`w-[300px] hidden lg:block z-30 bg-white border-r border-primaryColor
+          className={`w-[300px] hidden lg:block z-30 bg-white  shadow-[-1px_2px_5.5px_4px_rgba(0,0,0,0.06)]  rounded-md
             transition-transform duration-300 ease-in-out `}
         >
           <Sidebar navItems={navItems} />
@@ -39,10 +39,8 @@ const UserAdmin: React.FC<AdminLayoutProps> = ({ children }) => {
           <MobileSidebar navItems={navItems} />
         </div>
 
-        <div className="flex-1 w-full h-full  flex flex-col">
-          <main className="flex-1 overflow-y-auto  p-4 lg:pl-6 lg:pt-6">
-            {children}
-          </main>
+        <div className="flex-1 w-full h-full  flex flex-col  ">
+          <main className="">{children}</main>
         </div>
       </div>
     </div>
