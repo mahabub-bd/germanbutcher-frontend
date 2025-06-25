@@ -1,13 +1,9 @@
 import { HeadingPrimary } from "@/components/common/heading-primary";
 import { CarouselBanner } from "@/components/homepage/banner/hero/carousel-banner";
 
-import BrandList from "@/components/homepage/brands/brand-list";
-import CategoryList from "@/components/homepage/Category/category-list";
-
 import Client from "@/components/homepage/clients/Clients";
 import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
 import { TestimonialSection } from "@/components/homepage/testimonial/testimonial-section";
-import ProductList from "@/components/products/product-list";
 
 export default function Home() {
   return (
@@ -17,14 +13,14 @@ export default function Home() {
       </div>
 
       {/* Categories Section */}
-      <section className="md:pt-18 pt-5 bg-bgsecondColor">
+      {/* <section className="md:pt-18 pt-5 bg-bgsecondColor">
         <CategoryList endpoint="categories?isMainCategory=true">
           <HeadingPrimary title="All Category" />
         </CategoryList>
-      </section>
+      </section> */}
 
       {/* Features Products Section */}
-      <section className="md:py-10 py-5 bg-gray-50">
+      {/* <section className="md:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
           <ProductList
             endpoint="products?featured=true"
@@ -34,27 +30,27 @@ export default function Home() {
             <HeadingPrimary title="Featured Products" className="mb-8" />
           </ProductList>
         </div>
-      </section>
+      </section> */}
 
       {/* Popular Products Section */}
-      <section className="md:py-10 py-5 bg-bgsecondColor">
+      {/* <section className="md:py-10 py-5 bg-bgsecondColor">
         <div className="container mx-auto ">
           <ProductList endpoint="products" isHomePage href="products/popular">
             <HeadingPrimary title="Popular Products" className="mb-10" />
           </ProductList>
         </div>
-      </section>
+      </section> */}
 
       {/* Brands Section */}
-      <section className="lg:py-10 py-5 bg-gray-50">
+      {/* <section className="lg:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
           <BrandList endpoint="products">
             <HeadingPrimary title="Recommended for you" className="mb-10" />
           </BrandList>
         </div>
-      </section>
+      </section> */}
 
-      <section className="lg:py-10 py-5 bg-gray-50">
+      {/* <section className="lg:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
           <ProductList
             endpoint="products/discounted?page=1&limit=20"
@@ -69,7 +65,7 @@ export default function Home() {
             />
           </ProductList>
         </div>
-      </section>
+      </section> */}
       {/* Subscribe Section */}
       <section className="md:py-10 lg:py-24 py-5 bg-whiteColor">
         <Client>
