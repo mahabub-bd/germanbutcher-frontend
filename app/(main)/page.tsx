@@ -22,7 +22,7 @@ export default function Home() {
       </section> */}
 
       {/* Features Products Section */}
-      {/* <section className="md:py-10 py-5 bg-gray-50">
+      <section className="md:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
           <ProductList
             endpoint="products?featured=true"
@@ -32,7 +32,7 @@ export default function Home() {
             <HeadingPrimary title="Featured Products" className="mb-8" />
           </ProductList>
         </div>
-      </section> */}
+      </section>
 
       {/* Popular Products Section */}
       <section className="md:py-10 py-5 bg-bgsecondColor">
