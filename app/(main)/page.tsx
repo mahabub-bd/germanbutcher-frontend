@@ -52,22 +52,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* <section className="lg:py-10 py-5 bg-gray-50">
+      <section className="lg:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
           <ProductList
             endpoint="products/discounted?page=1&limit=20"
             isHomePage
             href="products/special-offers"
           >
-            <HeadingPrimary
-              title="SPECIAL OFFERS"
-              subtitle="Limited-time deals just for you"
-              className="mb-10"
-              titleClassName="text-green-600"
-            />
+            <HeadingPrimary title="SPECIAL OFFERS" className="mb-10" />
           </ProductList>
         </div>
-      </section> */}
+      </section>
       {/* Subscribe Section */}
       <section className="md:py-10 lg:py-24 py-5 bg-whiteColor">
         <Client>
