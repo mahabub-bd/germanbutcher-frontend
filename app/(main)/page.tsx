@@ -1,5 +1,6 @@
 import { HeadingPrimary } from "@/components/common/heading-primary";
 import { CarouselBanner } from "@/components/homepage/banner/hero/carousel-banner";
+import BrandList from "@/components/homepage/brands/brand-list";
 
 import Client from "@/components/homepage/clients/Clients";
 import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
@@ -42,13 +43,13 @@ export default function Home() {
       </section> */}
 
       {/* Brands Section */}
-      {/* <section className="lg:py-10 py-5 bg-gray-50">
+      <section className="lg:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
           <BrandList endpoint="products">
             <HeadingPrimary title="Recommended for you" className="mb-10" />
           </BrandList>
         </div>
-      </section> */}
+      </section>
 
       {/* <section className="lg:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
