@@ -1,6 +1,5 @@
 import { HeadingPrimary } from "@/components/common/heading-primary";
 import { CarouselBanner } from "@/components/homepage/banner/hero/carousel-banner";
-
 import BrandList from "@/components/homepage/brands/brand-list";
 import CategoryList from "@/components/homepage/Category/category-list";
 
@@ -61,12 +60,7 @@ export default function Home() {
             isHomePage
             href="products/special-offers"
           >
-            <HeadingPrimary
-              title="SPECIAL OFFERS"
-              subtitle="Limited-time deals just for you"
-              className="mb-10"
-              titleClassName="text-green-600"
-            />
+            <HeadingPrimary title="SPECIAL OFFERS" className="mb-10" />
           </ProductList>
         </div>
       </section>

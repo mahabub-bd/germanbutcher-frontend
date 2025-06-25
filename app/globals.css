@@ -120,17 +120,7 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
-*::-webkit-scrollbar {
-  width: 8px;
-}
-*::-webkit-scrollbar-track {
-  background: var(--color-background);
-  border-radius: 5px;
-}
-*::-webkit-scrollbar-thumb {
-  background-color: var(--color-primaryColor);
-  border-radius: 14px;
-}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
