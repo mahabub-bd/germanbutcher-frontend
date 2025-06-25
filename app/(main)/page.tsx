@@ -2,7 +2,6 @@ import { HeadingPrimary } from "@/components/common/heading-primary";
 import { CarouselBanner } from "@/components/homepage/banner/hero/carousel-banner";
 
 import BrandList from "@/components/homepage/brands/brand-list";
-import CategoryList from "@/components/homepage/Category/category-list";
 
 import Client from "@/components/homepage/clients/Clients";
 import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
