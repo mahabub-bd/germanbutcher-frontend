@@ -5,6 +5,7 @@ import BrandList from "@/components/homepage/brands/brand-list";
 import Client from "@/components/homepage/clients/Clients";
 import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
 import { TestimonialSection } from "@/components/homepage/testimonial/testimonial-section";
+import ProductList from "@/components/products/product-list";
 
 export default function Home() {
   return (
@@ -34,13 +35,13 @@ export default function Home() {
       </section> */}
 
       {/* Popular Products Section */}
-      {/* <section className="md:py-10 py-5 bg-bgsecondColor">
+      <section className="md:py-10 py-5 bg-bgsecondColor">
         <div className="container mx-auto ">
           <ProductList endpoint="products" isHomePage href="products/popular">
             <HeadingPrimary title="Popular Products" className="mb-10" />
           </ProductList>
         </div>
-      </section> */}
+      </section>
 
       {/* Brands Section */}
       <section className="lg:py-10 py-5 bg-gray-50">
