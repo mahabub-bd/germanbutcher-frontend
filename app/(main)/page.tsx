@@ -17,11 +17,11 @@ export default function Home() {
       </div>
 
       {/* Categories Section */}
-      <section className="md:pt-18 pt-5 bg-bgsecondColor">
+      {/* <section className="md:pt-18 pt-5 bg-bgsecondColor">
         <CategoryList endpoint="categories?isMainCategory=true">
           <HeadingPrimary title="All Category" />
         </CategoryList>
-      </section>
+      </section> */}
 
       {/* Features Products Section */}
       <section className="md:py-10 py-5 bg-gray-50">
