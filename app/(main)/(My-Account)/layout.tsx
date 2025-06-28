@@ -13,7 +13,7 @@ const UserAdmin: React.FC<AdminLayoutProps> = ({ children }) => {
     {
       icon: <UserRound />,
       label: 'User Account',
-      href: '/user-account',
+      href: '/profile',
     },
     {
       icon: <Store />,

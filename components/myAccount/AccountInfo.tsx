@@ -1,55 +1,115 @@
 'use client';
-import { useState } from 'react';
-
-const initialData = {
-  firstName: 'Mahabub',
-  lastName: 'Hossain',
-  contactNumber: '01711852202',
-  dateOfBirth: '1990-11-03',
-  gender: 'Male',
-  email: 'palashmahabub@gmail.com',
-};
+import { useUser } from '@/contexts/user-context';
+import { patchData } from '@/utils/api-utils';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export default function AccountInfo() {
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(initialData);
+  const { user, loading, error, refresh } = useUser();
+
+  const [formData, setFormData] = useState({
+    firstName: '',
+    contactNumber: '',
+    email: '',
+    password: '********',
+  });
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        firstName: user?.name || '',
+        contactNumber: user?.mobileNumber || '',
+        email: user?.email || '',
+        password: '********',
+      });
+    }
+  }, [user]);
+
+  if (loading) return <p>Loading user...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log('Updated Profile Data:', formData);
+    try {
+      const updateData = new FormData();
+      updateData.append('name', formData.firstName);
+      updateData.append('mobileNumber', formData.contactNumber);
+      updateData.append('email', formData.email);
+      updateData.append('password', formData.password);
+      const endpoint = `users/${user?.id}`;
+      const response = await patchData(endpoint, updateData);
+      if (response?.statusCode == 200) {
+        setIsEditing(false);
+        toast(response?.message);
+      }
+      refresh?.();
+    } catch (err) {
+      console.error('Update error:', err);
+    }
+  };
+
+  const handleCancel = () => {
+    if (user) {
+      setFormData({
+        firstName: user?.name || '',
+        contactNumber: user?.mobileNumber || '',
+        email: user?.email || '',
+        password: '********',
+      });
+    }
+    setIsEditing(false);
+  };
+
   return (
-    <div className=" space-y-8">
-      {/* Account Information */}
-      <div className=" p-6 shadow-[-1px_2px_8.5px_4px_rgba(0,0,0,0.06)] bg-white  rounded-md">
+    <form onSubmit={handleSubmit} className="space-y-8 h-full">
+      <div className="p-6 shadow-[-1px_2px_8.5px_4px_rgba(0,0,0,0.06)] bg-white rounded-md">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg md:text-2xl font-semibold">
             Account Information
           </h2>
-          <button
-            className="px-4 py-1 border rounded-md text-sm text-blue-600 hover:bg-blue-50"
-            onClick={() => setIsEditing(!isEditing)}
-          >
-            {isEditing ? 'Cancel' : 'Edit'}
-          </button>
+          {isEditing ? (
+            <div className="flex justify-end gap-4">
+              <button
+                type="button"
+                className="px-4 py-2 border border-red-500 text-red-500 cursor-pointer rounded-md text-sm hover:scale-105 hover:shadow-sm transition-all duration-200"
+                onClick={handleCancel}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 cursor-pointer py-2 bg-primaryColor text-white text-sm rounded-md hover:scale-105 hover:shadow-sm transition-all duration-200"
+              >
+                Update Profile
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="px-4 py-1 border rounded-md text-sm text-blue-600 hover:bg-blue-50"
+              onClick={() => setIsEditing(true)}
+            >
+              Edit
+            </button>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <InfoRow
-            label="First Name"
+            label="Name"
             name="firstName"
             value={formData.firstName}
             isEditing={isEditing}
             handleChange={handleChange}
           />
-          <InfoRow
-            label="Last Name"
-            name="lastName"
-            value={formData.lastName}
-            isEditing={isEditing}
-            handleChange={handleChange}
-          />
+
           <InfoRow
             label="Contact Number"
             name="contactNumber"
@@ -57,45 +117,32 @@ export default function AccountInfo() {
             isEditing={isEditing}
             handleChange={handleChange}
           />
-          <InfoRow
-            label="Date of Birth"
-            name="dateOfBirth"
-            value={formData.dateOfBirth}
-            isEditing={isEditing}
-            handleChange={handleChange}
-            type="date"
-          />
-          <InfoRow
-            label="Gender"
-            name="gender"
-            value={formData.gender}
-            isEditing={isEditing}
-            handleChange={handleChange}
-          />
-        </div>
-      </div>
 
-      {/* Account Security */}
-      <div className="p-6 shadow-[-1px_2px_8.5px_4px_rgba(0,0,0,0.06)] bg-white  rounded-md">
-        <h2 className="text-lg font-semibold mb-4">Account Security</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="text-sm text-gray-600">Email</label>
-            <p className="font-medium">{formData.email}</p>
-            <button className="text-blue-600 text-sm mt-1 hover:underline">
-              Change email address
-            </button>
-          </div>
+          <InfoRow
+            label="Email"
+            name="email"
+            value={formData.email}
+            isEditing={isEditing}
+            handleChange={handleChange}
+          />
+
           <div>
             <label className="text-sm text-gray-600">Password</label>
-            <p className="font-medium">********</p>
-            <button className="text-blue-600 text-sm mt-1 hover:underline">
-              Change password
-            </button>
+            {isEditing ? (
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="mt-1 w-full border rounded-md px-3 py-2 text-sm"
+              />
+            ) : (
+              <p className="font-medium">********</p>
+            )}
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 }
 
