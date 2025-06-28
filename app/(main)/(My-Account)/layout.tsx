@@ -35,12 +35,12 @@ const UserAdmin: React.FC<AdminLayoutProps> = ({ children }) => {
         >
           <Sidebar navItems={navItems} />
         </div>
-        <div className="lg:hidden ">
+        <div className="lg:hidden mb-6">
           <MobileSidebar navItems={navItems} />
         </div>
 
         <div className="flex-1 w-full h-full  flex flex-col  ">
-          <main className="">{children}</main>
+          <main className="h-full">{children}</main>
         </div>
       </div>
     </div>

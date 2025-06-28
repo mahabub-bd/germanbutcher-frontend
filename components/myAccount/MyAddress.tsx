@@ -18,7 +18,6 @@ const address = {
 export default function AccountInfo() {
   const [isOpen, setIsOpen] = useState(false);
   const { user, loading, error, refresh } = useUser();
-  console.log('check', user);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,7 +26,6 @@ export default function AccountInfo() {
   const fetchUser = async () => {
     try {
       const address = await fetchProtectedData(`addresses/user/1`);
-      console.log('==============', address);
     } catch (error) {
       console.log(error?.message);
     }
@@ -40,7 +38,7 @@ export default function AccountInfo() {
   return (
     <div className=" mx-auto mt-4 sm:mt-0  space-y-6">
       {/* Account Information */}
-      <div className="bg-white rounded-xl shadow p-4 lg:p-6">
+      <div className="bg-white rounded-xl shadow-[-1px_2px_8.5px_4px_rgba(0,0,0,0.06)] p-4 lg:p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold text-headerColor ">
             Account Information

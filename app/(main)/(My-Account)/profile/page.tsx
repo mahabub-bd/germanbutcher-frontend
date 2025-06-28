@@ -2,7 +2,7 @@ import AccountInfo from '@/components/myAccount/AccountInfo';
 
 function page() {
   return (
-    <div>
+    <div className="h-full">
       <AccountInfo />
     </div>
   );

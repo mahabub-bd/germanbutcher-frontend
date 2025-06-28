@@ -93,7 +93,7 @@ export default function AccountInfo() {
           ) : (
             <button
               type="button"
-              className="px-4 py-1 border rounded-md text-sm text-blue-600 hover:bg-blue-50"
+              className="px-4 py-1 border rounded-md cursor-pointer text-sm text-whiteColor bg-primaryColor"
               onClick={() => setIsEditing(true)}
             >
               Edit

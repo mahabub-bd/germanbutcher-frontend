@@ -17,7 +17,7 @@ function MobileSidebar({ navItems }: { navItems: NavItem[] }) {
   };
 
   return (
-    <div className="flex justify-between  sm:justify-normal gap-4 bg-white shadow-[0px_-0.3px_5.5px_0px_rgba(0,0,0,0.02)] p-2 sm:p-4 w-full">
+    <div className="flex justify-between rounded-sm  sm:justify-normal gap-4 bg-white shadow-[0px_-0.3px_5.5px_0px_rgba(0,0,0,0.02)] p-2 sm:p-4 w-full">
       {navItems.map((item, idx) => {
         const active = isActive(item.href);
         const baseTextColor = active
@@ -29,7 +29,7 @@ function MobileSidebar({ navItems }: { navItems: NavItem[] }) {
             key={idx}
             href={item.href}
             className={`
-              group flex items-center gap-1 text-center px-2 py-2  rounded-lg hover:bg-primaryColor/10
+              group flex items-center gap-1 text-center px-2 py-2 rounded-sm  lg:rounded-lg hover:bg-primaryColor/10
               transition-colors duration-200 ${active ? 'bg-primaryColor/10' : ''}
             `}
           >
