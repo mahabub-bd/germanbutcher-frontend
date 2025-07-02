@@ -257,8 +257,18 @@ const orderSchema = z.object({
     .min(1, "At least one item is required"),
   notes: z.string().optional(),
 });
-
+const addressSchema = z.object({
+  address: z.string().min(1, "Address is required").trim(),
+  area: z.string().min(1, "Area is required").trim(),
+  division: z.string().min(1, "Division is required"),
+  city: z.string().min(1, "City is required").trim(),
+  type: z.enum(["shipping", "billing"], {
+    required_error: "Please select an address type",
+  }),
+  isDefault: z.boolean().default(false),
+});
 export {
+  addressSchema,
   bannerSchema,
   brandSchema,
   couponSchema,

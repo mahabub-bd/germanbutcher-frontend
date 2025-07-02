@@ -7,7 +7,7 @@ import UserActions from "./user-actions";
 
 export function DesktopHeader() {
   return (
-    <div className="hidden bg-primaryColor  lg:block  py-4 ">
+    <div className="hidden bg-gradient-to-br from-primaryColor via-[#6d0000] to-primaryColor  lg:block  py-4  ">
       <div className="container mx-auto flex justify-between items-center  md:px-0 px-4 ">
         <div className="flex items-center">
           <Link href="/" className="flex items-center mr-6">
@@ -28,7 +28,6 @@ export function DesktopHeader() {
         </div>
         <SearchBar />
         <div className="flex items-center space-x-6">
-
           <UserActions compact={false} />
         </div>
       </div>

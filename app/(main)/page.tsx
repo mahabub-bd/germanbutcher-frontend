@@ -16,14 +16,14 @@ export default function Home() {
       </div>
 
       {/* Categories Section */}
-      <section className="md:pt-18 pt-5 bg-bgsecondColor">
+      <section className="md:pt-18 pt-5 ">
         <CategoryList endpoint="categories?isMainCategory=true">
           <HeadingPrimary title="All Category" />
         </CategoryList>
       </section>
 
       {/* Features Products Section */}
-      <section className="md:py-10 py-5 bg-gray-50">
+      <section className="md:py-10 py-5 product-bg">
         <div className="container mx-auto ">
           <ProductList
             endpoint="products?featured=true"
@@ -36,7 +36,7 @@ export default function Home() {
       </section>
 
       {/* Popular Products Section */}
-      <section className="md:py-10 py-5 bg-bgsecondColor">
+      <section className="md:py-10 py-5 ">
         <div className="container mx-auto ">
           <ProductList endpoint="products" isHomePage href="products/popular">
             <HeadingPrimary title="Popular Products" className="mb-10" />
@@ -45,7 +45,7 @@ export default function Home() {
       </section>
 
       {/* Brands Section */}
-      <section className="lg:py-10 py-5 bg-gray-50">
+      <section className="lg:py-10 py-5 product-bg">
         <div className="container mx-auto ">
           <BrandList endpoint="products">
             <HeadingPrimary title="Recommended for you" className="mb-10" />
@@ -65,7 +65,7 @@ export default function Home() {
         </div>
       </section>
       {/* Subscribe Section */}
-      <section className="md:py-10 lg:py-24 py-5 bg-whiteColor">
+      <section className="md:py-10 lg:py-24 py-5 product-bg">
         <Client>
           <HeadingPrimary title="Our Prominent Clients" className="mb-10" />
         </Client>

@@ -153,6 +153,15 @@
     animation: marquee var(--duration) linear infinite;
   }
 
+  .product-bg {
+    background: linear-gradient(
+      135deg,
+      rgba(138, 0, 0, 0.05) 0%,
+      /* Very light primaryColor */ rgba(199, 9, 9, 0.08) 50%,
+      /* Light secondaryColor */ rgba(138, 0, 0, 0.03) 100%
+        /* Even lighter primaryColor */
+    );
+  }
   .animate-marquee-reverse {
     animation: marquee-reverse var(--duration) linear infinite;
   }
@@ -161,7 +170,7 @@
     background: radial-gradient(circle, #ffeca7 50%, #deb149 100%) !important;
   }
   .border-golden-radial {
-    border: 1px radial-gradient(circle, #ffeca7 50%, #deb149 100%) !important;
+    border: 8px radial-gradient(circle, #ffeca7 50%, #deb149 100%) !important;
   }
 }
 /* Underline active class setup */
@@ -177,6 +186,12 @@
   height: 2px;
   border-radius: 1px;
   display: block;
+  background: linear-gradient(
+    to bottom right,
+    var(--primary-color),
+    #6d0000,
+    var(--primary-color)
+  );
 }
 
 /* Before - initial state */
@@ -203,7 +218,12 @@
 .underline-active::after {
   left: 12px;
   width: 12px;
-  background-color: #8a0000;
+  background: linear-gradient(
+    to bottom right,
+    var(--primary-color),
+    #6d0000,
+    var(--primary-color)
+  );
 }
 
 #closeIcon .mobile {

@@ -1,97 +1,96 @@
-import { getUser } from '@/actions/auth';
-import { SearchModal } from '@/components/homepage/search/search-modal';
-import { Toaster } from '@/components/ui/sonner';
+import { getUser } from "@/actions/auth";
+import { SearchModal } from "@/components/homepage/search/search-modal";
+import { Toaster } from "@/components/ui/sonner";
 
-import { CartProvider } from '@/providers/cart-provider';
-import { fetchProtectedData } from '@/utils/api-utils';
-import type { Cart } from '@/utils/types';
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import type React from 'react';
+import { CartProvider } from "@/providers/cart-provider";
+import { fetchProtectedData } from "@/utils/api-utils";
+import type { Cart } from "@/utils/types";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import type React from "react";
 
-import { UserProvider } from '@/contexts/user-context';
-import { SearchProvider } from '@/providers/search-provider';
-import './globals.css';
+import { SearchProvider } from "@/providers/search-provider";
+import "./globals.css";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: 'German Butcher - GB',
-    template: '%s | German Butcher',
+    default: "German Butcher - GB",
+    template: "%s | German Butcher",
   },
   description:
-    'In 1991, Ferenz Georgy started German Butcher in Bangladesh with a love for sausages noticing the unavailability of such products in our country. Since then, German Butcher is the pioneer of authentic German Sausages in Bangladesh and became the icon of premium quality gourmet sausages, cold cuts, ham, bacon, meatloaf, salami, pepperoni and so many meat based products',
+    "In 1991, Ferenz Georgy started German Butcher in Bangladesh with a love for sausages noticing the unavailability of such products in our country. Since then, German Butcher is the pioneer of authentic German Sausages in Bangladesh and became the icon of premium quality gourmet sausages, cold cuts, ham, bacon, meatloaf, salami, pepperoni and so many meat based products",
   keywords: [
-    'german butcher',
-    'German Butcher',
-    'GB',
-    'german-butcher',
-    'German-Butcher',
-    'germanbutcherbd',
-    'german butcher bd',
-    'beef',
-    'fish',
-    'steak',
-    'offer',
-    'meat',
-    'meatball',
-    'milk',
-    'dairy',
-    'gb product',
-    'chicken',
-    'sausages',
-    'cold cuts',
-    'ham',
-    'bacon',
-    'meatloaf',
-    'salami',
-    'pepperoni',
-    'authentic german sausages',
-    'premium quality',
-    'gourmet',
-    'bangladesh',
+    "german butcher",
+    "German Butcher",
+    "GB",
+    "german-butcher",
+    "German-Butcher",
+    "germanbutcherbd",
+    "german butcher bd",
+    "beef",
+    "fish",
+    "steak",
+    "offer",
+    "meat",
+    "meatball",
+    "milk",
+    "dairy",
+    "gb product",
+    "chicken",
+    "sausages",
+    "cold cuts",
+    "ham",
+    "bacon",
+    "meatloaf",
+    "salami",
+    "pepperoni",
+    "authentic german sausages",
+    "premium quality",
+    "gourmet",
+    "bangladesh",
   ],
-  authors: [{ name: 'German Butcher Team' }],
-  creator: 'German Butcher',
-  publisher: 'German Butcher',
+  authors: [{ name: "German Butcher Team" }],
+  creator: "German Butcher",
+  publisher: "German Butcher",
 
   openGraph: {
-    title: 'German Butcher - Premium German Sausages & Meat Products',
+    title: "German Butcher - Premium German Sausages & Meat Products",
     description:
-      'Pioneer of authentic German Sausages in Bangladesh since 1991. Premium quality gourmet sausages, cold cuts, ham, bacon, meatloaf, salami, pepperoni and meat based products.',
-    url: 'https://www.germanbutcherbd.com',
-    siteName: 'German Butcher',
+      "Pioneer of authentic German Sausages in Bangladesh since 1991. Premium quality gourmet sausages, cold cuts, ham, bacon, meatloaf, salami, pepperoni and meat based products.",
+    url: "https://www.germanbutcherbd.com",
+    siteName: "German Butcher",
     images: [
       {
-        url: 'https://www.germanbutcherbd.com/img/logo/logo-black.png',
+        url: "https://www.germanbutcherbd.com/img/logo/logo-black.png",
         width: 1200,
         height: 630,
-        alt: 'German Butcher - Premium German Sausages & Meat Products',
+        alt: "German Butcher - Premium German Sausages & Meat Products",
       },
     ],
-    locale: 'en_US',
-    type: 'website',
+    locale: "en_US",
+    type: "website",
   },
 
   twitter: {
-    card: 'summary_large_image',
-    title: 'German Butcher - Premium German Sausages & Meat Products',
+    card: "summary_large_image",
+    title: "German Butcher - Premium German Sausages & Meat Products",
     description:
-      'Pioneer of authentic German Sausages in Bangladesh since 1991. Premium quality gourmet sausages, cold cuts, ham, bacon and meat products.',
-    images: ['https://www.germanbutcherbd.com/img/logo/logo-black.png'],
-    creator: '@germanbutcherbd',
+      "Pioneer of authentic German Sausages in Bangladesh since 1991. Premium quality gourmet sausages, cold cuts, ham, bacon and meat products.",
+    images: ["https://www.germanbutcherbd.com/img/logo/logo-black.png"],
+    creator: "@germanbutcherbd",
   },
 
   icons: {
-    icon: '/img/logo/logo-black.png',
-    shortcut: '/img/logo/logo-black.png',
-    apple: '/img/logo/logo-black.png',
+    icon: "/img/logo/logo-black.png",
+    shortcut: "/img/logo/logo-black.png",
+    apple: "/img/logo/logo-black.png",
   },
 
-  metadataBase: new URL('https://www.germanbutcherbd.com'),
+  metadataBase: new URL("https://www.germanbutcherbd.com"),
   alternates: {
-    canonical: '/',
+    canonical: "/",
   },
   robots: {
     index: true,
@@ -99,15 +98,15 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
   verification: {
-    google: 'your-google-verification-code',
+    google: "your-google-verification-code",
   },
-  category: 'food',
+  category: "food",
 };
 
 export default async function RootLayout({
@@ -116,20 +115,19 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user = await getUser();
-  const cart = user ? await fetchProtectedData<Cart>('cart') : null;
+  const cart = user ? await fetchProtectedData<Cart>("cart") : null;
 
   return (
     <html lang="en">
       <body className={inter.className}>
         <Toaster richColors />
-        <UserProvider>
-          <CartProvider serverCart={cart ?? undefined} isLoggedIn={!!user}>
-            <SearchProvider>
-              {children}
-              <SearchModal />
-            </SearchProvider>
-          </CartProvider>
-        </UserProvider>
+
+        <CartProvider serverCart={cart ?? undefined} isLoggedIn={!!user}>
+          <SearchProvider>
+            {children}
+            <SearchModal />
+          </SearchProvider>
+        </CartProvider>
       </body>
     </html>
   );
