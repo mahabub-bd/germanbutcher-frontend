@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface NavLinksProps {
   isMobile?: boolean;
@@ -13,10 +13,11 @@ export function NavLinks({ isMobile, onClick }: NavLinksProps) {
   const pathname = usePathname();
 
   const links = [
-    { href: '/', label: 'Home' },
-    { href: '/products', label: 'Products' },
-    { href: '/recipes', label: 'Recipe' },
-    { href: '/where-to-buy', label: 'Where to Buy' },
+    { href: "/", label: "Home" },
+    { href: "/products", label: "Products" },
+    { href: "/recipes", label: "Recipe" },
+    { href: "/where-to-buy", label: "Where to Buy" },
+    { href: "/our-brands", label: "Our Brands" },
   ];
 
   return (
@@ -30,9 +31,14 @@ export function NavLinks({ isMobile, onClick }: NavLinksProps) {
             href={link.href}
             onClick={onClick}
             className={cn(
-              'relative block px-1 text-base font-medium transition-colors underline-active',
-              isMobile ? 'text-white ' : 'text-white hover:text-white',
-              isActive && 'text-white active'
+              "block px-4 py-3 rounded-xl text-base font-medium transition-colors",
+              isMobile
+                ? cn(
+                    "text-gray-700 hover:text-gray-900 hover:bg-gray-50",
+                    isActive &&
+                      "text-primaryColor bg-primaryColor/10 font-semibold"
+                  )
+                : "text-white hover:text-white"
             )}
           >
             {link.label}

@@ -37,6 +37,7 @@
     "date-fns": "^4.1.0",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
+    "framer-motion": "^12.23.0",
     "input-otp": "^1.4.2",
     "jodit-react": "^5.2.19",
     "lucide-react": "^0.482.0",
@@ -58,14 +59,12 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
- 
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.2.2",
-  
     "prettier": "^3.5.3",
     "tailwindcss": "^4",
     "typescript": "^5"

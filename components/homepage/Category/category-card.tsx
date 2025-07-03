@@ -8,16 +8,16 @@ export async function CategoryCard({ category }: { category: Category }) {
   return (
     <Link
       href={`/categories/${category.slug || category.id}`}
-      className="group block rounded-lg overflow-hidden transition-all duration-300"
+      className="group block rounded-lg overflow-hidden"
     >
       <div className="flex w-full items-center justify-center">
-        <div className="relative md:w-[150px] md:h-[150px] w-[100px] h-[100px] rounded-full p-2 flex items-center justify-center  border-2 border-dashed border-primaryColor">
+        <div className="relative md:w-[150px] md:h-[150px] w-[100px] h-[100px] rounded-full p-2 flex items-center justify-center border-2 border-dashed border-primaryColor group-hover:border-primary transition-colors">
           <Image
             src={category?.attachment?.url || "/category-placeholder.svg"}
             alt={`${category?.name} category icon`}
             width={600}
             height={600}
-            className="object-cover w-full  h-full rounded-full transition-transform duration-300 group-hover:scale-105"
+            className="object-cover w-full h-full rounded-full transition-transform duration-300 group-hover:scale-105"
             priority
             loading="eager"
             placeholder="blur"
@@ -27,7 +27,7 @@ export async function CategoryCard({ category }: { category: Category }) {
       </div>
 
       <div className="p-2 text-center">
-        <h3 className="text-md  sm:text-lg font-semibold md:text-xl text-primaryColor group-hover:text-primary transition-colors line-clamp-2 h-[50px] flex items-center justify-center">
+        <h3 className="text-md sm:text-lg font-semibold md:text-xl text-primaryColor group-hover:text-primary transition-colors line-clamp-2 h-[50px] flex items-center justify-center">
           {category?.name}
         </h3>
       </div>
