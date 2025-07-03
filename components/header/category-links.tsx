@@ -40,7 +40,7 @@ function CategoryError({ onRetry }: { onRetry: () => void }) {
         Oops! Something went wrong
       </h3>
       <p className="text-gray-500 text-sm mb-6 text-center">
-        We couldn't load the categories right now
+        We couldn&apos;t load the categories right now
       </p>
       <button
         onClick={onRetry}
@@ -63,7 +63,7 @@ function EmptyCategories() {
         No categories yet
       </h3>
       <p className="text-gray-500 text-sm">
-        Categories will appear here when they're available
+        Categories will appear here when they&apos;re available
       </p>
     </div>
   );
