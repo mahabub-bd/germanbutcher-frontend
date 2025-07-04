@@ -68,7 +68,7 @@ export interface Category {
   createdAt: string;
   updatedAt: string;
   products: Product[];
-  recipes: Recipe[]
+  recipes: Recipe[];
 }
 
 export enum DiscountType {
@@ -266,10 +266,23 @@ export interface Client {
   name: string;
   order: number;
   isActive: boolean;
-  Image?: Attachment
- 
+  Image?: Attachment;
+
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface SalesPartner {
+  Id: number;
+  name: string;
+  description: string;
+  order: number;
+  isActive: boolean;
+  Image?: Attachment;
+
+  createdAt?: string;
+  updatedAt?: string;
+  website: string;
 }
 export interface PurchaseItem {
   id: number;

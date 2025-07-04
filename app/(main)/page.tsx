@@ -4,6 +4,7 @@ import BrandList from "@/components/homepage/brands/brand-list";
 import CategoryList from "@/components/homepage/Category/category-list";
 
 import Client from "@/components/homepage/clients/Clients";
+import { SalesPartnersCompact } from "@/components/homepage/sales-partner/sales-partners";
 import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
 import { TestimonialSection } from "@/components/homepage/testimonial/testimonial-section";
 import ProductList from "@/components/products/product-list";
@@ -63,6 +64,11 @@ export default function Home() {
             <HeadingPrimary title="SPECIAL OFFERS" className="mb-10" />
           </ProductList>
         </div>
+      </section>
+      <section className="md:py-10 lg:py-24 py-5 ">
+        <SalesPartnersCompact >
+          <HeadingPrimary title="Our Sales Partner" className="mb-10" />
+        </SalesPartnersCompact>
       </section>
       {/* Subscribe Section */}
       <section className="md:py-10 lg:py-24 py-5 product-bg">
