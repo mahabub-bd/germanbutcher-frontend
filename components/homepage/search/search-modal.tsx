@@ -23,14 +23,12 @@ export function SearchModal() {
 
   const pathname = usePathname();
 
-  // Don't render modal on admin routes or other non-global search routes
   const shouldShowModal = () => {
     const adminRoutes = ["/admin"];
     const isAdminRoute = adminRoutes.some((route) =>
       pathname.startsWith(route)
     );
 
-    // Add other routes where modal shouldn't appear
     const excludedRoutes = ["/login", "/register", "/checkout"];
     const isExcludedRoute = excludedRoutes.some((route) =>
       pathname.startsWith(route)
