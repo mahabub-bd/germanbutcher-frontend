@@ -1,5 +1,6 @@
 import { OnlinePayment } from "@/public/images";
 import Image from "next/image";
+import Link from "next/link";
 
 const Copyright = () => {
   const currentYear = new Date().getFullYear();
@@ -49,9 +50,12 @@ const Copyright = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-700 py-4">
           <div className="flex flex-col md:flex-row items-center justify-between text-center md:text-left">
-            <p className="text-gray-400 text-xs md:text-sm">
-              Designed & Developed with ❤️ by German Butcher Team
-            </p>
+            <Link
+              href="https://www.techqul.com/"
+              className="text-gray-400 text-xs md:text-sm"
+            >
+              Designed & Developed with ❤️ by Techqul
+            </Link>
             <div className="flex items-center space-x-4 mt-2 md:mt-0">
               <span className="text-gray-500 text-xs">Follow us:</span>
               <div className="flex space-x-2">

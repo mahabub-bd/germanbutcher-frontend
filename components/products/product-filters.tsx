@@ -714,12 +714,12 @@ export function ProductFilters({
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
             <Button
-              className="relative group shadow-xl border-0 bg-gradient-to-r from-primaryColor to-primaryColor/90 hover:from-primaryColor/90 hover:to-secondaryColor text-white font-medium px-4 py-2 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl"
+              className="relative group shadow-xl border-0 bg-gradient-to-r from-primaryColor to-primaryColor/90 hover:from-primaryColor/90 hover:to-secondaryColor text-white font-medium px-4  rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl"
               size="lg"
             >
               <div className="flex items-center gap-2">
                 <Filter className="h-4 w-4 transition-transform group-hover:rotate-12" />
-                <span className="text-sm font-semibold">Filters</span>
+                <span className="text-xs font-semibold">Filters</span>
               </div>
               {hasActiveFilters && (
                 <Badge
