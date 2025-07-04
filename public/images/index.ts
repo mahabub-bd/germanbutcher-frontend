@@ -6,6 +6,7 @@ import BgFooter from "@/public/images/bg_footer.png";
 import FooterImageOne from "@/public/images/logo/footer1.png";
 import FooterImageTwo from "@/public/images/logo/footer2.png";
 import FooterImageThree from "@/public/images/logo/footer3.png";
+import OnlinePayment from "@/public/images/sslcommerz-banner.png";
 
 export {
   AvatarImageIcon,
@@ -14,4 +15,5 @@ export {
   FooterImageThree,
   FooterImageTwo,
   GermanbutcherLogo,
+  OnlinePayment,
 };

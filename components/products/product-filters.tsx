@@ -449,6 +449,87 @@ export function ProductFilters({
           className="space-y-4"
         >
           <AccordionItem
+            value="categories"
+            className="border border-red-100 dark:border-red-700 rounded-lg px-4 py-2 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/20 dark:to-rose-950/20"
+          >
+            <AccordionTrigger className="text-sm font-medium py-3 hover:no-underline text-red-800 dark:text-red-200">
+              <div className="flex items-center gap-2">
+                <Grid3X3 className="h-4 w-4" />
+                Categories
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="space-y-3 pt-2">
+                {organizedCategories.map((category) => (
+                  <div key={category.id} className="space-y-2">
+                    {/* Main Category */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`category-${category.id}`}
+                          checked={category.id.toString() === currentCategory}
+                          onCheckedChange={() =>
+                            handleCategoryChange(category.id)
+                          }
+                        />
+                        <Label
+                          htmlFor={`category-${category.id}`}
+                          className="text-sm font-medium cursor-pointer"
+                        >
+                          {category.name}
+                        </Label>
+                      </div>
+                      {category.children && category.children.length > 0 && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => toggleCategoryOpen(category.id)}
+                          className="h-6 w-6 p-0"
+                        >
+                          <ChevronRight
+                            className={`h-4 w-4 transition-transform ${
+                              openCategories.has(category.id) ? "rotate-90" : ""
+                            }`}
+                          />
+                        </Button>
+                      )}
+                    </div>
+
+                    {/* Subcategories */}
+                    {category.children && category.children.length > 0 && (
+                      <Collapsible open={openCategories.has(category.id)}>
+                        <CollapsibleContent className="ml-6 space-y-2 border-l-2 border-red-100 dark:border-red-800 pl-4">
+                          {category.children.map((subCategory) => (
+                            <div
+                              key={subCategory.id}
+                              className="flex items-center space-x-2"
+                            >
+                              <Checkbox
+                                id={`category-${subCategory.id}`}
+                                checked={
+                                  subCategory.id.toString() === currentCategory
+                                }
+                                onCheckedChange={() =>
+                                  handleCategoryChange(subCategory.id)
+                                }
+                              />
+                              <Label
+                                htmlFor={`category-${subCategory.id}`}
+                                className="text-sm font-normal cursor-pointer text-muted-foreground"
+                              >
+                                {subCategory.name}
+                              </Label>
+                            </div>
+                          ))}
+                        </CollapsibleContent>
+                      </Collapsible>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem
             value="price"
             className="border border-red-100 dark:border-red-700 rounded-lg px-4 py-2 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/30 dark:to-rose-950/30"
           >
@@ -572,89 +653,6 @@ export function ProductFilters({
               </Tabs>
             </AccordionContent>
           </AccordionItem>
-
-          <AccordionItem
-            value="categories"
-            className="border border-red-100 dark:border-red-700 rounded-lg px-4 py-2 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/20 dark:to-rose-950/20"
-          >
-            <AccordionTrigger className="text-sm font-medium py-3 hover:no-underline text-red-800 dark:text-red-200">
-              <div className="flex items-center gap-2">
-                <Grid3X3 className="h-4 w-4" />
-                Categories
-              </div>
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-3 pt-2">
-                {organizedCategories.map((category) => (
-                  <div key={category.id} className="space-y-2">
-                    {/* Main Category */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id={`category-${category.id}`}
-                          checked={category.id.toString() === currentCategory}
-                          onCheckedChange={() =>
-                            handleCategoryChange(category.id)
-                          }
-                        />
-                        <Label
-                          htmlFor={`category-${category.id}`}
-                          className="text-sm font-medium cursor-pointer"
-                        >
-                          {category.name}
-                        </Label>
-                      </div>
-                      {category.children && category.children.length > 0 && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => toggleCategoryOpen(category.id)}
-                          className="h-6 w-6 p-0"
-                        >
-                          <ChevronRight
-                            className={`h-4 w-4 transition-transform ${
-                              openCategories.has(category.id) ? "rotate-90" : ""
-                            }`}
-                          />
-                        </Button>
-                      )}
-                    </div>
-
-                    {/* Subcategories */}
-                    {category.children && category.children.length > 0 && (
-                      <Collapsible open={openCategories.has(category.id)}>
-                        <CollapsibleContent className="ml-6 space-y-2 border-l-2 border-red-100 dark:border-red-800 pl-4">
-                          {category.children.map((subCategory) => (
-                            <div
-                              key={subCategory.id}
-                              className="flex items-center space-x-2"
-                            >
-                              <Checkbox
-                                id={`category-${subCategory.id}`}
-                                checked={
-                                  subCategory.id.toString() === currentCategory
-                                }
-                                onCheckedChange={() =>
-                                  handleCategoryChange(subCategory.id)
-                                }
-                              />
-                              <Label
-                                htmlFor={`category-${subCategory.id}`}
-                                className="text-sm font-normal cursor-pointer text-muted-foreground"
-                              >
-                                {subCategory.name}
-                              </Label>
-                            </div>
-                          ))}
-                        </CollapsibleContent>
-                      </Collapsible>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-
           <AccordionItem
             value="brands"
             className="border border-rose-100 dark:border-rose-700 rounded-lg px-4 py-2 bg-gradient-to-br from-rose-50 to-red-50 dark:from-rose-950/20 dark:to-red-950/20"

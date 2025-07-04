@@ -128,7 +128,7 @@ export function CarouselBanner({
               <div className="absolute top-0 left-0 p-3 sm:p-4 lg:p-6 xl:p-8 w-full h-full text-white">
                 <div className="flex container items-center justify-center sm:justify-start h-full xl:px-24">
                   <div className="max-w-3xl text-center sm:text-left">
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-1 sm:mb-2 animate-fadeIn text-white leading-tight">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-1 sm:mb-2 animate-fadeIn text-secondColor leading-tight">
                       {slide.title}
                     </h2>
                     <p className="animate-fadeIn text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-medium animation-delay-200 mb-3 sm:mb-4 lg:mb-6">
