@@ -1,12 +1,12 @@
 "use client";
 
-import type React from "react";
-
 import { LoadingIndicator } from "@/components/admin/loading-indicator";
 import { useGlobalSearch } from "@/hooks/use-global-search";
 import type { Product } from "@/utils/types";
 import { ArrowRight, Search, X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type React from "react";
 import { EmptySearchState } from "./empty-search-state";
 import { ProductSearchItem } from "./product-search-item";
 
@@ -21,7 +21,26 @@ export function SearchModal() {
     clearSearch,
   } = useGlobalSearch();
 
-  if (!isOpen) return null;
+  const pathname = usePathname();
+
+  // Don't render modal on admin routes or other non-global search routes
+  const shouldShowModal = () => {
+    const adminRoutes = ["/admin"];
+    const isAdminRoute = adminRoutes.some((route) =>
+      pathname.startsWith(route)
+    );
+
+    // Add other routes where modal shouldn't appear
+    const excludedRoutes = ["/login", "/register", "/checkout"];
+    const isExcludedRoute = excludedRoutes.some((route) =>
+      pathname.startsWith(route)
+    );
+
+    return !isAdminRoute && !isExcludedRoute;
+  };
+
+  // Don't render if modal shouldn't show on this route
+  if (!shouldShowModal() || !isOpen) return null;
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -38,10 +57,10 @@ export function SearchModal() {
 
   return (
     <div
-      className="fixed inset-0  z-50 flex items-start justify-center md:pt-30 pt-24 px-4"
+      className="fixed inset-0 z-100  flex items-start justify-center md:pt-30 pt-24 px-4"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white rounded-xl shadow-2xl xl:w-120 lg:w-80  w-96 max-h-[80vh] overflow-hidden animate-in-from-top-4 duration-200">
+      <div className="bg-white rounded-xl shadow-2xl xl:w-120 lg:w-80 w-96 max-h-[80vh] overflow-hidden animate-in fade-in-0 zoom-in-95 duration-200">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50/50">
           <div className="flex items-center space-x-3">
@@ -120,9 +139,9 @@ export function SearchModal() {
                   <Link
                     href={`/products/search/${encodeURIComponent(searchQuery)}`}
                     onClick={handleClose}
-                    className="flex items-center justify-center w-full py-2 px-4 bg-gradient-to-r from-primaryColor to-secondaryColor hover:from-secondaryColor  hover:to-primaryColor text-white font-medium rounded-lg transition-all duration-200 hover:shadow-lg group"
+                    className="flex items-center justify-center w-full py-2 px-4 bg-gradient-to-r from-primaryColor to-secondaryColor hover:from-secondaryColor hover:to-primaryColor text-white font-medium rounded-lg transition-all duration-200 hover:shadow-lg group"
                   >
-                    <span>View All {products.length} </span>
+                    <span>View All {products.length} Results</span>
                     <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </div>
