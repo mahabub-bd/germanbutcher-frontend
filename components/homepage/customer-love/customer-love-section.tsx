@@ -15,18 +15,6 @@ type CustomerLoveSectionProps = {
   iconClassName?: string;
 };
 
-// Background color mapping
-const bgColorMap = {
-  green: "bg-green-50",
-  blue: "bg-blue-50",
-  orange: "bg-orange-50",
-  purple: "bg-purple-50",
-  red: "bg-red-50",
-  yellow: "bg-yellow-50",
-  indigo: "bg-indigo-50",
-  pink: "bg-pink-50",
-};
-
 export default function CustomerLoveSection({
   children,
   title,
