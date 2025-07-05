@@ -4,6 +4,7 @@ import BrandList from "@/components/homepage/brands/brand-list";
 import CategoryList from "@/components/homepage/Category/category-list";
 
 import Client from "@/components/homepage/clients/Clients";
+import CustomerLoveSection from "@/components/homepage/customer-love/customer-love-section";
 import { SalesPartnersCompact } from "@/components/homepage/sales-partner/sales-partners";
 import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
 import { TestimonialSection } from "@/components/homepage/testimonial/testimonial-section";
@@ -66,7 +67,7 @@ export default function Home() {
         </div>
       </section>
       <section className="md:py-10 lg:py-24 py-5 ">
-        <SalesPartnersCompact >
+        <SalesPartnersCompact>
           <HeadingPrimary title="Our Sales Partner" className="mb-10" />
         </SalesPartnersCompact>
       </section>
@@ -77,6 +78,11 @@ export default function Home() {
         </Client>
       </section>
 
+      <section className="md:py-10 lg:py-24 py-5 ">
+        <CustomerLoveSection>
+          <HeadingPrimary title="Why Our Customer Love Us" className="mb-10" />
+        </CustomerLoveSection>
+      </section>
       <NewsletterSection />
 
       <TestimonialSection />
