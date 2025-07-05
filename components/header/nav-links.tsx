@@ -31,14 +31,16 @@ export function NavLinks({ isMobile, onClick }: NavLinksProps) {
             href={link.href}
             onClick={onClick}
             className={cn(
-              "block  rounded-xl text-base font-medium transition-colors",
+              "block rounded-xl text-base font-medium transition-colors",
               isMobile
                 ? cn(
                     "text-gray-700 hover:text-gray-900 hover:bg-gray-50 px-4 py-3",
-                    isActive &&
-                      "text-primaryColor bg-primaryColor/10 font-semibold"
+                    isActive && "text-primaryColor bg-primaryColor/10"
                   )
-                : "text-white hover:text-white"
+                : cn(
+                    "text-white hover:text-white underline-active",
+                    isActive && "active"
+                  )
             )}
           >
             {link.label}
