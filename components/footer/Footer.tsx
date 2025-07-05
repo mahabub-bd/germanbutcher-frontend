@@ -19,12 +19,12 @@ const SocialLinks = () => {
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className={`p-2.5 sm:p-3 ${bg} rounded-full cursor-pointer 
+          className={`p-2 sm:p-3 ${bg} rounded-full cursor-pointer 
                      transition-all duration-300 hover:scale-110 shadow-lg
                      focus:outline-none focus:ring-2 focus:ring-white/50`}
           aria-label={`Follow us on ${name}`}
         >
-          <Icon className="w-4 h-4 sm:w-4 sm:h-5 text-white" />
+          <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
         </Link>
       ))}
     </div>

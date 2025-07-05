@@ -140,7 +140,7 @@ export function SalesPartnerForm({
         <div className="p-6 space-y-6 w-full mx-auto">
           {/* Basic Information Section */}
           <Section title="Basic Information">
-            <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-6">
+            <div className="w-full grid md:grid-cols-3 grid-cols-1 gap-6">
               <FormField
                 control={form.control}
                 name="name"

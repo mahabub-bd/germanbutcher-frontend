@@ -52,7 +52,7 @@ export async function SalesPartnersCompact({
               key={partner.Id}
               className="group flex items-center justify-center 
                          w-24 h-16 sm:w-32 sm:h-20 md:w-40 md:h-24 lg:w-48 lg:h-28
-                         bg-white rounded-lg shadow-sm border border-[#deb149]/50
+                         bg-white rounded-lg shadow-sm border border-primaryColor/20
                          hover:shadow-md hover:border-gray-200 
                          transition-all duration-300 hover:scale-105 p-3 sm:p-4"
             >
