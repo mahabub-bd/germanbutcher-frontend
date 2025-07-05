@@ -36,7 +36,7 @@ export const defaultFeaturesData: FeatureData[] = [
     iconBgColor: "orange",
   },
   {
-    iconSrc: "/images/return-icon.png",
+    iconSrc: GermanQuality.src,
     iconAlt: "Easy Returns",
     title: "Easy Returns",
     description:

@@ -52,7 +52,7 @@ export function HeadingPrimary({
     <div className={cn(alignClass, "space-y-2", className)}>
       <h2
         className={cn(
-          "font-semibold text-primaryColor capitalize tracking-tight leading-tight",
+          "text-transparent bg-clip-text bg-gradient-to-r from-primaryColor via-secondaryColor to-primaryColor",
           sizeClasses.title,
           titleClassName
         )}

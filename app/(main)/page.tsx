@@ -66,13 +66,13 @@ export default function Home() {
           </ProductList>
         </div>
       </section>
-      <section className="md:py-10 lg:py-24 py-5 ">
+      <section className="md:py-10 lg:py-24 py-5 product-bg ">
         <SalesPartnersCompact>
           <HeadingPrimary title="Our Sales Partner" className="mb-10" />
         </SalesPartnersCompact>
       </section>
       {/* Subscribe Section */}
-      <section className="md:py-10 lg:py-24 py-5 product-bg">
+      <section className="md:py-10 lg:py-24 py-5 ">
         <Client>
           <HeadingPrimary title="Our Prominent Clients" className="mb-10" />
         </Client>
