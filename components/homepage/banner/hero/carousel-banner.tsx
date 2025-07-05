@@ -7,7 +7,7 @@ import type { Banner } from "@/utils/types";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface AnimatedCarouselProps {
   autoPlayInterval?: number;
@@ -18,7 +18,7 @@ interface AnimatedCarouselProps {
 }
 
 // Skeleton component for loading state
-const CarouselSkeleton = memo(() => (
+const CarouselSkeleton = () => (
   <div className="relative overflow-hidden w-full h-[400px] sm:h-[700px] bg-gray-100 animate-pulse">
     <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%] animate-shimmer" />
     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
@@ -27,128 +27,118 @@ const CarouselSkeleton = memo(() => (
       ))}
     </div>
   </div>
-));
+);
 
-CarouselSkeleton.displayName = "CarouselSkeleton";
+const CarouselSlide = ({
+  slide,
+  index,
+  currentIndex,
+  priority,
+}: {
+  slide: Banner;
+  index: number;
+  currentIndex: number;
+  priority?: boolean;
+}) => {
+  const isActive = index === currentIndex;
+  const shouldLoad = index <= currentIndex + 1 && index >= currentIndex - 1;
 
-const CarouselSlide = memo(
-  ({
-    slide,
-    index,
-    currentIndex,
-    priority,
-  }: {
-    slide: Banner;
-    index: number;
-    currentIndex: number;
-    priority?: boolean;
-  }) => {
-    const isActive = index === currentIndex;
-    const shouldLoad = index <= currentIndex + 1 && index >= currentIndex - 1; // Load current, next, and previous
-
-    return (
-      <div
-        className={cn(
-          "absolute inset-0 w-full h-full transition-opacity duration-500 ease-in-out",
-          isActive ? "opacity-100 z-10" : "opacity-0 z-0"
-        )}
-        style={{
-          transform: `translateX(${(index - currentIndex) * 100}%)`,
-        }}
-      >
-        {shouldLoad && (
-          <>
-            <Image
-              src={
-                slide?.image?.url ||
-                "/placeholder.svg?height=600&width=1200&query=banner"
-              }
-              alt={slide.title}
-              fill
-              className="object-cover"
-              priority={priority && index === 0}
-              loading={priority && index === 0 ? "eager" : "lazy"}
-              sizes="100vw"
-              quality={index === 0 ? 90 : 75} // Higher quality for first slide
-              placeholder="blur"
-              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R+Kcp"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            <div className="absolute top-0 left-0 p-3 sm:p-4 lg:p-6 xl:p-8 w-full h-full text-white">
-              <div className="flex container items-center justify-center sm:justify-start h-full xl:px-24">
-                <div className="max-w-3xl text-center sm:text-left">
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-1 sm:mb-2 text-white leading-tight">
-                    {slide.title}
-                  </h2>
-                  <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-medium mb-3 sm:mb-4 lg:mb-6 text-gray-100">
-                    {slide.description}
-                  </p>
-                  {slide.targetUrl && (
-                    <Button
-                      asChild
-                      variant="secondary"
-                      className="mt-2 sm:mt-4 lg:mt-6 py-1.5 sm:py-2 px-3 sm:px-4 lg:px-6 rounded-lg text-sm sm:text-base lg:text-lg font-semibold bg-primaryColor hover:bg-secondaryColor text-white transition-colors duration-200"
+  return (
+    <div
+      className={cn(
+        "absolute inset-0 w-full h-full transition-opacity duration-500 ease-in-out",
+        isActive ? "opacity-100 z-10" : "opacity-0 z-0"
+      )}
+      style={{
+        transform: `translateX(${(index - currentIndex) * 100}%)`,
+      }}
+    >
+      {shouldLoad && (
+        <>
+          <Image
+            src={
+              slide?.image?.url ||
+              "/placeholder.svg?height=600&width=1200&query=banner"
+            }
+            alt={slide.title}
+            fill
+            className="object-cover"
+            priority={priority && index === 0}
+            loading={priority && index === 0 ? "eager" : "lazy"}
+            sizes="100vw"
+            quality={index === 0 ? 90 : 75}
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R+Kcp"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          <div className="absolute top-0 left-0 p-3 sm:p-4 lg:p-6 xl:p-8 w-full h-full text-white">
+            <div className="flex container items-center justify-center sm:justify-start h-full xl:px-24">
+              <div className="max-w-3xl text-center sm:text-left">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-1 sm:mb-2 text-white leading-tight">
+                  {slide.title}
+                </h2>
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-medium mb-3 sm:mb-4 lg:mb-6 text-gray-100">
+                  {slide.description}
+                </p>
+                {slide.targetUrl && (
+                  <Button
+                    asChild
+                    variant="secondary"
+                    className="mt-2 sm:mt-4 lg:mt-6 py-1.5 sm:py-2 px-3 sm:px-4 lg:px-6 rounded-lg text-sm sm:text-base lg:text-lg font-semibold bg-primaryColor hover:bg-secondaryColor text-white transition-colors duration-200"
+                  >
+                    <Link
+                      href={slide.targetUrl}
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 sm:gap-2"
                     >
-                      <Link
-                        href={slide.targetUrl}
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1 sm:gap-2"
-                      >
-                        Explore Products
-                        <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
-                      </Link>
-                    </Button>
-                  )}
-                </div>
+                      Explore Products
+                      <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                    </Link>
+                  </Button>
+                )}
               </div>
             </div>
-          </>
-        )}
-      </div>
-    );
-  }
-);
-
-CarouselSlide.displayName = "CarouselSlide";
-
-// Memoized indicators component
-const CarouselIndicators = memo(
-  ({
-    banners,
-    currentIndex,
-    onSlideClick,
-  }: {
-    banners: Banner[];
-    currentIndex: number;
-    onSlideClick: (index: number) => void;
-  }) => (
-    <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
-      {banners.map((_, index) => (
-        <button
-          key={index}
-          className={cn(
-            "w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/50",
-            index === currentIndex
-              ? "bg-primaryColor w-6 sm:w-8"
-              : "bg-white/50 hover:bg-white/80"
-          )}
-          onClick={() => onSlideClick(index)}
-          aria-label={`Go to slide ${index + 1}`}
-        />
-      ))}
+          </div>
+        </>
+      )}
     </div>
-  )
+  );
+};
+
+// Indicators component
+const CarouselIndicators = ({
+  banners,
+  currentIndex,
+  onSlideClick,
+}: {
+  banners: Banner[];
+  currentIndex: number;
+  onSlideClick: (index: number) => void;
+}) => (
+  <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
+    {banners.map((_, index) => (
+      <button
+        key={index}
+        className={cn(
+          "w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/50",
+          index === currentIndex
+            ? "bg-primaryColor w-6 sm:w-8"
+            : "bg-white/50 hover:bg-white/80"
+        )}
+        onClick={() => onSlideClick(index)}
+        aria-label={`Go to slide ${index + 1}`}
+      />
+    ))}
+  </div>
 );
 
-CarouselIndicators.displayName = "CarouselIndicators";
-
-export const CarouselBanner = memo(function CarouselBanner({
+export const CarouselBanner = ({
   autoPlayInterval = 3000,
   showControls = true,
   showIndicators = true,
   activeOnly = true,
   priority = true,
-}: AnimatedCarouselProps) {
+}: AnimatedCarouselProps) => {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -248,42 +238,6 @@ export const CarouselBanner = memo(function CarouselBanner({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [goToNextSlide, goToPrevSlide]);
 
-  const controlButtons = useMemo(
-    () =>
-      showControls &&
-      banners.length > 0 && (
-        <>
-          <Button
-            variant="outline"
-            size="icon"
-            className={cn(
-              "absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg w-8 h-8 sm:w-10 sm:h-10 hidden sm:flex transition-all duration-200",
-              "bg-black/40 hover:bg-black/60 text-white focus:outline-none focus:ring-2 focus:ring-white/50"
-            )}
-            onClick={goToPrevSlide}
-            disabled={isAnimating}
-            aria-label="Previous slide"
-          >
-            <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className={cn(
-              "absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg w-8 h-8 sm:w-10 sm:h-10 hidden sm:flex transition-all duration-200",
-              "bg-black/40 hover:bg-black/60 text-white focus:outline-none focus:ring-2 focus:ring-white/50"
-            )}
-            onClick={goToNextSlide}
-            disabled={isAnimating}
-            aria-label="Next slide"
-          >
-            <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
-          </Button>
-        </>
-      ),
-    [showControls, banners.length, goToPrevSlide, goToNextSlide, isAnimating]
-  );
-
   // Loading state
   if (isLoading) {
     return <CarouselSkeleton />;
@@ -327,7 +281,7 @@ export const CarouselBanner = memo(function CarouselBanner({
         />
       )}
 
-      {/* Carousel container with better performance */}
+      {/* Carousel container */}
       <div className="relative w-full h-full overflow-hidden">
         {banners.map((slide, index) => (
           <CarouselSlide
@@ -341,7 +295,36 @@ export const CarouselBanner = memo(function CarouselBanner({
       </div>
 
       {/* Controls */}
-      {controlButtons}
+      {showControls && banners.length > 0 && (
+        <>
+          <Button
+            variant="outline"
+            size="icon"
+            className={cn(
+              "absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg w-8 h-8 sm:w-10 sm:h-10 hidden sm:flex transition-all duration-200",
+              "bg-black/40 hover:bg-black/60 text-white focus:outline-none focus:ring-2 focus:ring-white/50"
+            )}
+            onClick={goToPrevSlide}
+            disabled={isAnimating}
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            className={cn(
+              "absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg w-8 h-8 sm:w-10 sm:h-10 hidden sm:flex transition-all duration-200",
+              "bg-black/40 hover:bg-black/60 text-white focus:outline-none focus:ring-2 focus:ring-white/50"
+            )}
+            onClick={goToNextSlide}
+            disabled={isAnimating}
+            aria-label="Next slide"
+          >
+            <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
+          </Button>
+        </>
+      )}
 
       {/* Indicators */}
       {showIndicators && banners.length > 1 && (
@@ -359,6 +342,6 @@ export const CarouselBanner = memo(function CarouselBanner({
       </div>
     </section>
   );
-});
+};
 
 export default CarouselBanner;

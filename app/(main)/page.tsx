@@ -1,5 +1,5 @@
 import { HeadingPrimary } from "@/components/common/heading-primary";
-import { CarouselBanner } from "@/components/homepage/banner/hero/carousel-banner";
+import CarouselBanner from "@/components/homepage/banner/hero/carousel-banner";
 import BrandList from "@/components/homepage/brands/brand-list";
 import CategoryList from "@/components/homepage/Category/category-list";
 
@@ -66,19 +66,19 @@ export default function Home() {
           </ProductList>
         </div>
       </section>
-      <section className="md:py-10 lg:py-24 py-5 product-bg ">
+      <section className="md:py-10 lg:py-10 py-5  ">
         <SalesPartnersCompact>
           <HeadingPrimary title="Our Sales Partner" className="mb-10" />
         </SalesPartnersCompact>
       </section>
       {/* Subscribe Section */}
-      <section className="md:py-10 lg:py-24 py-5 ">
+      <section className="md:py-10 lg:py-10 py-5 product-bg ">
         <Client>
           <HeadingPrimary title="Our Prominent Clients" className="mb-10" />
         </Client>
       </section>
 
-      <section className="md:py-10 lg:py-24 py-5 ">
+      <section className="md:py-10 lg:py-10 py-5 ">
         <CustomerLoveSection>
           <HeadingPrimary title="Why Our Customer Love Us" className="mb-10" />
         </CustomerLoveSection>
