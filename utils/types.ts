@@ -518,3 +518,16 @@ export interface Recipe {
   createdBy: User;
   updatedBy: User;
 }
+
+export interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  mobile?: string;
+  message: string;
+  contactStatus: "pending" | "in_progress" | "resolved" | "closed";
+  createdAt: string;
+  updatedAt: string;
+  handledById?: number | null;
+  handledBy?: any | null;
+}

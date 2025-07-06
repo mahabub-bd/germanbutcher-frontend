@@ -95,7 +95,6 @@ export function TestimonialSection() {
           title="What Our Customers Say"
           subtitle="Join thousands of satisfied customers who trust us"
           className="mb-16"
-          titleClassName="text-gray-900 text-4xl md:text-5xl"
         />
 
         <div className="relative mx-auto">
