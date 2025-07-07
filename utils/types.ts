@@ -531,3 +531,30 @@ export interface ContactMessage {
   handledById?: number | null;
   handledBy?: any | null;
 }
+
+export interface Shop {
+  id: number;
+  salesPointId: number;
+  shopName: string;
+  division: string;
+  district: string;
+  address: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SalesPoint {
+  id: number;
+  name: string;
+  logoAttachmentId: number;
+  description: string;
+  website: string;
+  contactNumber: string;
+  email: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  logoAttachment: Attachment;
+  shops: Shop[];
+}

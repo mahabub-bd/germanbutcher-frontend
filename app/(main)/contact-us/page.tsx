@@ -111,7 +111,7 @@ const ContactPage = () => {
           <div className="lg:col-span-1 space-y-8">
             {/* Contact Cards */}
             <div className="space-y-6">
-              <div className="bg-white rounded-2xl p-6 shadow-lg border border-primaryColor/10 hover:shadow-xl transition-all duration-300">
+              <div className="bg-white rounded-xl p-6 shadow-lg border border-primaryColor/10 hover:shadow-xl transition-all duration-300">
                 <div className="flex items-start space-x-4">
                   <div className="bg-primaryColor/10 p-3 rounded-xl">
                     <Mail className="w-6 h-6 text-primaryColor" />
@@ -133,7 +133,7 @@ const ContactPage = () => {
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-lg border border-primaryColor/10 hover:shadow-xl transition-all duration-300">
+              <div className="bg-white rounded-xl p-6 shadow-lg border border-primaryColor/10 hover:shadow-xl transition-all duration-300">
                 <div className="flex items-start space-x-4">
                   <div className="bg-primaryColor/10 p-3 rounded-xl">
                     <Phone className="w-6 h-6 text-primaryColor" />
@@ -155,7 +155,7 @@ const ContactPage = () => {
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-lg border border-primaryColor/10 hover:shadow-xl transition-all duration-300">
+              <div className="bg-white rounded-xl p-6 shadow-lg border border-primaryColor/10 hover:shadow-xl transition-all duration-300">
                 <div className="flex items-start space-x-4">
                   <div className="bg-primaryColor/10 p-3 rounded-xl">
                     <MessageSquare className="w-6 h-6 text-primaryColor" />
@@ -174,7 +174,7 @@ const ContactPage = () => {
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-lg border border-primaryColor/10 hover:shadow-xl transition-all duration-300">
+              <div className="bg-white rounded-xl p-6 shadow-lg border border-primaryColor/10 hover:shadow-xl transition-all duration-300">
                 <div className="flex items-start space-x-4">
                   <div className="bg-primaryColor/10 p-3 rounded-xl">
                     <MapPin className="w-6 h-6 text-primaryColor" />
@@ -196,14 +196,14 @@ const ContactPage = () => {
 
           {/* Contact Form */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10 border border-primaryColor/10">
+            <div className="bg-white rounded-xl shadow-2xl p-8 md:p-10 border border-primaryColor/10">
               <div className="mb-8">
                 <h2 className="text-3xl font-bold text-gray-800 mb-3">
                   Send us a Message
                 </h2>
                 <p className="text-gray-600">
-                  Fill out the form below and we&apos;ll get back to you as soon as
-                  possible.
+                  Fill out the form below and we&apos;ll get back to you as soon
+                  as possible.
                 </p>
               </div>
 
@@ -218,7 +218,7 @@ const ContactPage = () => {
                     <input
                       {...register("name")}
                       type="text"
-                      className={`w-full pl-12 pr-4 py-2 border-2 rounded-xl focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 bg-gray-50/50 ${
+                      className={`w-full pl-12 pr-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 bg-gray-50/50 ${
                         errors.name ? "border-red-500" : "border-gray-200"
                       }`}
                       placeholder="Enter your full name"
@@ -244,7 +244,7 @@ const ContactPage = () => {
                       <input
                         {...register("email")}
                         type="email"
-                        className={`w-full pl-12 pr-4 py-2 border-2 rounded-xl focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 bg-gray-50/50 ${
+                        className={`w-full pl-12 pr-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 bg-gray-50/50 ${
                           errors.email ? "border-red-500" : "border-gray-200"
                         }`}
                         placeholder="your@email.com"
@@ -268,7 +268,7 @@ const ContactPage = () => {
                       <input
                         {...register("mobile")}
                         type="tel"
-                        className={`w-full pl-12 pr-4 py-2 border-2 rounded-xl focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 bg-gray-50/50 ${
+                        className={`w-full pl-12 pr-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 bg-gray-50/50 ${
                           errors.mobile ? "border-red-500" : "border-gray-200"
                         }`}
                         placeholder="+8801234567890"
@@ -293,7 +293,7 @@ const ContactPage = () => {
                     <textarea
                       {...register("message")}
                       rows={5}
-                      className={`w-full pl-12 pr-4 py-2 border-2 rounded-xl focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 resize-none bg-gray-50/50 ${
+                      className={`w-full pl-12 pr-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 resize-none bg-gray-50/50 ${
                         errors.message ? "border-red-500" : "border-gray-200"
                       }`}
                       placeholder="Tell us about your inquiry..."
@@ -323,7 +323,7 @@ const ContactPage = () => {
                   type="submit"
                   disabled={isSubmitting}
                   onClick={handleSubmit(onSubmit)}
-                  className={`w-full flex items-center justify-center space-x-3 py-4 px-8 rounded-xl font-semibold transition-all duration-200 ${
+                  className={` inline-flex items-center justify-center space-x-3 py-2 px-8 rounded-xl transition-all duration-200 ${
                     isSubmitting
                       ? "bg-gray-400 cursor-not-allowed"
                       : "bg-primaryColor hover:bg-primaryColor/90 focus:ring-4 focus:ring-primaryColor/20 transform hover:scale-[1.02] active:scale-[0.98]"

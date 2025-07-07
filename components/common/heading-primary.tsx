@@ -52,7 +52,7 @@ export function HeadingPrimary({
     <div className={cn(alignClass, "space-y-2", className)}>
       <h2
         className={cn(
-          "  font-extrabold text-primaryColor ",
+          "  font-bold text-primaryColor ",
           sizeClasses.title,
           titleClassName
         )}
