@@ -547,6 +547,7 @@ export interface Shop {
 export interface SalesPoint {
   id: number;
   name: string;
+  order:number;
   logoAttachmentId: number;
   description: string;
   website: string;

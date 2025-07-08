@@ -1,23 +1,15 @@
 "use client";
 
 import { bangladeshData } from "@/constants";
+import { useDebounce } from "@/hooks/use-debounce";
+import { fetchDataPagination } from "@/utils/api-utils";
 import { SalesPoint } from "@/utils/types";
-import {
-  Building2,
-  ChevronDown,
-  Filter,
-  Globe,
-  Mail,
-  MapPin,
-  Phone,
-  Search,
-  Store,
-  X,
-} from "lucide-react";
-import Image from "next/image";
+import { ChevronDown, Filter, MapPin, Search, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { LoadingIndicator } from "../admin/loading-indicator";
 import { PaginationComponent } from "../common/pagination";
+import { SalesPointCard } from "./sales-point-card";
 
 export interface ApiResponse {
   message: string;
@@ -31,10 +23,9 @@ export interface ApiResponse {
 
 interface SearchParams {
   page?: string;
-  shopName?: string;
+  shopSearch?: string;
   division?: string;
   district?: string;
-  search?: string;
 }
 
 interface WhereToBuyClientProps {
@@ -52,16 +43,16 @@ function WhereToBuyClient({
   const [salesPoints, setSalesPoints] = useState<SalesPoint[]>(
     initialData.data
   );
-  const [loading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState(initialData.totalPages);
   const [total, setTotal] = useState(initialData.total);
   const [currentPage, setCurrentPage] = useState(Number(initialData.page));
 
-  // Filter states
-  const [shopName, setShopName] = useState(
-    Array.isArray(searchParams.shopName)
-      ? searchParams.shopName[0] || ""
-      : searchParams.shopName || ""
+  const [shopSearch, setShopSearch] = useState(
+    Array.isArray(searchParams.shopSearch)
+      ? searchParams.shopSearch[0] || ""
+      : searchParams.shopSearch || ""
   );
   const [division, setDivision] = useState(
     Array.isArray(searchParams.division)
@@ -73,53 +64,107 @@ function WhereToBuyClient({
       ? searchParams.district[0] || ""
       : searchParams.district || ""
   );
-  const [search, setSearch] = useState(
-    Array.isArray(searchParams.search)
-      ? searchParams.search[0] || ""
-      : searchParams.search || ""
-  );
 
   const divisions = Object.keys(bangladeshData);
   const districts = division
     ? bangladeshData[division as keyof typeof bangladeshData] || []
     : [];
 
-  // Update URL with search params
-  const updateURL = (params: Record<string, string>) => {
-    const newParams = new URLSearchParams(urlSearchParams.toString());
+  const debouncedShopSearch = useDebounce(shopSearch, 300);
 
-    Object.entries(params).forEach(([key, value]) => {
-      if (value) {
-        newParams.set(key, value);
-      } else {
-        newParams.delete(key);
+  const updateURL = useCallback(
+    (params: Record<string, string>) => {
+      const newParams = new URLSearchParams(urlSearchParams.toString());
+
+      Object.entries(params).forEach(([key, value]) => {
+        if (value) {
+          newParams.set(key, value);
+        } else {
+          newParams.delete(key);
+        }
+      });
+
+      router.push(`?${newParams.toString()}`);
+    },
+    [router, urlSearchParams]
+  );
+
+  const fetchSalesPoints = useCallback(
+    async (params: Record<string, string>) => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const searchParams = new URLSearchParams();
+
+        Object.entries(params).forEach(([key, value]) => {
+          if (value) {
+            searchParams.set(key, value);
+          }
+        });
+
+        searchParams.set("isActive", "true");
+
+        const data = (await fetchDataPagination(
+          `sales-points?${searchParams.toString()}`
+        )) as ApiResponse;
+
+        setSalesPoints(data.data);
+        setTotalPages(data.totalPages);
+        setTotal(data.total);
+        setCurrentPage(Number(data.page));
+      } catch (error) {
+        console.error("Error fetching sales points:", error);
+        setError(
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch sales points"
+        );
+      } finally {
+        setLoading(false);
       }
-    });
+    },
+    []
+  );
 
-    router.push(`?${newParams.toString()}`);
-  };
-
-  const handlePageChange = (page: number) => {
-    updateURL({ page: page.toString() });
-  };
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    updateURL({
+  useEffect(() => {
+    const params = {
       page: "1",
-      shopName,
+      shopSearch: debouncedShopSearch,
       division,
       district,
-      search,
-    });
+    };
+
+    updateURL(params);
+    fetchSalesPoints(params);
+  }, [debouncedShopSearch, division, district, updateURL, fetchSalesPoints]);
+
+  const handlePageChange = (page: number) => {
+    const params = {
+      page: page.toString(),
+      shopSearch: debouncedShopSearch,
+      division,
+      district,
+    };
+
+    updateURL(params);
+    fetchSalesPoints(params);
   };
 
   const clearFilters = () => {
-    setShopName("");
+    setShopSearch("");
     setDivision("");
     setDistrict("");
-    setSearch("");
+
+    const params = {
+      page: "1",
+      shopSearch: "",
+      division: "",
+      district: "",
+    };
+
     router.push("?");
+    fetchSalesPoints(params);
   };
 
   const handleDivisionChange = (selectedDivision: string) => {
@@ -127,368 +172,206 @@ function WhereToBuyClient({
     setDistrict("");
   };
 
-  useEffect(() => {
-    setSalesPoints(initialData.data);
-    setTotalPages(initialData.totalPages);
-    setTotal(initialData.total);
-    setCurrentPage(Number(initialData.page));
-  }, [initialData]);
+  const hasActiveFilters = shopSearch || division || district;
 
   return (
     <>
-      {/* Compact Search and Filter Form */}
-      <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
-        {/* Compact Header */}
-        <div className="flex items-center justify-between mb-4">
+      {/* Modern Search and Filter Form */}
+
+      <div className="bg-white/95 backdrop-blur-md rounded-md shadow-xl p-4 sm:p-6 mb-6 sm:mb-8 border border-white/30">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
           <div className="flex items-center">
-            <div className="bg-primaryColor/10 p-2 rounded-lg mr-3">
-              <Filter className="w-5 h-5 text-primaryColor" />
+            <div className="bg-gradient-to-br from-primaryColor/20 to-primaryColor/10 p-2 sm:p-3 rounded-xl mr-3 sm:mr-4">
+              <Filter className="w-5 h-5 sm:w-6 sm:h-6 text-primaryColor" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-gray-900">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">
                 Filter Locations
               </h2>
-              <p className="text-sm text-gray-600">
+              <p className="text-xs sm:text-sm text-gray-600 hidden sm:block">
                 Find the perfect partner location
               </p>
             </div>
           </div>
 
-          <div className="hidden md:flex items-center bg-primaryColor/10 text-primaryColor px-3 py-1 rounded-full text-sm font-semibold">
-            <MapPin className="w-4 h-4 mr-1" />
-            {total} Locations
+          <div className="flex items-center bg-gradient-to-r from-primaryColor/20 to-primaryColor/10 text-primaryColor px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold border border-primaryColor/20 self-start sm:self-center">
+            <MapPin className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+            <span className="hidden xs:inline">{total} Locations</span>
+            <span className="xs:hidden">{total}</span>
           </div>
         </div>
 
-        <form onSubmit={handleSearchSubmit} className="space-y-4">
-          {/* Compact Search Fields Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-            {/* Shop Name Field */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Shop Name
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  value={shopName}
-                  onChange={(e) => setShopName(e.target.value)}
-                  placeholder="Enter shop name..."
-                  className="w-full px-3 py-2 pl-9 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryColor/30 focus:border-primaryColor transition-all text-gray-800 placeholder-gray-400"
-                />
-                <Store className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              </div>
-            </div>
-
-            {/* Division Field */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Division
-              </label>
-              <div className="relative">
-                <select
-                  value={division}
-                  onChange={(e) => handleDivisionChange(e.target.value)}
-                  className="w-full px-3 py-2 pl-9 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryColor/30 focus:border-primaryColor transition-all text-gray-800 appearance-none cursor-pointer"
-                >
-                  <option value="">Select Division</option>
-                  {divisions.map((div) => (
-                    <option key={div} value={div}>
-                      {div}
-                    </option>
-                  ))}
-                </select>
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-              </div>
-            </div>
-
-            {/* District Field */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                District
-              </label>
-              <div className="relative">
-                <select
-                  value={district}
-                  onChange={(e) => setDistrict(e.target.value)}
-                  disabled={!division}
-                  className="w-full px-3 py-2 pl-9 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryColor/30 focus:border-primaryColor transition-all text-gray-800 appearance-none cursor-pointer disabled:bg-gray-50 disabled:cursor-not-allowed disabled:text-gray-400"
-                >
-                  <option value="">Select District</option>
-                  {districts.map((dist) => (
-                    <option key={dist} value={dist}>
-                      {dist}
-                    </option>
-                  ))}
-                </select>
-                <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-              </div>
-            </div>
-
-            {/* Search Field */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Global Search
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search everything..."
-                  className="w-full px-3 py-2 pl-9 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primaryColor/30 focus:border-primaryColor transition-all text-gray-800 placeholder-gray-400"
-                />
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              </div>
+        {/* Search Fields Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {/* Division Field */}
+          <div className="space-y-2">
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700">
+              Division
+            </label>
+            <div className="relative">
+              <select
+                value={division}
+                onChange={(e) => handleDivisionChange(e.target.value)}
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 pl-10 sm:pl-12 pr-8 sm:pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primaryColor/30 focus:border-primaryColor transition-all text-sm sm:text-base text-gray-800 appearance-none cursor-pointer bg-white/80 backdrop-blur-sm hover:bg-white/90"
+              >
+                <option value="">Select Division</option>
+                {divisions.map((div) => (
+                  <option key={div} value={div}>
+                    {div}
+                  </option>
+                ))}
+              </select>
+              <MapPin className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+              <ChevronDown className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400 pointer-events-none" />
             </div>
           </div>
 
-          {/* Compact Action Buttons */}
-          <div className="flex flex-wrap items-center justify-between pt-3 border-t border-gray-100">
-            <div className="flex flex-wrap gap-3">
-              <button
-                type="submit"
-                className="px-6 py-2 bg-primaryColor text-white rounded-lg hover:bg-primaryColor/90 transition-colors font-medium shadow-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center"
-                disabled={loading}
+          {/* District Field */}
+          <div className="space-y-2">
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700">
+              District
+            </label>
+            <div className="relative">
+              <select
+                value={district}
+                onChange={(e) => setDistrict(e.target.value)}
+                disabled={!division}
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 pl-10 sm:pl-12 pr-8 sm:pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primaryColor/30 focus:border-primaryColor transition-all text-sm sm:text-base text-gray-800 appearance-none cursor-pointer bg-white/80 backdrop-blur-sm hover:bg-white/90 disabled:bg-gray-50/80 disabled:cursor-not-allowed disabled:text-gray-400"
               >
-                {loading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                    Searching...
-                  </>
-                ) : (
-                  <>
-                    <Search className="w-4 h-4 mr-2" />
-                    Search
-                  </>
-                )}
-              </button>
-
-              <button
-                type="button"
-                onClick={clearFilters}
-                className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium flex items-center"
-              >
-                <X className="w-4 h-4 mr-2" />
-                Clear
-              </button>
+                <option value="">Select District</option>
+                {districts.map((dist) => (
+                  <option key={dist} value={dist}>
+                    {dist}
+                  </option>
+                ))}
+              </select>
+              <MapPin className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+              <ChevronDown className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400 pointer-events-none" />
             </div>
+          </div>
 
-            {/* Active Filters Display */}
-            {(shopName || division || district || search) && (
-              <div className="flex flex-wrap gap-2 mt-3 lg:mt-0">
-                <span className="text-sm font-medium text-gray-600 mr-2">
-                  Filters:
+          {/* Global Search Field */}
+          <div className="space-y-2 sm:col-span-2 lg:col-span-1">
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700">
+              Search
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                value={shopSearch}
+                onChange={(e) => setShopSearch(e.target.value)}
+                placeholder="Search locations..."
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 pl-10 sm:pl-12 pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primaryColor/30 focus:border-primaryColor transition-all text-sm sm:text-base text-gray-800 placeholder-gray-400 bg-white/80 backdrop-blur-sm hover:bg-white/90"
+              />
+              <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+              {shopSearch && (
+                <button
+                  type="button"
+                  onClick={() => setShopSearch("")}
+                  className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <X className="w-3 h-3 sm:w-4 sm:h-4" />
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Active Filters and Clear Button */}
+        {hasActiveFilters && (
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 sm:pt-6 border-t border-gray-200/60 mt-4 sm:mt-6 space-y-3 sm:space-y-0">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <span className="text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap">
+                Active Filters:
+              </span>
+
+              {shopSearch && (
+                <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-gradient-to-r from-primaryColor/20 to-primaryColor/10 text-primaryColor border border-primaryColor/20">
+                  <span className="hidden sm:inline">Search: </span>
+                  <span className="max-w-[80px] sm:max-w-none truncate">
+                    {shopSearch}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setShopSearch("")}
+                    className="ml-1 sm:ml-2 hover:text-primaryColor/70 transition-colors"
+                  >
+                    <X className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                  </button>
                 </span>
-                {shopName && (
-                  <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-primaryColor/10 text-primaryColor">
-                    Shop: {shopName}
-                    <button
-                      type="button"
-                      onClick={() => setShopName("")}
-                      className="ml-1 hover:text-primaryColor/70"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </span>
-                )}
-                {division && (
-                  <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-primaryColor/10 text-primaryColor">
+              )}
+
+              {division && (
+                <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-gradient-to-r from-blue-500/20 to-blue-500/10 text-blue-700 border border-blue-500/20">
+                  <span className="max-w-[80px] sm:max-w-none truncate">
                     {division}
-                    <button
-                      type="button"
-                      onClick={() => handleDivisionChange("")}
-                      className="ml-1 hover:text-primaryColor/70"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
                   </span>
-                )}
-                {district && (
-                  <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-primaryColor/10 text-primaryColor">
+                  <button
+                    type="button"
+                    onClick={() => handleDivisionChange("")}
+                    className="ml-1 sm:ml-2 hover:text-blue-700/70 transition-colors"
+                  >
+                    <X className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                  </button>
+                </span>
+              )}
+
+              {district && (
+                <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-gradient-to-r from-green-500/20 to-green-500/10 text-green-700 border border-green-500/20">
+                  <span className="max-w-[80px] sm:max-w-none truncate">
                     {district}
-                    <button
-                      type="button"
-                      onClick={() => setDistrict("")}
-                      className="ml-1 hover:text-primaryColor/70"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
                   </span>
-                )}
-                {search && (
-                  <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-primaryColor/10 text-primaryColor">
-                    Search: {search}
-                    <button
-                      type="button"
-                      onClick={() => setSearch("")}
-                      className="ml-1 hover:text-primaryColor/70"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </span>
-                )}
-              </div>
-            )}
+                  <button
+                    type="button"
+                    onClick={() => setDistrict("")}
+                    className="ml-1 sm:ml-2 hover:text-green-700/70 transition-colors"
+                  >
+                    <X className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                  </button>
+                </span>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="px-4 sm:px-6 py-2 bg-gradient-to-r from-gray-100 to-gray-50 text-gray-700 rounded-xl hover:from-gray-200 hover:to-gray-100 transition-all font-medium flex items-center border border-gray-200 shadow-sm text-xs sm:text-sm self-start sm:self-center"
+            >
+              <X className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+              <span className="hidden xs:inline">Clear All</span>
+              <span className="xs:hidden">Clear</span>
+            </button>
           </div>
-        </form>
+        )}
       </div>
+      {/* Loading State */}
+      {loading && <LoadingIndicator message="Loading Search Data " />}
 
       {/* Sales Points Grid */}
-      <div className="grid gap-8">
-        {salesPoints.map((salesPoint) => (
-          <div
-            key={salesPoint.id}
-            className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300"
-          >
-            {/* Sales Point Header */}
-            <div className="bg-gradient-to-r from-primaryColor/10 to-primaryColor/20  p-6">
-              <div className="flex items-start gap-6">
-                {salesPoint.logoAttachment && (
-                  <div className="bg-white rounded-xl p-3 shadow-lg">
-                    <Image
-                      src={salesPoint.logoAttachment.url}
-                      alt={`${salesPoint.name} logo`}
-                      className="w-16 h-16 object-contain"
-                    />
-                  </div>
-                )}
-                <div className="flex-1">
-                  <h2 className="text-3xl font-bold mb-2">{salesPoint.name}</h2>
-                  <p className=" mb-4 text-lg">{salesPoint.description}</p>
-                  <div className="flex flex-wrap gap-4">
-                    {salesPoint.website && (
-                      <a
-                        href={salesPoint.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
-                      >
-                        <Globe className="w-4 h-4" />
-                        Visit Website
-                      </a>
-                    )}
-                    {salesPoint.email && (
-                      <a
-                        href={`mailto:${salesPoint.email}`}
-                        className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
-                      >
-                        <Mail className="w-4 h-4" />
-                        {salesPoint.email}
-                      </a>
-                    )}
-                    {salesPoint.contactNumber && (
-                      <a
-                        href={`tel:${salesPoint.contactNumber}`}
-                        className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
-                      >
-                        <Phone className="w-4 h-4" />
-                        {salesPoint.contactNumber}
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Shops/Branches */}
-            {salesPoint.shops && salesPoint.shops.length > 0 && (
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-                  <Store className="w-5 h-5 mr-2 text-primaryColor" />
-                  Branches ({salesPoint.shops.length})
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {salesPoint.shops.map((shop) => (
-                    <div
-                      key={shop.id}
-                      className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-5 border border-gray-200 hover:shadow-md transition-all duration-200 hover:scale-105"
-                    >
-                      {/* Shop Image */}
-                      <div className="flex items-center gap-4 mb-4">
-                        {salesPoint.logoAttachment && (
-                          <div className="bg-white rounded-lg p-2 shadow-sm">
-                            <Image
-                              src={salesPoint.logoAttachment.url}
-                              alt={`${shop.shopName} logo`}
-                              className="w-12 h-12 object-contain"
-                            />
-                          </div>
-                        )}
-                        <div className="flex-1">
-                          <h4 className="font-bold text-gray-900 text-lg mb-1">
-                            {shop.shopName}
-                          </h4>
-                          <div className="flex items-center">
-                            <span
-                              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                                shop.isActive
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-red-100 text-red-800"
-                              }`}
-                            >
-                              <span
-                                className={`w-2 h-2 rounded-full mr-2 ${
-                                  shop.isActive ? "bg-green-400" : "bg-red-400"
-                                }`}
-                              ></span>
-                              {shop.isActive ? "Active" : "Inactive"}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-3">
-                        <div className="flex items-center text-sm text-gray-600">
-                          <MapPin className="w-4 h-4 mr-2 text-primaryColor" />
-                          <span className="font-medium">Division:</span>
-                          <span className="ml-2 text-gray-800">
-                            {shop.division}
-                          </span>
-                        </div>
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Building2 className="w-4 h-4 mr-2 text-green-500" />
-                          <span className="font-medium">District:</span>
-                          <span className="ml-2 text-gray-800">
-                            {shop.district}
-                          </span>
-                        </div>
-                        <div className="flex items-start text-sm text-gray-600">
-                          <MapPin className="w-4 h-4 mr-2 mt-0.5 text-orange-500" />
-                          <div>
-                            <span className="font-medium">Address:</span>
-                            <p className="text-gray-800 mt-1 leading-relaxed">
-                              {shop.address}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+      {!loading && !error && (
+        <div className="grid gap-8">
+          {salesPoints.map((salesPoint) => (
+            <SalesPointCard key={salesPoint.id} salesPoint={salesPoint} />
+          ))}
+        </div>
+      )}
 
       {/* No Results */}
       {!loading && salesPoints.length === 0 && (
-        <div className="text-center py-16">
-          <div className="bg-white rounded-2xl shadow-lg p-12 max-w-md mx-auto">
+        <div className="text-center py-10">
+          <div className="bg-white/90 backdrop-blur-sm rounded-md shadow-xl p-12  mx-auto border border-white/20">
             <div className="text-gray-300 text-8xl mb-6">🏪</div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-3">
-              No sales points found
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              No locations found
             </h3>
-            <p className="text-gray-500 text-lg mb-6">
+            <p className="text-gray-500 text-lg mb-8 leading-relaxed">
               Try adjusting your search criteria to find what you&apos;re
               looking for.
             </p>
             <button
               onClick={clearFilters}
-              className="px-6 py-3 bg-primaryColor text-white rounded-lg hover:bg-primaryColor/90 transition-colors font-medium"
+              className="px-8 py-3 bg-gradient-to-r from-primaryColor to-primaryColor/90 text-white rounded-xl hover:from-primaryColor/90 hover:to-primaryColor/80 transition-all font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
             >
               Clear All Filters
             </button>
@@ -499,7 +382,7 @@ function WhereToBuyClient({
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="mt-12 flex justify-center">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-2">
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 p-3">
             <PaginationComponent
               currentPage={currentPage}
               totalPages={totalPages}
