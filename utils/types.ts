@@ -547,7 +547,7 @@ export interface Shop {
 export interface SalesPoint {
   id: number;
   name: string;
-  order:number;
+  order: number;
   logoAttachmentId: number;
   description: string;
   website: string;
@@ -558,4 +558,18 @@ export interface SalesPoint {
   updatedAt: string;
   logoAttachment: Attachment;
   shops: Shop[];
+}
+
+export interface SisterConcern {
+  id: number;
+  name: string;
+  imageUrl: string;
+  description: string;
+}
+
+export interface FAQItem {
+  id: number;
+  question: string;
+  answer: string;
+  category: string;
 }

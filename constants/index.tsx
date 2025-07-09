@@ -1,6 +1,17 @@
 // constants/index.ts
-import { GermanQuality, HalalImage } from "@/public/images";
-import fastDelivery from "@/public/images/fastdelivery.png";
+import {
+  FoodSafty,
+  GBEXPRESS,
+  GermanDeli,
+  GermanQuality,
+  HACCP,
+  HalalImage,
+  Pizzerie,
+  SteakandSausage,
+  Tandoor,
+  TokyoKitchen,
+} from "@/public/images";
+import { FAQItem, SisterConcern } from "@/utils/types";
 
 export type FeatureData = {
   iconSrc: string;
@@ -20,11 +31,11 @@ export const defaultFeaturesData: FeatureData[] = [
     iconBgColor: "green",
   },
   {
-    iconSrc: fastDelivery.src,
-    iconAlt: "Fast Delivery",
-    title: "Superfast Delivery",
+    iconSrc: FoodSafty.src,
+    iconAlt: "Food System Management",
+    title: "Food System Management System",
     description:
-      "Get your order delivered to your doorstep at the earliest from Quality food stores near you.",
+      "Advanced food management system ensuring quality control, traceability, and safety standards throughout our supply chain.",
     iconBgColor: "blue",
   },
   {
@@ -36,37 +47,16 @@ export const defaultFeaturesData: FeatureData[] = [
     iconBgColor: "orange",
   },
   {
-    iconSrc: GermanQuality.src,
-    iconAlt: "Easy Returns",
-    title: "Easy Returns",
+    iconSrc: HACCP.src,
+    iconAlt: "HACCP Certified",
+    title: "HACCP Certified",
     description:
-      "Not satisfied with a product? you can always exchange for your desired product.",
+      "Hazard Analysis and Critical Control Points certified ensuring food safety and quality management throughout our production process.",
     iconBgColor: "purple",
   },
 ];
 
 export const bangladeshData = {
-  Barisal: [
-    "Barguna",
-    "Barisal",
-    "Bhola",
-    "Jhalokathi",
-    "Patuakhali",
-    "Pirojpur",
-  ],
-  Chittagong: [
-    "Bandarban",
-    "Brahmanbaria",
-    "Chandpur",
-    "Chittagong",
-    "Comilla",
-    "Cox's Bazar",
-    "Feni",
-    "Khagrachhari",
-    "Lakshmipur",
-    "Noakhali",
-    "Rangamati",
-  ],
   Dhaka: [
     "Dhaka",
     "Faridpur",
@@ -82,6 +72,21 @@ export const bangladeshData = {
     "Shariatpur",
     "Tangail",
   ],
+
+  Chittagong: [
+    "Bandarban",
+    "Brahmanbaria",
+    "Chandpur",
+    "Chittagong",
+    "Comilla",
+    "Cox's Bazar",
+    "Feni",
+    "Khagrachhari",
+    "Lakshmipur",
+    "Noakhali",
+    "Rangamati",
+  ],
+
   Khulna: [
     "Bagerhat",
     "Chuadanga",
@@ -93,6 +98,14 @@ export const bangladeshData = {
     "Meherpur",
     "Narail",
     "Satkhira",
+  ],
+  Barisal: [
+    "Barguna",
+    "Barisal",
+    "Bhola",
+    "Jhalokathi",
+    "Patuakhali",
+    "Pirojpur",
   ],
   Mymensingh: ["Jamalpur", "Mymensingh", "Netrokona", "Sherpur"],
   Rajshahi: [
@@ -120,3 +133,200 @@ export const bangladeshData = {
 
 export type Division = keyof typeof bangladeshData;
 export const divisions = Object.keys(bangladeshData) as Division[];
+
+export const sisterConcerns: SisterConcern[] = [
+  {
+    id: 1,
+    name: "Tokyo Kitchen",
+    imageUrl: TokyoKitchen.src,
+    description:
+      "Authentic Japanese cuisine featuring fresh sushi, ramen, and traditional dishes prepared by skilled chefs using premium ingredients.",
+  },
+  {
+    id: 2,
+    name: "Steak and Sausage",
+    imageUrl: SteakandSausage.src,
+    description:
+      "Premium steakhouse and grill specializing in high-quality cuts of meat, artisanal sausages, and hearty comfort food.",
+  },
+  {
+    id: 3,
+    name: "Pizzerie",
+    imageUrl: Pizzerie.src,
+    description:
+      "Traditional Italian pizzeria serving wood-fired pizzas, pasta dishes, and classic Italian cuisine in a cozy atmosphere.",
+  },
+  {
+    id: 4,
+    name: "German Deli",
+    imageUrl: GermanDeli.src,
+    description:
+      "Authentic German delicatessen offering traditional sausages, breads, imported cheeses, and European specialty foods.",
+  },
+  {
+    id: 5,
+    name: "GB Express",
+    imageUrl: GBEXPRESS.src,
+    description:
+      "Fast-casual dining experience providing quick, quality meals and convenient takeout options for busy customers.",
+  },
+  {
+    id: 6,
+    name: "Tandoor",
+    imageUrl: Tandoor.src,
+    description:
+      "Authentic Indian restaurant featuring traditional tandoor-cooked dishes, aromatic curries, naan bread, and flavorful spices.",
+  },
+];
+
+export const faqData: FAQItem[] = [
+  // Products & Quality
+  {
+    id: 1,
+    question: "Are your products 100% Halal certified?",
+    answer:
+      "Yes, all our products are 100% Halal certified by Halal Bangladesh Services Ltd (Certificate No. HBM10010322/221). We strictly follow Islamic dietary laws in our production process.",
+    category: "Products & Quality",
+  },
+  {
+    id: 2,
+    question: "What makes German Butcher products authentic?",
+    answer:
+      "We use traditional German recipes and methods that have been perfected over 29+ years. Our founder Ferenz Georgy started the company in 1991 with authentic German techniques, using only the finest ingredients and freshest meats.",
+    category: "Products & Quality",
+  },
+  {
+    id: 3,
+    question: "Do you have HACCP certification?",
+    answer:
+      "Yes, we are HACCP (Hazard Analysis and Critical Control Points) certified, ensuring food safety and quality management throughout our production process.",
+    category: "Products & Quality",
+  },
+  {
+    id: 4,
+    question: "What types of products do you offer?",
+    answer:
+      "We specialize in authentic German sausages, cold cuts, ham, bacon, meatloaf, salami, pepperoni, and various other premium meat-based products. All made with traditional German craftsmanship.",
+    category: "Products & Quality",
+  },
+  {
+    id: 5,
+    question: "How long do your products stay fresh?",
+    answer:
+      "Our products have different shelf lives depending on the type. Fresh sausages typically last 3-5 days refrigerated, while cured products like salami can last 2-3 weeks. All products come with clear expiration dates.",
+    category: "Products & Quality",
+  },
+
+  // Orders & Shopping
+  {
+    id: 6,
+    question: "How do I place an order?",
+    answer:
+      "You can place an order through our website germanbutcherbd.com, by calling us at +880-1234-567890, or by visiting our physical stores. Simply add items to your cart and proceed to checkout.",
+    category: "Orders & Shopping",
+  },
+  {
+    id: 7,
+    question: "What is the minimum order amount?",
+    answer:
+      "There is no minimum order amount for delivery within Dhaka city. However, for areas outside Dhaka, we have a minimum order requirement of BDT 1,000.",
+    category: "Orders & Shopping",
+  },
+  {
+    id: 8,
+    question: "Can I modify or cancel my order?",
+    answer:
+      "You can modify or cancel your order within 30 minutes of placing it. After that, please contact our customer service team, and we'll do our best to accommodate your request if the order hasn't been processed.",
+    category: "Orders & Shopping",
+  },
+  {
+    id: 9,
+    question: "Do you offer bulk orders for events?",
+    answer:
+      "Yes, we offer special pricing for bulk orders and catering services. Please contact us at least 48 hours in advance for large orders, and we'll provide you with a customized quote.",
+    category: "Orders & Shopping",
+  },
+
+  // Delivery & Shipping
+  {
+    id: 10,
+    question: "What are your delivery areas?",
+    answer:
+      "We deliver throughout Dhaka city and selected areas outside Dhaka. You can check if we deliver to your area by entering your postal code during checkout or calling our customer service.",
+    category: "Delivery & Shipping",
+  },
+  {
+    id: 11,
+    question: "How fast is your delivery?",
+    answer:
+      "We offer same-day delivery within Dhaka city for orders placed before 2:00 PM. For areas outside Dhaka, delivery typically takes 1-2 business days.",
+    category: "Delivery & Shipping",
+  },
+  {
+    id: 12,
+    question: "What are the delivery charges?",
+    answer:
+      "Delivery is free for orders above BDT 1,500 within Dhaka city. For orders below this amount, delivery charges are BDT 80. Outside Dhaka delivery charges vary by location.",
+    category: "Delivery & Shipping",
+  },
+  {
+    id: 13,
+    question: "How do you ensure products stay fresh during delivery?",
+    answer:
+      "We use insulated bags and ice packs to maintain proper temperature during delivery. Our delivery team is trained to handle perishable items properly to ensure freshness upon arrival.",
+    category: "Delivery & Shipping",
+  },
+
+  // Payment & Pricing
+  {
+    id: 14,
+    question: "What payment methods do you accept?",
+    answer:
+      "We accept cash on delivery, credit/debit cards, mobile banking (bKash, Nagad, Rocket), and bank transfers. All online payments are processed through secure payment gateways.",
+    category: "Payment & Pricing",
+  },
+  {
+    id: 15,
+    question: "Are your prices competitive?",
+    answer:
+      "We offer premium quality products at competitive prices. While we focus on quality over cost-cutting, we ensure our prices are affordable and provide excellent value for authentic German products.",
+    category: "Payment & Pricing",
+  },
+  {
+    id: 16,
+    question: "Do you offer any discounts or promotions?",
+    answer:
+      "Yes, we regularly offer promotions, seasonal discounts, and special deals for bulk orders. Follow us on social media or subscribe to our newsletter to stay updated on current offers.",
+    category: "Payment & Pricing",
+  },
+
+  // Returns & Support
+  {
+    id: 17,
+    question: "What is your return policy?",
+    answer:
+      "We accept returns within 24 hours for perishable items and 7 days for non-perishable items. Items must be in original condition. We offer full refunds for defective products or wrong items delivered.",
+    category: "Returns & Support",
+  },
+  {
+    id: 18,
+    question: "How do I contact customer support?",
+    answer:
+      "You can reach our customer support team at +880-1234-567890, email us at support@germanbutcherbd.com, or use the contact form on our website. Our support hours are Sunday-Thursday, 9:00 AM - 6:00 PM.",
+    category: "Returns & Support",
+  },
+  {
+    id: 19,
+    question: "What if I receive a damaged product?",
+    answer:
+      "If you receive a damaged product, please contact us immediately with photos of the item. We will arrange for a replacement or full refund within 24 hours of reporting the issue.",
+    category: "Returns & Support",
+  },
+  {
+    id: 20,
+    question: "Do you have physical stores?",
+    answer:
+      "Yes, we have multiple physical stores across Bangladesh. You can find our store locations on our website or contact us for the nearest store location to you.",
+    category: "Returns & Support",
+  },
+];

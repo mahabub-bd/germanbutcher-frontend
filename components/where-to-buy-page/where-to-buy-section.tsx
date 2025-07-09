@@ -4,9 +4,9 @@ import { bangladeshData } from "@/constants";
 import { useDebounce } from "@/hooks/use-debounce";
 import { fetchDataPagination } from "@/utils/api-utils";
 import { SalesPoint } from "@/utils/types";
-import { ChevronDown, Filter, MapPin, Search, X } from "lucide-react";
+import { ChevronDown, MapPin, Search, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { LoadingIndicator } from "../admin/loading-indicator";
 import { PaginationComponent } from "../common/pagination";
 import { SalesPointCard } from "./sales-point-card";
@@ -39,6 +39,7 @@ function WhereToBuyClient({
 }: WhereToBuyClientProps) {
   const router = useRouter();
   const urlSearchParams = useSearchParams();
+  const isInitialMount = useRef(true);
 
   const [salesPoints, setSalesPoints] = useState<SalesPoint[]>(
     initialData.data
@@ -46,7 +47,7 @@ function WhereToBuyClient({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState(initialData.totalPages);
-  const [total, setTotal] = useState(initialData.total);
+
   const [currentPage, setCurrentPage] = useState(Number(initialData.page));
 
   const [shopSearch, setShopSearch] = useState(
@@ -90,8 +91,10 @@ function WhereToBuyClient({
   );
 
   const fetchSalesPoints = useCallback(
-    async (params: Record<string, string>) => {
-      setLoading(true);
+    async (params: Record<string, string>, showLoading = true) => {
+      if (showLoading) {
+        setLoading(true);
+      }
       setError(null);
 
       try {
@@ -111,7 +114,7 @@ function WhereToBuyClient({
 
         setSalesPoints(data.data);
         setTotalPages(data.totalPages);
-        setTotal(data.total);
+
         setCurrentPage(Number(data.page));
       } catch (error) {
         console.error("Error fetching sales points:", error);
@@ -121,13 +124,40 @@ function WhereToBuyClient({
             : "Failed to fetch sales points"
         );
       } finally {
-        setLoading(false);
+        if (showLoading) {
+          setLoading(false);
+        }
       }
     },
     []
   );
 
   useEffect(() => {
+    // Skip the initial API call if we already have initial data
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+
+      // Only fetch if the URL params don't match the initial data
+      const hasUrlParams = debouncedShopSearch || division || district;
+      const hasInitialParams =
+        searchParams.shopSearch ||
+        searchParams.division ||
+        searchParams.district;
+
+      if (hasUrlParams && !hasInitialParams) {
+        const params = {
+          page: "1",
+          shopSearch: debouncedShopSearch,
+          division,
+          district,
+        };
+
+        updateURL(params);
+        fetchSalesPoints(params);
+      }
+      return;
+    }
+
     const params = {
       page: "1",
       shopSearch: debouncedShopSearch,
@@ -177,81 +207,8 @@ function WhereToBuyClient({
   return (
     <>
       {/* Modern Search and Filter Form */}
-
       <div className="bg-white/95 backdrop-blur-md rounded-md shadow-xl p-4 sm:p-6 mb-6 sm:mb-8 border border-white/30">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
-          <div className="flex items-center">
-            <div className="bg-gradient-to-br from-primaryColor/20 to-primaryColor/10 p-2 sm:p-3 rounded-xl mr-3 sm:mr-4">
-              <Filter className="w-5 h-5 sm:w-6 sm:h-6 text-primaryColor" />
-            </div>
-            <div>
-              <h2 className="text-lg sm:text-xl font-bold text-gray-900">
-                Filter Locations
-              </h2>
-              <p className="text-xs sm:text-sm text-gray-600 hidden sm:block">
-                Find the perfect partner location
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center bg-gradient-to-r from-primaryColor/20 to-primaryColor/10 text-primaryColor px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold border border-primaryColor/20 self-start sm:self-center">
-            <MapPin className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-            <span className="hidden xs:inline">{total} Locations</span>
-            <span className="xs:hidden">{total}</span>
-          </div>
-        </div>
-
-        {/* Search Fields Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {/* Division Field */}
-          <div className="space-y-2">
-            <label className="block text-xs sm:text-sm font-semibold text-gray-700">
-              Division
-            </label>
-            <div className="relative">
-              <select
-                value={division}
-                onChange={(e) => handleDivisionChange(e.target.value)}
-                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 pl-10 sm:pl-12 pr-8 sm:pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primaryColor/30 focus:border-primaryColor transition-all text-sm sm:text-base text-gray-800 appearance-none cursor-pointer bg-white/80 backdrop-blur-sm hover:bg-white/90"
-              >
-                <option value="">Select Division</option>
-                {divisions.map((div) => (
-                  <option key={div} value={div}>
-                    {div}
-                  </option>
-                ))}
-              </select>
-              <MapPin className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
-              <ChevronDown className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400 pointer-events-none" />
-            </div>
-          </div>
-
-          {/* District Field */}
-          <div className="space-y-2">
-            <label className="block text-xs sm:text-sm font-semibold text-gray-700">
-              District
-            </label>
-            <div className="relative">
-              <select
-                value={district}
-                onChange={(e) => setDistrict(e.target.value)}
-                disabled={!division}
-                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 pl-10 sm:pl-12 pr-8 sm:pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primaryColor/30 focus:border-primaryColor transition-all text-sm sm:text-base text-gray-800 appearance-none cursor-pointer bg-white/80 backdrop-blur-sm hover:bg-white/90 disabled:bg-gray-50/80 disabled:cursor-not-allowed disabled:text-gray-400"
-              >
-                <option value="">Select District</option>
-                {districts.map((dist) => (
-                  <option key={dist} value={dist}>
-                    {dist}
-                  </option>
-                ))}
-              </select>
-              <MapPin className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
-              <ChevronDown className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400 pointer-events-none" />
-            </div>
-          </div>
-
-          {/* Global Search Field */}
+        <div className="flex flex-col gap-5">
           <div className="space-y-2 sm:col-span-2 lg:col-span-1">
             <label className="block text-xs sm:text-sm font-semibold text-gray-700">
               Search
@@ -274,6 +231,54 @@ function WhereToBuyClient({
                   <X className="w-3 h-3 sm:w-4 sm:h-4" />
                 </button>
               )}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6">
+            {/* Division Field */}
+            <div className="space-y-2">
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700">
+                Division
+              </label>
+              <div className="relative">
+                <select
+                  value={division}
+                  onChange={(e) => handleDivisionChange(e.target.value)}
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 pl-10 sm:pl-12 pr-8 sm:pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primaryColor/30 focus:border-primaryColor transition-all text-sm sm:text-base text-gray-800 appearance-none cursor-pointer bg-white/80 backdrop-blur-sm hover:bg-white/90"
+                >
+                  <option value="">Select Division</option>
+                  {divisions.map((div) => (
+                    <option key={div} value={div}>
+                      {div}
+                    </option>
+                  ))}
+                </select>
+                <MapPin className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+                <ChevronDown className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* District Field */}
+            <div className="space-y-2">
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700">
+                District
+              </label>
+              <div className="relative">
+                <select
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value)}
+                  disabled={!division}
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 pl-10 sm:pl-12 pr-8 sm:pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primaryColor/30 focus:border-primaryColor transition-all text-sm sm:text-base text-gray-800 appearance-none cursor-pointer bg-white/80 backdrop-blur-sm hover:bg-white/90 disabled:bg-gray-50/80 disabled:cursor-not-allowed disabled:text-gray-400"
+                >
+                  <option value="">Select District</option>
+                  {districts.map((dist) => (
+                    <option key={dist} value={dist}>
+                      {dist}
+                    </option>
+                  ))}
+                </select>
+                <MapPin className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+                <ChevronDown className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400 pointer-events-none" />
+              </div>
             </div>
           </div>
         </div>
@@ -345,22 +350,32 @@ function WhereToBuyClient({
           </div>
         )}
       </div>
+
       {/* Loading State */}
       {loading && <LoadingIndicator message="Loading Search Data " />}
+
+      {/* Error State */}
+      {error && (
+        <div className="text-center py-10">
+          <div className="bg-red-50 rounded-md p-6 border border-red-200">
+            <p className="text-red-600">{error}</p>
+          </div>
+        </div>
+      )}
 
       {/* Sales Points Grid */}
       {!loading && !error && (
         <div className="grid gap-8">
-          {salesPoints.map((salesPoint) => (
+          {salesPoints.map((salesPoint: SalesPoint) => (
             <SalesPointCard key={salesPoint.id} salesPoint={salesPoint} />
           ))}
         </div>
       )}
 
       {/* No Results */}
-      {!loading && salesPoints.length === 0 && (
+      {!loading && !error && salesPoints.length === 0 && (
         <div className="text-center py-10">
-          <div className="bg-white/90 backdrop-blur-sm rounded-md shadow-xl p-12  mx-auto border border-white/20">
+          <div className="bg-white/90 backdrop-blur-sm rounded-md shadow-xl p-12 mx-auto border border-white/20">
             <div className="text-gray-300 text-8xl mb-6">🏪</div>
             <h3 className="text-2xl font-bold text-gray-900 mb-4">
               No locations found
@@ -380,7 +395,7 @@ function WhereToBuyClient({
       )}
 
       {/* Pagination */}
-      {totalPages > 1 && (
+      {!loading && !error && totalPages > 1 && (
         <div className="mt-12 flex justify-center">
           <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 p-3">
             <PaginationComponent

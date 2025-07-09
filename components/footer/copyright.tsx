@@ -34,18 +34,18 @@ const Copyright = () => {
 
             {/* Legal Links - 25% width */}
 
-            <div className="col-span-1 md:col-span-3 flex  md:flex-row items-center justify-center md:gap-8 gap-6 mx-auto">
+            <div className="col-span-1 md:col-span-3 flex  md:flex-row items-center justify-center md:gap-4 gap-4 mx-auto">
               <Link
-                className="px-4 md:px-4 py-2 md:py-2.5 text-xs md:text-sm text-gray-300 border border-[#deb149] rounded-full backdrop-blur-sm transition-all duration-300 hover:bg-[#deb149] hover:text-black hover:border-[#deb149] hover:scale-105 hover:shadow-lg hover:shadow-[#deb149]/20 group overflow-hidden min-w-[140px]"
-                href="/terms"
-              >
-                Terms & Conditions
-              </Link>
-              <Link
-                className="px-4 md:px-4 py-2 md:py-2.5 text-xs md:text-sm text-gray-300 border border-[#deb149] rounded-full backdrop-blur-sm transition-all duration-300 hover:bg-[#deb149] hover:text-black hover:border-[#deb149] hover:scale-105 hover:shadow-lg hover:shadow-[#deb149]/20 group overflow-hidden min-w-[140px]"
-                href="/terms"
+                className="px-4 md:px-4 py-2 md:py-2.5 text-xs  text-gray-300 border border-[#deb149] rounded-full backdrop-blur-sm transition-all duration-300 hover:bg-[#deb149] hover:text-black hover:border-[#deb149] hover:scale-105 hover:shadow-lg hover:shadow-[#deb149]/20 group overflow-hidden "
+                href="/privacy-policy"
               >
                 Privacy Policy
+              </Link>
+              <Link
+                className="px-4 md:px-4 py-2 md:py-2.5 text-xs  text-gray-300 border border-[#deb149] rounded-full backdrop-blur-sm transition-all duration-300 hover:bg-[#deb149] hover:text-black hover:border-[#deb149] hover:scale-105 hover:shadow-lg hover:shadow-[#deb149]/20 group overflow-hidden "
+                href="/refund-policy"
+              >
+                Refund Policy
               </Link>
             </div>
           </div>

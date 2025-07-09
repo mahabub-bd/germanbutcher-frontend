@@ -1,4 +1,3 @@
-// components/homepage/customer-love/customer-love-section.tsx
 import { defaultFeaturesData, FeatureData } from "@/constants";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -57,7 +56,7 @@ export default function CustomerLoveSection({
               <div
                 key={index}
                 className={cn(
-                  "bg-primaryColor/10  rounded-lg md:p-6 p-3 text-center shadow-lg hover:shadow-md transition-shadow duration-300",
+                  "bg-primaryColor/80  rounded-lg md:p-6 p-3 text-center shadow-lg hover:shadow-md transition-shadow duration-300",
                   cardClassName
                 )}
               >
@@ -81,12 +80,12 @@ export default function CustomerLoveSection({
                 </div>
 
                 {/* Title */}
-                <h3 className="md:text-lg text-sm font-semibold text-gray-800 mb-3">
+                <h3 className="md:text-lg text-sm font-semibold text-gray-50 mb-3">
                   {feature.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-gray-600 md:text-sm text-xs leading-relaxed">
+                <p className="text-gray-100 md:text-sm text-xs leading-relaxed">
                   {feature.description}
                 </p>
               </div>

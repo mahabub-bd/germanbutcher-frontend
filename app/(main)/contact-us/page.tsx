@@ -6,13 +6,11 @@ import {
   AlertCircle,
   CheckCircle,
   Mail,
-  MapPin,
   MessageSquare,
   Phone,
   Send,
   User,
 } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -106,248 +104,159 @@ const ContactPage = () => {
       </div>
 
       <div className="container mx-auto px-4 py-16">
-        <div className="grid lg:grid-cols-3 gap-12">
-          {/* Contact Information */}
-          <div className="lg:col-span-1 space-y-8">
-            {/* Contact Cards */}
-            <div className="space-y-6">
-              <div className="bg-white rounded-xl p-6 shadow-lg border border-primaryColor/10 hover:shadow-xl transition-all duration-300">
-                <div className="flex items-start space-x-4">
-                  <div className="bg-primaryColor/10 p-3 rounded-xl">
-                    <Mail className="w-6 h-6 text-primaryColor" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-800 mb-1">
-                      Email Us
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-2">
-                      Send us an email anytime!
-                    </p>
-                    <Link
-                      href="mailto:support@company.com"
-                      className="text-primaryColor hover:text-primaryColor/80 font-medium transition-colors"
-                    >
-                      info@germanbutcherbd.com
-                    </Link>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl p-6 shadow-lg border border-primaryColor/10 hover:shadow-xl transition-all duration-300">
-                <div className="flex items-start space-x-4">
-                  <div className="bg-primaryColor/10 p-3 rounded-xl">
-                    <Phone className="w-6 h-6 text-primaryColor" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-800 mb-1">
-                      Call Us
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-2">
-                      Mon-Fri from 9am to 6pm
-                    </p>
-                    <a
-                      href="tel:+8801234567890"
-                      className="text-primaryColor hover:text-primaryColor/80 font-medium transition-colors"
-                    >
-                      +880 1234-567890
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl p-6 shadow-lg border border-primaryColor/10 hover:shadow-xl transition-all duration-300">
-                <div className="flex items-start space-x-4">
-                  <div className="bg-primaryColor/10 p-3 rounded-xl">
-                    <MessageSquare className="w-6 h-6 text-primaryColor" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-800 mb-1">
-                      Live Chat
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-2">
-                      Chat with our team
-                    </p>
-                    <span className="text-primaryColor font-medium">
-                      Available 24/7
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl p-6 shadow-lg border border-primaryColor/10 hover:shadow-xl transition-all duration-300">
-                <div className="flex items-start space-x-4">
-                  <div className="bg-primaryColor/10 p-3 rounded-xl">
-                    <MapPin className="w-6 h-6 text-primaryColor" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-800 mb-1">
-                      Visit Us
-                    </h3>
-                    <p className="text-gray-600 text-sm">
-                      123 Business Street
-                      <br />
-                      Dhaka, Bangladesh
-                    </p>
-                  </div>
-                </div>
-              </div>
+        {/* Contact Form */}
+        <div className="lg:col-span-2">
+          <div className="bg-white rounded-xl shadow-2xl p-8 md:p-10 border border-primaryColor/10">
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold text-gray-800 mb-3">
+                Send us a Message
+              </h2>
+              <p className="text-gray-600">
+                Fill out the form below and we&apos;ll get back to you as soon
+                as possible.
+              </p>
             </div>
-          </div>
 
-          {/* Contact Form */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-2xl p-8 md:p-10 border border-primaryColor/10">
-              <div className="mb-8">
-                <h2 className="text-3xl font-bold text-gray-800 mb-3">
-                  Send us a Message
-                </h2>
-                <p className="text-gray-600">
-                  Fill out the form below and we&apos;ll get back to you as soon
-                  as possible.
-                </p>
+            <div className="space-y-6">
+              {/* Name Field */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  Full Name *
+                </label>
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    {...register("name")}
+                    type="text"
+                    className={`w-full pl-12 pr-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 bg-gray-50/50 ${
+                      errors.name ? "border-red-500" : "border-gray-200"
+                    }`}
+                    placeholder="Enter your full name"
+                  />
+                </div>
+                {errors.name && (
+                  <div className="flex items-center mt-2 text-red-600 text-sm">
+                    <AlertCircle className="w-4 h-4 mr-2" />
+                    {errors.name.message}
+                  </div>
+                )}
               </div>
 
-              <div className="space-y-6">
-                {/* Name Field */}
+              {/* Email and Mobile Grid */}
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Email Field */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Full Name *
+                    Email Address *
                   </label>
                   <div className="relative">
-                    <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
-                      {...register("name")}
-                      type="text"
+                      {...register("email")}
+                      type="email"
                       className={`w-full pl-12 pr-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 bg-gray-50/50 ${
-                        errors.name ? "border-red-500" : "border-gray-200"
+                        errors.email ? "border-red-500" : "border-gray-200"
                       }`}
-                      placeholder="Enter your full name"
+                      placeholder="your@email.com"
                     />
                   </div>
-                  {errors.name && (
+                  {errors.email && (
                     <div className="flex items-center mt-2 text-red-600 text-sm">
                       <AlertCircle className="w-4 h-4 mr-2" />
-                      {errors.name.message}
+                      {errors.email.message}
                     </div>
                   )}
                 </div>
 
-                {/* Email and Mobile Grid */}
-                <div className="grid md:grid-cols-2 gap-6">
-                  {/* Email Field */}
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-3">
-                      Email Address *
-                    </label>
-                    <div className="relative">
-                      <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        {...register("email")}
-                        type="email"
-                        className={`w-full pl-12 pr-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 bg-gray-50/50 ${
-                          errors.email ? "border-red-500" : "border-gray-200"
-                        }`}
-                        placeholder="your@email.com"
-                      />
-                    </div>
-                    {errors.email && (
-                      <div className="flex items-center mt-2 text-red-600 text-sm">
-                        <AlertCircle className="w-4 h-4 mr-2" />
-                        {errors.email.message}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Mobile Field */}
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-3">
-                      Mobile Number *
-                    </label>
-                    <div className="relative">
-                      <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        {...register("mobile")}
-                        type="tel"
-                        className={`w-full pl-12 pr-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 bg-gray-50/50 ${
-                          errors.mobile ? "border-red-500" : "border-gray-200"
-                        }`}
-                        placeholder="+8801234567890"
-                      />
-                    </div>
-                    {errors.mobile && (
-                      <div className="flex items-center mt-2 text-red-600 text-sm">
-                        <AlertCircle className="w-4 h-4 mr-2" />
-                        {errors.mobile.message}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Message Field */}
+                {/* Mobile Field */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Message *
+                    Mobile Number *
                   </label>
                   <div className="relative">
-                    <MessageSquare className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
-                    <textarea
-                      {...register("message")}
-                      rows={5}
-                      className={`w-full pl-12 pr-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 resize-none bg-gray-50/50 ${
-                        errors.message ? "border-red-500" : "border-gray-200"
+                    <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      {...register("mobile")}
+                      type="tel"
+                      className={`w-full pl-12 pr-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 bg-gray-50/50 ${
+                        errors.mobile ? "border-red-500" : "border-gray-200"
                       }`}
-                      placeholder="Tell us about your inquiry..."
+                      placeholder="+8801234567890"
                     />
                   </div>
-                  <div className="flex justify-between items-center mt-2">
-                    {errors.message ? (
-                      <div className="flex items-center text-red-600 text-sm">
-                        <AlertCircle className="w-4 h-4 mr-2" />
-                        {errors.message.message}
-                      </div>
-                    ) : (
-                      <div></div>
-                    )}
-                    <span
-                      className={`text-sm font-medium ${
-                        messageLength > 500 ? "text-red-600" : "text-gray-500"
-                      }`}
-                    >
-                      {messageLength}/500
-                    </span>
-                  </div>
-                </div>
-
-                {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  onClick={handleSubmit(onSubmit)}
-                  className={` inline-flex items-center justify-center space-x-3 py-2 px-8 rounded-xl transition-all duration-200 ${
-                    isSubmitting
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-primaryColor hover:bg-primaryColor/90 focus:ring-4 focus:ring-primaryColor/20 transform hover:scale-[1.02] active:scale-[0.98]"
-                  } text-white shadow-lg`}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
-                      <span>Sending...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Send className="w-5 h-5" />
-                      <span>Send Message</span>
-                    </>
+                  {errors.mobile && (
+                    <div className="flex items-center mt-2 text-red-600 text-sm">
+                      <AlertCircle className="w-4 h-4 mr-2" />
+                      {errors.mobile.message}
+                    </div>
                   )}
-                </button>
-
-                <div className="text-center">
-                  <p className="text-sm text-gray-500">
-                    <CheckCircle className="w-4 h-4 inline mr-1 text-green-500" />
-                    We typically respond within 24 hours
-                  </p>
                 </div>
+              </div>
+
+              {/* Message Field */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  Message *
+                </label>
+                <div className="relative">
+                  <MessageSquare className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
+                  <textarea
+                    {...register("message")}
+                    rows={5}
+                    className={`w-full pl-12 pr-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 resize-none bg-gray-50/50 ${
+                      errors.message ? "border-red-500" : "border-gray-200"
+                    }`}
+                    placeholder="Tell us about your inquiry..."
+                  />
+                </div>
+                <div className="flex justify-between items-center mt-2">
+                  {errors.message ? (
+                    <div className="flex items-center text-red-600 text-sm">
+                      <AlertCircle className="w-4 h-4 mr-2" />
+                      {errors.message.message}
+                    </div>
+                  ) : (
+                    <div></div>
+                  )}
+                  <span
+                    className={`text-sm font-medium ${
+                      messageLength > 500 ? "text-red-600" : "text-gray-500"
+                    }`}
+                  >
+                    {messageLength}/500
+                  </span>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                onClick={handleSubmit(onSubmit)}
+                className={` inline-flex items-center justify-center space-x-3 py-2 px-8 rounded-xl transition-all duration-200 ${
+                  isSubmitting
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-primaryColor hover:bg-primaryColor/90 focus:ring-4 focus:ring-primaryColor/20 transform hover:scale-[1.02] active:scale-[0.98]"
+                } text-white shadow-lg`}
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5" />
+                    <span>Send Message</span>
+                  </>
+                )}
+              </button>
+
+              <div className="text-center">
+                <p className="text-sm text-gray-500">
+                  <CheckCircle className="w-4 h-4 inline mr-1 text-green-500" />
+                  We typically respond within 24 hours
+                </p>
               </div>
             </div>
           </div>

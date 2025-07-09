@@ -1,4 +1,4 @@
-import { SalesPoint } from "@/utils/types";
+import { SalesPoint, Shop } from "@/utils/types";
 import { Store } from "lucide-react";
 import { ShopCard } from "./shop-card";
 
@@ -8,7 +8,7 @@ interface SalesPointCardProps {
 
 export function SalesPointCard({ salesPoint }: SalesPointCardProps) {
   return (
-    <div className="bg-white rounded-md shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+    <div className="rounded-md   overflow-hidden  transition-shadow duration-300">
       {/* Shops/Branches */}
       {salesPoint.shops && salesPoint.shops.length > 0 && (
         <div className="p-6">
@@ -22,8 +22,8 @@ export function SalesPointCard({ salesPoint }: SalesPointCardProps) {
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {salesPoint.shops.map((shop) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {salesPoint.shops.map((shop: Shop) => (
               <ShopCard
                 key={shop.id}
                 shop={shop}

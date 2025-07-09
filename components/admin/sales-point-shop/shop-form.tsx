@@ -30,6 +30,7 @@ import { fetchDataPagination, patchData, postData } from "@/utils/api-utils";
 
 import { bangladeshData, Division, divisions } from "@/constants";
 import type { SalesPoint, Shop } from "@/utils/types";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Section } from "../helper";
 
@@ -155,9 +156,11 @@ export function ShopForm({ mode, shop }: ShopFormProps) {
                             >
                               <div className="flex items-center gap-3">
                                 {salesPoint.logoAttachment?.url && (
-                                  <img
+                                  <Image
                                     src={salesPoint.logoAttachment.url}
                                     alt={`${salesPoint.name} logo`}
+                                    width={500}
+                                    height={500}
                                     className="w-6 h-6 object-contain rounded"
                                   />
                                 )}
