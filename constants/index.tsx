@@ -12,6 +12,7 @@ import {
   TokyoKitchen,
 } from "@/public/images";
 import { FAQItem, SisterConcern } from "@/utils/types";
+import { Mail, MapPin, Phone } from "lucide-react";
 
 export type FeatureData = {
   iconSrc: string;
@@ -328,5 +329,26 @@ export const faqData: FAQItem[] = [
     answer:
       "Yes, we have multiple physical stores across Bangladesh. You can find our store locations on our website or contact us for the nearest store location to you.",
     category: "Returns & Support",
+  },
+];
+
+export const contactInfo = [
+  {
+    icon: Phone,
+    label: "Call Us",
+    value: "+880 1600000000",
+    href: "tel:+8801600000000",
+  },
+  {
+    icon: Mail,
+    label: "Email Us",
+    value: "info@germanbutcher.com",
+    href: "mailto:info@germanbutcher.com",
+  },
+  {
+    icon: MapPin,
+    label: "Visit Us",
+    value: "Amigo D-149 Square, Mohammadpur, Dhaka 1207, Bangladesh",
+    href: "https://maps.google.com/?q=Amigo+D-149+Square,+Mohammadpur,+Dhaka+1207,+Bangladesh",
   },
 ];

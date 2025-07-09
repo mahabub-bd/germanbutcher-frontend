@@ -1,5 +1,6 @@
+import { contactInfo } from "@/constants";
 import { BgFooter, GermanbutcherLogo } from "@/public/images";
-import { Facebook, Linkedin, Mail, MapPin, Phone, Youtube } from "lucide-react";
+import { Facebook, Linkedin, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -142,27 +143,6 @@ export default function Footer() {
       ],
     },
   };
-
-  const contactInfo = [
-    {
-      icon: Phone,
-      label: "Call Us",
-      value: "+880 1600000000",
-      href: "tel:+8801600000000",
-    },
-    {
-      icon: Mail,
-      label: "Email Us",
-      value: "info@germanbutcher.com",
-      href: "mailto:info@germanbutcher.com",
-    },
-    {
-      icon: MapPin,
-      label: "Visit Us",
-      value: "Amigo D-149 Square, Mohammadpur, Dhaka 1207, Bangladesh",
-      href: "https://maps.google.com/?q=Amigo+D-149+Square,+Mohammadpur,+Dhaka+1207,+Bangladesh",
-    },
-  ];
 
   return (
     <footer

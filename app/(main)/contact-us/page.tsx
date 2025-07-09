@@ -1,5 +1,6 @@
 "use client";
 import { HeadingPrimary } from "@/components/common/heading-primary";
+import { contactInfo } from "@/constants";
 import { postData } from "@/utils/api-utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -89,80 +90,135 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primaryColor/5 via-white to-primaryColor/10">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden ">
-        <div className="relative container mx-auto px-4 py-5">
-          <div className="max-w-3xl mx-auto text-center">
-            <HeadingPrimary
-              title=" Get In Touch"
-              subtitle=" Have questions about our products or services? We'd love to hear
-              from you. Send us a message and we'll respond as soon as possible."
-            />
-          </div>
+    <div className="min-h-screen py-12 px-4 sm:px-6">
+      <div className="container mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <HeadingPrimary
+            title="Get In Touch"
+            subtitle="Have questions about our products or services? We'd love to hear from you. Send us a message and we'll respond as soon as possible."
+          />
         </div>
-      </div>
 
-      <div className="container mx-auto px-4 py-16">
-        {/* Contact Form */}
-        <div className="lg:col-span-2">
-          <div className="bg-white rounded-xl shadow-2xl p-8 md:p-10 border border-primaryColor/10">
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-gray-800 mb-3">
-                Send us a Message
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Contact Information */}
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="mb-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-2">
+                Contact Information
               </h2>
               <p className="text-gray-600">
-                Fill out the form below and we&apos;ll get back to you as soon
-                as possible.
+                Reach out to us through any of the following methods.
               </p>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4">
+              {contactInfo.map((item, index) => {
+                const IconComponent = item.icon;
+                return (
+                  <a
+                    key={index}
+                    href={item.href}
+                    target={item.href.startsWith("http") ? "_blank" : undefined}
+                    rel={
+                      item.href.startsWith("http")
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
+                    className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors group"
+                  >
+                    <div className="flex-shrink-0 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-gray-200 transition-colors">
+                      <IconComponent className="w-5 h-5 text-gray-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-medium text-gray-800 mb-1">
+                        {item.label}
+                      </h3>
+                      <p className="text-gray-600 text-sm">{item.value}</p>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+
+            {/* Business Hours */}
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <h3 className="font-medium text-gray-800 mb-3">Business Hours</h3>
+              <div className="space-y-1 text-sm text-gray-600">
+                <div className="flex justify-between">
+                  <span>Monday - Friday:</span>
+                  <span>9:00 AM - 6:00 PM</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Saturday:</span>
+                  <span>10:00 AM - 4:00 PM</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Sunday:</span>
+                  <span>Closed</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Form */}
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="mb-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-2">
+                Send us a Message
+              </h2>
+              <p className="text-gray-600">
+                Fill out the form below and we&apos;ll get back to you as soon as
+                possible.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               {/* Name Field */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Full Name *
                 </label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
                     {...register("name")}
                     type="text"
-                    className={`w-full pl-12 pr-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 bg-gray-50/50 ${
-                      errors.name ? "border-red-500" : "border-gray-200"
+                    className={`w-full pl-10 pr-3 py-2 border rounded-md focus:ring-1 focus:ring-gray-400 focus:border-gray-400 ${
+                      errors.name ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Enter your full name"
                   />
                 </div>
                 {errors.name && (
-                  <div className="flex items-center mt-2 text-red-600 text-sm">
-                    <AlertCircle className="w-4 h-4 mr-2" />
+                  <div className="flex items-center mt-1 text-red-600 text-xs">
+                    <AlertCircle className="w-3 h-3 mr-1" />
                     {errors.name.message}
                   </div>
                 )}
               </div>
 
               {/* Email and Mobile Grid */}
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Email Field */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Email Address *
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input
                       {...register("email")}
                       type="email"
-                      className={`w-full pl-12 pr-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 bg-gray-50/50 ${
-                        errors.email ? "border-red-500" : "border-gray-200"
+                      className={`w-full pl-10 pr-3 py-2 border rounded-md focus:ring-1 focus:ring-gray-400 focus:border-gray-400 ${
+                        errors.email ? "border-red-500" : "border-gray-300"
                       }`}
                       placeholder="your@email.com"
                     />
                   </div>
                   {errors.email && (
-                    <div className="flex items-center mt-2 text-red-600 text-sm">
-                      <AlertCircle className="w-4 h-4 mr-2" />
+                    <div className="flex items-center mt-1 text-red-600 text-xs">
+                      <AlertCircle className="w-3 h-3 mr-1" />
                       {errors.email.message}
                     </div>
                   )}
@@ -170,23 +226,23 @@ const ContactPage = () => {
 
                 {/* Mobile Field */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Mobile Number *
                   </label>
                   <div className="relative">
-                    <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input
                       {...register("mobile")}
                       type="tel"
-                      className={`w-full pl-12 pr-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 bg-gray-50/50 ${
-                        errors.mobile ? "border-red-500" : "border-gray-200"
+                      className={`w-full pl-10 pr-3 py-2 border rounded-md focus:ring-1 focus:ring-gray-400 focus:border-gray-400 ${
+                        errors.mobile ? "border-red-500" : "border-gray-300"
                       }`}
                       placeholder="+8801234567890"
                     />
                   </div>
                   {errors.mobile && (
-                    <div className="flex items-center mt-2 text-red-600 text-sm">
-                      <AlertCircle className="w-4 h-4 mr-2" />
+                    <div className="flex items-center mt-1 text-red-600 text-xs">
+                      <AlertCircle className="w-3 h-3 mr-1" />
                       {errors.mobile.message}
                     </div>
                   )}
@@ -195,31 +251,31 @@ const ContactPage = () => {
 
               {/* Message Field */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Message *
                 </label>
                 <div className="relative">
-                  <MessageSquare className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
+                  <MessageSquare className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
                   <textarea
                     {...register("message")}
-                    rows={5}
-                    className={`w-full pl-12 pr-4 py-2 border-2 rounded-md focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor transition-all duration-200 resize-none bg-gray-50/50 ${
-                      errors.message ? "border-red-500" : "border-gray-200"
+                    rows={4}
+                    className={`w-full pl-10 pr-3 py-2 border rounded-md focus:ring-1 focus:ring-gray-400 focus:border-gray-400 ${
+                      errors.message ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Tell us about your inquiry..."
                   />
                 </div>
-                <div className="flex justify-between items-center mt-2">
+                <div className="flex justify-between items-center mt-1">
                   {errors.message ? (
-                    <div className="flex items-center text-red-600 text-sm">
-                      <AlertCircle className="w-4 h-4 mr-2" />
+                    <div className="flex items-center text-red-600 text-xs">
+                      <AlertCircle className="w-3 h-3 mr-1" />
                       {errors.message.message}
                     </div>
                   ) : (
                     <div></div>
                   )}
                   <span
-                    className={`text-sm font-medium ${
+                    className={`text-xs ${
                       messageLength > 500 ? "text-red-600" : "text-gray-500"
                     }`}
                   >
@@ -232,33 +288,32 @@ const ContactPage = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                onClick={handleSubmit(onSubmit)}
-                className={` inline-flex items-center justify-center space-x-3 py-2 px-8 rounded-xl transition-all duration-200 ${
+                className={`w-full flex items-center justify-center space-x-2 py-2 px-4 rounded-md transition-colors ${
                   isSubmitting
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-primaryColor hover:bg-primaryColor/90 focus:ring-4 focus:ring-primaryColor/20 transform hover:scale-[1.02] active:scale-[0.98]"
-                } text-white shadow-lg`}
+                    ? "bg-primaryColor cursor-not-allowed"
+                    : "bg-primaryColor hover:bg-gray-700 text-white"
+                }`}
               >
                 {isSubmitting ? (
                   <>
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                     <span>Sending...</span>
                   </>
                 ) : (
                   <>
-                    <Send className="w-5 h-5" />
+                    <Send className="w-4 h-4" />
                     <span>Send Message</span>
                   </>
                 )}
               </button>
 
               <div className="text-center">
-                <p className="text-sm text-gray-500">
-                  <CheckCircle className="w-4 h-4 inline mr-1 text-green-500" />
+                <p className="text-xs text-gray-500">
+                  <CheckCircle className="w-3 h-3 inline mr-1 text-green-500" />
                   We typically respond within 24 hours
                 </p>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>

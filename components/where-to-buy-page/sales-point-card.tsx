@@ -7,32 +7,32 @@ interface SalesPointCardProps {
 }
 
 export function SalesPointCard({ salesPoint }: SalesPointCardProps) {
-  return (
-    <div className="rounded-md   overflow-hidden  transition-shadow duration-300">
-      {/* Shops/Branches */}
-      {salesPoint.shops && salesPoint.shops.length > 0 && (
-        <div className="p-6">
-          <div className="flex justify-between items-center">
-            <h1 className="text-xl font-bold text-primaryColor mb-6 flex items-center">
-              {salesPoint.name}
-            </h1>
-            <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-              <Store className="w-5 h-5 mr-2 text-primaryColor" />
-              Branches ({salesPoint.shops.length})
-            </h3>
-          </div>
+  if (!salesPoint.shops?.length) return null;
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {salesPoint.shops.map((shop: Shop) => (
-              <ShopCard
-                key={shop.id}
-                shop={shop}
-                logoUrl={salesPoint.logoAttachment?.url}
-              />
-            ))}
-          </div>
+  return (
+    <div className="space-y-4">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row  md:items-center gap-4">
+        <h2 className="text-xl font-semibold text-gray-800">
+          {salesPoint.name}
+        </h2>
+
+        <div className="flex items-center text-gray-600">
+          <Store className="w-5 h-5 mr-2 text-primary-500" />
+          <span>Branches ({salesPoint.shops.length})</span>
         </div>
-      )}
+      </div>
+
+      {/* Shops Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {salesPoint.shops.map((shop: Shop) => (
+          <ShopCard
+            key={shop.id}
+            shop={shop}
+            logoUrl={salesPoint.logoAttachment?.url}
+          />
+        ))}
+      </div>
     </div>
   );
 }

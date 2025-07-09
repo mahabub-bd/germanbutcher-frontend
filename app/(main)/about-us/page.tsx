@@ -1,3 +1,4 @@
+import { HeadingPrimary } from "@/components/common/heading-primary";
 import { Chairman } from "@/public/images";
 import { Award, Heart, Star } from "lucide-react";
 import Image from "next/image";
@@ -8,17 +9,13 @@ const AboutUsComponent: React.FC = () => {
     <div className="bg-white py-16 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            About German Butcher
-          </h1>
-          <p className="text-xl text-gray-600">
-            Over 29 years of authentic German craftsmanship since 1991
-          </p>
-        </div>
+        <HeadingPrimary
+          title="About German Butcher"
+          subtitle="Over 29 years of authentic German craftsmanship since 1991"
+        />
 
         {/* Founder Story */}
-        <div className="bg-gray-50 rounded-lg p-8 mb-12">
+        <div className="bg-gray-50 rounded-lg md:p-8 p-4 md:my-10 py-5">
           <div className="flex flex-col lg:flex-row items-center gap-8">
             {/* Founder Photo */}
             <div className="flex-shrink-0 text-center">
@@ -161,9 +158,9 @@ const AboutUsComponent: React.FC = () => {
           </p>
           <div className="bg-gray-50 rounded-lg p-6">
             <p className="text-gray-700 font-medium italic">
-              &quot;We don&quot;t believe in making exaggerated claims, we believe in
-              results. Try any of our products and we can promise you that it
-              will be a class apart from others.&quot;
+              &quot;We don&quot;t believe in making exaggerated claims, we
+              believe in results. Try any of our products and we can promise you
+              that it will be a class apart from others.&quot;
             </p>
           </div>
         </div>

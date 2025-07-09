@@ -16,7 +16,7 @@ import HalalImage from "@/public/images/logo/footer1.png";
 import FooterImageThree from "@/public/images/logo/footer3.png";
 import GermanQuality from "@/public/images/logo/germanquality.png";
 import HACCP from "@/public/images/logo/haccp.png";
-import OnlinePayment from "@/public/images/sslcommerz-banner.png";
+import OnlinePayment from "@/public/images/sslcommerz-banner.webp";
 
 export {
   AvatarImageIcon,
