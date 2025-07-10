@@ -90,7 +90,7 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6">
+    <div className="min-h-screen py-12 px-4 sm:px-2">
       <div className="container mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -140,25 +140,6 @@ const ContactPage = () => {
                 );
               })}
             </div>
-
-            {/* Business Hours */}
-            <div className="mt-6 pt-6 border-t border-gray-200">
-              <h3 className="font-medium text-gray-800 mb-3">Business Hours</h3>
-              <div className="space-y-1 text-sm text-gray-600">
-                <div className="flex justify-between">
-                  <span>Monday - Friday:</span>
-                  <span>9:00 AM - 6:00 PM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Saturday:</span>
-                  <span>10:00 AM - 4:00 PM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Sunday:</span>
-                  <span>Closed</span>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Contact Form */}
@@ -168,8 +149,8 @@ const ContactPage = () => {
                 Send us a Message
               </h2>
               <p className="text-gray-600">
-                Fill out the form below and we&apos;ll get back to you as soon as
-                possible.
+                Fill out the form below and we&apos;ll get back to you as soon
+                as possible.
               </p>
             </div>
 

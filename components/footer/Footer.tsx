@@ -118,7 +118,7 @@ export default function Footer() {
       title: "Company",
       links: [
         { text: "Our Story", href: "/about-us" },
-        { text: "Team", href: "/team" },
+        { text: "Our Clients", href: "/clients" },
         { text: "Careers", href: "/careers" },
         { text: "News & Updates", href: "/news" },
       ],
@@ -139,7 +139,7 @@ export default function Footer() {
         { text: "Contact Us", href: "/contact-us" },
         { text: "FAQ", href: "/faqs" },
         { text: "Recipes", href: "/recipes" },
-        { text: "Cooking Tips", href: "/cooking-tips" },
+        { text: "How To Order", href: "/how-to-order" },
       ],
     },
   };

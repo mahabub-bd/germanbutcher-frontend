@@ -13,7 +13,7 @@ import React from "react";
 
 const RefundPolicy: React.FC = () => {
   return (
-    <div className="min-h-screen py-8 px-4 sm:px-6">
+    <div className="min-h-screen py-8 px-4 sm:px-2">
       <div className="container mx-auto">
         {/* Header Section */}
         <div className="text-center mb-8">
@@ -31,7 +31,7 @@ const RefundPolicy: React.FC = () => {
         {/* Main Content */}
         <div className="space-y-8">
           {/* Return Window */}
-          <div className="border rounded-lg p-6">
+          <div className="rounded-lg md:p-6 p-2">
             <div className="flex items-center mb-4">
               <Clock className="w-5 h-5 text-gray-700 mr-3" />
               <h2 className="text-xl font-semibold">Return Window</h2>
@@ -55,7 +55,7 @@ const RefundPolicy: React.FC = () => {
           </div>
 
           {/* Eligible Items */}
-          <div className="border rounded-lg p-6">
+          <div className="rounded-lg md:p-6 p-2">
             <div className="flex items-center mb-4">
               <Package className="w-5 h-5 text-gray-700 mr-3" />
               <h2 className="text-xl font-semibold">
@@ -117,7 +117,7 @@ const RefundPolicy: React.FC = () => {
           </div>
 
           {/* Return Process */}
-          <div className="border rounded-lg p-6">
+          <div className="rounded-lg md:p-6 p-2">
             <div className="flex items-center mb-4">
               <Shield className="w-5 h-5 text-gray-700 mr-3" />
               <h2 className="text-xl font-semibold">How to Return Items</h2>
@@ -166,13 +166,13 @@ const RefundPolicy: React.FC = () => {
           </div>
 
           {/* Refund Methods */}
-          <div className="border rounded-lg p-6">
+          <div className="rounded-lg md:p-6 p-2">
             <div className="flex items-center mb-4">
               <CreditCard className="w-5 h-5 text-gray-700 mr-3" />
               <h2 className="text-xl font-semibold">Refund Methods</h2>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">
@@ -193,38 +193,18 @@ const RefundPolicy: React.FC = () => {
                     </li>
                   </ul>
                 </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    Store Credit
-                  </h3>
-                  <ul className="space-y-2 text-sm text-gray-700">
-                    <li className="flex items-center">
-                      <CheckCircle className="w-3 h-3 text-green-500 mr-2" />
-                      Instant credit to your account
-                    </li>
-                    <li className="flex items-center">
-                      <CheckCircle className="w-3 h-3 text-green-500 mr-2" />
-                      Valid for 1 year from issue date
-                    </li>
-                    <li className="flex items-center">
-                      <CheckCircle className="w-3 h-3 text-green-500 mr-2" />
-                      Can be used for any purchase
-                    </li>
-                  </ul>
-                </div>
               </div>
             </div>
           </div>
 
           {/* Important Notes */}
-          <div className="border rounded-lg p-6">
+          <div className="rounded-lg md:p-6 p-2">
             <div className="flex items-center mb-4">
               <AlertTriangle className="w-5 h-5 text-gray-700 mr-3" />
               <h2 className="text-xl font-semibold">Important Notes</h2>
             </div>
 
-            <div className="bg-yellow-50 p-4 rounded-lg">
+            <div className="">
               <ul className="space-y-3 text-sm text-gray-700">
                 {[
                   "Shipping costs are non-refundable unless the return is due to our error or a defective product.",
@@ -244,7 +224,7 @@ const RefundPolicy: React.FC = () => {
         </div>
 
         {/* Contact Information */}
-        <div className="text-center mt-8 p-6 border rounded-lg">
+        <div className="text-center mt-8 md:p-6 p-2 rounded-lg">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
             Need Help?
           </h3>

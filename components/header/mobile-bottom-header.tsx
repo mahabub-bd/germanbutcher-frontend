@@ -67,7 +67,7 @@ export function MobileBottomHeader({ user }: MobileBottomHeaderProps) {
 
   return (
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-100">
-      <div className="flex items-center justify-around py-4 px-4 pb-safe">
+      <div className="flex items-center justify-around py-3 px-3 pb-safe">
         {navigationItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(item);
