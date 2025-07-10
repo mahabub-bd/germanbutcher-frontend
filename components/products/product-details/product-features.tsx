@@ -5,7 +5,7 @@ export function ProductFeatures() {
     {
       icon: Truck,
       label: "Free Delivery",
-      desc: "On orders over ৳500",
+      desc: "On orders over ৳1500",
     },
     {
       icon: Shield,

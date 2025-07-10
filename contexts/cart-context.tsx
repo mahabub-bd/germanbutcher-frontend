@@ -19,6 +19,7 @@ type CartContextType = {
   removeCoupon: () => void;
   getCartTotals: () => {
     itemCount: number;
+    productCount: number;
     originalSubtotal: number;
     discountedSubtotal: number;
     productDiscounts: number;

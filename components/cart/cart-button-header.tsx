@@ -33,19 +33,24 @@ export function CartButtonHeader({
 }) {
   const {
     clearCart,
-
     appliedCoupon,
     applyCoupon: applyCartCoupon,
     removeCoupon,
     getCartTotals,
   } = useCartContext();
+
   const [isOpen, setIsOpen] = useState(false);
   const [isRemovingAll, setIsRemovingAll] = useState(false);
   const [couponCode, setCouponCode] = useState("");
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
 
-  const { itemCount, originalSubtotal, discountedSubtotal, productDiscounts } =
-    getCartTotals();
+  const {
+    itemCount,
+    originalSubtotal,
+    discountedSubtotal,
+    productDiscounts,
+    productCount,
+  } = getCartTotals();
   const total = discountedSubtotal - (appliedCoupon?.discount || 0);
 
   const handleApplyCoupon = async () => {
@@ -98,7 +103,7 @@ export function CartButtonHeader({
             />
           }
           label={compact ? "Cart" : "Cart"}
-          count={itemCount}
+          count={productCount}
           alwaysShowCount
         />
       </SheetTrigger>

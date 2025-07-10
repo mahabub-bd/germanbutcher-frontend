@@ -9,7 +9,6 @@ import {
   MapPin,
   Minus,
   Plus,
-  Receipt,
   User,
 } from "lucide-react";
 import Image from "next/image";
@@ -58,7 +57,6 @@ import { patchData } from "@/utils/api-utils";
 import type { Order } from "@/utils/types";
 import { CheckCircle, Truck, XCircle } from "lucide-react";
 import { Section } from "../helper";
-
 
 const orderUpdateSchema = z.object({
   orderStatus: z.union([
@@ -109,7 +107,6 @@ export function OrderForm({ order }: OrderFormProps) {
     setIsSubmitting(true);
 
     try {
-   
       const orderStatusResponse = await patchData(
         `orders/${order.id}/order-status`,
         {
@@ -265,123 +262,128 @@ export function OrderForm({ order }: OrderFormProps) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <div className="p-6 space-y-6 mx-auto w-full">
-          <Section title="Update Order Status">
-            <div className="grid grid-cols-1 gap-6">
-              <FormField
-                control={form.control}
-                name="orderStatus"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Order Status</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select order status" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="pending">Pending</SelectItem>
-                        <SelectItem value="processing">Processing</SelectItem>
-                        <SelectItem value="shipped">Shipped</SelectItem>
-                        <SelectItem value="delivered">Delivered</SelectItem>
-                        <SelectItem value="cancelled">Cancelled</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </Section>
+          <div className="grid grid-cols-2 gap-6">
+            <Section title="Update Order Status">
+              <div className="grid grid-cols-1 gap-6">
+                <FormField
+                  control={form.control}
+                  name="orderStatus"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Order Status</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select order status" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="pending">Pending</SelectItem>
+                          <SelectItem value="processing">Processing</SelectItem>
+                          <SelectItem value="shipped">Shipped</SelectItem>
+                          <SelectItem value="delivered">Delivered</SelectItem>
+                          <SelectItem value="cancelled">Cancelled</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </Section>
 
-          {/* Order Status Timeline */}
-          <Section title="Order Status Timeline">
-            <div className="pl-2">
-              {order.statusTracks.length > 0 ? (
-                <Timeline>
-                  {timelineStatuses.map((status, index) => {
-                    const isActive = isStatusActive(status);
-                    const timestamp = getStatusTimestamp(status);
-                    const note = getStatusNote(status);
-                    const updatedBy = getStatusUpdatedBy(status);
+            {/* Order Status Timeline */}
+            <Section title="Order Status Timeline">
+              <div className="pl-2">
+                {order.statusTracks.length > 0 ? (
+                  <Timeline>
+                    {timelineStatuses.map((status, index) => {
+                      const isActive = isStatusActive(status);
+                      const timestamp = getStatusTimestamp(status);
+                      const note = getStatusNote(status);
+                      const updatedBy = getStatusUpdatedBy(status);
 
-                    return (
-                      <TimelineItem key={status}>
-                        <TimelineSeparator>
-                          <TimelineDot
-                            className={
-                              isActive
-                                ? getStatusDotColor(status)
-                                : "bg-gray-300"
-                            }
-                          />
-                          {index < timelineStatuses.length - 1 && (
-                            <TimelineConnector
-                              className={isActive ? "" : "bg-gray-300"}
+                      return (
+                        <TimelineItem key={status}>
+                          <TimelineSeparator>
+                            <TimelineDot
+                              className={
+                                isActive
+                                  ? getStatusDotColor(status)
+                                  : "bg-gray-300"
+                              }
                             />
-                          )}
-                        </TimelineSeparator>
-                        <TimelineContent>
-                          <div className="ml-4">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center">
-                                {isActive && getStatusIcon(status)}
-                                <h4
-                                  className={`text-sm font-medium ${
-                                    !isActive ? "text-gray-400" : ""
-                                  }`}
-                                >
-                                  {status.charAt(0).toUpperCase() +
-                                    status.slice(1)}
-                                </h4>
+                            {index < timelineStatuses.length - 1 && (
+                              <TimelineConnector
+                                className={isActive ? "" : "bg-gray-300"}
+                              />
+                            )}
+                          </TimelineSeparator>
+                          <TimelineContent>
+                            <div className="ml-4">
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center">
+                                  {isActive && getStatusIcon(status)}
+                                  <h4
+                                    className={`text-sm font-medium ${
+                                      !isActive ? "text-gray-400" : ""
+                                    }`}
+                                  >
+                                    {status.charAt(0).toUpperCase() +
+                                      status.slice(1)}
+                                  </h4>
+                                </div>
+                                {timestamp ? (
+                                  <span className="text-xs text-muted-foreground">
+                                    {formatDateTime(timestamp)}
+                                  </span>
+                                ) : (
+                                  isActive && (
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs"
+                                    >
+                                      {status === order.orderStatus
+                                        ? "Current"
+                                        : ""}
+                                    </Badge>
+                                  )
+                                )}
                               </div>
-                              {timestamp ? (
-                                <span className="text-xs text-muted-foreground">
-                                  {formatDateTime(timestamp)}
-                                </span>
+                              {note && (
+                                <p className="text-sm text-muted-foreground mt-1">
+                                  {note}
+                                </p>
+                              )}
+                              {updatedBy ? (
+                                <div className="flex items-center mt-1 text-xs text-muted-foreground">
+                                  <User className="h-3 w-3 mr-1" />
+                                  Updated by: {updatedBy.name || "User"}
+                                </div>
                               ) : (
-                                isActive && (
-                                  <Badge variant="outline" className="text-xs">
-                                    {status === order.orderStatus
-                                      ? "Current"
-                                      : ""}
-                                  </Badge>
-                                )
+                                <div className="flex items-center mt-1 text-xs text-muted-foreground">
+                                  <User className="h-3 w-3 mr-1" />
+                                  Created by: {order.user.name || "User"}
+                                </div>
                               )}
                             </div>
-                            {note && (
-                              <p className="text-sm text-muted-foreground mt-1">
-                                {note}
-                              </p>
-                            )}
-                            {updatedBy ? (
-                              <div className="flex items-center mt-1 text-xs text-muted-foreground">
-                                <User className="h-3 w-3 mr-1" />
-                                Updated by: {updatedBy.name || "User"}
-                              </div>
-                            ) : (
-                              <div className="flex items-center mt-1 text-xs text-muted-foreground">
-                                <User className="h-3 w-3 mr-1" />
-                                Created by: {order.user.name || "User"}
-                              </div>
-                            )}
-                          </div>
-                        </TimelineContent>
-                      </TimelineItem>
-                    );
-                  })}
-                </Timeline>
-              ) : (
-                <p className="text-muted-foreground text-sm">
-                  No status updates available.
-                </p>
-              )}
-            </div>
-          </Section>
+                          </TimelineContent>
+                        </TimelineItem>
+                      );
+                    })}
+                  </Timeline>
+                ) : (
+                  <p className="text-muted-foreground text-sm">
+                    No status updates available.
+                  </p>
+                )}
+              </div>
+            </Section>
+          </div>
 
           {/* Payment Information (Read-only) */}
           <Section title="Payment Information">
@@ -402,7 +404,6 @@ export function OrderForm({ order }: OrderFormProps) {
             </div>
           </Section>
 
-          {/* Order Information (Read-only) */}
           <Section title="Order Information">
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -470,7 +471,7 @@ export function OrderForm({ order }: OrderFormProps) {
 
           {/* Order Items Section */}
           <Section title="Order Items">
-            <div className="space-y-6 w-full">
+            <div className="space-y-6 w-full grid grid-cols-2 gap-5">
               {/* Order items table */}
               <div className="border rounded-md overflow-hidden w-full">
                 <Table>
@@ -536,12 +537,7 @@ export function OrderForm({ order }: OrderFormProps) {
 
               {/* Value breakdown */}
               <div className="border rounded-md p-6 space-y-4 w-full">
-                <h3 className="font-medium text-lg mb-2 flex items-center gap-2">
-                  <Receipt className="h-5 w-5 text-primary" />
-                  Order Value Breakdown
-                </h3>
-
-                <div className="space-y-3 max-w-md">
+                <div className="space-y-3 ">
                   <div className="flex justify-between items-center">
                     <span className="text-muted-foreground">Subtotal</span>
                     <span>{formatCurrencyEnglish(subtotal)}</span>

@@ -1,12 +1,12 @@
-import { Badge } from '@/components/ui/badge';
-import { formatCurrencyEnglish, formatWeight } from '@/lib/utils';
-import { getBlurData } from '@/utils/blur-generator';
-import type { Product } from '@/utils/types';
-import { DiscountType } from '@/utils/types';
-import { Weight } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { AddToCartButton } from '../cart/add-to-cart-button';
+import { Badge } from "@/components/ui/badge";
+import { formatCurrencyEnglish, formatWeight } from "@/lib/utils";
+import { getBlurData } from "@/utils/blur-generator";
+import type { Product } from "@/utils/types";
+import { DiscountType } from "@/utils/types";
+import { Weight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { AddToCartButton } from "../cart/add-to-cart-button";
 
 export default async function ProductCard({ product }: { product: Product }) {
   const { base64 } = await getBlurData(product?.attachment?.url);
@@ -62,15 +62,28 @@ export default async function ProductCard({ product }: { product: Product }) {
             </div>
           )}
 
-          {/* Discount Badge */}
+          {/* Minimalist Clean Version */}
           {isDiscountActive &&
             product.discountType &&
             product.discountValue && (
-              <Badge className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-pink-500 text-white border-0 shadow-lg font-semibold px-3 py-1 rounded-full">
-                {product.discountType === DiscountType.PERCENTAGE
-                  ? `${product.discountValue}% OFF`
-                  : `Save ${formatCurrencyEnglish(product.discountValue)}`}
-              </Badge>
+              <div className="absolute top-[2px] right-[2px] z-10">
+                <div className="relative w-16 h-16">
+                  <div className="absolute inset-2 bg-primaryColor rounded-full"></div>
+
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white ">
+                    <div className="text-[10px] leading-none font-black">
+                      {product.discountType === DiscountType.PERCENTAGE
+                        ? `${product.discountValue % 1 === 0 ? product.discountValue : product.discountValue.toFixed(3)}%`
+                        : formatCurrencyEnglish(product.discountValue)}
+                    </div>
+                    <span className="text-[10px]  uppercase tracking-wide font-medium">
+                      {product.discountType === DiscountType.PERCENTAGE
+                        ? "OFF"
+                        : "SAVE"}
+                    </span>
+                  </div>
+                </div>
+              </div>
             )}
         </div>
 

@@ -35,7 +35,7 @@ export default async function RecommendedProductCard({
   return (
     <div className="relative group mt-20 mb-5  transition-all duration-300 border border-gray-200 hover:bg-[#FDFBF4]  p-4 flex flex-col items-center rounded-lg shadow-sm hover:shadow-md">
       <Link
-        href={`/products/${product.slug}`}
+        href={`/product/${product.slug}`}
         className="flex flex-col  w-full h-full"
       >
         {/* Image Container */}

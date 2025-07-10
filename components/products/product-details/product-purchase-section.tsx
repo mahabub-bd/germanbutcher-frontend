@@ -5,13 +5,23 @@ import { Separator } from "@/components/ui/separator";
 import { useCartContext } from "@/contexts/cart-context";
 import type { Product } from "@/utils/types";
 import {
+  Facebook,
   Heart,
+  Linkedin,
   Loader2,
+  Mail,
+  MessageCircle,
   Minus,
   Plus,
   Share2,
   ShoppingCart,
 } from "lucide-react";
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  LinkedinShareButton,
+  WhatsappShareButton,
+} from "next-share";
 import { useState } from "react";
 
 interface ProductPurchaseSectionProps {
@@ -24,6 +34,7 @@ export function ProductPurchaseSection({
   const [quantity, setQuantity] = useState(1);
   const { addItem } = useCartContext();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [showShareOptions, setShowShareOptions] = useState(false);
 
   const discountAmount =
     product.discountType === "fixed"
@@ -58,6 +69,14 @@ export function ProductPurchaseSection({
       setIsAddingToCart(false);
     }
   };
+
+  // Share functionality
+  const shareUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/products/${product.slug}`
+      : "";
+  const shareTitle = `Check out ${product.name} on Our Store`;
+  const shareBody = `${product.name} - ${product.description}`;
 
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border">
@@ -129,7 +148,7 @@ export function ProductPurchaseSection({
             ) : (
               <ShoppingCart className="w-5 h-5 mr-2" />
             )}
-            Add {quantity} to Cart
+            Add to Cart
           </Button>
 
           <div className="grid grid-cols-2 gap-3">
@@ -140,13 +159,60 @@ export function ProductPurchaseSection({
               <Heart className="w-4 h-4 mr-2" />
               Add to Wishlist
             </Button>
-            <Button
-              variant="outline"
-              className="py-3 border-gray-300 hover:border-primaryColor hover:text-primaryColor"
-            >
-              <Share2 className="w-4 h-4 mr-2" />
-              Share Product
-            </Button>
+
+            <div className="relative">
+              <Button
+                variant="outline"
+                className="py-3 border-gray-300 hover:border-primaryColor hover:text-primaryColor w-full"
+                onClick={() => setShowShareOptions(!showShareOptions)}
+              >
+                <Share2 className="w-4 h-4 mr-2" />
+                Share Product
+              </Button>
+
+              {showShareOptions && (
+                <div className="absolute z-10 mt-2 w-64 bg-white rounded-md shadow-lg border border-gray-200 right-0">
+                  <div className="p-2 space-y-1  flex  gap-4">
+                    <FacebookShareButton
+                      url={shareUrl}
+                      quote={shareTitle}
+                      className="w-full"
+                    >
+                      <div className="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
+                        <Facebook className="w-4 h-4 mr-2 text-blue-600" />
+                      </div>
+                    </FacebookShareButton>
+
+                    <WhatsappShareButton
+                      url={shareUrl}
+                      title={shareTitle}
+                      className="w-full"
+                    >
+                      <div className="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
+                        <MessageCircle className="w-4 h-4 mr-2 text-green-500" />
+                      </div>
+                    </WhatsappShareButton>
+
+                    <LinkedinShareButton url={shareUrl} className="w-full">
+                      <div className="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
+                        <Linkedin className="w-4 h-4 mr-2 text-blue-700" />
+                      </div>
+                    </LinkedinShareButton>
+
+                    <EmailShareButton
+                      url={shareUrl}
+                      subject={shareTitle}
+                      body={shareBody}
+                      className="w-full"
+                    >
+                      <div className="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded cursor-pointer">
+                        <Mail className="w-4 h-4 mr-2 text-gray-600" />
+                      </div>
+                    </EmailShareButton>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -22,7 +22,7 @@ interface MobileBottomHeaderProps {
 export function MobileBottomHeader({ user }: MobileBottomHeaderProps) {
   const pathname = usePathname();
   const { getCartTotals } = useCartContext();
-  const { itemCount } = getCartTotals();
+  const { productCount } = getCartTotals();
 
   const navigationItems: NavigationItem[] = [
     {
@@ -71,14 +71,14 @@ export function MobileBottomHeader({ user }: MobileBottomHeaderProps) {
         {navigationItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(item);
-          const showBadge = item.badge && itemCount > 0;
+          const showBadge = item.badge && productCount > 0;
 
           return (
             <Link
               key={item.name}
               href={item.href}
-              className="flex flex-col items-center justify-center py-1 px-2 min-w-0 flex-1 group"
-              aria-label={`Navigate to ${item.name}${showBadge ? ` (${itemCount} items)` : ""}`}
+              className="flex flex-col items-center justify-center  px-2 min-w-0 flex-1 group"
+              aria-label={`Navigate to ${item.name}${showBadge ? ` (${productCount} items)` : ""}`}
             >
               {/* Icon container */}
               <div className="relative mb-1">
@@ -93,7 +93,7 @@ export function MobileBottomHeader({ user }: MobileBottomHeaderProps) {
                 {/* Clean badge */}
                 {showBadge && (
                   <div className="absolute -top-2 -right-2.5 bg-primaryColor text-white text-xs font-medium rounded-full min-w-[16px] h-4 flex items-center justify-center px-1">
-                    {itemCount > 99 ? "99+" : itemCount}
+                    {productCount > 99 ? "99+" : productCount}
                   </div>
                 )}
               </div>

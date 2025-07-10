@@ -15,18 +15,6 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
   const imageRef = useRef<HTMLDivElement>(null);
 
-  const discountAmount =
-    product.discountType === "fixed"
-      ? Number.parseFloat(String(product.discountValue ?? "0"))
-      : (product.sellingPrice *
-          Number.parseFloat(String(product.discountValue ?? "0"))) /
-        100;
-
-  const discountPercentage = (
-    (discountAmount / product.sellingPrice) *
-    100
-  ).toFixed(0);
-
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
     if (!imageRef.current) return;
 
@@ -90,12 +78,6 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
           />
         )}
 
-        {/* Badges */}
-        {discountAmount > 0 && (
-          <Badge className="absolute top-3 left-3 bg-red-500 text-white font-semibold z-10">
-            -{discountPercentage}% OFF
-          </Badge>
-        )}
         {product.stock <= 5 && product.stock > 0 && (
           <Badge className="absolute top-3 right-3 bg-orange-500 text-white z-10">
             Only {product.stock} left

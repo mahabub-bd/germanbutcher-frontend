@@ -354,6 +354,7 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
       isLoggedIn && serverCart ? serverCart.items : localCart?.items || [];
 
     const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+    const productCount = items.length; 
 
     const originalSubtotal = items.reduce((sum, item) => {
       const price = isLoggedIn
@@ -374,6 +375,7 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
 
     return {
       itemCount,
+      productCount,
       originalSubtotal,
       discountedSubtotal,
       productDiscounts,

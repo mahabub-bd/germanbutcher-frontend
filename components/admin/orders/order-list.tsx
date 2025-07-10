@@ -228,6 +228,9 @@ export function OrderList({
             <TableHead className="hidden md:table-cell">
               Payment Status
             </TableHead>
+            <TableHead className="hidden md:table-cell">
+              Payment Method
+            </TableHead>
             <TableHead className="hidden md:table-cell text-right">
               Total
             </TableHead>
@@ -256,10 +259,15 @@ export function OrderList({
                   {order.paymentStatus}
                 </Badge>
               </TableCell>
+              <TableCell className="hidden md:table-cell capitalize">
+                <Badge variant={getStatusBadgeVariant(order.paymentStatus)}>
+                  {order.paymentMethod.name}
+                </Badge>
+              </TableCell>
               <TableCell className="hidden md:table-cell text-right">
                 {formatCurrencyEnglish(order.totalValue)}
               </TableCell>
-               <TableCell className="hidden md:table-cell text-right">
+              <TableCell className="hidden md:table-cell text-right">
                 {formatCurrencyEnglish(order.paidAmount)}
               </TableCell>
               <TableCell className="text-right">

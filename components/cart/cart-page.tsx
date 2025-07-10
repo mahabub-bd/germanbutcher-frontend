@@ -73,10 +73,10 @@ export function CartPage({ cart }: { cart?: Cart }) {
       <div className="flex flex-col rounded-lg border bg-background shadow-sm lg:col-span-2">
         {/* Cart Header */}
         <div className="border-b p-4 sm:p-6">
-          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+          <div className="flex  justify-between gap-4 ">
             <div className="flex items-center gap-3">
               <ShoppingCart className="h-5 w-5" />
-              <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-3">
+              <div className="flex items-center gap-4 sm:gap-3">
                 <h1 className="text-lg font-semibold">Shopping Cart</h1>
                 <span className="text-sm text-muted-foreground">
                   ({itemCount} {itemCount === 1 ? "item" : "items"})
@@ -195,7 +195,7 @@ export function CartPage({ cart }: { cart?: Cart }) {
                   href="/shipping"
                   className="text-sm text-muted-foreground hover:underline"
                 >
-                  Calculate shipping
+                  Calculated at checkout
                 </Link>
               </div>
 

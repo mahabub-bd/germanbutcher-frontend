@@ -12,91 +12,63 @@ export function ProductDetailsCard({ product }: ProductDetailsCardProps) {
       label: "SKU",
       value: product.productSku,
       icon: Hash,
-      color: "text-primaryColor",
     },
     {
       label: "Weight",
       value: `${product.weight} ${product.unit.name}`,
       icon: Weight,
-      color: "text-primaryColor",
     },
     {
       label: "Brand",
       value: product.brand.name,
       icon: Building2,
-      color: "text-primaryColor",
     },
     {
       label: "Category",
       value: product.category.name,
       icon: Tag,
-      color: "text-primaryColor",
     },
   ];
 
   return (
-    <div className="bg-gradient-to-br from-white to-gray-50/50 shadow-lg rounded-lg hover:shadow-xl transition-all duration-300">
-      <div className="p-8">
+    <div className="bg-white rounded-lg border border-gray-200">
+      <div className="md:p-4 p-2">
         {/* Header */}
-        <div className="flex items-center mb-6">
-          <div className="p-3 bg-primaryColor/10 rounded-xl shadow-lg border border-primaryColor/20">
-            <Package className="w-6 h-6 text-primaryColor" />
+        <div className="flex items-center mb-6 gap-4">
+          <div className="p-2 bg-primaryColor/10 rounded-lg">
+            <Package className="w-5 h-5 text-primaryColor" />
           </div>
-          <div className="ml-4">
-            <h3 className="text-xl font-bold text-gray-900">Product Details</h3>
-            <p className="text-sm text-gray-500">
-              Comprehensive product information
-            </p>
+          <div>
+            <h3 className="text-lg font-semibold">Product Details</h3>
+            <p className="text-sm text-gray-500">Basic product information</p>
           </div>
         </div>
 
         {/* Details Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {details.map(({ label, value, icon: Icon, color }) => (
-            <div
-              key={label}
-              className="group p-4 bg-white rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-200"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div
-                    className={`p-2 rounded-lg bg-gray-50 group-hover:bg-gray-100 transition-colors`}
-                  >
-                    <Icon className={`w-4 h-4 ${color}`} />
-                  </div>
-                  <span className="text-sm font-medium text-gray-600">
-                    {label}
-                  </span>
-                </div>
-                <span className="text-sm font-semibold text-gray-900 bg-gray-50 px-3 py-1 rounded-full">
-                  {value}
-                </span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          {details.map(({ label, value, icon: Icon }) => (
+            <div key={label} className="flex items-center gap-3 p-3 ">
+              <Icon className="w-4 h-4 text-primaryColor" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-gray-500 truncate">{label}</p>
+                <p className="text-sm font-medium truncate">{value}</p>
               </div>
             </div>
           ))}
         </div>
 
-        <Separator className="my-6 bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-
         {/* Detailed Information Section */}
         {product.productDetails && (
           <>
-            <Separator className="my-6 bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-            <div>
-              <div className="flex items-center mb-4">
-                <div className="p-2 bg-primaryColor/10 rounded-lg border border-primaryColor/20">
-                  <Info className="w-4 h-4 text-primaryColor" />
-                </div>
-                <h4 className="ml-3 text-lg font-semibold text-gray-900">
-                  Detailed Information
-                </h4>
+            <Separator className="my-4" />
+            <div className="mt-6">
+              <div className="flex items-center mb-3 gap-3">
+                <Info className="w-4 h-4 text-primaryColor" />
+                <h4 className="text-base font-medium">Detailed Information</h4>
               </div>
-              <div className="bg-gradient-to-br from-gray-50 to-white p-2 rounded-xl border border-gray-100">
+              <div className="prose prose-sm max-w-none text-gray-700  md:p-4 p-2">
                 <div
-                  className="prose prose-sm max-w-none text-gray-700 prose-headings:text-gray-900 prose-links:text-primaryColor prose-strong:text-gray-900"
-                  dangerouslySetInnerHTML={{
-                    __html: product.productDetails,
-                  }}
+                  dangerouslySetInnerHTML={{ __html: product.productDetails }}
                 />
               </div>
             </div>

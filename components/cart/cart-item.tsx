@@ -121,14 +121,14 @@ export function CartItemProduct({ item }: { item: CartItem }) {
 
           <div className="text-right">
             <div className="flex items-center gap-1">
-              <div className="text-sm font-medium">
-                {formatCurrencyEnglish(totalPrice)}
-              </div>
               {hasActiveDiscount && (
                 <span className="text-[10px] text-green-600 font-medium">
                   Sale
                 </span>
               )}
+              <div className="text-sm font-medium">
+                {formatCurrencyEnglish(totalPrice)}
+              </div>
             </div>
             {hasDiscount && (
               <div className="text-xs text-muted-foreground line-through">
