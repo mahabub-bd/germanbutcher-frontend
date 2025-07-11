@@ -2,11 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { AddToWishlistButton } from "@/components/wishlist/add-to-wishlist-button";
 import { useCartContext } from "@/contexts/cart-context";
 import type { Product } from "@/utils/types";
 import {
   Facebook,
-  Heart,
   Linkedin,
   Loader2,
   Mail,
@@ -152,13 +152,11 @@ export function ProductPurchaseSection({
           </Button>
 
           <div className="grid grid-cols-2 gap-3">
-            <Button
+            <AddToWishlistButton
+              product={product}
               variant="outline"
               className="py-3 border-gray-300 hover:border-primaryColor hover:text-primaryColor"
-            >
-              <Heart className="w-4 h-4 mr-2" />
-              Add to Wishlist
-            </Button>
+            />
 
             <div className="relative">
               <Button

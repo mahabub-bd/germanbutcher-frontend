@@ -45,9 +45,9 @@ export function ProductDetailsCard({ product }: ProductDetailsCardProps) {
         </div>
 
         {/* Details Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
           {details.map(({ label, value, icon: Icon }) => (
-            <div key={label} className="flex items-center gap-3 p-3 ">
+            <div key={label} className="flex items-center  gap-3 p-3 ">
               <Icon className="w-4 h-4 text-primaryColor" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-gray-500 truncate">{label}</p>

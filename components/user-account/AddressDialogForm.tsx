@@ -35,7 +35,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-// Zod schema for address validation
 const addressSchema = z.object({
   address: z.string().min(1, "Address is required").trim(),
   area: z.string().min(1, "Area is required").trim(),
@@ -91,7 +90,6 @@ export default function AddressDialog({
 
   const { isSubmitting } = form.formState;
 
-  // Reset form when dialog opens/closes or mode changes
   useEffect(() => {
     if (open) {
       if (mode === "edit" && address) {
@@ -122,13 +120,11 @@ export default function AddressDialog({
   const onSubmit = async (data: AddressFormData) => {
     try {
       if (mode === "edit" && address) {
-        // Update existing address
         await patchData(`addresses/${address.id}`, data);
 
         toast.success("Address updated successfully");
         serverRevalidate(`/user/${userId}/addresses`);
       } else {
-        // Create new address
         await postData("addresses", data);
 
         toast.success("Address added successfully");
@@ -171,7 +167,7 @@ export default function AddressDialog({
                 control={form.control}
                 name="address"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel>
                       Address <span className="text-red-500">*</span>
                     </FormLabel>
@@ -187,7 +183,7 @@ export default function AddressDialog({
                 control={form.control}
                 name="area"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel>
                       Area <span className="text-red-500">*</span>
                     </FormLabel>
@@ -203,7 +199,7 @@ export default function AddressDialog({
                 control={form.control}
                 name="city"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel>
                       City <span className="text-red-500">*</span>
                     </FormLabel>
@@ -219,7 +215,7 @@ export default function AddressDialog({
                 control={form.control}
                 name="division"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel>
                       Division <span className="text-red-500">*</span>
                     </FormLabel>
@@ -228,7 +224,7 @@ export default function AddressDialog({
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select division" />
                         </SelectTrigger>
                       </FormControl>
@@ -249,7 +245,7 @@ export default function AddressDialog({
                 control={form.control}
                 name="type"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel>
                       Address Type <span className="text-red-500">*</span>
                     </FormLabel>
@@ -258,7 +254,7 @@ export default function AddressDialog({
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select address type" />
                         </SelectTrigger>
                       </FormControl>
@@ -278,7 +274,7 @@ export default function AddressDialog({
                 control={form.control}
                 name="isDefault"
                 render={({ field }) => (
-                  <FormItem className="flex items-center justify-between bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <FormItem className="w-full flex items-center justify-between bg-gray-50 p-4 rounded-lg border border-gray-200">
                     <FormLabel className="text-sm font-medium cursor-pointer mb-0">
                       Set as default address
                     </FormLabel>
@@ -299,10 +295,15 @@ export default function AddressDialog({
                 variant="outline"
                 onClick={() => setOpen(false)}
                 disabled={isSubmitting}
+                className="w-full sm:w-auto"
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full sm:w-auto"
+              >
                 {isSubmitting && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}

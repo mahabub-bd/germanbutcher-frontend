@@ -381,6 +381,17 @@ export interface CartItem {
   product: Product;
 }
 
+export interface Wishlist {
+  id: number;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  items: WishlistItem[];
+}
+
+export interface WishlistItem {
+  id: number;
+  product: Product;
+}
 export interface Coupon {
   id: string;
   code: string;

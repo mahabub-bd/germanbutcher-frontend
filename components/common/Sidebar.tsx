@@ -31,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems }) => {
           flex flex-col
           bg-white 
           shadow-[0px_-0.3px_5.5px_0px_rgba(0,0,0,0.02)]
-          rounded-[8px] sm:rounded-[10px] lg:rounded-[12px] 
+          rounded-lg
           p-3 sm:p-4 lg:p-5 
           w-full 
           overflow-y-auto

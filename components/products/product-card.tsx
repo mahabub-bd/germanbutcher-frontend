@@ -123,7 +123,11 @@ export default async function ProductCard({ product }: { product: Product }) {
 
       {/* Add to Cart Button */}
       <div className="lg:p-5 p-3">
-        <AddToCartButton product={product} disabled={isOutOfStock} />
+        <AddToCartButton
+          product={product}
+          disabled={isOutOfStock}
+          className="w-full"
+        />
       </div>
     </div>
   );

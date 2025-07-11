@@ -4,8 +4,8 @@ import { getUser } from "@/actions/auth";
 import MobileSidebar from "@/components/common/MobileSidebar";
 import Sidebar from "@/components/common/Sidebar";
 
+import ProfileBreadcrumb from "@/components/user-account/profile-breadcrumb";
 import {
-  CreditCard,
   Headphones,
   Heart,
   MapPin,
@@ -13,7 +13,6 @@ import {
   ShoppingBag,
   User,
 } from "lucide-react";
-import ProfileBreadcrumb from "@/components/user-account/profile-breadcrumb";
 
 interface UserProfileLayoutProps {
   children: React.ReactNode;
@@ -42,12 +41,7 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = async ({
       href: `/user/${user.id}/addresses`,
       description: "Manage shipping addresses",
     },
-    {
-      icon: <CreditCard className="w-5 h-5" />,
-      label: "Payment Methods",
-      href: `/user/${user.id}/payment-methods`,
-      description: "Saved cards and payment options",
-    },
+
     {
       icon: <Heart className="w-5 h-5" />,
       label: "Wishlist",
@@ -60,16 +54,10 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = async ({
       href: `/user/${user.id}/security`,
       description: "Password and account security",
     },
-    {
-      icon: <Headphones className="w-5 h-5" />,
-      label: "Help & Support",
-      href: `/user/${user.id}/support`,
-      description: "Get help with your account",
-    },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className=" bg-gray-50">
       <ProfileBreadcrumb navItems={navItems} />
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -114,8 +102,8 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = async ({
 
           {/* Main Content Area */}
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 min-h-[600px]">
-              <main className="p-6 lg:p-8">{children}</main>
+            <div className="bg-white rounded-md shadow-sm border border-gray-200 min-h-[600px]">
+              <main className="md:p-4 p-2">{children}</main>
             </div>
           </div>
         </div>

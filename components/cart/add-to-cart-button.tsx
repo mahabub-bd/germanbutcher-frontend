@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useCartContext } from '@/contexts/cart-context';
-import { cn } from '@/lib/utils';
-import type { Product } from '@/utils/types';
-import { Loader2, Plus, ShoppingCart } from 'lucide-react';
-import { useState } from 'react';
-import { Button } from '../ui/button';
+import { useCartContext } from "@/contexts/cart-context";
+import { cn } from "@/lib/utils";
+import type { Product } from "@/utils/types";
+import { Loader2, Plus, ShoppingCart } from "lucide-react";
+import { useState } from "react";
+import { Button } from "../ui/button";
 
 interface AddToCartButtonProps {
   product: Product;
@@ -27,7 +27,7 @@ export function AddToCartButton({
     try {
       await addItem(product);
     } catch (error) {
-      console.error('Error adding to cart:', error);
+      console.error("Error adding to cart:", error);
     } finally {
       setIsLoading(false);
     }
@@ -37,7 +37,7 @@ export function AddToCartButton({
     return (
       <Button
         className={cn(
-          'w-full md:py-3 py-0 border-primaryColor border px-4 bg-gray-100 text-gray-800 rounded-md font-semibold cursor-not-allowed transition-all duration-200',
+          "md:py-3 py-0 border-primaryColor border px-4 bg-gray-100 text-gray-800 rounded-md font-semibold cursor-not-allowed transition-all duration-200",
           className
         )}
         disabled
@@ -53,7 +53,7 @@ export function AddToCartButton({
   return (
     <Button
       className={cn(
-        'w-full md:py-3 py-0 px-4 bg-primaryColor hover:bg-primaryColor/90 text-white rounded-sm font-semibold transition-all duration-200 transform  hover:shadow-lg active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none group md:text-md cursor-pointer',
+        " md:py-3 py-0 px-4 bg-primaryColor hover:bg-primaryColor/90 text-white rounded-sm font-semibold transition-all duration-200 transform  hover:shadow-lg active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none group md:text-md cursor-pointer",
         className
       )}
       onClick={handleAddToCart}
