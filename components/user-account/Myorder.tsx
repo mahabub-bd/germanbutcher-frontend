@@ -15,22 +15,20 @@ import { Order } from "@/utils/types";
 import { ChevronRight, Eye, Package } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import PayNow from "../payment/pay-now";
 
 interface MyorderProps {
   orders: Order[];
 }
 
 export default function Myorder({ orders }: MyorderProps) {
-  console.log(orders);
   const params = useParams();
   const userId = params.id;
 
-  // Helper function to format status
   const formatStatus = (status: string) => {
     return status.charAt(0).toUpperCase() + status.slice(1);
   };
 
-  // Helper function to get status styling
   const getStatusStyle = (status: string) => {
     const statusStyles: { [key: string]: string } = {
       pending: "bg-amber-50 text-amber-700 border-amber-200",
@@ -45,7 +43,6 @@ export default function Myorder({ orders }: MyorderProps) {
     );
   };
 
-  // Helper function to get payment status styling
   const getPaymentStatusStyle = (status: string) => {
     const statusStyles: { [key: string]: string } = {
       paid: "bg-green-50 text-green-700 border-green-200",
@@ -58,20 +55,27 @@ export default function Myorder({ orders }: MyorderProps) {
     );
   };
 
+  const shouldShowPayNow = (order: Order) => {
+    return (
+      order.paymentStatus?.toLowerCase() === "pending" &&
+      order.orderStatus?.toLowerCase() !== "cancelled"
+    );
+  };
+
   return (
     <div className="w-full">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">My Orders</h2>
+      <div className="mb-6 flex justify-between">
+        <h2 className="text-2xl font-bold text-gray-900"> Orders</h2>
         <p className="text-gray-600 mt-1">
           Track and manage your order history
         </p>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div className=" rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto px-4">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gray-50 border-b border-gray-200">
+              <TableRow className=" border-b border-gray-200">
                 <TableHead className="font-semibold text-gray-700">
                   Order ID
                 </TableHead>
@@ -91,7 +95,7 @@ export default function Myorder({ orders }: MyorderProps) {
                   Payment
                 </TableHead>
                 <TableHead className="font-semibold text-gray-700 text-center">
-                  Details
+                  Actions
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -129,7 +133,9 @@ export default function Myorder({ orders }: MyorderProps) {
                       <div className="text-sm text-gray-600">
                         ৳{" "}
                         {order.shippingMethod?.cost
-                          ? parseFloat(order.shippingMethod.cost).toFixed(2)
+                          ? typeof order.shippingMethod.cost === "string"
+                            ? parseFloat(order.shippingMethod.cost).toFixed(2)
+                            : order.shippingMethod.cost
                           : "0.00"}
                       </div>
                     </TableCell>
@@ -141,18 +147,31 @@ export default function Myorder({ orders }: MyorderProps) {
                         {formatStatus(order.paymentStatus)}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-center">
+                    <TableCell>
                       <Link href={`/user/${userId}/orders/${order.id}`}>
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="hover:bg-gray-100 hover:text-gray-900 transition-all group"
+                          className="hover:bg-gray-100 hover:text-gray-900 transition-all group h-8"
                         >
-                          <Eye className="w-4 h-4 mr-1.5 group-hover:scale-110 transition-transform" />
+                          <Eye className="w-3 h-3 mr-1 group-hover:scale-110 transition-transform" />
                           View
-                          <ChevronRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 transition-transform" />
+                          <ChevronRight className="w-3 h-3 ml-0.5 group-hover:translate-x-0.5 transition-transform" />
                         </Button>
                       </Link>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        {/* Use existing PayNow component for pending payments */}
+                        {shouldShowPayNow(order) && (
+                          <div className="w-24">
+                            <PayNow
+                              order={order}
+                              className="h-6 text-xs px-2 text-white"
+                            />
+                          </div>
+                        )}
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))

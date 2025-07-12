@@ -1,6 +1,6 @@
 import Myorder from "@/components/user-account/Myorder";
 import { fetchProtectedData } from "@/utils/api-utils";
-import { Order } from "@/utils/types"; // Assuming you have an Order type
+import { Order } from "@/utils/types";
 
 export default async function UserOrderPage({
   params,
@@ -13,7 +13,7 @@ export default async function UserOrderPage({
   const userOrders: Order[] = await fetchProtectedData(endpoint);
 
   return (
-    <div className="h-full mt-1">
+    <div className="p-4">
       <Myorder orders={userOrders} />
     </div>
   );
