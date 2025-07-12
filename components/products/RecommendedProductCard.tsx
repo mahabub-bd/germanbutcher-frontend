@@ -99,7 +99,11 @@ export default async function RecommendedProductCard({
 
       {/* Add to Cart */}
       <div className="w-full">
-        <AddToCartButton product={product} disabled={!product?.stock} />
+        <AddToCartButton
+          className="w-full"
+          product={product}
+          disabled={!product?.stock}
+        />
       </div>
     </div>
   );

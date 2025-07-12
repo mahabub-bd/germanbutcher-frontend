@@ -243,7 +243,7 @@ function WhereToBuyClient({
                 <select
                   value={division}
                   onChange={(e) => handleDivisionChange(e.target.value)}
-                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 pl-10 sm:pl-12 pr-8 sm:pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primaryColor/30 focus:border-primaryColor transition-all text-sm sm:text-base text-gray-800 appearance-none cursor-pointer bg-white/80 backdrop-blur-sm hover:bg-white/90"
+                  className="w-full px-3  sm:px-4 py-2.5 sm:py-3 pl-10 sm:pl-12 pr-8 sm:pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primaryColor/30 focus:border-primaryColor transition-all text-sm sm:text-base text-gray-800 appearance-none cursor-pointer bg-white/80 backdrop-blur-sm hover:bg-white/90"
                 >
                   <option value="">Select Division</option>
                   {divisions.map((div) => (
