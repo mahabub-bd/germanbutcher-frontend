@@ -5,7 +5,7 @@ const SisterConcernCard: React.FC<{ concern: SisterConcern }> = ({
   concern,
 }) => {
   return (
-    <div className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+    <div className=" p-2 group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
       <div className="relative aspect-[4/3] overflow-hidden w-[160px] mx-auto">
         <Image
           src={concern.imageUrl}
@@ -14,7 +14,6 @@ const SisterConcernCard: React.FC<{ concern: SisterConcern }> = ({
           height={113}
           className="w-full h-full object-contain transition-transform duration-700 ease-out"
         />
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
       </div>
 
       <div className="p-6 space-y-4">

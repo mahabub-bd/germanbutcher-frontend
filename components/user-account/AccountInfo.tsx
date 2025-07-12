@@ -123,39 +123,41 @@ function FormField({
 }: FormFieldProps) {
   return (
     <div className="space-y-3">
-      <div className="space-y-1">
+      <div className="space-y-2">
         <label className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-          <div className="p-1 rounded-md bg-primaryColor/10">
-            <Icon className="w-3.5 h-3.5 text-primaryColor" />
+          <div className="p-1.5 rounded-lg bg-primaryColor/10">
+            <Icon className="w-4 h-4 text-primaryColor" />
           </div>
           {label}
           <span className="text-red-500 text-xs">*</span>
         </label>
-        {description && <p className="text-xs text-gray-500">{description}</p>}
+        {description && (
+          <p className="text-xs text-gray-500 ml-7">{description}</p>
+        )}
       </div>
 
       {isEditing ? (
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Input
             type={type}
             {...register(name)}
             placeholder={placeholder}
-            className={`h-10 sm:h-11 transition-all duration-200 ${
+            className={`h-12 text-base transition-all duration-200 ${
               error
                 ? "border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500/20"
                 : "focus-visible:border-primaryColor focus-visible:ring-primaryColor/20"
             }`}
           />
           {error && (
-            <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 p-2 rounded-md">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <div className="flex items-start gap-3 text-sm text-red-600 bg-red-50 p-3 rounded-lg">
+              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           )}
         </div>
       ) : (
-        <div className="min-h-[40px] sm:min-h-[44px] flex items-center px-3 sm:px-4 py-2 sm:py-3 bg-gray-50/50">
-          <p className="text-xs sm:text-sm text-gray-800 font-medium">
+        <div className="min-h-[48px] flex items-center px-4 py-3 bg-gray-50 rounded-lg border">
+          <p className="text-sm text-gray-800 font-medium">
             {value || "Not provided"}
           </p>
         </div>
@@ -191,18 +193,16 @@ function PasswordField({
   if (!isEditing) {
     return (
       <div className="space-y-3">
-        <div className="space-y-1">
+        <div className="space-y-2">
           <label className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-            <div className="p-1 rounded-md bg-blue-50">
-              <Lock className="w-3.5 h-3.5 text-blue-600" />
+            <div className="p-1.5 rounded-lg bg-blue-50">
+              <Lock className="w-4 h-4 text-blue-600" />
             </div>
             {label}
           </label>
         </div>
-        <div className="min-h-[40px] sm:min-h-[44px] flex items-center px-3 sm:px-4 py-2 sm:py-3 bg-gray-50/50">
-          <p className="text-xs sm:text-sm text-gray-800 font-medium">
-            ••••••••••••
-          </p>
+        <div className="min-h-[48px] flex items-center px-4 py-3 bg-gray-50 rounded-lg border">
+          <p className="text-sm text-gray-800 font-medium">••••••••••••</p>
         </div>
       </div>
     );
@@ -210,26 +210,28 @@ function PasswordField({
 
   return (
     <div className="space-y-3">
-      <div className="space-y-1">
+      <div className="space-y-2">
         <label className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-          <div className="p-1 rounded-md bg-primaryColor/10">
-            <Lock className="w-3.5 h-3.5 text-primaryColor" />
+          <div className="p-1.5 rounded-lg bg-primaryColor/10">
+            <Lock className="w-4 h-4 text-primaryColor" />
           </div>
           {label}
           {name === "confirmPassword" && (
             <span className="text-red-500 text-xs">*</span>
           )}
         </label>
-        {description && <p className="text-xs text-gray-500">{description}</p>}
+        {description && (
+          <p className="text-xs text-gray-500 ml-7">{description}</p>
+        )}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-3">
         <div className="relative">
           <Input
             type={showPassword ? "text" : "password"}
             {...register(name)}
             placeholder={placeholder}
-            className={`h-10 sm:h-11 pr-10 transition-all duration-200 ${
+            className={`h-12 pr-12 text-base transition-all duration-200 ${
               error
                 ? "border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500/20"
                 : "focus-visible:border-primaryColor focus-visible:ring-primaryColor/20"
@@ -238,20 +240,20 @@ function PasswordField({
           {showToggle && (
             <button
               type="button"
-              className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 transition-colors"
+              className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600 transition-colors touch-manipulation"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? (
-                <EyeOff className="w-4 h-4" />
+                <EyeOff className="w-5 h-5" />
               ) : (
-                <Eye className="w-4 h-4" />
+                <Eye className="w-5 h-5" />
               )}
             </button>
           )}
         </div>
         {error && (
-          <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 p-2 rounded-md">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <div className="flex items-start gap-3 text-sm text-red-600 bg-red-50 p-3 rounded-lg">
+            <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
             <span>{error}</span>
           </div>
         )}
@@ -278,26 +280,23 @@ function ActionButtons({
 }: ActionButtonsProps) {
   if (isEditing) {
     return (
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:gap-3">
         <button
           type="button"
-          className="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[48px]"
           onClick={onCancel}
           disabled={isSubmitting}
         >
           <X className="w-4 h-4" />
-          <span className="hidden xs:inline">Cancel</span>
+          Cancel
         </button>
         <button
           type="submit"
-          className="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-sm font-medium text-white bg-primaryColor hover:bg-primaryColor/90 focus:outline-none transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-primaryColor rounded-lg hover:bg-primaryColor/90 focus:outline-none focus:ring-2 focus:ring-primaryColor transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[48px]"
           disabled={isSubmitting || !isValid}
         >
           <Save className="w-4 h-4" />
-          <span className="hidden xs:inline">
-            {isSubmitting ? "Saving..." : "Save"}
-          </span>
-          <span className="xs:hidden">{isSubmitting ? "..." : "Save"}</span>
+          {isSubmitting ? "Saving..." : "Save Changes"}
         </button>
       </div>
     );
@@ -306,12 +305,11 @@ function ActionButtons({
   return (
     <button
       type="button"
-      className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-all duration-200"
+      className="flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-200 touch-manipulation min-h-[48px] w-full sm:w-auto"
       onClick={onEdit}
     >
       <Edit3 className="w-4 h-4" />
-      <span className="hidden xs:inline">Edit Profile</span>
-      <span className="xs:hidden">Edit</span>
+      Edit Profile
     </button>
   );
 }
@@ -439,36 +437,26 @@ export default function AccountInfo({ user }: AccountInfoProps) {
   }, []);
 
   return (
-    <div className="space-y-8">
+    <div className="">
       {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-            Account Information
-          </h1>
-          <p className="text-sm sm:text-base text-gray-600">
-            Manage your personal details and account preferences
-          </p>
-        </div>
+      <div className="p-4">
+        <h1 className="text-xl font-bold text-gray-900">Account Information</h1>
       </div>
 
       {/* Main Form Card */}
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="bg-white rounded-2xl overflow-hidden"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className=" overflow-hidden">
         {/* Card Header */}
-        <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 bg-gradient-to-r from-primaryColor/10 to-primaryColor/5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primaryColor/10 flex items-center justify-center">
-                <UserIcon className="w-5 h-5 sm:w-6 sm:h-6 text-primaryColor" />
+        <div className="px-4 sm:px-0 py-5 border-b">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 flex items-center justify-center">
+                <UserIcon className="w-6 h-6 text-primaryColor" />
               </div>
               <div>
-                <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-gray-900">
                   Personal Details
                 </h2>
-                <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
+                <p className="text-sm text-gray-600 mt-0.5">
                   Keep your information up to date
                 </p>
               </div>
@@ -484,16 +472,16 @@ export default function AccountInfo({ user }: AccountInfoProps) {
         </div>
 
         {/* Form Content */}
-        <div className="p-4 sm:p-6 lg:p-8">
-          <div className="space-y-6 sm:space-y-8">
+        <div className="p-4 sm:p-6">
+          <div className="space-y-8">
             {/* Basic Information Section */}
-            <div className="space-y-4 sm:space-y-6">
-              <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-700 uppercase tracking-wide">
-                <div className="w-1 h-3 sm:h-4 bg-primaryColor rounded-full"></div>
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 text-sm font-medium text-gray-700 uppercase tracking-wide">
+                <div className="w-1 h-4 bg-primaryColor rounded-full"></div>
                 Basic Information
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+              <div className="space-y-6">
                 {FORM_FIELDS.map((field) => (
                   <FormField
                     key={field.name}
@@ -513,13 +501,13 @@ export default function AccountInfo({ user }: AccountInfoProps) {
             </div>
 
             {/* Security Section */}
-            <div className="space-y-4 sm:space-y-6">
-              <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-700 uppercase tracking-wide">
-                <div className="w-1 h-3 sm:h-4 bg-red-600 rounded-full"></div>
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 text-sm font-medium text-gray-700 uppercase tracking-wide">
+                <div className="w-1 h-4 bg-red-600 rounded-full"></div>
                 Security Settings
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+              <div className="space-y-6">
                 <PasswordField
                   label="Password"
                   name="password"
@@ -545,18 +533,18 @@ export default function AccountInfo({ user }: AccountInfoProps) {
               </div>
 
               {isEditing && (
-                <div className="bg-amber-50 rounded-lg p-3 sm:p-4">
-                  <div className="flex items-start gap-2 sm:gap-3">
-                    <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                    <div className="space-y-1">
-                      <h4 className="text-xs sm:text-sm font-medium text-amber-800">
+                <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
+                  <div className="flex items-start gap-3">
+                    <Shield className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-medium text-amber-800">
                         Password Security Tips
                       </h4>
-                      <ul className="text-xs sm:text-sm text-amber-700 space-y-1">
-                        <li>• Use at least 8 characters</li>
-                        <li>• Include uppercase and lowercase letters</li>
-                        <li>• Add numbers and special characters</li>
-                        <li>• Avoid using personal information</li>
+                      <ul className="text-sm text-amber-700 space-y-1 list-disc list-inside">
+                        <li>Use at least 8 characters</li>
+                        <li>Include uppercase and lowercase letters</li>
+                        <li>Add numbers and special characters</li>
+                        <li>Avoid using personal information</li>
                       </ul>
                     </div>
                   </div>
@@ -567,31 +555,31 @@ export default function AccountInfo({ user }: AccountInfoProps) {
 
           {/* Account Status Section */}
           {!isEditing && (
-            <div className="mt-6 sm:mt-8 pt-6 sm:pt-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                <div className="flex items-center gap-3">
-                  <div className="p-1.5 sm:p-2 rounded-lg bg-green-50">
-                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+            <div className="mt-8 pt-6 border-t">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
+                  <div className="p-2 rounded-lg bg-green-100">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
                   </div>
                   <div>
-                    <p className="text-xs sm:text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-gray-900">
                       Account Status
                     </p>
-                    <p className="text-xs sm:text-sm text-green-600 font-medium">
+                    <p className="text-sm text-green-600 font-medium">
                       {user.isVerified ? "Verified" : "Pending Verification"}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="p-1.5 sm:p-2 rounded-lg bg-primaryColor/10">
-                    <UserIcon className="w-4 h-4 sm:w-5 sm:h-5 text-primaryColor" />
+                <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+                  <div className="p-2 rounded-lg bg-blue-100">
+                    <UserIcon className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-xs sm:text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-gray-900">
                       Member Since
                     </p>
-                    <p className="text-xs sm:text-sm text-gray-600">
+                    <p className="text-sm text-gray-600">
                       {new Date(user.createdAt).toLocaleDateString("en-US", {
                         month: "long",
                         year: "numeric",
@@ -600,15 +588,15 @@ export default function AccountInfo({ user }: AccountInfoProps) {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 sm:col-span-2 lg:col-span-1">
-                  <div className="p-1.5 sm:p-2 rounded-lg bg-purple-50">
-                    <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
+                <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg sm:col-span-2 lg:col-span-1">
+                  <div className="p-2 rounded-lg bg-purple-100">
+                    <Shield className="w-5 h-5 text-purple-600" />
                   </div>
                   <div>
-                    <p className="text-xs sm:text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-gray-900">
                       Last Updated
                     </p>
-                    <p className="text-xs sm:text-sm text-gray-600">
+                    <p className="text-sm text-gray-600">
                       {new Date(user.updatedAt).toLocaleDateString()}
                     </p>
                   </div>

@@ -148,7 +148,7 @@ export default function Myorder({ orders }: MyorderProps) {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <Link href={`/user/${userId}/orders/${order.id}`}>
+                      <Link href={`/user/${userId}/order/${order.id}`}>
                         <Button
                           variant="ghost"
                           size="sm"

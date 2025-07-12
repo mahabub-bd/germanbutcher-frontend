@@ -138,35 +138,37 @@ export function CustomerInformation({
       </div>
 
       <div className="space-y-4 md:space-y-5">
-        <div>
-          <Label htmlFor="name">Name</Label>
-          <Input
-            id="name"
-            value={formData.name}
-            onChange={(e) => onChange("name", e.target.value)}
-            placeholder="Your full name"
-            disabled={
-              !isEditingInfo &&
-              ((!!user && !isVerified) || (isVerified && !isEditingInfo))
-            }
-            className="mt-1"
-          />
-        </div>
+        <div className="grid md:grid-cols-2 grid-cols-1">
+          <div>
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              value={formData.name}
+              onChange={(e) => onChange("name", e.target.value)}
+              placeholder="Your full name"
+              disabled={
+                !isEditingInfo &&
+                ((!!user && !isVerified) || (isVerified && !isEditingInfo))
+              }
+              className="mt-1"
+            />
+          </div>
 
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={formData.email}
-            onChange={(e) => onChange("email", e.target.value)}
-            placeholder="your@email.com"
-            disabled={
-              !isEditingInfo &&
-              ((!!user && !isVerified) || (isVerified && !isEditingInfo))
-            }
-            className="mt-1"
-          />
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              value={formData.email}
+              onChange={(e) => onChange("email", e.target.value)}
+              placeholder="your@email.com"
+              disabled={
+                !isEditingInfo &&
+                ((!!user && !isVerified) || (isVerified && !isEditingInfo))
+              }
+              className="mt-1"
+            />
+          </div>
         </div>
 
         <div>

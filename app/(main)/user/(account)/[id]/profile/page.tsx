@@ -12,5 +12,9 @@ export default async function AccountPage({
 
   const userData: User = await fetchProtectedData(endpoint);
 
-  return <AccountInfo user={userData} />;
+  return (
+    <div className="md:p-4 p-0 ">
+      <AccountInfo user={userData} />
+    </div>
+  );
 }
