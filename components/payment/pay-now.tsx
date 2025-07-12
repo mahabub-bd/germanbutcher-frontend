@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { fetchProtectedData } from "@/utils/api-utils";
 import { Order } from "@/utils/types";
 import { CreditCard, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface PayNowProps {
@@ -15,7 +14,7 @@ interface PayNowProps {
 export default function PayNow({ order, className }: PayNowProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+  console.log(order);
 
   const handlePayment = async () => {
     setIsProcessing(true);
