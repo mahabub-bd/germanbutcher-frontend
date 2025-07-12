@@ -18,6 +18,7 @@ import {
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+import PayNow from "@/components/payment/pay-now";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -530,7 +531,7 @@ export default async function OrderConfirmationPage({
             {/* Action Buttons */}
             <div className="space-y-3">
               {order.paymentStatus.toLowerCase() === "pending" ? (
-                <Button className="w-full">Pay Now</Button>
+                <PayNow order={order} className="w-full" />
               ) : (
                 <Button className="w-full">
                   <Download className="mr-2 h-4 w-4" />
