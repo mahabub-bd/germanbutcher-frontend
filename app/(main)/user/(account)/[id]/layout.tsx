@@ -24,7 +24,7 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = async ({
     },
     {
       icon: <ShoppingBag className="w-5 h-5" />,
-      label: "My Orders",
+      label: "Orders",
       href: `/user/${user.id}/orders`,
       description: "Track and manage your orders",
     },
