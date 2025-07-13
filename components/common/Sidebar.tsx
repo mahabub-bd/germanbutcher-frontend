@@ -7,6 +7,7 @@ interface NavItem {
   icon: React.ReactNode;
   label: string;
   href: string;
+  description?: string;
 }
 
 interface SidebarProps {
@@ -25,14 +26,9 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems }) => {
 
   return (
     <div className="w-full">
-      {/* Sidebar container */}
-      <div
-        className="
-          flex rounded-lg
-          p-3 sm:p-4 lg:p-5"
-      >
-        <div className="flex gap-5 justify-between">
-          {/* Navigation Items */}
+      {/* Tab Navigation */}
+      <div className="bg-white border-b border-gray-200">
+        <nav className="flex overflow-x-auto scrollbar-hide">
           {navItems.map((item: NavItem) => {
             const active = isActive(item.href);
             return (
@@ -40,52 +36,68 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems }) => {
                 key={item.label}
                 href={item.href}
                 className={`
-                    flex items-center group 
-                    gap-2 sm:gap-3  flex-wrap
-                    px-2 sm:px-3 
-                    py-2 sm:py-2.5 lg:py-3 
-                    rounded-lg 
-                    hover:bg-primaryColor/10
-                    transition-colors duration-200
-                    ${active ? "bg-primaryColor/10" : ""}
-                  `}
+                  group relative flex items-center gap-3 px-4 py-3 min-w-fit
+                  border-b-2 transition-all duration-200
+                  hover:bg-gray-50 hover:border-primaryColor/50
+                  ${
+                    active
+                      ? "border-primaryColor bg-primaryColor/5 text-primaryColor"
+                      : "border-transparent text-gray-600 hover:text-gray-900"
+                  }
+                `}
               >
                 {/* Icon */}
                 <div
                   className={`
-                      w-[24px] h-[24px] sm:w-[28px] sm:h-[28px] lg:w-[30px] lg:h-[30px]
-                      flex justify-center items-center flex-shrink-0 rounded-full
-                      text-lg sm:text-xl font-medium
-                      ${
-                        active
-                          ? "text-primaryColor"
-                          : "text-descriptionColor group-hover:text-primaryColor"
-                      }
-                    `}
+                    w-5 h-5 flex-shrink-0 transition-colors duration-200
+                    ${
+                      active
+                        ? "text-primaryColor"
+                        : "text-gray-500 group-hover:text-gray-700"
+                    }
+                  `}
                 >
                   {item.icon}
                 </div>
 
-                {/* Label - Hidden on small screens, visible on sm+ */}
+                {/* Label */}
                 <span
                   className={`
-                      hidden sm:block
-                      text-sm sm:text-base font-medium 
-                      truncate
-                      ${
-                        active
-                          ? "text-primaryColor"
-                          : "text-descriptionColor group-hover:text-primaryColor"
-                      }
-                    `}
+                    text-sm font-medium whitespace-nowrap transition-colors duration-200
+                    ${
+                      active
+                        ? "text-primaryColor"
+                        : "text-gray-700 group-hover:text-gray-900"
+                    }
+                  `}
                 >
                   {item.label}
                 </span>
+
+                {/* Active indicator */}
+                {active && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primaryColor"></div>
+                )}
               </Link>
             );
           })}
-        </div>
+        </nav>
       </div>
+
+      {/* Tab Content Description (Optional) */}
+      {navItems.map((item: NavItem) => {
+        const active = isActive(item.href);
+        if (!active || !item.description) return null;
+
+        return (
+          <div
+            key={`${item.label}-desc`}
+            className="px-4 py-3 bg-primaryColor/5 border-b border-gray-200"
+          >
+            <p className="text-sm text-gray-600">{item.description}</p>
+          </div>
+        );
+      })}
     </div>
   );
 };

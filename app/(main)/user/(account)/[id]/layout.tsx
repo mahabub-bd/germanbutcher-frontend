@@ -5,14 +5,7 @@ import MobileSidebar from "@/components/common/MobileSidebar";
 
 import Sidebar from "@/components/common/Sidebar";
 import ProfileBreadcrumb from "@/components/user-account/profile-breadcrumb";
-import {
-  Headphones,
-  Heart,
-  MapPin,
-  Shield,
-  ShoppingBag,
-  User,
-} from "lucide-react";
+import { Headphones, Heart, MapPin, ShoppingBag, User } from "lucide-react";
 
 interface UserProfileLayoutProps {
   children: React.ReactNode;
@@ -46,12 +39,6 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = async ({
       label: "Wishlist",
       href: `/user/${user.id}/wishlist`,
       description: "Your saved items",
-    },
-    {
-      icon: <Shield className="w-5 h-5" />,
-      label: "Privacy & Security",
-      href: `/user/${user.id}/security`,
-      description: "Password and account security",
     },
   ];
 
