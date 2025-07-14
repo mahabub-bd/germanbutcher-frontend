@@ -26,11 +26,11 @@ export default function PayNow({ order, className }: PayNowProps) {
     }
   };
   return (
-    <div className="space-y-2">
+    <div>
       <Button
         onClick={handlePayment}
         disabled={isProcessing}
-        className={className || "w-full"}
+        className={className || "w-full py-0"}
       >
         {isProcessing ? (
           <>

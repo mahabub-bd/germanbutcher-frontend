@@ -584,3 +584,17 @@ export interface FAQItem {
   answer: string;
   category: string;
 }
+
+export type PaymentStatus = "success" | "failed" | "canceled";
+
+export interface PaymentStatusConfig {
+  title: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  iconColor: string;
+  bgGradient: string;
+  cardBg: string;
+  cardBorder: string;
+  badgeClass: string;
+  actionText: string;
+}

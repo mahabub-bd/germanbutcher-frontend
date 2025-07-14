@@ -302,6 +302,7 @@ export default function CheckoutPage({ user }: { user?: UserType }) {
         <div className="grid gap-6 md:gap-8 lg:grid-cols-12">
           {/* Main Form */}
           <div className="lg:col-span-8 space-y-6 md:space-y-8">
+            <OrderItems items={cart.items} itemCount={itemCount} />
             <CustomerInformation
               formData={formData}
               onChange={handleFormDataChange}
@@ -339,8 +340,6 @@ export default function CheckoutPage({ user }: { user?: UserType }) {
                 }
               />
             )}
-
-            <OrderItems items={cart.items} itemCount={itemCount} />
 
             {/* Mobile Order Summary */}
             <div className="lg:hidden">

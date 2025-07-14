@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 export default function OrderPage() {
   const params = useParams();
-  const orderId = params.id as string;
+  const orderId = params.orderId as string;
   const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 

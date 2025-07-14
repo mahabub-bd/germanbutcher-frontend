@@ -36,6 +36,12 @@ enum OrderStatus {
   CANCELLED = "cancelled",
 }
 
+// Payment method constants
+const PAYMENT_METHODS = {
+  CASH_ON_DELIVERY: "cash on delivery",
+  COD: "cod",
+} as const;
+
 async function fetchOrder(id: string) {
   try {
     const order = await fetchProtectedData<Order>(`orders/${id}`);
@@ -45,6 +51,89 @@ async function fetchOrder(id: string) {
     return null;
   }
 }
+
+// Utility functions
+const getOrderStatusColor = (status: string) => {
+  switch (status.toLowerCase()) {
+    case OrderStatus.PENDING:
+      return "bg-yellow-100 text-yellow-800";
+    case OrderStatus.PROCESSING:
+      return "bg-blue-100 text-blue-800";
+    case OrderStatus.SHIPPED:
+      return "bg-purple-100 text-purple-800";
+    case OrderStatus.DELIVERED:
+      return "bg-green-100 text-green-800";
+    case OrderStatus.CANCELLED:
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-gray-100 text-gray-800";
+  }
+};
+
+const getPaymentStatusColor = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "paid":
+      return "bg-green-100 text-green-800";
+    case "pending":
+      return "bg-yellow-100 text-yellow-800";
+    case "failed":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-gray-100 text-gray-800";
+  }
+};
+
+const getStatusIcon = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "paid":
+    case OrderStatus.DELIVERED:
+    case "completed":
+      return <CheckCircle className="size-4 mr-1" />;
+    case OrderStatus.PENDING:
+    case OrderStatus.PROCESSING:
+      return <Clock className="size-4 mr-1" />;
+    case OrderStatus.CANCELLED:
+    case "failed":
+      return <XCircle className="size-4 mr-1" />;
+    case OrderStatus.SHIPPED:
+      return <Truck className="size-4 mr-1" />;
+    default:
+      return null;
+  }
+};
+
+const formatStatus = (status: string) => {
+  return status.charAt(0).toUpperCase() + status.slice(1);
+};
+
+const calculateDiscountedPrice = (
+  price: number,
+  discountType: string,
+  discountValue: string
+) => {
+  if (discountType === "percentage") {
+    return price - price * (Number.parseFloat(discountValue) / 100);
+  }
+  return price - Number.parseFloat(discountValue);
+};
+
+// Check if payment method is Cash on Delivery
+const isCashOnDelivery = (paymentMethod: string): boolean => {
+  const method = paymentMethod.toLowerCase();
+  return (
+    method === PAYMENT_METHODS.CASH_ON_DELIVERY ||
+    method === PAYMENT_METHODS.COD
+  );
+};
+
+// Determine if Pay Now button should be shown
+const shouldShowPayNow = (order: Order): boolean => {
+  const isPending = order.paymentStatus.toLowerCase() === "pending";
+  const isNotCancelled = order.orderStatus.toLowerCase() !== "cancelled";
+  const isNotCOD = !isCashOnDelivery(order.paymentMethod.name);
+
+  return isPending && isNotCancelled && isNotCOD;
+};
 
 export default async function OrderConfirmationPage({
   params,
@@ -57,55 +146,6 @@ export default async function OrderConfirmationPage({
   if (!order) {
     notFound();
   }
-
-  const getOrderStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case OrderStatus.PENDING:
-        return "bg-yellow-100 text-yellow-800";
-      case OrderStatus.PROCESSING:
-        return "bg-blue-100 text-blue-800";
-      case OrderStatus.SHIPPED:
-        return "bg-purple-100 text-purple-800";
-      case OrderStatus.DELIVERED:
-        return "bg-green-100 text-green-800";
-      case OrderStatus.CANCELLED:
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getPaymentStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "paid":
-        return "bg-green-100 text-green-800";
-      case "pending":
-        return "bg-yellow-100 text-yellow-800";
-      case "failed":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "paid":
-      case OrderStatus.DELIVERED:
-      case "completed":
-        return <CheckCircle className="size-4 mr-1" />;
-      case OrderStatus.PENDING:
-      case OrderStatus.PROCESSING:
-        return <Clock className="size-4 mr-1" />;
-      case OrderStatus.CANCELLED:
-      case "failed":
-        return <XCircle className="size-4 mr-1" />;
-      case OrderStatus.SHIPPED:
-        return <Truck className="size-4 mr-1" />;
-      default:
-        return null;
-    }
-  };
 
   const calculateOrderSummary = () => {
     let originalSubtotal = 0;
@@ -142,17 +182,6 @@ export default async function OrderConfirmationPage({
 
   const orderSummary = calculateOrderSummary();
 
-  const calculateDiscountedPrice = (
-    price: number,
-    discountType: string,
-    discountValue: string
-  ) => {
-    if (discountType === "percentage") {
-      return price - price * (Number.parseFloat(discountValue) / 100);
-    }
-    return price - Number.parseFloat(discountValue);
-  };
-
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="flex flex-col space-y-6">
@@ -172,16 +201,14 @@ export default async function OrderConfirmationPage({
               className={getOrderStatusColor(order.orderStatus)}
             >
               Order Status: {getStatusIcon(order.orderStatus)}
-              {order.orderStatus.charAt(0).toUpperCase() +
-                order.orderStatus.slice(1)}
+              {formatStatus(order.orderStatus)}
             </Badge>
             <Badge
               variant="outline"
               className={getPaymentStatusColor(order.paymentStatus)}
             >
               Payment Status: {getStatusIcon(order.paymentStatus)}
-              {order.paymentStatus.charAt(0).toUpperCase() +
-                order.paymentStatus.slice(1)}
+              {formatStatus(order.paymentStatus)}
             </Badge>
           </div>
         </div>
@@ -307,6 +334,14 @@ export default async function OrderConfirmationPage({
                       </span>
                       <span className="text-sm font-medium">
                         {order.paymentMethod.name}
+                        {isCashOnDelivery(order.paymentMethod.name) && (
+                          <Badge
+                            variant="outline"
+                            className="ml-2 text-xs bg-blue-50 text-blue-700 border-blue-200"
+                          >
+                            COD
+                          </Badge>
+                        )}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -318,8 +353,7 @@ export default async function OrderConfirmationPage({
                         className={getPaymentStatusColor(order.paymentStatus)}
                       >
                         {getStatusIcon(order.paymentStatus)}
-                        {order.paymentStatus.charAt(0).toUpperCase() +
-                          order.paymentStatus.slice(1)}
+                        {formatStatus(order.paymentStatus)}
                       </Badge>
                     </div>
                     {order.paidAmount > 0 && (
@@ -330,6 +364,11 @@ export default async function OrderConfirmationPage({
                         <span className="text-sm font-medium">
                           {formatCurrencyEnglish(order.paidAmount)}
                         </span>
+                      </div>
+                    )}
+                    {isCashOnDelivery(order.paymentMethod.name) && (
+                      <div className="text-xs text-muted-foreground bg-blue-50 p-2 rounded border-l-2 border-blue-200">
+                        💡 Payment will be collected upon delivery
                       </div>
                     )}
                   </div>
@@ -514,23 +553,24 @@ export default async function OrderConfirmationPage({
                     <span>{formatCurrencyEnglish(orderSummary.total)}</span>
                   </div>
 
-                  {order.paymentStatus.toLowerCase() === "pending" && (
-                    <div className="flex justify-between text-red-600 text-sm">
-                      <span>Due Amount</span>
-                      <span>
-                        {formatCurrencyEnglish(
-                          order.totalValue - order.paidAmount
-                        )}
-                      </span>
-                    </div>
-                  )}
+                  {order.paymentStatus.toLowerCase() === "pending" &&
+                    !isCashOnDelivery(order.paymentMethod.name) && (
+                      <div className="flex justify-between text-red-600 text-sm">
+                        <span>Due Amount</span>
+                        <span>
+                          {formatCurrencyEnglish(
+                            order.totalValue - order.paidAmount
+                          )}
+                        </span>
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
 
             {/* Action Buttons */}
             <div className="space-y-3">
-              {order.paymentStatus.toLowerCase() === "pending" ? (
+              {shouldShowPayNow(order) ? (
                 <PayNow order={order} className="w-full" />
               ) : (
                 <Button className="w-full">
@@ -538,6 +578,14 @@ export default async function OrderConfirmationPage({
                   Download Invoice
                 </Button>
               )}
+
+              {isCashOnDelivery(order.paymentMethod.name) &&
+                order.paymentStatus.toLowerCase() === "pending" && (
+                  <div className="text-center text-sm text-muted-foreground bg-amber-50 p-3 rounded border">
+                    <Clock className="inline-block w-4 h-4 mr-1" />
+                    Payment will be collected when your order is delivered
+                  </div>
+                )}
             </div>
           </div>
         </div>

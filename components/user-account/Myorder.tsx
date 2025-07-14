@@ -10,193 +10,128 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatDateTime } from "@/lib/utils";
 import { Order } from "@/utils/types";
-import { ChevronRight, Eye, Package } from "lucide-react";
+import { Eye } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import PayNow from "../payment/pay-now";
 
-interface MyorderProps {
+interface MyOrderProps {
   orders: Order[];
 }
 
-export default function Myorder({ orders }: MyorderProps) {
+const OrderTable = ({ orders }: MyOrderProps) => {
   const params = useParams();
-  const userId = params.id;
+  const userId = params.id as string;
+
+  // Sort orders by date (newest first)
+  const sortedOrders = [...orders].sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "processing":
+        return "bg-blue-100 text-blue-800";
+      case "shipped":
+        return "bg-purple-100 text-purple-800";
+      case "delivered":
+        return "bg-green-100 text-green-800";
+      case "cancelled":
+        return "bg-red-100 text-red-800";
+      case "paid":
+        return "bg-green-100 text-green-800";
+      case "failed":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
 
   const formatStatus = (status: string) => {
     return status.charAt(0).toUpperCase() + status.slice(1);
   };
 
-  const getStatusStyle = (status: string) => {
-    const statusStyles: { [key: string]: string } = {
-      pending: "bg-amber-50 text-amber-700 border-amber-200",
-      processing: "bg-blue-50 text-blue-700 border-blue-200",
-      shipped: "bg-indigo-50 text-indigo-700 border-indigo-200",
-      delivered: "bg-emerald-50 text-emerald-700 border-emerald-200",
-      cancelled: "bg-red-50 text-red-700 border-red-200",
-    };
-    return (
-      statusStyles[status.toLowerCase()] ||
-      "bg-gray-50 text-gray-700 border-gray-200"
-    );
-  };
-
-  const getPaymentStatusStyle = (status: string) => {
-    const statusStyles: { [key: string]: string } = {
-      paid: "bg-green-50 text-green-700 border-green-200",
-      pending: "bg-orange-50 text-orange-700 border-orange-200",
-      failed: "bg-red-50 text-red-700 border-red-200",
-    };
-    return (
-      statusStyles[status.toLowerCase()] ||
-      "bg-gray-50 text-gray-700 border-gray-200"
-    );
-  };
-
-  const shouldShowPayNow = (order: Order) => {
-    return (
-      order.paymentStatus?.toLowerCase() === "pending" &&
-      order.orderStatus?.toLowerCase() !== "cancelled"
-    );
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("en-US").format(amount);
   };
 
   return (
-    <div className="w-full">
-      <div className="mb-6 flex justify-between">
-        <h2 className="text-2xl font-bold text-gray-900"> Orders</h2>
-        <p className="text-gray-600 mt-1">
-          Track and manage your order history
-        </p>
-      </div>
+    <div className="w-full p-4">
+      <h2 className="text-xl font-semibold mb-4">My Orders</h2>
 
-      <div className=" rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-        <div className="overflow-x-auto px-4">
-          <Table>
-            <TableHeader>
-              <TableRow className=" border-b border-gray-200">
-                <TableHead className="font-semibold text-gray-700">
-                  Order ID
-                </TableHead>
-                <TableHead className="font-semibold text-gray-700">
-                  Date & Time
-                </TableHead>
-                <TableHead className="font-semibold text-gray-700">
-                  Status
-                </TableHead>
-                <TableHead className="font-semibold text-gray-700 text-right">
-                  Amount
-                </TableHead>
-                <TableHead className="font-semibold text-gray-700 text-right">
-                  Shipping
-                </TableHead>
-                <TableHead className="font-semibold text-gray-700">
-                  Payment
-                </TableHead>
-                <TableHead className="font-semibold text-gray-700 text-center">
-                  Actions
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {orders && orders.length > 0 ? (
-                orders.map((order: Order) => (
-                  <TableRow
-                    key={order.id}
-                    className="hover:bg-gray-50/50 transition-colors border-b border-gray-100 last:border-b-0"
-                  >
-                    <TableCell className="font-medium">
-                      <div className="flex flex-col">
-                        <span className="text-gray-900">{order.orderNo}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-sm text-gray-600">
-                        {formatDateTime(order.createdAt)}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant="outline"
-                        className={`${getStatusStyle(order.orderStatus)} border font-medium`}
-                      >
-                        {formatStatus(order.orderStatus)}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="font-semibold text-gray-900">
-                        ৳ {order.totalValue.toFixed(2)}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="text-sm text-gray-600">
-                        ৳{" "}
-                        {order.shippingMethod?.cost
-                          ? typeof order.shippingMethod.cost === "string"
-                            ? parseFloat(order.shippingMethod.cost).toFixed(2)
-                            : order.shippingMethod.cost
-                          : "0.00"}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant="outline"
-                        className={`${getPaymentStatusStyle(order.paymentStatus)} border text-xs`}
-                      >
-                        {formatStatus(order.paymentStatus)}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
+      <div className="border rounded-lg overflow-hidden">
+        <Table>
+          <TableHeader className="bg-gray-50">
+            <TableRow>
+              <TableHead>Order ID</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
+              <TableHead>Payment Status</TableHead>
+              <TableHead>Actions</TableHead>
+              <TableHead>Payment Method</TableHead>
+              <TableHead>Payment Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {sortedOrders.length > 0 ? (
+              sortedOrders.map((order) => (
+                <TableRow key={order.id}>
+                  <TableCell className="font-medium">{order.orderNo}</TableCell>
+
+                  <TableCell>
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </TableCell>
+
+                  <TableCell>
+                    <Badge className={getStatusColor(order.orderStatus)}>
+                      {formatStatus(order.orderStatus)}
+                    </Badge>
+                  </TableCell>
+
+                  <TableCell className="text-right">
+                    ৳{formatCurrency(order.totalValue)}
+                  </TableCell>
+
+                  <TableCell>
+                    <Badge className={getStatusColor(order.paymentStatus)}>
+                      {formatStatus(order.paymentStatus)}
+                    </Badge>
+                  </TableCell>
+
+                  <TableCell>
+                    <div className="flex gap-4">
                       <Link href={`/user/${userId}/order/${order.id}`}>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="hover:bg-gray-100 hover:text-gray-900 transition-all group h-8"
-                        >
-                          <Eye className="w-3 h-3 mr-1 group-hover:scale-110 transition-transform" />
+                        <Button variant="outline" size="sm">
+                          <Eye className="h-4 w-4 mr-1" />
                           View
-                          <ChevronRight className="w-3 h-3 ml-0.5 group-hover:translate-x-0.5 transition-transform" />
                         </Button>
                       </Link>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        {/* Use existing PayNow component for pending payments */}
-                        {shouldShowPayNow(order) && (
-                          <div className="w-24">
-                            <PayNow
-                              order={order}
-                              className="h-6 text-xs px-2 text-white"
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={7} className="h-40">
-                    <div className="flex flex-col items-center justify-center">
-                      <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                        <Package className="w-10 h-10 text-gray-400" />
-                      </div>
-                      <p className="text-xl font-semibold text-gray-700 mb-2">
-                        No Orders Yet
-                      </p>
-                      <p className="text-sm text-gray-500 text-center max-w-sm">
-                        When you place orders, they will appear here. Start
-                        shopping to see your order history.
-                      </p>
                     </div>
                   </TableCell>
+                  <TableCell>{order.paymentMethod.name}</TableCell>
+                  <TableCell>
+                    {order.paymentStatus === "pending" && (
+                      <PayNow order={order} className="inline-flex" />
+                    )}
+                  </TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6} className="h-24 text-center">
+                  No orders found
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );
-}
+};
+
+export default OrderTable;

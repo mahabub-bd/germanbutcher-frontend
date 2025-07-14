@@ -13,7 +13,6 @@ import {
   XCircle,
 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
 
 import { PaymentsTable } from "@/app/admin/order/[id]/payments/payment-table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -44,7 +43,7 @@ interface OrderViewProps {
 }
 
 export default function UserOrderView({ order }: OrderViewProps) {
-  const [isPrinting] = useState(false);
+  console.log(order);
 
   const getStatusDotColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -236,44 +235,8 @@ export default function UserOrderView({ order }: OrderViewProps) {
     return price - Number.parseFloat(discountValue);
   };
   return (
-    <div className={`${isPrinting ? "print-mode" : ""}`}>
-      {/* Print Styles */}
-      <style jsx global>{`
-        @media print {
-          body * {
-            visibility: hidden;
-          }
-          .print-mode,
-          .print-mode * {
-            visibility: visible;
-          }
-          .print-mode {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-          }
-          .no-print {
-            display: none !important;
-          }
-          .print-break-inside-avoid {
-            break-inside: avoid;
-          }
-        }
-      `}</style>
-
-      <div className="flex flex-col space-y-6  md:p-2">
-        {/* Invoice Header for Print */}
-        <div className="hidden print:flex flex-col items-center mb-6 text-center">
-          <h1 className="text-2xl font-bold">INVOICE</h1>
-          <p className="text-sm text-muted-foreground">
-            Order #{order.orderNo}
-          </p>
-          <p className="text-sm text-muted-foreground">
-            {formatDateTime(order.createdAt)}
-          </p>
-        </div>
-
+    <div>
+      <div className="flex flex-col space-y-6 md:p-2">
         {/* Order Summary */}
         <div className="border rounded-lg p-4 bg-background">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -288,7 +251,7 @@ export default function UserOrderView({ order }: OrderViewProps) {
                 variant="outline"
                 className={getOrderStatusColor(order.orderStatus)}
               >
-                {getStatusIcon(order.orderStatus)}
+                Order Status: {getStatusIcon(order.orderStatus)}
                 {order.orderStatus.charAt(0).toUpperCase() +
                   order.orderStatus.slice(1)}
               </Badge>
@@ -297,6 +260,7 @@ export default function UserOrderView({ order }: OrderViewProps) {
                 className={getPaymentStatusColor(order.paymentStatus)}
               >
                 {getStatusIcon(order.paymentStatus)}
+                Payment Status :
                 {order.paymentStatus.charAt(0).toUpperCase() +
                   order.paymentStatus.slice(1)}
               </Badge>
@@ -398,7 +362,7 @@ export default function UserOrderView({ order }: OrderViewProps) {
                             )}
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            × {item.quantity} {item.product.unit?.name || "pc"}
+                            × {item.quantity}
                           </div>
                         </div>
                       </div>
@@ -761,12 +725,6 @@ export default function UserOrderView({ order }: OrderViewProps) {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Print Footer */}
-        <div className="hidden print:block mt-8 text-center text-sm text-muted-foreground">
-          <p>Thank you for your business!</p>
-          <p>For any questions, please contact support@yourstore.com</p>
         </div>
       </div>
     </div>

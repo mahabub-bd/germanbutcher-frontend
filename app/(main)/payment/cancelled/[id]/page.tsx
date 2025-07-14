@@ -3,7 +3,7 @@ import { fetchProtectedData } from "@/utils/api-utils";
 import { Order } from "@/utils/types";
 import { notFound } from "next/navigation";
 
-export default async function PaymentSuccessPage({
+export default async function PaymentCanceledPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -15,5 +15,5 @@ export default async function PaymentSuccessPage({
     notFound();
   }
 
-  return <PaymentStatusPage order={order} status="success" orderId={id} />;
+  return <PaymentStatusPage order={order} status="canceled" orderId={id} />;
 }
