@@ -1,6 +1,7 @@
 import { getUser } from "@/actions/auth";
 import Copyright from "@/components/footer/copyright";
 import Footer from "@/components/footer/Footer";
+import WhatsAppMessengerWidget from "@/components/footer/live-chat";
 import { Header } from "@/components/header";
 import { MobileBottomHeader } from "@/components/header/mobile-bottom-header";
 import { GoToTop } from "@/components/ui/go-to-top";
@@ -18,6 +19,7 @@ export default async function MainLayout({
       <Header />
       <main className="flex-1">{children}</main>
       <GoToTop />
+      <WhatsAppMessengerWidget />
       <MobileBottomHeader user={user} />
       <Footer />
       <Copyright />
