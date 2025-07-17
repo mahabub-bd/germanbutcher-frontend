@@ -54,7 +54,7 @@ export function PaymentMethodSelector({
               key={method.id}
               className={cn(
                 "flex items-center justify-between rounded-lg border p-4",
-                selectedMethod === method.code && "border-primary bg-primary/5"
+                selectedMethod === method.code && "border-primary bg-primary/1"
               )}
             >
               <div className="flex items-center space-x-3">

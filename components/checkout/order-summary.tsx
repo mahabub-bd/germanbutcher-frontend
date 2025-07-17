@@ -26,6 +26,7 @@ import Link from "next/link";
 
 interface OrderSummaryProps {
   originalSubtotal: number;
+  isVerified: boolean;
   productDiscounts: number;
   appliedCoupon: { code: string; discount: number } | null;
   shippingCost: number;
@@ -38,6 +39,26 @@ interface OrderSummaryProps {
   paymentMethods: PaymentMethod[];
   user?: UserType;
 }
+
+const SummaryRow = ({
+  icon: Icon,
+  label,
+  value,
+  valueClassName = "",
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  value: string | number;
+  valueClassName?: string;
+}) => (
+  <div className="flex justify-between text-sm">
+    <span className="text-muted-foreground flex items-center gap-2">
+      <Icon className="h-3.5 w-3.5" />
+      {label}
+    </span>
+    <span className={valueClassName}>{value}</span>
+  </div>
+);
 
 export function OrderSummary({
   originalSubtotal,
@@ -52,37 +73,46 @@ export function OrderSummary({
   shippingMethods,
   paymentMethods,
   user,
+  isVerified,
 }: OrderSummaryProps) {
-  return (
-    <div className="space-y-4 bg-white rounded-lg border p-4 md:p-6">
-      <div className="border-b pb-3 md:pb-4">
-        <h2 className="text-base md:text-lg font-semibold">Order Summary</h2>
-      </div>
+  const shippingMethodName = shippingMethods.find(
+    (m) => m.id.toString() === selectedShippingMethod
+  )?.name;
 
-      <div className="space-y-2">
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground flex items-center gap-1">
-            <ShoppingBag className="h-3 w-3" /> Subtotal
-          </span>
-          <span>{formatCurrencyEnglish(originalSubtotal)}</span>
-        </div>
+  const paymentMethodName = paymentMethods.find(
+    (m) => m.code === selectedPaymentMethod
+  )?.name;
+
+  const canPlaceOrder = user;
+
+  return (
+    <section className="space-y-6 bg-white rounded-lg border p-6">
+      <header className="border-b pb-4">
+        <h2 className="text-lg font-semibold">Order Summary</h2>
+      </header>
+
+      <div className="space-y-3">
+        <SummaryRow
+          icon={ShoppingBag}
+          label="Subtotal"
+          value={formatCurrencyEnglish(originalSubtotal)}
+        />
 
         {productDiscounts > 0 && (
-          <div className="flex justify-between text-sm text-green-600">
-            <span className="flex items-center gap-1">
-              <Tag className="h-3 w-3" /> Product Discounts
-            </span>
-            <span>-{formatCurrencyEnglish(productDiscounts)}</span>
-          </div>
+          <SummaryRow
+            icon={Tag}
+            label="Product Discounts"
+            value={`-${formatCurrencyEnglish(productDiscounts)}`}
+            valueClassName="text-green-600"
+          />
         )}
 
         {appliedCoupon && (
           <div className="flex justify-between text-sm text-green-600">
-            <div className="flex items-center">
-              <span className="flex items-center gap-1">
-                <TicketPercent className="h-3 w-3 mr-1" /> Coupon
-              </span>
-              <Badge variant="outline" className="ml-2 bg-green-50 text-xs">
+            <div className="flex items-center gap-2">
+              <TicketPercent className="h-3.5 w-3.5" />
+              <span>Coupon</span>
+              <Badge variant="outline" className="bg-green-50 text-xs">
                 {appliedCoupon.code.toUpperCase()}
               </Badge>
             </div>
@@ -90,93 +120,106 @@ export function OrderSummary({
           </div>
         )}
 
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground flex items-center gap-1">
-            <Truck className="h-3 w-3" /> Shipping
-          </span>
-          <span>{formatCurrencyEnglish(Number(shippingCost))}</span>
-        </div>
+        <SummaryRow
+          icon={Truck}
+          label="Shipping"
+          value={formatCurrencyEnglish(Number(shippingCost))}
+        />
 
-        <Separator className="my-2" />
+        <Separator className="my-3" />
 
         <div className="flex justify-between font-medium">
-          <span className="flex items-center gap-1">
-            <Receipt className="h-4 w-4" /> Total
+          <span className="flex items-center gap-2">
+            <Receipt className="h-4 w-4" />
+            Total
           </span>
-          <span className="text-lg">{formatCurrencyEnglish(total)}</span>
+          <span className="text-lg font-semibold">
+            {formatCurrencyEnglish(total)}
+          </span>
         </div>
       </div>
 
-      <Button
-        onClick={onSubmit}
-        size="lg"
-        className="w-full bg-primaryColor hover:bg-secondaryColor"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Placing Order...
-          </>
-        ) : (
-          <>
-            <ShoppingCart className="mr-2 h-4 w-4" />
-            Place Order
-          </>
-        )}
-      </Button>
+      {canPlaceOrder ? (
+        <div className="space-y-2">
+          <Button
+            onClick={onSubmit}
+            size="lg"
+            className="w-full bg-primaryColor hover:bg-primaryColor/90 transition-colors"
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Placing Order...
+              </>
+            ) : (
+              <>
+                <ShoppingCart className="mr-2 h-4 w-4" />
+                Place Order
+              </>
+            )}
+          </Button>
+        </div>
+      ) : (
+        <div className="p-4 bg-yellow-50 rounded-md text-center">
+          {!user && (
+            <p className="text-sm text-yellow-800">
+              Please verify your mobile number to place an order
+            </p>
+          )}
+        </div>
+      )}
 
-      <div className="mt-4 space-y-3 text-xs md:text-sm">
+      <div className="space-y-3 text-sm">
         {selectedShippingMethod && (
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Truck className="h-3 w-3 md:h-4 md:w-4" />
-            <span>
-              {shippingMethods.find(
-                (m) => m.id.toString() === selectedShippingMethod
-              )?.name || "Standard Shipping"}
-            </span>
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <Truck className="h-4 w-4 flex-shrink-0" />
+            <span>{shippingMethodName || "Standard Shipping"}</span>
           </div>
         )}
+
         {selectedPaymentMethod && (
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <CreditCard className="h-3 w-3 md:h-4 md:w-4" />
-            <span>
-              {paymentMethods.find((m) => m.code === selectedPaymentMethod)
-                ?.name || "Credit Card"}
-            </span>
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <CreditCard className="h-4 w-4 flex-shrink-0" />
+            <span>{paymentMethodName || "Credit Card"}</span>
           </div>
         )}
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <ShieldCheck className="h-3 w-3 md:h-4 md:w-4" />
+
+        <div className="flex items-center gap-3 text-muted-foreground">
+          <ShieldCheck className="h-4 w-4 flex-shrink-0" />
           <span>Secure checkout</span>
         </div>
+
         {user && (
-          <div className="flex items-center gap-2 text-green-600">
-            <User className="h-3 w-3 md:h-4 md:w-4" />
+          <div className="flex items-center gap-3 text-green-600">
+            <User className="h-4 w-4 flex-shrink-0" />
             <span>Signed in as {user?.name || user.mobileNumber}</span>
           </div>
         )}
       </div>
 
-      <div className="border-t pt-6 mt-6">
-        <p className="text-xs text-muted-foreground flex flex-wrap items-center gap-1 sm:gap-2">
-          <FileText className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+      <footer className="border-t pt-6 mt-6">
+        <p className="text-xs text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1">
+          <FileText className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
           <span>By placing your order, you agree to our</span>
           <Link
             href="/terms"
             className="underline hover:text-primary transition-colors"
+            aria-label="Terms of Service"
           >
             Terms of Service
           </Link>
           <span>and</span>
           <Link
-            href="/privacy"
+            href="/privacy-policy"
             className="underline hover:text-primary transition-colors"
+            aria-label="Privacy Policy"
           >
             Privacy Policy
           </Link>
         </p>
-      </div>
-    </div>
+      </footer>
+    </section>
   );
 }
