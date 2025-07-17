@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack -p 3002",
-    "build": "next build",
+    "build": "next build --turbopack",
     "start": "next start -p 3002",
     "lint": "next lint"
   },
@@ -42,7 +42,7 @@
     "input-otp": "^1.4.2",
     "jodit-react": "^5.2.19",
     "lucide-react": "^0.482.0",
-    "next": "15.3.3",
+    "next": "15.4.1",
     "next-share": "^0.27.0",
     "next-themes": "^0.4.6",
     "plaiceholder": "^3.0.0",
