@@ -196,14 +196,14 @@ const WhatsAppMessengerWidget = () => {
   }
 
   return (
-    <div className="fixed  bottom-24 right-5 z-50">
+    <div className="fixed  bottom-2 right-5 z-50">
       <div
         className={`bg-white rounded-lg shadow-xl transition-all duration-300 ${
-          isMinimized ? "w-60 h-12" : "w-60 min-h-72"
+          isMinimized ? "w-64 h-12" : "w-64 min-h-72"
         }`}
       >
         {/* Header */}
-        <div className="bg-primaryColor text-white p-3 rounded-t-lg flex items-center justify-between">
+        <div className="bg-primaryColor text-white p-5 rounded-t-lg flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center">
               <MessageCircle className="w-3 h-3 text-white" />
@@ -385,7 +385,7 @@ const WhatsAppMessengerWidget = () => {
                   <button
                     onClick={handleSubmit}
                     disabled={!userInfo.name || !userInfo.message}
-                    className={`w-full py-1.5 rounded-lg transition-colors flex items-center justify-center space-x-1 text-xs ${
+                    className={`w-full py-1.5 rounded-lg transition-colors flex items-center justify-center space-x-1 my-4 text-xs ${
                       userInfo.name && userInfo.message
                         ? selectedPlatform === "whatsapp"
                           ? "bg-green-500 hover:bg-green-600 text-white"
