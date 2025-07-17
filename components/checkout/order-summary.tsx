@@ -26,7 +26,7 @@ import Link from "next/link";
 
 interface OrderSummaryProps {
   originalSubtotal: number;
-  isVerified: boolean;
+
   productDiscounts: number;
   appliedCoupon: { code: string; discount: number } | null;
   shippingCost: number;
@@ -73,7 +73,7 @@ export function OrderSummary({
   shippingMethods,
   paymentMethods,
   user,
-  isVerified,
+
 }: OrderSummaryProps) {
   const shippingMethodName = shippingMethods.find(
     (m) => m.id.toString() === selectedShippingMethod

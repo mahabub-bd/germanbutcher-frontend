@@ -351,7 +351,7 @@ export default function CheckoutPage({ user }: { user?: UserType }) {
                 total={total}
                 isSubmitting={isSubmitting}
                 onSubmit={handleSubmit}
-                isVerified={isVerified}
+             
                 selectedShippingMethod={selectedShippingMethod}
                 selectedPaymentMethod={selectedPaymentMethod}
                 shippingMethods={shippingMethods}
@@ -375,7 +375,7 @@ export default function CheckoutPage({ user }: { user?: UserType }) {
                   appliedCoupon={appliedCoupon}
                   shippingCost={Number(shippingCost)}
                   total={total}
-                  isVerified={isVerified}
+               
                   isSubmitting={isSubmitting}
                   onSubmit={handleSubmit}
                   selectedShippingMethod={selectedShippingMethod}
