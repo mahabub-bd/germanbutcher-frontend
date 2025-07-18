@@ -22,6 +22,7 @@ import { useCallback, useEffect, useState } from "react";
 import { FieldPath, useForm, UseFormRegister } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { formatDateTime } from "../../lib/utils";
 
 // Enhanced Zod validation schema
 const accountSchema = z
@@ -280,10 +281,10 @@ function ActionButtons({
 }: ActionButtonsProps) {
   if (isEditing) {
     return (
-      <div className="flex flex-col gap-3 sm:flex-row sm:gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:gap-3 items-center">
         <button
           type="button"
-          className="flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[48px]"
+          className="flex items-center justify-center gap-2 px-6 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[48px]"
           onClick={onCancel}
           disabled={isSubmitting}
         >
@@ -292,11 +293,11 @@ function ActionButtons({
         </button>
         <button
           type="submit"
-          className="flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-primaryColor rounded-lg hover:bg-primaryColor/90 focus:outline-none focus:ring-2 focus:ring-primaryColor transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[48px]"
+          className="flex items-center justify-center gap-2 px-6  text-sm font-medium text-white bg-primaryColor rounded-lg hover:bg-primaryColor/90 focus:outline-none focus:ring-2 focus:ring-primaryColor transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[48px]"
           disabled={isSubmitting || !isValid}
         >
           <Save className="w-4 h-4" />
-          {isSubmitting ? "Saving..." : "Save Changes"}
+          {isSubmitting ? "Saving..." : "Save"}
         </button>
       </div>
     );
@@ -305,11 +306,11 @@ function ActionButtons({
   return (
     <button
       type="button"
-      className="flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-200 touch-manipulation min-h-[48px] w-full sm:w-auto"
+      className="flex items-center justify-center gap-2 px-6  text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-200 touch-manipulation min-h-[48px] w-full sm:w-auto"
       onClick={onEdit}
     >
       <Edit3 className="w-4 h-4" />
-      Edit Profile
+      Edit
     </button>
   );
 }
@@ -340,7 +341,6 @@ export default function AccountInfo({ user }: AccountInfoProps) {
     },
   });
 
-  // Watch password field to show/hide confirm password
   const passwordValue = watch("password");
   const showConfirmPassword =
     isEditing &&
@@ -438,11 +438,6 @@ export default function AccountInfo({ user }: AccountInfoProps) {
 
   return (
     <div className="">
-      {/* Header Section */}
-      <div className="p-4">
-        <h1 className="text-xl font-bold text-gray-900">Account Information</h1>
-      </div>
-
       {/* Main Form Card */}
       <form onSubmit={handleSubmit(onSubmit)} className=" overflow-hidden">
         {/* Card Header */}
@@ -481,7 +476,7 @@ export default function AccountInfo({ user }: AccountInfoProps) {
                 Basic Information
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-6 grid grid-cols-3 gap-4">
                 {FORM_FIELDS.map((field) => (
                   <FormField
                     key={field.name}
@@ -580,10 +575,7 @@ export default function AccountInfo({ user }: AccountInfoProps) {
                       Member Since
                     </p>
                     <p className="text-sm text-gray-600">
-                      {new Date(user.createdAt).toLocaleDateString("en-US", {
-                        month: "long",
-                        year: "numeric",
-                      })}
+                      {formatDateTime(user.createdAt)}
                     </p>
                   </div>
                 </div>

@@ -145,7 +145,7 @@ export function CouponList() {
   );
 
   const renderTableView = () => (
-    <div className="md:p-6 p-2">
+    <div className="md:p-2 p-2">
       <Table>
         <TableHeader>
           <TableRow>

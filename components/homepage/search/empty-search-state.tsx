@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Search } from 'lucide-react';
+import { Search } from "lucide-react";
 
 interface EmptySearchStateProps {
   searchQuery: string;
@@ -18,8 +18,8 @@ export function EmptySearchState({ searchQuery }: EmptySearchStateProps) {
           No products found
         </h3>
         <p className="text-gray-600 mb-6">
-          We couldn&quot;t find any products matching &quot;{searchQuery}&quot;. Try adjusting
-          your search terms or explore our suggestions below.
+          We couldn&quot;t find any products matching &quot;{searchQuery}&quot;.
+          Try adjusting your search terms or explore our suggestions below.
         </p>
       </div>
     </div>

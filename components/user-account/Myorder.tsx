@@ -68,12 +68,12 @@ const OrderTable = ({ orders }: MyOrderProps) => {
             <TableRow>
               <TableHead>Order ID</TableHead>
               <TableHead>Date</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+              <TableHead>Order Status</TableHead>
+              <TableHead>Amount</TableHead>
               <TableHead>Payment Status</TableHead>
-              <TableHead>Actions</TableHead>
               <TableHead>Payment Method</TableHead>
               <TableHead>Payment Actions</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -92,9 +92,7 @@ const OrderTable = ({ orders }: MyOrderProps) => {
                     </Badge>
                   </TableCell>
 
-                  <TableCell className="text-right">
-                    ৳{formatCurrency(order.totalValue)}
-                  </TableCell>
+                  <TableCell>৳{formatCurrency(order.totalValue)}</TableCell>
 
                   <TableCell>
                     <Badge className={getStatusColor(order.paymentStatus)}>
@@ -102,6 +100,12 @@ const OrderTable = ({ orders }: MyOrderProps) => {
                     </Badge>
                   </TableCell>
 
+                  <TableCell>{order.paymentMethod.name}</TableCell>
+                  <TableCell>
+                    {order.paymentStatus === "pending" && (
+                      <PayNow order={order} className="inline-flex" />
+                    )}
+                  </TableCell>
                   <TableCell>
                     <div className="flex gap-4">
                       <Link href={`/user/${userId}/order/${order.id}`}>
@@ -111,12 +115,6 @@ const OrderTable = ({ orders }: MyOrderProps) => {
                         </Button>
                       </Link>
                     </div>
-                  </TableCell>
-                  <TableCell>{order.paymentMethod.name}</TableCell>
-                  <TableCell>
-                    {order.paymentStatus === "pending" && (
-                      <PayNow order={order} className="inline-flex" />
-                    )}
                   </TableCell>
                 </TableRow>
               ))
