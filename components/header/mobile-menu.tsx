@@ -13,12 +13,17 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { GermanbutcherLogo } from "@/public/images";
+import MobileAuth from "../auth/mobile-auth";
 import { CategoryLinks } from "./category-links";
 import { NavLinks } from "./nav-links";
 
 type TabType = "navigation" | "categories";
 
-export function MobileMenu() {
+interface MobileMenuProps {
+  user?: any | null;
+}
+
+export function MobileMenu({ user }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("categories");
 
@@ -52,7 +57,7 @@ export function MobileMenu() {
             <div className="flex items-center justify-center">
               <Link
                 href="/"
-                className="flex items-center justify-center size-16 rounded-xl  hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-center size-16 rounded-xl hover:bg-gray-100 transition-colors"
                 aria-label="Go to homepage"
                 onClick={handleClose}
               >
@@ -85,7 +90,7 @@ export function MobileMenu() {
                   }`}
                 >
                   <div className="flex items-center justify-center gap-2">
-                    <span>{tab.label}</span>
+                    <span className="truncate">{tab.label}</span>
                     {tab.count && (
                       <span className="bg-gray-200 text-gray-700 text-xs px-2 py-0.5 rounded-full">
                         {tab.count}
@@ -108,6 +113,7 @@ export function MobileMenu() {
               {activeTab === "categories" && (
                 <CategoryLinks onCategoryClick={handleClose} />
               )}
+
               {activeTab === "navigation" && (
                 <div className="space-y-2">
                   <NavLinks isMobile={true} onClick={handleClose} />
@@ -116,10 +122,15 @@ export function MobileMenu() {
             </div>
           </div>
 
+          {/* Auth Section in Footer */}
+          <div className=" p-4">
+            <MobileAuth user={user} onClose={handleClose} />
+          </div>
+
           {/* Footer */}
-          <div className="  p-6 border-t-4 border-[#deb149] ">
+          <div className="px-6 py-3 border-t-2 border-[#deb149] bg-gradient-to-r from-black/95 via-gray-900/95 to-black/95">
             <div className="text-center">
-              <p className="text-xs text-gray-500">© 2025 German Butcher</p>
+              <p className="text-xs text-gray-100 ">© 2025 German Butcher</p>
             </div>
           </div>
         </div>

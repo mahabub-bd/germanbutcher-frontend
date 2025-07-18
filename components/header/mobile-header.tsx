@@ -1,13 +1,13 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 
+import { getUser } from "@/actions/auth";
 import { GermanbutcherLogo } from "@/public/images";
 import { SearchBar } from "../homepage/search/search-bar";
 import { MobileMenu } from "./mobile-menu";
 
-export function MobileHeader() {
+export async function MobileHeader() {
+  const user = await getUser();
   return (
     <header className="lg:hidden sticky top-0 z-40 bg-primaryColor shadow-lg">
       <div className="flex items-center justify-between py-3 px-4">
@@ -34,7 +34,7 @@ export function MobileHeader() {
         </div>
 
         <SearchBar />
-        <MobileMenu />
+        <MobileMenu user={user} />
       </div>
     </header>
   );
