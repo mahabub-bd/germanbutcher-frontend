@@ -74,7 +74,7 @@ const CarouselSlide = ({
           <div className="absolute top-0 left-0 p-3 sm:p-4 lg:p-6 xl:p-8 w-full h-full text-white">
             <div className="flex container items-center justify-center sm:justify-start h-full xl:px-24">
               <div className="max-w-3xl text-center sm:text-left">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-1 sm:mb-2 gradient-text leading-tight">
+                <h2 className="text-2xl font-castor sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-1 sm:mb-2 gradient-text leading-tight">
                   {slide.title}
                 </h2>
                 <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-medium mb-3 sm:mb-4 lg:mb-6 text-gray-100">

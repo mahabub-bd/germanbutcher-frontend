@@ -1,18 +1,34 @@
 import { getUser } from "@/actions/auth";
 import { SearchModal } from "@/components/homepage/search/search-modal";
 import { Toaster } from "@/components/ui/sonner";
-
 import { CartProvider } from "@/providers/cart-provider";
+import { SearchProvider } from "@/providers/search-provider";
 import { fetchProtectedData } from "@/utils/api-utils";
 import type { Cart } from "@/utils/types";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Quicksand } from "next/font/google";
+import localFont from "next/font/local";
 import type React from "react";
-
-import { SearchProvider } from "@/providers/search-provider";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+// Google Font - Quicksand
+const quicksand = Quicksand({
+  subsets: ["latin"],
+  variable: "--font-quicksand",
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+// Local Font - CastorTwoW01
+const castorTwoW01 = localFont({
+  src: "../public/font/CastorTwoW01-Regular.woff2",
+  variable: "--font-castor",
+  display: "swap",
+  weight: "400",
+});
+
+// Combine font variables
+const fontVariables = `${quicksand.variable} ${castorTwoW01.variable}`;
 
 export const metadata: Metadata = {
   title: {
@@ -118,8 +134,18 @@ export default async function RootLayout({
   const cart = user ? await fetchProtectedData<Cart>("cart") : null;
 
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={fontVariables}>
+      <head>
+        {/* Preload the local font for better performance */}
+        <link
+          rel="preload"
+          href="/font/CastorTwoW01-Regular.woff"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
+      <body className={fontVariables}>
         <Toaster richColors />
 
         <CartProvider serverCart={cart ?? undefined} isLoggedIn={!!user}>
@@ -132,3 +158,5 @@ export default async function RootLayout({
     </html>
   );
 }
+
+export { castorTwoW01, quicksand };
