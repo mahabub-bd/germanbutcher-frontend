@@ -135,10 +135,7 @@ const contactMethods: ContactMethod[] = [
 ];
 
 // Components
-const OrderStepCard: React.FC<{ step: OrderStep; index: number }> = ({
-  step,
-  index,
-}) => (
+const OrderStepCard: React.FC<{ step: OrderStep }> = ({ step }) => (
   <div className="relative bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 group">
     <div className="flex justify-center mb-4 group-hover:scale-110 transition-transform duration-300 ">
       {step.icon}
@@ -239,14 +236,14 @@ const HowToOrderPage: React.FC = () => {
             Simple Ordering Process
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Follow these easy steps to get German Butcher's premium products
-            delivered to your door
+            Follow these easy steps to get German Butcher&apos;s premium
+            products delivered to your door
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {orderSteps.map((step, index) => (
-            <OrderStepCard key={index} step={step} index={index} />
+            <OrderStepCard key={index} step={step} />
           ))}
         </div>
       </div>

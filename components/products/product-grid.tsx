@@ -23,9 +23,6 @@ interface PaginatedResponse {
   totalPages: number;
 }
 
-/**
- * Creates URL parameters from filter params, excluding empty values
- */
 const createUrlParams = (
   filterParams: ProductListProps["filterParams"]
 ): URLSearchParams => {
@@ -40,9 +37,6 @@ const createUrlParams = (
   return params;
 };
 
-/**
- * Generates pagination URLs for all pages
- */
 const generatePaginationUrls = (
   baseParams: URLSearchParams,
   totalPages: number
@@ -58,9 +52,6 @@ const generatePaginationUrls = (
   return urls;
 };
 
-/**
- * Error State Component
- */
 const ErrorState = ({ onRetry }: { onRetry?: () => void }) => (
   <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
     <AlertCircle className="h-16 w-16 text-red-400 mb-4" />
@@ -68,8 +59,8 @@ const ErrorState = ({ onRetry }: { onRetry?: () => void }) => (
       Oops! Something went wrong
     </h3>
     <p className="text-gray-600 mb-6 max-w-md">
-      We couldn't load the products right now. Please check your connection and
-      try again.
+      We couldn&apos;t load the products right now. Please check your connection
+      and try again.
     </p>
     {onRetry && (
       <button
@@ -101,7 +92,7 @@ const EmptyState = ({ hasFilters }: { hasFilters: boolean }) => (
     <p className="text-gray-600 mb-6 max-w-md">
       {hasFilters
         ? "Try adjusting your filters or search terms to find what you're looking for."
-        : "We don't have any products to show right now. Please check back later."}
+        : "We dont have any products to show right now. Please check back later."}
     </p>
 
     {hasFilters && (
