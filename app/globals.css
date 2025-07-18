@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-primaryColor: #8a0000;
+  --color-primaryColor: #800000;
   --color-secondaryColor: #c70909;
 
   --color-whiteColor: #fff;
@@ -172,6 +172,12 @@
   }
   .border-golden-radial {
     border: 8px radial-gradient(circle, #ffeca7 50%, #deb149 100%) !important;
+  }
+  .gradient-text {
+    background: linear-gradient(270deg, #d29835, #f9ecc0 53.12%, #d29835);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
   }
 }
 /* Underline active class setup */
