@@ -57,7 +57,7 @@ export function PaymentMethodSelector({
                 selectedMethod === method.code && "border-primary bg-primary/1"
               )}
             >
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-4">
                 <RadioGroupItem
                   value={method.code}
                   id={`payment-${method.id}`}

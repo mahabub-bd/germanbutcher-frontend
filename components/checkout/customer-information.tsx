@@ -138,7 +138,7 @@ export function CustomerInformation({
       </div>
 
       <div className="space-y-4 md:space-y-5">
-        <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
           <div>
             <Label htmlFor="name">Name</Label>
             <Input

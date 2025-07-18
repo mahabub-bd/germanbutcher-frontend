@@ -20,7 +20,15 @@ import { formatDateTime } from "@/lib/utils";
 
 import { deleteData, fetchProtectedData } from "@/utils/api-utils";
 import { Coupon } from "@/utils/types";
-import { MoreHorizontal, Pencil, Plus, Tag, Trash2 } from "lucide-react";
+import {
+  AlertTriangle,
+  Clock,
+  MoreHorizontal,
+  Pencil,
+  Plus,
+  Tag,
+  Trash2,
+} from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -72,6 +80,55 @@ export function CouponList() {
     }
   };
 
+  // Helper function to check if coupon is expired
+  const isCouponExpired = (coupon: Coupon): boolean => {
+    const now = new Date();
+    return new Date(coupon.validUntil) < now;
+  };
+
+  // Helper function to check if coupon is expiring soon (within 7 days)
+  const isCouponExpiringSoon = (coupon: Coupon): boolean => {
+    const now = new Date();
+    const validUntil = new Date(coupon.validUntil);
+    const sevenDaysFromNow = new Date();
+    sevenDaysFromNow.setDate(now.getDate() + 7);
+
+    return validUntil > now && validUntil <= sevenDaysFromNow;
+  };
+
+  // Helper function to get coupon status
+  const getCouponStatus = (coupon: Coupon) => {
+    if (isCouponExpired(coupon)) {
+      return {
+        variant: "destructive" as const,
+        label: "Expired",
+        icon: <AlertTriangle className="h-3 w-3 mr-1" />,
+      };
+    }
+
+    if (isCouponExpiringSoon(coupon)) {
+      return {
+        variant: "secondary" as const,
+        label: "Expiring Soon",
+        icon: <Clock className="h-3 w-3 mr-1" />,
+      };
+    }
+
+    if (!coupon.isActive) {
+      return {
+        variant: "secondary" as const,
+        label: "Inactive",
+        icon: null,
+      };
+    }
+
+    return {
+      variant: "default" as const,
+      label: "Active",
+      icon: null,
+    };
+  };
+
   const renderEmptyState = () => (
     <div className="flex flex-col items-center justify-center p-8 text-center">
       <Tag className="h-10 w-10 text-muted-foreground mb-4" />
@@ -98,70 +155,115 @@ export function CouponList() {
             <TableHead>Valid Period</TableHead>
             <TableHead>Max Discount</TableHead>
             <TableHead className="hidden md:table-cell">Status</TableHead>
-            <TableHead className="hidden md:table-cell">Created</TableHead>
+            <TableHead className="hidden md:table-cell">Valid From</TableHead>
+
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {coupons.map((coupon) => (
-            <TableRow key={coupon.id}>
-              <TableCell className="font-medium">
-                <Badge variant="outline" className="font-mono">
-                  {coupon.code}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                {coupon.discountType === "percentage"
-                  ? `${coupon.value}%`
-                  : `${coupon.value}`}
-              </TableCell>
-              <TableCell>
-                {coupon.timesUsed} / {coupon.maxUsage}
-              </TableCell>
-              <TableCell>
-                {formatDateTime(coupon.validFrom)} -{" "}
-                {formatDateTime(coupon.validUntil)}
-              </TableCell>
-              <TableCell>{coupon?.maxDiscountAmount}</TableCell>
-              <TableCell className="hidden md:table-cell">
-                <Badge variant={coupon.isActive ? "default" : "secondary"}>
-                  {coupon.isActive ? "Active" : "Inactive"}
-                </Badge>
-              </TableCell>
-              <TableCell className="hidden md:table-cell">
-                {formatDateTime(coupon.createdAt)}
-              </TableCell>
-              <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal className="h-4 w-4" />
-                      <span className="sr-only">Open menu</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <Link
-                        href={`/admin/marketing/coupon/${coupon?.code}/edit`}
-                      >
-                        <Pencil className="mr-2 h-4 w-4" /> Edit
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="text-red-600"
-                      onClick={() => handleDeleteClick(coupon)}
+          {coupons.map((coupon) => {
+            const status = getCouponStatus(coupon);
+            const isExpired = isCouponExpired(coupon);
+
+            return (
+              <TableRow
+                key={coupon.id}
+                className={
+                  isExpired ? "opacity-60 bg-red-50 dark:bg-red-950/20" : ""
+                }
+              >
+                <TableCell className="font-medium">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="font-mono">
+                      {coupon.code}
+                    </Badge>
+                    {isExpired && (
+                      <AlertTriangle className="h-4 w-4 text-red-500" />
+                    )}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  {coupon.discountType === "percentage"
+                    ? `${coupon.value}%`
+                    : `${coupon.value}`}
+                </TableCell>
+                <TableCell>
+                  <span className={isExpired ? "text-muted-foreground" : ""}>
+                    {coupon.timesUsed} / {coupon.maxUsage || "∞"}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <div className="text-sm">
+                    <div
+                      className={
+                        isExpired ? "text-muted-foreground line-through" : ""
+                      }
                     >
-                      <Trash2 className="mr-2 h-4 w-4" /> Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          ))}
+                      {formatDateTime(coupon.validFrom)} -{" "}
+                      {formatDateTime(coupon.validUntil)}
+                    </div>
+                    {isExpired && (
+                      <div className="text-red-500 text-xs mt-1 flex items-center">
+                        <AlertTriangle className="h-3 w-3 mr-1" />
+                        Expired
+                      </div>
+                    )}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <span className={isExpired ? "text-muted-foreground" : ""}>
+                    {coupon?.maxDiscountAmount || "No limit"}
+                  </span>
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  <Badge
+                    variant={status.variant}
+                    className="flex items-center w-fit"
+                  >
+                    {status.icon}
+                    {status.label}
+                  </Badge>
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  <span className={isExpired ? "text-muted-foreground" : ""}>
+                    {formatDateTime(coupon.createdAt)}
+                  </span>
+                </TableCell>
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">Open menu</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link
+                          href={`/admin/marketing/coupon/${coupon?.code}/edit`}
+                        >
+                          <Pencil className="mr-2 h-4 w-4" /> Edit
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="text-red-600"
+                        onClick={() => handleDeleteClick(coupon)}
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" /> Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>
   );
+
+  const expiredCount = coupons.filter(isCouponExpired).length;
+  const expiringSoonCount = coupons.filter(isCouponExpiringSoon).length;
 
   return (
     <>
@@ -172,6 +274,48 @@ export function CouponList() {
           actionLabel="Add Coupon"
           actionHref="/admin/marketing/coupon/add"
         />
+
+        {/* Summary Cards */}
+        {coupons.length > 0 && (expiredCount > 0 || expiringSoonCount > 0) && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-card border rounded-lg p-4">
+              <div className="flex items-center gap-2">
+                <Tag className="h-4 w-4 text-green-600" />
+                <span className="text-sm font-medium">Active Coupons</span>
+              </div>
+              <div className="text-2xl font-bold text-green-600">
+                {
+                  coupons.filter((c) => !isCouponExpired(c) && c.isActive)
+                    .length
+                }
+              </div>
+            </div>
+
+            {expiringSoonCount > 0 && (
+              <div className="bg-card border rounded-lg p-4">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-orange-600" />
+                  <span className="text-sm font-medium">Expiring Soon</span>
+                </div>
+                <div className="text-2xl font-bold text-orange-600">
+                  {expiringSoonCount}
+                </div>
+              </div>
+            )}
+
+            {expiredCount > 0 && (
+              <div className="bg-card border rounded-lg p-4">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4 text-red-600" />
+                  <span className="text-sm font-medium">Expired</span>
+                </div>
+                <div className="text-2xl font-bold text-red-600">
+                  {expiredCount}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="space-y-4">
           {isLoading ? (
@@ -186,6 +330,11 @@ export function CouponList() {
         <div className="flex justify-between">
           <div className="text-xs text-muted-foreground">
             {coupons.length} {coupons.length === 1 ? "coupon" : "coupons"}
+            {expiredCount > 0 && (
+              <span className="text-red-500 ml-2">
+                ({expiredCount} expired)
+              </span>
+            )}
           </div>
         </div>
       </div>

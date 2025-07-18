@@ -73,7 +73,6 @@ export function OrderSummary({
   shippingMethods,
   paymentMethods,
   user,
-
 }: OrderSummaryProps) {
   const shippingMethodName = shippingMethods.find(
     (m) => m.id.toString() === selectedShippingMethod
@@ -171,7 +170,7 @@ export function OrderSummary({
         </div>
       )}
 
-      <div className="space-y-3 text-sm">
+      <div className="space-y-3 text-sm grid grid-cols-2">
         {selectedShippingMethod && (
           <div className="flex items-center gap-3 text-muted-foreground">
             <Truck className="h-4 w-4 flex-shrink-0" />
@@ -199,7 +198,7 @@ export function OrderSummary({
         )}
       </div>
 
-      <footer className="border-t pt-6 mt-6">
+      <div className="border-t pt-6 mt-6">
         <p className="text-xs text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1">
           <FileText className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
           <span>By placing your order, you agree to our</span>
@@ -219,7 +218,7 @@ export function OrderSummary({
             Privacy Policy
           </Link>
         </p>
-      </footer>
+      </div>
     </section>
   );
 }

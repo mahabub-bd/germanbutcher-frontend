@@ -324,13 +324,8 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
         clearLocalCoupon();
       }
 
-      toast.error("Invalid coupon code", {
-        description:
-          error instanceof Error
-            ? error.message
-            : "The coupon code is not valid",
-      });
-      throw error;
+    toast.error(error instanceof Error ? error.message : "Invalid coupon code");
+    
     } finally {
       setIsLoading(false);
     }

@@ -301,7 +301,7 @@ export default function CheckoutPage({ user }: { user?: UserType }) {
       ) : (
         <div className="grid gap-6 md:gap-8 lg:grid-cols-12">
           {/* Main Form */}
-          <div className="lg:col-span-8 space-y-6 md:space-y-8">
+          <div className="lg:col-span-7 space-y-6 md:space-y-8">
             <OrderItems items={cart.items} itemCount={itemCount} />
             <CustomerInformation
               formData={formData}
@@ -351,7 +351,6 @@ export default function CheckoutPage({ user }: { user?: UserType }) {
                 total={total}
                 isSubmitting={isSubmitting}
                 onSubmit={handleSubmit}
-             
                 selectedShippingMethod={selectedShippingMethod}
                 selectedPaymentMethod={selectedPaymentMethod}
                 shippingMethods={shippingMethods}
@@ -362,7 +361,7 @@ export default function CheckoutPage({ user }: { user?: UserType }) {
           </div>
 
           {/* Desktop Order Summary */}
-          <div className="hidden lg:block lg:col-span-4">
+          <div className="hidden lg:block lg:col-span-5">
             <div className="sticky top-4 bg-white rounded-lg border p-6">
               <div className="border-b pb-4">
                 <h2 className="text-lg font-semibold">Order Summary</h2>
@@ -375,7 +374,6 @@ export default function CheckoutPage({ user }: { user?: UserType }) {
                   appliedCoupon={appliedCoupon}
                   shippingCost={Number(shippingCost)}
                   total={total}
-               
                   isSubmitting={isSubmitting}
                   onSubmit={handleSubmit}
                   selectedShippingMethod={selectedShippingMethod}

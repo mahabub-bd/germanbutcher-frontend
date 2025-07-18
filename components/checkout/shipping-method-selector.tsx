@@ -35,7 +35,7 @@ export function ShippingMethodSelector({
         <RadioGroup
           value={selectedMethod}
           onValueChange={onSelectMethod}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-4"
         >
           {shippingMethods.map((method) => (
             <div
