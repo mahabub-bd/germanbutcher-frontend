@@ -12,7 +12,7 @@ import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 interface MobileAuthProps {
-  user: UserTypes | null;
+  user: UserTypes;
   onClose?: () => void;
   className?: string;
 }
@@ -31,7 +31,6 @@ const UserProfileSection: React.FC<{
   isLoading: boolean;
 }> = ({ user, isLoading }) => {
   const initials = useMemo(() => generateInitials(user.name), [user.name]);
-  console.log(user);
 
   return (
     <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg mb-3">
@@ -97,7 +96,7 @@ const LoginSection: React.FC<{
 
     <div className="pt-2 border-t border-gray-100">
       <p className="text-xs text-gray-500 text-center mb-2">
-        Don't have an account?
+        Don&apos;t have an account?
       </p>
       <Link
         href="/auth/sign-up"

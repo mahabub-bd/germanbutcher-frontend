@@ -21,7 +21,7 @@ export type UserTypes = {
   name: string;
   email: string;
   mobileNumber: string;
-  roles: UserRole[];
+  roles?: UserRole[];
   isAdmin: boolean;
   profilePhoto?: Attachment;
   createdAt: string;

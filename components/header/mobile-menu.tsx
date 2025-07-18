@@ -13,17 +13,14 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { GermanbutcherLogo } from "@/public/images";
+import { User } from "@/utils/types";
 import MobileAuth from "../auth/mobile-auth";
 import { CategoryLinks } from "./category-links";
 import { NavLinks } from "./nav-links";
 
 type TabType = "navigation" | "categories";
 
-interface MobileMenuProps {
-  user?: any | null;
-}
-
-export function MobileMenu({ user }: MobileMenuProps) {
+export function MobileMenu({ user }: { user: User }) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("categories");
 
