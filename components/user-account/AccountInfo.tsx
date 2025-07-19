@@ -476,7 +476,7 @@ export default function AccountInfo({ user }: AccountInfoProps) {
                 Basic Information
               </div>
 
-              <div className="space-y-6 grid grid-cols-3 gap-4">
+              <div className="space-y-6 grid md:grid-cols-3 grid-cols-1 gap-4">
                 {FORM_FIELDS.map((field) => (
                   <FormField
                     key={field.name}
