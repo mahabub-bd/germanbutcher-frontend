@@ -133,11 +133,11 @@ function WhereToBuyClient({
   );
 
   useEffect(() => {
-    // Skip the initial API call if we already have initial data
+   
     if (isInitialMount.current) {
       isInitialMount.current = false;
 
-      // Only fetch if the URL params don't match the initial data
+
       const hasUrlParams = debouncedShopSearch || division || district;
       const hasInitialParams =
         searchParams.shopSearch ||

@@ -10,7 +10,7 @@ export async function MobileHeader() {
   const user = await getUser();
   return (
     <header className="lg:hidden sticky top-0 z-40 bg-primaryColor shadow-lg">
-      <div className="flex items-center justify-between py-3 px-4">
+      <div className="flex items-center justify-between py-2 px-2">
         <div>
           <Link
             href="/"

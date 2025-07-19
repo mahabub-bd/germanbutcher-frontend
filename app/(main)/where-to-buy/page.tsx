@@ -63,7 +63,6 @@ async function fetchSalesPoints(searchParams: SearchParams) {
   }
 }
 
-// Server Component
 export default async function WhereToBuyPage({ searchParams }: Props) {
   const resolvedParams = await searchParams;
 

@@ -102,7 +102,7 @@ const ContactPage = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Contact Information */}
-          <div className="bg-white rounded-md border border-gray-200 md:p-6 p-2">
+          <div className="bg-white rounded-md border border-gray-200 md:p-6 p-4">
             <div className="mb-6">
               <h2 className="text-xl font-bold text-gray-800 mb-2">
                 Contact Information
@@ -143,7 +143,7 @@ const ContactPage = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white rounded-md border border-gray-200  md:p-6 p-2">
+          <div className="bg-white rounded-md border border-gray-200  md:p-6 p-4">
             <div className="mb-6">
               <h2 className="text-xl font-bold text-gray-800 mb-2">
                 Send us a Message

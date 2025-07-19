@@ -76,7 +76,6 @@ const FORM_FIELDS = [
     type: "text",
     icon: UserIcon,
     placeholder: "Enter your full name",
-    description: "Your display name on the platform",
   },
   {
     label: "Contact Number",
@@ -84,7 +83,6 @@ const FORM_FIELDS = [
     type: "tel",
     icon: Phone,
     placeholder: "Enter your phone number",
-    description: "For order updates and support",
   },
   {
     label: "Email Address",
@@ -92,7 +90,6 @@ const FORM_FIELDS = [
     type: "email",
     icon: Mail,
     placeholder: "Enter your email address",
-    description: "Primary contact for your account",
   },
 ] as const;
 
@@ -106,7 +103,7 @@ interface FormFieldProps {
   type?: string;
   icon: React.ComponentType<{ className?: string }>;
   placeholder: string;
-  description?: string;
+
   value?: string;
 }
 
@@ -119,7 +116,7 @@ function FormField({
   type = "text",
   icon: Icon,
   placeholder,
-  description,
+
   value,
 }: FormFieldProps) {
   return (
@@ -132,9 +129,6 @@ function FormField({
           {label}
           <span className="text-red-500 text-xs">*</span>
         </label>
-        {description && (
-          <p className="text-xs text-gray-500 ml-7">{description}</p>
-        )}
       </div>
 
       {isEditing ? (
@@ -306,7 +300,7 @@ function ActionButtons({
   return (
     <button
       type="button"
-      className="flex items-center justify-center gap-2 px-6  text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-200 touch-manipulation min-h-[48px] w-full sm:w-auto"
+      className="flex items-center justify-center gap-2 px-4  text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-200 touch-manipulation min-h-[48px] w-full sm:w-auto"
       onClick={onEdit}
     >
       <Edit3 className="w-4 h-4" />
@@ -441,7 +435,7 @@ export default function AccountInfo({ user }: AccountInfoProps) {
       {/* Main Form Card */}
       <form onSubmit={handleSubmit(onSubmit)} className=" overflow-hidden">
         {/* Card Header */}
-        <div className="px-4 sm:px-0 py-5 border-b">
+        <div className="px-4 sm:px-0 py-2 border-b">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 flex items-center justify-center">
@@ -451,9 +445,6 @@ export default function AccountInfo({ user }: AccountInfoProps) {
                 <h2 className="text-lg font-semibold text-gray-900">
                   Personal Details
                 </h2>
-                <p className="text-sm text-gray-600 mt-0.5">
-                  Keep your information up to date
-                </p>
               </div>
             </div>
             <ActionButtons
@@ -467,42 +458,33 @@ export default function AccountInfo({ user }: AccountInfoProps) {
         </div>
 
         {/* Form Content */}
-        <div className="p-4 sm:p-6">
-          <div className="space-y-8">
-            {/* Basic Information Section */}
-            <div className="space-y-6">
-              <div className="flex items-center gap-3 text-sm font-medium text-gray-700 uppercase tracking-wide">
-                <div className="w-1 h-4 bg-primaryColor rounded-full"></div>
-                Basic Information
-              </div>
-
-              <div className="space-y-6 grid md:grid-cols-3 grid-cols-1 gap-4">
-                {FORM_FIELDS.map((field) => (
-                  <FormField
-                    key={field.name}
-                    label={field.label}
-                    name={field.name}
-                    register={register}
-                    error={errors[field.name]?.message}
-                    isEditing={isEditing}
-                    type={field.type}
-                    icon={field.icon}
-                    placeholder={field.placeholder}
-                    description={field.description}
-                    value={watch(field.name)}
-                  />
-                ))}
-              </div>
+        <div className="py-4">
+          <div className="space-y-2">
+            <div className=" grid md:grid-cols-3 grid-cols-1 gap-4">
+              {FORM_FIELDS.map((field) => (
+                <FormField
+                  key={field.name}
+                  label={field.label}
+                  name={field.name}
+                  register={register}
+                  error={errors[field.name]?.message}
+                  isEditing={isEditing}
+                  type={field.type}
+                  icon={field.icon}
+                  placeholder={field.placeholder}
+                  value={watch(field.name)}
+                />
+              ))}
             </div>
 
             {/* Security Section */}
-            <div className="space-y-6">
+            <div className="mt-5">
               <div className="flex items-center gap-3 text-sm font-medium text-gray-700 uppercase tracking-wide">
                 <div className="w-1 h-4 bg-red-600 rounded-full"></div>
                 Security Settings
               </div>
 
-              <div className="space-y-6">
+              <div className="mt-5">
                 <PasswordField
                   label="Password"
                   name="password"

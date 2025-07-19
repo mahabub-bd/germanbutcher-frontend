@@ -106,7 +106,7 @@ export function MobileMenu({ user }: { user: User }) {
 
           {/* Tab Content */}
           <div className="flex-1 overflow-auto">
-            <div className="p-6">
+            <div className="p-4">
               {activeTab === "categories" && (
                 <CategoryLinks onCategoryClick={handleClose} />
               )}

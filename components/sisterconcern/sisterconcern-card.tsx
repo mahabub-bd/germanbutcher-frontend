@@ -24,7 +24,7 @@ const SisterConcernCard: React.FC<{ concern: SisterConcern }> = ({
           <div className="w-12 h-1 bg-gradient-to-r from-primaryColor to-secondaryColor rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
         </div>
 
-        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+        <p className="text-gray-800 text-md leading-relaxed line-clamp-5">
           {concern.description}
         </p>
 

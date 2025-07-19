@@ -47,8 +47,8 @@ export default async function RecipeDetails({
   recipeData: Recipe;
 }) {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-6">
+    <div className="min-h-screen ">
+      <div className="container mx-auto px-4 md:py-5">
         {/* Breadcrumbs */}
         <RecipeBreadcrumb
           categoryName={recipeData.category?.name}
@@ -57,7 +57,7 @@ export default async function RecipeDetails({
         />
 
         {/* Recipe Header */}
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-8">
+        <div className="bg-white rounded-md shadow-sm overflow-hidden mb-8">
           <div className="relative h-[400px]">
             <Image
               src={recipeData.attachment.url || "/placeholder.svg"}
@@ -68,7 +68,7 @@ export default async function RecipeDetails({
             />
           </div>
 
-          <div className="p-6">
+          <div className="md:p-6 p-4">
             <div className="flex flex-wrap items-center gap-2 mb-4">
               <Badge variant="secondary" className="flex items-center gap-1">
                 <Tag className="w-3 h-3" />
@@ -109,7 +109,7 @@ export default async function RecipeDetails({
         <div className="grid gap-8 md:grid-cols-3">
           {/* Main Content */}
           <div className="md:col-span-2">
-            <div className="bg-white rounded-lg p-6 shadow-sm">
+            <div className=" rounded-md md:p-6 p-4 shadow-sm">
               <div className="flex items-center gap-2 mb-6">
                 <ChefHat className="w-5 h-5 text-orange-600" />
                 <h2 className="text-xl font-semibold text-gray-900">
@@ -125,7 +125,7 @@ export default async function RecipeDetails({
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Category Section */}
-            <div className="bg-white rounded-lg p-6 shadow-sm">
+            <div className=" rounded-md md:p-6 p-4 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
                 <Tag className="w-5 h-5 text-blue-600" />
                 <h3 className="text-lg font-semibold text-gray-900">
@@ -144,7 +144,9 @@ export default async function RecipeDetails({
                   />
                 </div>
                 <div>
-                  <h4 className="font-semibold">{recipeData?.category?.name}</h4>
+                  <h4 className="font-semibold">
+                    {recipeData?.category?.name}
+                  </h4>
                   <p className="text-sm text-gray-600">
                     {recipeData.category?.description}
                   </p>
@@ -153,7 +155,7 @@ export default async function RecipeDetails({
             </div>
 
             {/* Recipe Info */}
-            <div className="bg-white rounded-lg p-6 shadow-sm">
+            <div className=" rounded-md md:p-6  p-4 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
                 <Info className="w-5 h-5 text-green-600" />
                 <h3 className="text-lg font-semibold text-gray-900">
@@ -203,7 +205,7 @@ export default async function RecipeDetails({
 
             {/* Nutrition Details */}
             {recipeData.nutrition_details && (
-              <div className="bg-white rounded-lg p-6 shadow-sm">
+              <div className="bg-white rounded-md md:p-6 p-4 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
                   <Apple className="w-5 h-5 text-red-600" />
                   <h3 className="text-lg font-semibold text-gray-900">
