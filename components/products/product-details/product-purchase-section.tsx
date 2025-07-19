@@ -79,7 +79,7 @@ export function ProductPurchaseSection({
   const shareBody = `${product.name} - ${product.description}`;
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border">
+    <div className="bg-white rounded-md  md:p-6 p-4 shadow-sm border">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">
         Purchase Options
       </h3>

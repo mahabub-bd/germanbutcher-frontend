@@ -2,7 +2,7 @@ import { HeadingPrimary } from "@/components/common/heading-primary";
 import CategoryList from "@/components/homepage/Category/category-list";
 export default function CategoryPage() {
   return (
-    <section className="md:py-10 py-5 bg-gray-50">
+    <section className="bg-gray-50">
       <div className="container mx-auto px-4">
         <CategoryList endpoint="categories?isMainCategory=true">
           <HeadingPrimary

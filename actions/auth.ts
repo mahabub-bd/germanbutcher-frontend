@@ -108,11 +108,11 @@ export async function login(formData: LoginFormData) {
         ...response,
         ...tokenData,
       };
+      console.log("User data after login:", userData);
 
       await setUserCookies(userData);
-      const user = await getUser();
 
-      const redirectPath = user?.isAdmin ? "/admin/dashboard" : "/";
+      const redirectPath = "/";
 
       return {
         success: true,
@@ -259,7 +259,10 @@ export async function verifyOtp(data: {
   otpExpiresAt?: string;
 }) {
   try {
+    console.log("Verifying OTP with data:", data);
+
     const response = await postData("auth/verify-otp", data);
+    console.log("OTP verification response:", response);
 
     if (response?.data?.accessToken) {
       const tokenData = getUserFromToken(response.data.accessToken);
@@ -269,9 +272,8 @@ export async function verifyOtp(data: {
       };
 
       await setUserCookies(userData);
-      const user = await getUser();
 
-      const redirectPath = user?.isAdmin ? "/admin/dashboard" : "/";
+      const redirectPath = "/";
 
       return {
         success: true,

@@ -90,7 +90,7 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-2">
+    <div className="min-h-screen md:py-10 py-5 px-4 sm:px-2">
       <div className="container mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -102,7 +102,7 @@ const ContactPage = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Contact Information */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="bg-white rounded-md border border-gray-200 md:p-6 p-2">
             <div className="mb-6">
               <h2 className="text-xl font-bold text-gray-800 mb-2">
                 Contact Information
@@ -112,7 +112,7 @@ const ContactPage = () => {
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="flex flex-col gap-4">
               {contactInfo.map((item, index) => {
                 const IconComponent = item.icon;
                 return (
@@ -143,7 +143,7 @@ const ContactPage = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="bg-white rounded-md border border-gray-200  md:p-6 p-2">
             <div className="mb-6">
               <h2 className="text-xl font-bold text-gray-800 mb-2">
                 Send us a Message

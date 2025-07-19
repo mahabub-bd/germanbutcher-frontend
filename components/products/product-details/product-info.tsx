@@ -21,26 +21,30 @@ export function ProductInfo({ product }: ProductInfoProps) {
   ).toFixed(0);
 
   return (
-    <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+    <div className="bg-white rounded-md  md:p-6 p-4 shadow-sm border">
       {/* Header Section with Brand and Category */}
-      <div className="flex flex-wrap items-center gap-3 mb-6">
-        <div className="flex items-center gap-2 bg-gradient-to-r from-red-50 to-pink-50 px-4 py-2 rounded-full border border-red-200">
-          <Tag className="w-4 h-4 text-primaryColor" />
-          <span className="text-sm font-medium text-primaryColor">Brand:</span>
-          <span className="text-sm font-semibold text-primaryColor">
+
+      <div className="flex flex-wrap items-center gap-2 mb-4 sm:gap-3 sm:mb-6">
+        <div className="flex items-center gap-1.5 bg-gradient-to-r from-red-50 to-pink-50 px-2.5 py-1.5 rounded-full border border-red-200 sm:gap-2 sm:px-4 sm:py-2">
+          <Tag className="w-3 h-3 text-primaryColor sm:w-4 sm:h-4" />
+          <span className="text-xs font-medium text-primaryColor sm:text-sm">
+            Brand:
+          </span>
+          <span className="text-xs font-semibold text-primaryColor sm:text-sm">
             {product.brand.name}
           </span>
         </div>
 
-        <div className="flex items-center gap-2 bg-gradient-to-r from-gray-50 to-slate-50 px-4 py-2 rounded-full border border-gray-200">
-          <Star className="w-4 h-4 text-gray-600" />
-          <span className="text-sm font-medium text-gray-700">Category:</span>
-          <span className="text-sm font-semibold text-gray-900">
+        <div className="flex items-center gap-1.5 bg-gradient-to-r from-gray-50 to-slate-50 px-2.5 py-1.5 rounded-full border border-gray-200 sm:gap-2 sm:px-4 sm:py-2">
+          <Star className="w-3 h-3 text-gray-600 sm:w-4 sm:h-4" />
+          <span className="text-xs font-medium text-gray-700 sm:text-sm">
+            Category:
+          </span>
+          <span className="text-xs font-semibold text-gray-900 sm:text-sm">
             {product.category.name}
           </span>
         </div>
       </div>
-
       {/* Product Title */}
       <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight">
         {product.name}
@@ -79,14 +83,13 @@ export function ProductInfo({ product }: ProductInfoProps) {
       </div>
 
       {/* Product Details */}
-      <div className="p-4 ">
-        <div className="flex items-center gap-2 text-gray-700">
-          <Package className="w-5 h-5 text-gray-500" />
-          <span className="font-medium">Weight:</span>
-          <span className="font-semibold text-gray-900">
-            {product.weight} {product.unit.name}
-          </span>
-        </div>
+
+      <div className="flex items-center gap-2 text-gray-700">
+        <Package className="w-5 h-5 text-gray-500" />
+        <span className="font-medium">Weight:</span>
+        <span className="font-semibold text-gray-900">
+          {product.weight} {product.unit.name}
+        </span>
       </div>
     </div>
   );

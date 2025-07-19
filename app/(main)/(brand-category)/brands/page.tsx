@@ -3,7 +3,7 @@ import BrandList from "@/components/homepage/brands/brand-list";
 
 export default async function BrandPage() {
   return (
-    <section className="md:py-10 py-5">
+    <section className="bg-gray-50">
       <div className="container mx-auto px-4">
         <BrandList endpoint="brands">
           <HeadingPrimary

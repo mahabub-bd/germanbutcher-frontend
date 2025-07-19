@@ -17,7 +17,7 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
     <div className="min-h-screen bg-gray-50">
       <ProductBreadcrumb product={product} />
 
-      <div className="container mx-auto md:px-0 px-2 py-6">
+      <div className="container mx-auto md:px-0 px-2 md:py-4 py-2">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Product Images */}
           <div className="lg:col-span-1">
@@ -25,7 +25,7 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
           </div>
 
           {/* Product Information */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 flex flex-col md:gap-6 gap-4">
             <ProductInfo product={product} />
             <ProductPurchaseSection product={product} />
             <ProductFeatures />

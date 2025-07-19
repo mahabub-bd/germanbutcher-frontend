@@ -29,7 +29,7 @@ export function ProductFeatures() {
       {features.map(({ icon: Icon, label, desc }) => (
         <div
           key={label}
-          className="bg-white rounded-lg p-4 shadow-sm border text-center hover:shadow-md transition-shadow"
+          className="bg-white rounded-md  md:p-6 p-4 shadow-sm border"
         >
           <Icon className="w-6 h-6 text-primaryColor mx-auto mb-2" />
           <h4 className="font-medium text-sm text-gray-900">{label}</h4>

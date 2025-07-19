@@ -1,3 +1,4 @@
+import { HeadingPrimary } from "@/components/common/heading-primary";
 import {
   AlertTriangle,
   CheckCircle,
@@ -214,31 +215,14 @@ const ContactMethodCard: React.FC<{ method: ContactMethod }> = ({ method }) => (
 const HowToOrderPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-red-700 to-red-800 text-white py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">How to Order</h1>
-          <p className="text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed">
-            Getting premium meats from German Butcher is quick, easy, and secure
-          </p>
-          <div className="mt-8">
-            <button className="bg-white text-red-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200">
-              Start Shopping Now
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Ordering Steps */}
       <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-            Simple Ordering Process
-          </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Follow these easy steps to get German Butcher&apos;s premium
-            products delivered to your door
-          </p>
+          <HeadingPrimary
+            title="Simple Ordering Process"
+            subtitle=" Follow these easy steps to get German Butcher's premium
+            products delivered to your door"
+          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

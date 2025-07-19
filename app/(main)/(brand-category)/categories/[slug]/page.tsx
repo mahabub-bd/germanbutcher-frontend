@@ -1,9 +1,9 @@
-import CategoryBrandProductList from '@/components/products/brand-category-product-list';
+import CategoryBrandProductList from "@/components/products/brand-category-product-list";
 
-import { SortBar } from '@/components/products/sort-bar';
-import { formatSlugToTitle } from '@/lib/utils';
-import { buildQueryString } from '@/utils/api-utils';
-import { CategoryBreadcrumb } from '../category-breadcrumb';
+import { SortBar } from "@/components/products/sort-bar";
+import { formatSlugToTitle } from "@/lib/utils";
+import { buildQueryString } from "@/utils/api-utils";
+import { CategoryBreadcrumb } from "../category-breadcrumb";
 
 export default async function CategoryPage({
   searchParams,
@@ -29,7 +29,7 @@ export default async function CategoryPage({
   const url = `categories?${buildQueryString(queryParams)}`;
 
   return (
-    <div className="container mx-auto px-4 py-4">
+    <div className="container mx-auto ">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
         <CategoryBreadcrumb categoryName={formatSlugToTitle(slug)} />
         <SortBar currentSort={(await searchParams).sort} />

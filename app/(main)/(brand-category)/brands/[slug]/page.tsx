@@ -25,7 +25,7 @@ export default async function BrandPage({
   const url = `brands?${buildQueryString(queryParams)}`;
 
   return (
-    <div className="container mx-auto px-4 py-4">
+    <div className="container mx-auto">
       <SortBar currentSort={(await searchParams).sort} />
       <CategoryBrandProductList endpoint={url} path="brands" />
     </div>

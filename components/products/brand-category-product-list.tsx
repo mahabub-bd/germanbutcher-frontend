@@ -1,13 +1,13 @@
-import { fetchData } from '@/utils/api-utils';
-import type { Brand, Category, Product, Recipe } from '@/utils/types';
-import { HeadingPrimary } from '../common/heading-primary';
+import { fetchData } from "@/utils/api-utils";
+import type { Brand, Category, Product, Recipe } from "@/utils/types";
+import { HeadingPrimary } from "../common/heading-primary";
 
-import RecipeCard from '../recipe/recipe-card';
-import ProductCard from './product-card';
+import RecipeCard from "../recipe/recipe-card";
+import ProductCard from "./product-card";
 
 interface ProductListProps {
   endpoint: string;
-  path: 'brands' | 'categories';
+  path: "brands" | "categories";
   searchParams?: {
     sort?: string;
     minPrice?: string;
@@ -19,22 +19,22 @@ export default async function CategoryBrandProductList({
   endpoint,
   path,
 }: ProductListProps) {
-  let title = '';
+  let title = "";
   let products: Product[] = [];
   let recipes: Recipe[] = [];
 
   try {
     const response = (await fetchData(endpoint)) as unknown;
 
-    if (path === 'brands' && Array.isArray(response)) {
+    if (path === "brands" && Array.isArray(response)) {
       const brand = response[0] as Brand;
-      title = brand?.name || '';
+      title = brand?.name || "";
       products = brand?.products || [];
     } else {
       const category = Array.isArray(response)
         ? (response[0] as Category)
         : null;
-      title = category?.name || '';
+      title = category?.name || "";
       products = category?.products || [];
       recipes = category?.recipes || [];
     }
@@ -48,7 +48,7 @@ export default async function CategoryBrandProductList({
 
       {/* Products Section */}
       {products?.length > 0 ? (
-        <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5 lg:gap-6 py-12">
+        <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5 lg:gap-6 md:py-10 py-5">
           {products?.map((product: Product) => (
             <ProductCard key={product.id} product={product} />
           ))}
