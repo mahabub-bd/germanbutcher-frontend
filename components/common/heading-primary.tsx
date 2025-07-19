@@ -13,20 +13,20 @@ type HeadingProps = {
 
 const sizeVariants = {
   sm: {
-    title: "text-base md:text-lg lg:text-xl",
-    subtitle: "text-xs md:text-sm",
+    title: "text-xl md:text-2xl lg:text-3xl",
+    subtitle: "text-sm md:text-base lg:text-lg",
   },
   md: {
-    title: "text-lg md:text-xl lg:text-2xl",
-    subtitle: "text-sm md:text-base",
+    title: "text-2xl md:text-3xl lg:text-4xl",
+    subtitle: "text-base md:text-lg lg:text-xl",
   },
   lg: {
-    title: "text-xl md:text-2xl lg:text-3xl",
-    subtitle: "text-sm md:text-base",
+    title: "text-3xl md:text-4xl lg:text-5xl",
+    subtitle: "text-base md:text-lg lg:text-xl",
   },
   xl: {
-    title: "text-2xl md:text-3xl lg:text-4xl",
-    subtitle: "text-base md:text-lg",
+    title: "text-4xl md:text-5xl lg:text-6xl xl:text-7xl",
+    subtitle: "text-lg md:text-xl lg:text-2xl",
   },
 };
 
@@ -52,7 +52,7 @@ export function HeadingPrimary({
     <div className={cn(alignClass, "space-y-2", className)}>
       <h2
         className={cn(
-          "  font-bold text-primaryColor ",
+          "text-primaryColor font-castor font-normal leading-tight tracking-tight",
           sizeClasses.title,
           titleClassName
         )}
