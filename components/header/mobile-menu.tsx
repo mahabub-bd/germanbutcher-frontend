@@ -127,7 +127,9 @@ export function MobileMenu({ user }: { user: User }) {
           {/* Footer */}
           <div className="px-6 py-3 border-t-2 border-[#deb149] bg-gradient-to-r from-black/95 via-gray-900/95 to-black/95">
             <div className="text-center">
-              <p className="text-xs text-gray-100 ">© 2025 German Butcher</p>
+              <p className="text-xs text-gray-100 ">
+                © 2025 German Butcher All rights reserved.
+              </p>
             </div>
           </div>
         </div>

@@ -96,6 +96,7 @@ const ContactItem = ({ icon: Icon, label, value, href }: ContactItemProps) => (
       {href ? (
         <Link
           href={href}
+          prefetch={true}
           className="text-white font-medium text-sm sm:text-base 
                      hover:text-white/80 transition-colors duration-300
                      focus:outline-none focus:text-white/80"
