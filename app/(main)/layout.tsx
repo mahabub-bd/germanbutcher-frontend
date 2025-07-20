@@ -21,7 +21,7 @@ export default async function MainLayout({
       <RouteLoadingBar
         height="3px"
         position="top"
-        color="linear-gradient(270deg, #d29835, #f9ecc0 53.12%, #d29835)"
+        color="linear-gradient(270deg, #000000, #f9ecc0 53.12%, #d29835)"
       />
       <main className="flex-1">{children}</main>
       <GoToTop />

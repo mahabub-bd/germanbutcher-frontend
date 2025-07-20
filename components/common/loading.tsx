@@ -1,7 +1,7 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 interface RouteLoadingBarProps {
   height?: string;
@@ -15,99 +15,52 @@ interface RouteLoadingBarProps {
 export default function RouteLoadingBar({
   height = "3px",
   position = "top",
-  color = "linear-gradient(270deg, #d29835, #f9ecc0 53.12%, #d29835)",
+  color = "#ffffff",
   showOnRouteChange = true,
-  delay = 100,
-  speed = 200,
+  delay = 50, // Reduced delay
+  speed = 100, // Faster updates
 }: RouteLoadingBarProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const timeoutRef = useRef<NodeJS.Timeout>(null);
+  const intervalRef = useRef<NodeJS.Timeout>(null);
 
-  // Track route changes
   useEffect(() => {
     if (!showOnRouteChange) return;
 
-    const handleStart = () => {
-      setIsLoading(true);
-      setProgress(0);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (intervalRef.current) clearInterval(intervalRef.current);
 
-      // Simulate progress
-      const progressTimer = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 90) {
-            clearInterval(progressTimer);
-            return 90;
-          }
-          return prev + Math.random() * 30;
-        });
-      }, speed);
+    setIsLoading(true);
+    setProgress(10);
 
-      // Cleanup function
-      return () => clearInterval(progressTimer);
-    };
+    intervalRef.current = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 85) {
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          return 85;
+        }
 
-    const handleComplete = () => {
+        const increment = prev < 50 ? Math.random() * 25 : Math.random() * 10;
+        return Math.min(prev + increment, 85);
+      });
+    }, speed);
+
+    timeoutRef.current = setTimeout(() => {
       setProgress(100);
       setTimeout(() => {
         setIsLoading(false);
         setProgress(0);
-      }, 200);
-    };
-
-    // Start loading after delay
-    const startTimer = setTimeout(handleStart, delay);
-
-    // Complete loading when route change is done
-    const completeTimer = setTimeout(handleComplete, 100);
+      }, 150); // Faster completion
+    }, 50); // Much faster completion trigger
 
     return () => {
-      clearTimeout(startTimer);
-      clearTimeout(completeTimer);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [pathname, searchParams, showOnRouteChange, delay, speed]);
-
-  // Override router methods to detect navigation
-  useEffect(() => {
-    const originalPush = router.push;
-    const originalReplace = router.replace;
-    const originalBack = router.back;
-    const originalForward = router.forward;
-
-    const handleRouteStart = () => {
-      setIsLoading(true);
-      setProgress(10);
-    };
-
-    router.push = (...args) => {
-      handleRouteStart();
-      return originalPush.apply(router, args);
-    };
-
-    router.replace = (...args) => {
-      handleRouteStart();
-      return originalReplace.apply(router, args);
-    };
-
-    router.back = () => {
-      handleRouteStart();
-      return originalBack();
-    };
-
-    router.forward = () => {
-      handleRouteStart();
-      return originalForward();
-    };
-
-    return () => {
-      router.push = originalPush;
-      router.replace = originalReplace;
-      router.back = originalBack;
-      router.forward = originalForward;
-    };
-  }, [router]);
+  }, [pathname, searchParams, showOnRouteChange, speed]);
 
   if (!isLoading) return null;
 
@@ -116,23 +69,24 @@ export default function RouteLoadingBar({
   return (
     <>
       <div
-        className={`fixed left-0 right-0 ${positionClass} z-[9999] overflow-hidden bg-gray-200/30 dark:bg-gray-700/30`}
+        className={`fixed left-0 right-0 ${positionClass} z-[9999] overflow-hidden bg-gray-200/10 dark:bg-gray-800/10`}
         style={{ height }}
       >
         <div
-          className="h-full transition-all duration-300 ease-out relative"
+          className="h-full transition-all duration-200 ease-out relative"
           style={{
             width: `${Math.min(progress, 100)}%`,
             background: color,
+            boxShadow: "0 0 8px rgba(255, 255, 255, 0.4)",
           }}
         >
-          {/* Shimmer effect */}
+          {/* Optimized shimmer effect */}
           <div
-            className="absolute inset-0 opacity-60"
+            className="absolute inset-0 opacity-30"
             style={{
               background:
-                "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)",
-              animation: "shimmer 1.5s infinite",
+                "linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)",
+              animation: "shimmer 1s infinite",
             }}
           />
         </div>
@@ -144,7 +98,7 @@ export default function RouteLoadingBar({
             transform: translateX(-100%);
           }
           100% {
-            transform: translateX(200%);
+            transform: translateX(150%);
           }
         }
       `}</style>
