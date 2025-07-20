@@ -7,7 +7,7 @@ import { MobileBottomHeader } from "@/components/header/mobile-bottom-header";
 import { GoToTop } from "@/components/ui/go-to-top";
 
 import type React from "react";
-import RouteLoadingBar from "../loading";
+import RouteLoadingBar from "../../components/common/loading";
 
 export default async function MainLayout({
   children,
