@@ -189,9 +189,9 @@ export default function Footer() {
           {/* Menu Section - Mobile: full width, Desktop: 50% */}
           <div className="col-span-1 lg:col-span-6 order-3 lg:order-2">
             <div className="text-center lg:text-left mb-6 sm:mb-8">
-              <h3 className="font-bold text-xl sm:text-2xl text-white">
+              <p className="font-bold text-xl sm:text-2xl text-white">
                 Quick Links
-              </h3>
+              </p>
             </div>
 
             {/* Menu Grid - 2 columns on mobile, 4 on desktop */}
