@@ -67,7 +67,7 @@ export function NavLinks({ isMobile, onClick }: NavLinksProps) {
                     isPending && "opacity-70"
                   )
                 : cn(
-                    "text-white hover:text-white underline-active",
+                    "text-white  underline-active",
                     isActive && "active",
                     isPending && "opacity-70"
                   )
