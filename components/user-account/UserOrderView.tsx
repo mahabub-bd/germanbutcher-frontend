@@ -43,8 +43,6 @@ interface OrderViewProps {
 }
 
 export default function UserOrderView({ order }: OrderViewProps) {
-  console.log(order);
-
   const getStatusDotColor = (status: string) => {
     switch (status.toLowerCase()) {
       case OrderStatus.PENDING:
