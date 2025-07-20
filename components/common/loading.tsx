@@ -17,7 +17,7 @@ export default function RouteLoadingBar({
   position = "top",
   color = "#ffffff",
   showOnRouteChange = true,
-  delay = 50, // Reduced delay
+
   speed = 100, // Faster updates
 }: RouteLoadingBarProps) {
   const [isLoading, setIsLoading] = useState(false);
