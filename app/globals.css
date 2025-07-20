@@ -152,7 +152,20 @@
       transform: translateX(0);
     }
   }
-
+   .animation{
+    background: linear-gradient(to right, #f0f0f0 20%, #ddd 40%, #f0f0f0 60%) no-repeat;
+    background-size: 200% auto;
+    animation: loading 1.5s linear infinite;
+  }
+  @keyframes loading {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+ 
   .animate-marquee {
     animation: marquee var(--duration) linear infinite;
   }

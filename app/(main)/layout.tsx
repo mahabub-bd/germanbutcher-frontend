@@ -7,6 +7,7 @@ import { MobileBottomHeader } from "@/components/header/mobile-bottom-header";
 import { GoToTop } from "@/components/ui/go-to-top";
 
 import type React from "react";
+import RouteLoadingBar from "../loading";
 
 export default async function MainLayout({
   children,
@@ -17,6 +18,11 @@ export default async function MainLayout({
   return (
     <div>
       <Header />
+      <RouteLoadingBar
+        height="3px"
+        position="top"
+        color="linear-gradient(270deg, #d29835, #f9ecc0 53.12%, #d29835)"
+      />
       <main className="flex-1">{children}</main>
       <GoToTop />
       <WhatsAppMessengerWidget />
