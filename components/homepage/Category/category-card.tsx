@@ -1,36 +1,41 @@
-import { getBlurData } from "@/utils/blur-generator";
 import { Category } from "@/utils/types";
 import Image from "next/image";
 import Link from "next/link";
 
-export async function CategoryCard({ category }: { category: Category }) {
-  const { base64 } = await getBlurData(category?.attachment?.url);
+interface CategoryCardProps {
+  category: Category;
+}
+
+export default function CategoryCard({ category }: CategoryCardProps) {
   return (
     <Link
       href={`/categories/${category.slug || category.id}`}
       className="group block rounded-lg overflow-hidden"
+      prefetch={false}
     >
       <div className="flex w-full items-center justify-center">
-        <div className="relative md:w-[150px] md:h-[150px] w-[100px] h-[100px] rounded-full p-2 flex items-center justify-center border-2 border-dashed border-primaryColor group-hover:border-primary transition-colors">
-          <Image
-            src={category?.attachment?.url || "/category-placeholder.svg"}
-            alt={`${category?.name} category icon`}
-            width={600}
-            height={600}
-            className="object-cover w-full h-full rounded-full transition-transform duration-300 group-hover:scale-105"
-            priority
-            loading="eager"
-            placeholder="blur"
-            blurDataURL={base64}
-          />
+        <div className="relative md:w-[150px] md:h-[150px] w-[100px] h-[100px] rounded-full p-2 flex items-center justify-center border-2 border-dashed border-primaryColor group-hover:border-primary transition-colors duration-200">
+          <div className="relative w-full h-full rounded-full overflow-hidden bg-gray-100">
+            <Image
+              src={category?.attachment?.url || "/category-placeholder.svg"}
+              alt={`${category?.name} category`}
+              fill
+              className="object-cover transition-transform duration-200 group-hover:scale-105"
+              loading="lazy"
+              sizes="(max-width: 768px) 100px, 150px"
+              quality={75}
+            />
+          </div>
         </div>
       </div>
 
       <div className="p-2 text-center">
-        <h3 className="text-md sm:text-lg font-semibold md:text-xl text-primaryColor group-hover:text-primary transition-colors line-clamp-2 h-[50px] flex items-center justify-center">
+        <h3 className="text-sm sm:text-base font-semibold md:text-lg text-primaryColor group-hover:text-primary transition-colors duration-200 line-clamp-2 min-h-[40px] flex items-center justify-center">
           {category?.name}
         </h3>
       </div>
     </Link>
   );
 }
+
+// Memoize the component to prevent unnecessary re-renders
