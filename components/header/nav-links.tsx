@@ -69,7 +69,7 @@ export function NavLinks({ isMobile, onClick }: NavLinksProps) {
                 : cn(
                     "text-white  underline-active",
                     isActive && "active",
-                    isPending && "opacity-70"
+                    isPending && "opacity-100"
                   )
             )}
             prefetch={true}
