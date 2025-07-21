@@ -43,17 +43,17 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = async ({
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen ">
       <ProfileBreadcrumb navItems={navItems} />
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-12 gap-8">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-12 md:gap-8 gap-4">
           {/* Desktop Sidebar */}
           <div className="col-span-12">
             <div className="hidden lg:block sticky top-8">
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className=" shadow-md rounded-md  overflow-hidden">
                 {/* User Profile Header */}
-                <div className="bg-gradient-to-br from-primaryColor via-[#6d0000] to-primaryColor p-6 text-white">
+                <div className="bg-gradient-to-br from-primaryColor via-[#6d0000] to-primaryColor p-4 text-white">
                   <div className="flex items-center space-x-3">
                     <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
                       <User className="w-6 h-6" />
@@ -76,7 +76,7 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = async ({
 
             {/* Mobile Sidebar */}
             <div className="lg:hidden mb-6">
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+              <div className="bg-white rounded-md shadow-md p-4">
                 <div className="flex items-center space-x-3 mb-4">
                   <div className="w-10 h-10 bg-gradient-to-br from-primaryColor via-[#6d0000] to-primaryColor rounded-full flex items-center justify-center">
                     <User className="w-5 h-5 text-white" />
@@ -95,7 +95,7 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = async ({
 
           {/* Main Content Area */}
           <div className="col-span-12">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 min-h-[600px]">
+            <div className="shadow-md rounded-md  min-h-[600px]">
               <main className="md:p-4 p-2">{children}</main>
             </div>
           </div>

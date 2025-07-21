@@ -59,10 +59,10 @@ const OrderTable = ({ orders }: MyOrderProps) => {
   };
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full  ">
       <h2 className="text-xl font-semibold mb-4">My Orders</h2>
 
-      <div className="border rounded-lg overflow-hidden">
+      <div className="rounded-md  overflow-hidden">
         <Table>
           <TableHeader className="bg-gray-50">
             <TableRow>

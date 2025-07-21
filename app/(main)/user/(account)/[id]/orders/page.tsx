@@ -13,7 +13,7 @@ export default async function UserOrderPage({
   const userOrders: Order[] = await fetchProtectedData(endpoint);
 
   return (
-    <div className="p-4">
+    <div className="md:p-4 p-2">
       <Myorder orders={userOrders} />
     </div>
   );
