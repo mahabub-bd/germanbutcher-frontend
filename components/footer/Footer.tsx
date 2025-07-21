@@ -220,9 +220,9 @@ export default function Footer() {
           >
             {/* Section Header */}
             <div className="text-center lg:text-left">
-              <h3 className="font-bold text-xl sm:text-2xl text-white mb-4 sm:mb-6">
+              <p className="font-bold text-xl sm:text-2xl text-white mb-4 sm:mb-6">
                 Contact Us
-              </h3>
+              </p>
             </div>
 
             {/* Contact Information */}
