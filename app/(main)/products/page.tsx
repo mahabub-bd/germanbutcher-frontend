@@ -76,7 +76,7 @@ export default async function ProductsPage({
       </div>
 
       {/* Desktop Header */}
-      <div className="hidden md:flex md:flex-row md:justify-between md:items-center mb-6">
+      <div className="hidden md:flex md:flex-row md:justify-between md:items-center">
         <ProductsBreadcrumb
           categoryName={
             (await searchParams).category

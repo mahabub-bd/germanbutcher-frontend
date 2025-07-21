@@ -237,7 +237,7 @@ export default function UserOrderView({ order }: OrderViewProps) {
       <div className="flex flex-col space-y-6 md:p-2">
         {/* Order Summary */}
         <div className="border rounded-lg p-4 bg-background">
-          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <div className="flex md:flex-row flex-col pb-2 gap-4 justify-between">
             <div>
               <h2 className="text-lg font-semibold">Order-{order.orderNo}</h2>
               <p className="text-sm text-muted-foreground">
@@ -611,7 +611,7 @@ export default function UserOrderView({ order }: OrderViewProps) {
               </div>
 
               {/* Shipping Address Details */}
-              <div className="space-y-3 grid grid-cols-1 md:grid-cols-2">
+              <div className="space-y-3 grid  md:grid-cols-2">
                 <div>
                   <p className="font-medium text-sm text-muted-foreground">
                     Name:
