@@ -5,7 +5,7 @@ import { getUser } from "./actions/auth";
 export async function middleware(req: any) {
   const { pathname } = req.nextUrl;
 
-  const userProtectedRoutes = ["/user"];
+  const userProtectedRoutes = ["/user", "/order-confirmation"];
   const adminProtectedRoutes = ["/admin"];
 
   const isUserProtected = userProtectedRoutes.some((route) =>
