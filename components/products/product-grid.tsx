@@ -3,6 +3,8 @@ import type { Product } from "@/utils/types";
 import { AlertCircle, Package, RefreshCw, Search } from "lucide-react";
 import { PaginationComponent } from "../common/pagination";
 import ProductCard from "./product-card";
+import { Suspense } from "react";
+import { ProductGridSkeleton } from "./product-skeleton";
 
 interface ProductListProps {
   filterParams: {
@@ -168,8 +170,9 @@ export default async function ProductBarList({
     <div className="container mx-auto py-4 sm:px-1 md:py-5 md:px-0">
       {response.data && response.data.length > 0 ? (
         <>
-          <ProductGrid products={response.data} />
-
+          <Suspense fallback={<ProductGridSkeleton />}>
+            <ProductGrid products={response.data} />
+          </Suspense>
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
             <PaginationInfo
               currentCount={response.data.length}
