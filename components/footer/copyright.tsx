@@ -13,9 +13,9 @@ const Copyright = () => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12  items-center h-full">
             {/* Payment Methods - 50% width */}
             <div className="col-span-1 md:col-span-8 flex flex-col items-center space-y-4">
-              <h3 className="font-semibold text-2xl gradient-text ">
+              <p className="font-semibold text-2xl gradient-text ">
                 Online Payment
-              </h3>
+              </p>
               <div className="w-full ">
                 <Image
                   src={OnlinePayment}
