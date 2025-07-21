@@ -190,7 +190,7 @@ export function LowStockReport({
   };
 
   const renderTableView = () => (
-    <div className="rounded-lg border bg-white dark:bg-gray-950">
+    <div className="rounded-lg border bg-white dark:bg-gray-950 p-6">
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
@@ -323,7 +323,7 @@ export function LowStockReport({
 
       {/* Pagination Section */}
       {!isLoading && products.length > 0 && (
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-4 border-t">
+        <div className="flex justify-between items-center gap-4 p-4 border-t">
           <div className="text-sm text-muted-foreground">
             Showing {Math.min((currentPage - 1) * limit + 1, totalItems)} to{" "}
             {Math.min(currentPage * limit, totalItems)} of {totalItems} low

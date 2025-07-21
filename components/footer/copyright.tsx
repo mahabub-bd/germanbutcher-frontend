@@ -53,6 +53,7 @@ const Copyright = () => {
               </p>
             </div>
             <Link
+              target="_blank"
               href="https://www.techqul.com"
               className="text-gray-400 text-xs md:text-sm"
             >
