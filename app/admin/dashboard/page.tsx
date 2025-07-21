@@ -21,6 +21,7 @@ import type {
 } from "@/utils/types";
 
 import CombinedOrdersSalesChart from "@/components/admin/dashboard/combined-order-saleschart";
+import { LowStockReport } from "@/components/admin/dashboard/low-stock-report";
 import {
   Activity,
   DollarSign,
@@ -100,6 +101,7 @@ export default async function DashboardPage() {
 
       <CombinedOrdersSalesChart chartData={chartdata as OrderSummary[]} />
       <OrdersTable />
+      <LowStockReport />
       {/* Additional Stats */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/40 dark:to-blue-900/20 border-none">

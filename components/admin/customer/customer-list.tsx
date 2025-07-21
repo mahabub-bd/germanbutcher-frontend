@@ -84,7 +84,7 @@ export function CustomerList({
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   }, [router, pathname, currentPage, limit, searchQuery, roleFilter]);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setIsLoading(true);
     try {
       const params = new URLSearchParams();
@@ -94,7 +94,10 @@ export function CustomerList({
       if (searchQuery) params.append("search", searchQuery);
       if (roleFilter && roleFilter !== "all") params.append("role", roleFilter);
 
-      const response = await fetchDataPagination<ApiResponseusers>(`users`);
+      // Pass the params to the API call
+      const response = await fetchDataPagination<ApiResponseusers>(
+        `users?${params.toString()}`
+      );
 
       const allUsers = [...response.data.customers];
 
@@ -108,16 +111,34 @@ export function CustomerList({
     } finally {
       setIsLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  useEffect(() => {
-    fetchUsers();
-    updateUrl();
   }, [currentPage, limit, searchQuery, roleFilter]);
+
+  // Initial load with URL params
+  useEffect(() => {
+    const pageFromUrl = searchParams?.get("page");
+    const searchFromUrl = searchParams?.get("search");
+    const roleFromUrl = searchParams?.get("role");
+
+    if (pageFromUrl) {
+      setCurrentPage(parseInt(pageFromUrl, 10));
+    }
+    if (searchFromUrl) {
+      setSearchQuery(searchFromUrl);
+    }
+    if (roleFromUrl) {
+      setRoleFilter(roleFromUrl);
+    }
+  }, [searchParams]);
+
+  // Fetch data when dependencies change
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
+  // Update URL when state changes
+  useEffect(() => {
+    updateUrl();
+  }, [updateUrl]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -131,7 +152,7 @@ export function CustomerList({
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   const renderEmptyState = () => (
@@ -317,7 +338,7 @@ export function CustomerList({
                             setCurrentPage(1);
                           }}
                           className={`text-xs py-1.5 px-2 rounded-md border ${
-                            roleFilter === "all"
+                            roleFilter === "all" || !roleFilter
                               ? "bg-blue-50 border-blue-200 dark:bg-blue-900/30 dark:border-blue-800 text-blue-600 dark:text-blue-400"
                               : "bg-gray-50 dark:bg-neutral-800 border-gray-200 dark:border-neutral-700"
                           }`}
@@ -361,7 +382,7 @@ export function CustomerList({
           {renderActiveFilters()}
 
           {isLoading ? (
-            <LoadingIndicator message="   Loading users..." />
+            <LoadingIndicator message="Loading users..." />
           ) : users.length === 0 ? (
             renderEmptyState()
           ) : (
@@ -369,22 +390,24 @@ export function CustomerList({
           )}
         </div>
 
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex-1 min-w-0">
-            <p className="text-xs text-muted-foreground text-center md:text-left truncate">
-              {`Showing ${users.length} of ${totalItems} users`}
-            </p>
-          </div>
+        {!isLoading && users.length > 0 && (
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-muted-foreground text-center md:text-left truncate">
+                {`Showing ${users.length} of ${totalItems} users`}
+              </p>
+            </div>
 
-          <div className="flex-1 w-full md:w-auto">
-            <PaginationComponent
-              currentPage={currentPage}
-              totalPages={totalPages}
-              baseUrl="#"
-              onPageChange={handlePageChange}
-            />
+            <div className="flex-1 w-full md:w-auto">
+              <PaginationComponent
+                currentPage={currentPage}
+                totalPages={totalPages}
+                baseUrl="#"
+                onPageChange={handlePageChange}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

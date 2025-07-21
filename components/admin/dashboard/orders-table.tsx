@@ -110,10 +110,10 @@ export default function OrdersTable() {
                       order.orderStatus === "pending"
                         ? "text-yellow-500"
                         : order.orderStatus === "shipped"
-                        ? "text-blue-500"
-                        : order.orderStatus === "delivered"
-                        ? "text-green-600"
-                        : "text-red-500"
+                          ? "text-blue-500"
+                          : order.orderStatus === "delivered"
+                            ? "text-green-600"
+                            : "text-red-500"
                     }`}
                   >
                     {order.orderStatus}
