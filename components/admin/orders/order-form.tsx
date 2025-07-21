@@ -103,7 +103,47 @@ export function OrderForm({ order }: OrderFormProps) {
     defaultValues,
   });
 
+  // Check if order can be cancelled based on current status
+  const canCancelOrder = () => {
+    const nonCancellableStatuses = ["shipped", "delivered"];
+    return !nonCancellableStatuses.includes(order.orderStatus.toLowerCase());
+  };
+
+  const getAvailableStatusOptions = () => {
+    const baseOptions = [
+      { value: "pending", label: "Pending", disabled: false },
+      { value: "processing", label: "Processing", disabled: false },
+      { value: "shipped", label: "Shipped", disabled: false },
+      { value: "delivered", label: "Delivered", disabled: false },
+    ];
+
+    if (canCancelOrder()) {
+      baseOptions.push({
+        value: "cancelled",
+        label: "Cancelled",
+        disabled: false,
+      });
+    } else {
+      // Show cancelled as disabled option with explanation
+      baseOptions.push({
+        value: "cancelled",
+        label: "Cancelled (Not allowed - Order already shipped/delivered)",
+        disabled: true,
+      });
+    }
+
+    return baseOptions;
+  };
+
   const handleSubmit = async (data: OrderUpdateValues) => {
+    // Prevent cancellation if order is shipped or delivered
+    if (data.orderStatus === "cancelled" && !canCancelOrder()) {
+      toast.error(
+        "Cannot cancel order - Order has already been shipped or delivered"
+      );
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -255,8 +295,8 @@ export function OrderForm({ order }: OrderFormProps) {
     return statusIndex <= currentIndex;
   };
 
-  // Generate the timeline statuses
   const timelineStatuses = generateOrderTimeline();
+  const availableStatusOptions = getAvailableStatusOptions();
 
   return (
     <Form {...form}>
@@ -282,14 +322,37 @@ export function OrderForm({ order }: OrderFormProps) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="pending">Pending</SelectItem>
-                          <SelectItem value="processing">Processing</SelectItem>
-                          <SelectItem value="shipped">Shipped</SelectItem>
-                          <SelectItem value="delivered">Delivered</SelectItem>
-                          <SelectItem value="cancelled">Cancelled</SelectItem>
+                          {availableStatusOptions.map((option) => (
+                            <SelectItem
+                              key={option.value}
+                              value={option.value}
+                              disabled={option.disabled}
+                              className={
+                                option.disabled
+                                  ? "opacity-50 cursor-not-allowed"
+                                  : ""
+                              }
+                            >
+                              {option.label}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       <FormMessage />
+
+                      {/* Show warning message if trying to access cancelled status */}
+                      {!canCancelOrder() && (
+                        <div className="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-md">
+                          <div className="flex items-center gap-2">
+                            <XCircle className="h-4 w-4 text-amber-600" />
+                            <span className="text-sm text-amber-800">
+                              <strong>Cancellation Restricted:</strong> This
+                              order cannot be cancelled because it has already
+                              been shipped or delivered.
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </FormItem>
                   )}
                 />

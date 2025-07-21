@@ -28,6 +28,7 @@ import {
   Eye,
   Filter,
   List,
+  Lock,
   MoreHorizontal,
   Pencil,
   Search,
@@ -38,7 +39,6 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { LoadingIndicator } from "../loading-indicator";
 
 interface OrderListProps {
   initialPage: number;
@@ -67,7 +67,6 @@ export function OrderList({
   const [statusFilter, setStatusFilter] = useState(
     getInitialParam("orderStatus") as string
   );
-  const [isLoading, setIsLoading] = useState(true);
 
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(initialPage);
@@ -87,14 +86,13 @@ export function OrderList({
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   }, [router, pathname, currentPage, limit, searchQuery, statusFilter]);
 
-  const fetchOrders = async () => {
-    setIsLoading(true);
+  const fetchOrders = useCallback(async () => {
     try {
       const params = new URLSearchParams();
       params.append("page", currentPage.toString());
       params.append("limit", limit.toString());
 
-      if (searchQuery) params.append("orderStatus", searchQuery);
+      if (searchQuery) params.append("search", searchQuery);
       if (statusFilter && statusFilter !== "all")
         params.append("orderStatus", statusFilter);
 
@@ -110,19 +108,35 @@ export function OrderList({
       console.error("Error fetching orders:", error);
       toast.error("Failed to load orders. Please try again.");
       setOrders([]);
-    } finally {
-      setIsLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  useEffect(() => {
-    fetchOrders();
-    updateUrl();
   }, [currentPage, limit, searchQuery, statusFilter]);
+
+  // Initial load with URL params
+  useEffect(() => {
+    const pageFromUrl = searchParams?.get("page");
+    const searchFromUrl = searchParams?.get("search");
+    const statusFromUrl = searchParams?.get("orderStatus");
+
+    if (pageFromUrl) {
+      setCurrentPage(parseInt(pageFromUrl, 10));
+    }
+    if (searchFromUrl) {
+      setSearchQuery(searchFromUrl);
+    }
+    if (statusFromUrl) {
+      setStatusFilter(statusFromUrl);
+    }
+  }, [searchParams]);
+
+  // Fetch data when dependencies change
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
+
+  // Update URL when state changes
+  useEffect(() => {
+    updateUrl();
+  }, [updateUrl]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -139,39 +153,28 @@ export function OrderList({
     setCurrentPage(1);
   };
 
-  const getStatusBadgeVariant = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "pending":
-        return "secondary";
-      case "processing":
-        return "secondary";
-      case "shipped":
-        return "default";
-      case "delivered":
-        return "default"; // Changed from "success" to "default"
-      case "cancelled":
-        return "destructive";
-      default:
-        return "outline";
-    }
+  // Check if order can be edited
+  const canEditOrder = (orderStatus: string) => {
+    const nonEditableStatuses = ["shipped", "delivered"];
+    return !nonEditableStatuses.includes(orderStatus.toLowerCase());
   };
 
-  const renderEmptyState = () => (
-    <div className="flex flex-col items-center justify-center p-8 text-center">
-      <ShoppingCart className="h-10 w-10 text-muted-foreground mb-4" />
-      <h3 className="text-lg font-semibold">No orders found</h3>
-      <p className="text-sm text-muted-foreground mt-2">
-        {searchQuery || statusFilter
-          ? "No orders match your search criteria. Try different filters."
-          : "There are no orders in the system yet."}
-      </p>
-      {(searchQuery || statusFilter) && (
-        <Button variant="outline" className="mt-4" onClick={clearFilters}>
-          Clear Filters
-        </Button>
-      )}
-    </div>
-  );
+  const getStatusBadgeColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "pending":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 capitalize";
+      case "processing":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 capitalize";
+      case "shipped":
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300 capitalize";
+      case "delivered":
+        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 capitalize";
+      case "cancelled":
+        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 capitalize";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300 capitalize";
+    }
+  };
 
   const renderActiveFilters = () => {
     const hasFilters = searchQuery || statusFilter;
@@ -217,267 +220,271 @@ export function OrderList({
   };
 
   const renderTableView = () => (
-    <div className="md:p-6 p-2">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Order ID</TableHead>
-            <TableHead>Customer</TableHead>
-            <TableHead className="hidden md:table-cell">Date</TableHead>
-            <TableHead className="hidden md:table-cell">Order Status</TableHead>
-            <TableHead className="hidden md:table-cell">
-              Payment Status
-            </TableHead>
-            <TableHead className="hidden md:table-cell">
-              Payment Method
-            </TableHead>
-            <TableHead className="hidden md:table-cell text-right">
-              Total
-            </TableHead>
-            <TableHead className="hidden md:table-cell text-right">
-              Total Paid
-            </TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {orders.map((order) => (
-            <TableRow key={order.id}>
-              <TableCell className="font-medium">{order.orderNo}</TableCell>
-              <TableCell>{order.user.name}</TableCell>
-              <TableCell className="hidden md:table-cell">
-                {formatDateTime(order.createdAt)}
-              </TableCell>
-              <TableCell className="hidden md:table-cell capitalize">
-                <Badge variant={getStatusBadgeVariant(order.orderStatus)}>
-                  {order.orderStatus}
-                </Badge>
-              </TableCell>
-
-              <TableCell className="hidden md:table-cell capitalize">
-                <Badge variant={getStatusBadgeVariant(order.paymentStatus)}>
-                  {order.paymentStatus}
-                </Badge>
-              </TableCell>
-              <TableCell className="hidden md:table-cell capitalize">
-                <Badge variant={getStatusBadgeVariant(order.paymentStatus)}>
-                  {order.paymentMethod.name}
-                </Badge>
-              </TableCell>
-              <TableCell className="hidden md:table-cell text-right">
-                {formatCurrencyEnglish(order.totalValue)}
-              </TableCell>
-              <TableCell className="hidden md:table-cell text-right">
-                {formatCurrencyEnglish(order.paidAmount)}
-              </TableCell>
-              <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal className="h-4 w-4" />
-                      <span className="sr-only">Open menu</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <Link href={`/admin/order/${order.id}/view`}>
-                        <Eye className="mr-2 h-4 w-4" /> View
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href={`/admin/order/${order.id}/edit`}>
-                        <Pencil className="mr-2 h-4 w-4" /> Edit
-                      </Link>
-                    </DropdownMenuItem>
-                    {order.paidAmount < order.totalValue && (
-                      <DropdownMenuItem asChild>
-                        <Link href={`/admin/order/${order.id}/payment`}>
-                          <DollarSign className="mr-2 h-4 w-4" /> Update Payment
-                        </Link>
-                      </DropdownMenuItem>
-                    )}
-                    <DropdownMenuItem asChild>
-                      <Link href={`/admin/order/${order.id}/payments`}>
-                        <List className="mr-2 h-4 w-4" /> View Payments
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+    <div className="">
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-24">Order ID</TableHead>
+              <TableHead>Customer</TableHead>
+              <TableHead className="hidden md:table-cell">Date</TableHead>
+              <TableHead className="hidden md:table-cell">
+                Order Status
+              </TableHead>
+              <TableHead className="hidden md:table-cell">
+                Payment Status
+              </TableHead>
+              <TableHead className="hidden md:table-cell">
+                Payment Method
+              </TableHead>
+              <TableHead className="hidden md:table-cell text-right">
+                Total
+              </TableHead>
+              <TableHead className="hidden md:table-cell text-right">
+                Total Paid
+              </TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {orders.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={9} className="text-center py-12">
+                  <div className="flex flex-col items-center gap-3">
+                    <ShoppingCart className="h-12 w-12 text-muted-foreground" />
+                    <div className="space-y-1">
+                      <h3 className="font-semibold">No orders found</h3>
+                      <p className="text-sm text-muted-foreground">
+                        {searchQuery || statusFilter
+                          ? "No orders match your search criteria."
+                          : "There are no orders in the system yet."}
+                      </p>
+                    </div>
+                    {(searchQuery || statusFilter) && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={clearFilters}
+                      >
+                        Clear Filters
+                      </Button>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : (
+              orders.map((order) => (
+                <TableRow key={order.id} className="hover:bg-muted/50">
+                  <TableCell className="font-mono text-sm">
+                    #{order.orderNo}
+                  </TableCell>
+                  <TableCell>
+                    <div className="space-y-1">
+                      <div className="font-medium">
+                        {order.user?.name || "N/A"}
+                      </div>
+                      <div className="text-xs text-muted-foreground md:hidden">
+                        {formatDateTime(order.createdAt).split(" ")[0]}
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell text-sm">
+                    <div className="space-y-1">
+                      <div>{formatDateTime(order.createdAt)}</div>
+                    </div>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <Badge
+                      variant="secondary"
+                      className={getStatusBadgeColor(order.orderStatus)}
+                    >
+                      {order.orderStatus}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <Badge
+                      variant="secondary"
+                      className={getStatusBadgeColor(order.paymentStatus)}
+                    >
+                      {order.paymentStatus}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <Badge variant="outline" className="capitalize">
+                      {order.paymentMethod?.name || "N/A"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell text-right font-medium">
+                    {formatCurrencyEnglish(order.totalValue || 0)}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell text-right font-medium">
+                    <div className="space-y-1">
+                      <div>{formatCurrencyEnglish(order.paidAmount || 0)}</div>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Open menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        {/* View - Always available */}
+                        <DropdownMenuItem asChild>
+                          <Link href={`/admin/order/${order.id}/view`}>
+                            <Eye className="mr-2 h-4 w-4" /> View Details
+                          </Link>
+                        </DropdownMenuItem>
+
+                        {/* Edit - Only for pending, processing, cancelled orders */}
+                        {canEditOrder(order.orderStatus) ? (
+                          <DropdownMenuItem asChild>
+                            <Link href={`/admin/order/${order.id}/edit`}>
+                              <Pencil className="mr-2 h-4 w-4" /> Edit Order
+                            </Link>
+                          </DropdownMenuItem>
+                        ) : (
+                          <DropdownMenuItem disabled className="opacity-50">
+                            <Lock className="mr-2 h-4 w-4" />
+                            Edit (Order {order.orderStatus})
+                          </DropdownMenuItem>
+                        )}
+
+                        {/* Payment Update - Only if not fully paid and not cancelled */}
+                        {(order.paidAmount || 0) < (order.totalValue || 0) &&
+                          order.orderStatus.toLowerCase() !== "cancelled" && (
+                            <DropdownMenuItem asChild>
+                              <Link href={`/admin/order/${order.id}/payment`}>
+                                <DollarSign className="mr-2 h-4 w-4" /> Update
+                                Payment
+                              </Link>
+                            </DropdownMenuItem>
+                          )}
+
+                        {/* View Payments - Always available */}
+                        <DropdownMenuItem asChild>
+                          <Link href={`/admin/order/${order.id}/payments`}>
+                            <List className="mr-2 h-4 w-4" /> Payment History
+                          </Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      {/* Pagination Section */}
+      {orders.length > 0 && (
+        <div className="flex flex-row justify-between items-center p-4 border-t">
+          <div className="text-sm text-muted-foreground whitespace-nowrap">
+            Showing {Math.min((currentPage - 1) * limit + 1, totalItems)} to{" "}
+            {Math.min(currentPage * limit, totalItems)} of {totalItems} orders
+          </div>
+          <PaginationComponent
+            currentPage={currentPage}
+            totalPages={totalPages}
+            baseUrl="#"
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
     </div>
   );
 
   return (
-    <>
-      <div className="w-full md:p-6 p-2">
-        <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row justify-between gap-4">
-            <div className="relative w-full sm:max-w-xs">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search orders..."
-                className="pl-8"
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-            </div>
-
-            <div className="flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex items-center gap-2 px-3"
-                  >
-                    <Filter className="h-4 w-4" />
-                    <span>Filters</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="end"
-                  className="w-64 p-3 rounded-lg shadow-lg bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800"
-                  sideOffset={8}
-                >
-                  <div className="space-y-3">
-                    {/* Header */}
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-medium">Filters</h4>
-                      {statusFilter && statusFilter !== "all" && (
-                        <button
-                          onClick={clearFilters}
-                          className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
-                        >
-                          Clear all
-                        </button>
-                      )}
-                    </div>
-
-                    {/* Status Filter */}
-                    <div className="space-y-2">
-                      <label className="text-xs text-muted-foreground">
-                        Status
-                      </label>
-                      <div className="grid grid-cols-2 gap-2">
-                        <button
-                          onClick={() => {
-                            setStatusFilter("all");
-                            setCurrentPage(1);
-                          }}
-                          className={`text-xs py-1.5 px-2 rounded-md border ${
-                            statusFilter === "all"
-                              ? "bg-blue-50 border-blue-200 dark:bg-blue-900/30 dark:border-blue-800 text-blue-600 dark:text-blue-400"
-                              : "bg-gray-50 dark:bg-neutral-800 border-gray-200 dark:border-neutral-700"
-                          }`}
-                        >
-                          All
-                        </button>
-                        <button
-                          onClick={() => {
-                            setStatusFilter("pending");
-                            setCurrentPage(1);
-                          }}
-                          className={`text-xs py-1.5 px-2 rounded-md border ${
-                            statusFilter === "pending"
-                              ? "bg-yellow-50 border-yellow-200 dark:bg-yellow-900/30 dark:border-yellow-800 text-yellow-600 dark:text-yellow-400"
-                              : "bg-gray-50 dark:bg-neutral-800 border-gray-200 dark:border-neutral-700"
-                          }`}
-                        >
-                          Pending
-                        </button>
-                        <button
-                          onClick={() => {
-                            setStatusFilter("processing");
-                            setCurrentPage(1);
-                          }}
-                          className={`text-xs py-1.5 px-2 rounded-md border ${
-                            statusFilter === "processing"
-                              ? "bg-purple-50 border-purple-200 dark:bg-purple-900/30 dark:border-purple-800 text-purple-600 dark:text-purple-400"
-                              : "bg-gray-50 dark:bg-neutral-800 border-gray-200 dark:border-neutral-700"
-                          }`}
-                        >
-                          Processing
-                        </button>
-                        <button
-                          onClick={() => {
-                            setStatusFilter("shipped");
-                            setCurrentPage(1);
-                          }}
-                          className={`text-xs py-1.5 px-2 rounded-md border ${
-                            statusFilter === "shipped"
-                              ? "bg-blue-50 border-blue-200 dark:bg-blue-900/30 dark:border-blue-800 text-blue-600 dark:text-blue-400"
-                              : "bg-gray-50 dark:bg-neutral-800 border-gray-200 dark:border-neutral-700"
-                          }`}
-                        >
-                          Shipped
-                        </button>
-                        <button
-                          onClick={() => {
-                            setStatusFilter("delivered");
-                            setCurrentPage(1);
-                          }}
-                          className={`text-xs py-1.5 px-2 rounded-md border ${
-                            statusFilter === "delivered"
-                              ? "bg-green-50 border-green-200 dark:bg-green-900/30 dark:border-green-800 text-green-600 dark:text-green-400"
-                              : "bg-gray-50 dark:bg-neutral-800 border-gray-200 dark:border-neutral-700"
-                          }`}
-                        >
-                          Delivered
-                        </button>
-                        <button
-                          onClick={() => {
-                            setStatusFilter("cancelled");
-                            setCurrentPage(1);
-                          }}
-                          className={`text-xs py-1.5 px-2 rounded-md border ${
-                            statusFilter === "cancelled"
-                              ? "bg-red-50 border-red-200 dark:bg-red-900/30 dark:border-red-800 text-red-600 dark:text-red-400"
-                              : "bg-gray-50 dark:bg-neutral-800 border-gray-200 dark:border-neutral-700"
-                          }`}
-                        >
-                          Cancelled
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-
-          {renderActiveFilters()}
-
-          {isLoading ? (
-            <LoadingIndicator message="Loading Orders..." />
-          ) : orders.length === 0 ? (
-            renderEmptyState()
-          ) : (
-            <div className="mt-6">{renderTableView()}</div>
-          )}
-        </div>
-
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
-          <div className="flex-1 min-w-0">
-            <p className="text-xs text-muted-foreground text-center md:text-left truncate">
-              {`Showing ${orders.length} of ${totalItems} orders`}
-            </p>
-          </div>
-
-          <div className="flex-1 w-full md:w-auto">
-            <PaginationComponent
-              currentPage={currentPage}
-              totalPages={totalPages}
-              baseUrl="#"
-              onPageChange={handlePageChange}
+    <div className="w-full space-y-6">
+      <div className="space-y-4">
+        <div className="flex flex-col sm:flex-row justify-between gap-4">
+          <div className="relative w-full sm:max-w-xs">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search orders..."
+              className="pl-8"
+              value={searchQuery}
+              onChange={handleSearchChange}
             />
           </div>
+
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2 px-3"
+                >
+                  <Filter className="h-4 w-4" />
+                  <span>Filters</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                className="w-64 p-3 rounded-lg shadow-lg bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800"
+                sideOffset={8}
+              >
+                <div className="space-y-3">
+                  {/* Header */}
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-medium">Filters</h4>
+                    {statusFilter && statusFilter !== "all" && (
+                      <button
+                        onClick={clearFilters}
+                        className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                      >
+                        Clear all
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Status Filter */}
+                  <div className="space-y-2">
+                    <label className="text-xs text-muted-foreground">
+                      Order Status
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        "all",
+                        "pending",
+                        "processing",
+                        "shipped",
+                        "delivered",
+                        "cancelled",
+                      ].map((status) => (
+                        <button
+                          key={status}
+                          onClick={() => {
+                            setStatusFilter(status);
+                            setCurrentPage(1);
+                          }}
+                          className={`text-xs py-1.5 px-2 rounded-md border capitalize ${
+                            statusFilter === status ||
+                            (!statusFilter && status === "all")
+                              ? "bg-blue-50 border-blue-200 dark:bg-blue-900/30 dark:border-blue-800 text-blue-600 dark:text-blue-400"
+                              : "bg-gray-50 dark:bg-neutral-800 border-gray-200 dark:border-neutral-700"
+                          }`}
+                        >
+                          {status}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
+
+        {renderActiveFilters()}
+
+        {renderTableView()}
       </div>
-    </>
+    </div>
   );
 }

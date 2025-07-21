@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { Check, ChevronDown, Loader2, MapPin, Plus } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { Check, ChevronDown, Loader2, MapPin } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -12,15 +12,15 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command';
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
-import { fetchProtectedData } from '@/utils/api-utils';
-import { Address } from '@/utils/types';
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { fetchProtectedData } from "@/utils/api-utils";
+import { Address } from "@/utils/types";
 
 interface AddressSelectorProps {
   userId?: string;
@@ -31,7 +31,6 @@ interface AddressSelectorProps {
 export function AddressSelector({
   userId,
   onAddressSelect,
-  onAddNewClick,
 }: AddressSelectorProps) {
   const [open, setOpen] = useState(false);
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -51,10 +50,10 @@ export function AddressSelector({
     try {
       const result = await fetchProtectedData(`addresses/user/${userId}`);
 
-      if (result && typeof result === 'object') {
+      if (result && typeof result === "object") {
         if (
-          'statusCode' in result &&
-          'data' in result &&
+          "statusCode" in result &&
+          "data" in result &&
           result.statusCode === 200 &&
           Array.isArray(result.data)
         ) {
@@ -79,17 +78,17 @@ export function AddressSelector({
         }
       }
 
-      console.error('Unexpected API response format:', result);
-      toast.error('Failed to load saved addresses', {
-        description: 'The server response was not in the expected format',
+      console.error("Unexpected API response format:", result);
+      toast.error("Failed to load saved addresses", {
+        description: "The server response was not in the expected format",
       });
     } catch (error) {
-      console.error('Error fetching addresses:', error);
-      toast.error('Failed to load saved addresses', {
+      console.error("Error fetching addresses:", error);
+      toast.error("Failed to load saved addresses", {
         description:
           error instanceof Error
             ? error.message
-            : 'An unexpected error occurred',
+            : "An unexpected error occurred",
       });
     } finally {
       setIsLoading(false);
@@ -106,15 +105,6 @@ export function AddressSelector({
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <label className="text-sm font-medium">Saved Addresses</label>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-8 px-2 text-xs"
-          onClick={onAddNewClick}
-        >
-          <Plus className="h-3.5 w-3.5 mr-1" />
-          Add New
-        </Button>
       </div>
 
       <Popover open={open} onOpenChange={setOpen}>
@@ -136,13 +126,13 @@ export function AddressSelector({
                 <div className="flex items-center">
                   <MapPin className="h-4 w-4 mr-1 text-muted-foreground" />
                   <span className="font-medium">
-                    {selectedAddress.type === 'shipping'
-                      ? 'Shipping'
-                      : 'Billing'}
+                    {selectedAddress.type === "shipping"
+                      ? "Shipping"
+                      : "Billing"}
                   </span>
                 </div>
                 <span className="text-sm text-muted-foreground truncate max-w-full">
-                  {selectedAddress.address}, {selectedAddress.area},{' '}
+                  {selectedAddress.address}, {selectedAddress.area},{" "}
                   {selectedAddress.city}
                 </span>
               </div>
@@ -150,9 +140,9 @@ export function AddressSelector({
               <span>
                 {userId
                   ? addresses.length > 0
-                    ? 'Select an address'
-                    : 'No saved addresses found'
-                  : 'Sign in to see saved addresses'}
+                    ? "Select an address"
+                    : "No saved addresses found"
+                  : "Sign in to see saved addresses"}
               </span>
             )}
             <ChevronDown className="h-4 w-4 opacity-50" />
@@ -174,9 +164,9 @@ export function AddressSelector({
                     <div className="flex flex-col w-full">
                       <div className="flex items-center justify-between">
                         <span className="font-medium">
-                          {address.type === 'shipping'
-                            ? 'Shipping Address'
-                            : 'Billing Address'}
+                          {address.type === "shipping"
+                            ? "Shipping Address"
+                            : "Billing Address"}
                         </span>
                         {address.isDefault && (
                           <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
@@ -190,10 +180,10 @@ export function AddressSelector({
                     </div>
                     <Check
                       className={cn(
-                        'ml-auto h-4 w-4',
+                        "ml-auto h-4 w-4",
                         selectedAddress?.id === address.id
-                          ? 'opacity-100'
-                          : 'opacity-0'
+                          ? "opacity-100"
+                          : "opacity-0"
                       )}
                     />
                   </CommandItem>

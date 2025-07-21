@@ -1,9 +1,9 @@
+import PayNow from "@/components/payment/pay-now";
 import {
   Building,
   CheckCircle,
   Clock,
   CreditCard,
-  Download,
   FileText,
   Home,
   Map,
@@ -18,10 +18,9 @@ import {
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-import PayNow from "@/components/payment/pay-now";
+import { DownloadInvoiceButton } from "@/components/admin/orders/download-invoice-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrencyEnglish, formatDateTime } from "@/lib/utils";
 import { fetchProtectedData } from "@/utils/api-utils";
@@ -131,7 +130,6 @@ const shouldShowPayNow = (order: Order): boolean => {
   const isPending = order.paymentStatus.toLowerCase() === "pending";
   const isNotCancelled = order.orderStatus.toLowerCase() !== "cancelled";
   const isNotCOD = !isCashOnDelivery(order.paymentMethod.name);
-
   return isPending && isNotCancelled && isNotCOD;
 };
 
@@ -292,11 +290,7 @@ export default async function OrderConfirmationPage({
                               </span>
                             )}
                             <span
-                              className={`text-sm ${
-                                hasDiscount
-                                  ? "text-green-700 font-semibold"
-                                  : "font-medium"
-                              }`}
+                              className={`text-sm ${hasDiscount ? "text-green-700 font-semibold" : "font-medium"}`}
                             >
                               {formatCurrencyEnglish(discountedPrice)}
                             </span>
@@ -433,7 +427,8 @@ export default async function OrderConfirmationPage({
                     <AvatarImage
                       src={
                         order.user.profilePhoto?.url ||
-                        "/placeholder.svg?height=40&width=40&query=user"
+                        "/placeholder.svg?height=40&width=40&query=user" ||
+                        "/placeholder.svg"
                       }
                       alt={order.user.name}
                     />
@@ -509,7 +504,6 @@ export default async function OrderConfirmationPage({
                       {formatCurrencyEnglish(orderSummary.originalSubtotal)}
                     </span>
                   </div>
-
                   {orderSummary.productDiscountTotal > 0 && (
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground flex items-center">
@@ -524,7 +518,6 @@ export default async function OrderConfirmationPage({
                       </span>
                     </div>
                   )}
-
                   {order.coupon && orderSummary.couponDiscount > 0 && (
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground flex items-center">
@@ -536,7 +529,6 @@ export default async function OrderConfirmationPage({
                       </span>
                     </div>
                   )}
-
                   <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">
                       Shipping
@@ -545,14 +537,11 @@ export default async function OrderConfirmationPage({
                       {formatCurrencyEnglish(orderSummary.shippingCost)}
                     </span>
                   </div>
-
                   <Separator className="my-2" />
-
                   <div className="flex justify-between font-medium text-base">
                     <span>Total</span>
                     <span>{formatCurrencyEnglish(orderSummary.total)}</span>
                   </div>
-
                   {order.paymentStatus.toLowerCase() === "pending" &&
                     !isCashOnDelivery(order.paymentMethod.name) && (
                       <div className="flex justify-between text-red-600 text-sm">
@@ -573,12 +562,8 @@ export default async function OrderConfirmationPage({
               {shouldShowPayNow(order) ? (
                 <PayNow order={order} className="w-full" />
               ) : (
-                <Button className="w-full">
-                  <Download className="mr-2 h-4 w-4" />
-                  Download Invoice
-                </Button>
+                <DownloadInvoiceButton order={order} className="w-full" />
               )}
-
               {isCashOnDelivery(order.paymentMethod.name) &&
                 order.paymentStatus.toLowerCase() === "pending" && (
                   <div className="text-center text-sm text-muted-foreground bg-amber-50 p-3 rounded border">
