@@ -63,9 +63,9 @@ interface MenuSectionProps {
 
 const MenuSection = ({ title, links }: MenuSectionProps) => (
   <div className="space-y-3 sm:space-y-4">
-    <h4 className="font-semibold text-base sm:text-lg text-white/90 mb-3 sm:mb-4">
+    <p className="font-semibold text-base sm:text-lg text-white/90 mb-3 sm:mb-4">
       {title}
-    </h4>
+    </p>
     <div className="space-y-2 sm:space-y-3">
       {links.map((link) => (
         <MenuLink key={link.text} href={link.href}>
