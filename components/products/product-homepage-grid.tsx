@@ -14,7 +14,7 @@ export default async function ProductGrid({ endpoint }: { endpoint: string }) {
   }
 
   return (
-    <div className="grid grid-cols-2 md:px-0 px-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 sm:gap-4 md:gap-5 lg:gap-6 gap-2 ">
+    <div className="grid grid-cols-2 md:px-0 px-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-2 md:gap-5">
       {products.slice(0, 10).map((product: Product) => (
         <ProductCard key={product.id} product={product} />
       ))}

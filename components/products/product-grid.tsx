@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { PaginationComponent } from "../common/pagination";
 import ProductCard from "./product-card";
 import { ProductGridSkeleton } from "./product-skeleton";
+import Link from "next/link";
 
 interface ProductListProps {
   filterParams: {
@@ -98,12 +99,12 @@ const EmptyState = ({ hasFilters }: { hasFilters: boolean }) => (
     </p>
 
     {hasFilters && (
-      <a
+      <Link
         href="?"
         className="inline-flex items-center px-4 py-2 bg-primaryColor text-white rounded-md  transition-colors"
       >
-        Clear All Filters
-      </a>
+        Clear All 
+      </Link>
     )}
   </div>
 );
