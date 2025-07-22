@@ -17,7 +17,7 @@ export default function ProductList({
   href,
 }: ProductListProps) {
   return (
-    <div className="container mx-auto py-4 sm:px-1 md:py-8 lg:py-10 md:px-2">
+    <div className="container mx-auto py-4 sm:px-1 md:py-5 lg:py-10 md:px-2">
       {children}
 
       <Suspense fallback={<ProductGridSkeleton />}>

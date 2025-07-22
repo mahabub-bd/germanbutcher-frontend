@@ -29,7 +29,7 @@ export default async function CategoryPage({
   const url = `categories?${buildQueryString(queryParams)}`;
 
   return (
-    <div className="container mx-auto ">
+    <div className="container mx-auto md:px-0 px-2">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
         <CategoryBreadcrumb categoryName={formatSlugToTitle(slug)} />
         <SortBar currentSort={(await searchParams).sort} />

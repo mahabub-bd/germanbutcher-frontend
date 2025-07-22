@@ -43,7 +43,7 @@ export default async function CategoryBrandProductList({
   }
 
   return (
-    <div className="container mx-auto py-4 sm:px-1 md:py-8 lg:py-10 md:px-0">
+    <div className="container mx-auto py-4 sm:px-1  md:px-2">
       <HeadingPrimary title={title} />
 
       {/* Products Section */}
