@@ -1,11 +1,11 @@
 import { fetchDataPagination } from "@/utils/api-utils";
 import type { Product } from "@/utils/types";
 import { AlertCircle, Package, RefreshCw, Search } from "lucide-react";
+import Link from "next/link";
 import { Suspense } from "react";
 import { PaginationComponent } from "../common/pagination";
 import ProductCard from "./product-card";
 import { ProductGridSkeleton } from "./product-skeleton";
-import Link from "next/link";
 
 interface ProductListProps {
   filterParams: {
@@ -103,7 +103,7 @@ const EmptyState = ({ hasFilters }: { hasFilters: boolean }) => (
         href="?"
         className="inline-flex items-center px-4 py-2 bg-primaryColor text-white rounded-md  transition-colors"
       >
-        Clear All 
+        Clear All
       </Link>
     )}
   </div>
@@ -113,7 +113,7 @@ const EmptyState = ({ hasFilters }: { hasFilters: boolean }) => (
  * Product Grid Component
  */
 const ProductGrid = ({ products }: { products: Product[] }) => (
-  <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-2 md:gap-5">
+  <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-2 md:gap-5">
     {products.map((product: Product) => (
       <ProductCard key={product.id} product={product} />
     ))}
