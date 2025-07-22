@@ -13,7 +13,7 @@ export default async function UsersPage({
   const limit =
     typeof resolvedParams.limit === "string"
       ? Number.parseInt(resolvedParams.limit)
-      : 10;
+      : 30;
 
   return (
     <div className="p-6 space-y-6 border rounded-sm">

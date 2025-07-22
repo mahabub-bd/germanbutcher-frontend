@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import { formatDateTime, getRoleColor } from "@/lib/utils";
 import { deleteData, fetchDataPagination } from "@/utils/api-utils";
-import { User } from "@/utils/types";
+import { ApiResponseusers, User } from "@/utils/types";
 import {
   Filter,
   MoreHorizontal,
@@ -64,7 +64,7 @@ interface UserListProps {
 
 export function UserList({
   initialPage = 1,
-  initialLimit = 10,
+  initialLimit = 30,
   initialSearchParams = {},
 }: UserListProps) {
   const router = useRouter();
@@ -114,7 +114,9 @@ export function UserList({
       if (searchQuery) params.append("search", searchQuery);
       if (roleFilter && roleFilter !== "all") params.append("role", roleFilter);
 
-      const response = await fetchDataPagination<ApiResponse>("users");
+      const response = await fetchDataPagination<ApiResponseusers>(
+        `users?${params.toString()}`
+      );
 
       const allUsers = [...response.data.others];
 
@@ -430,7 +432,7 @@ export function UserList({
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex-1 min-w-0">
             <p className="text-xs text-muted-foreground text-center md:text-left truncate">
-              {`Showing ${users.length} of ${totalItems} users`}
+              {`Showing ${users.length} user `}
             </p>
           </div>
 

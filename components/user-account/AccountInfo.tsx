@@ -23,6 +23,7 @@ import { FieldPath, useForm, UseFormRegister } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { formatDateTime } from "../../lib/utils";
+import { Button } from "../ui/button";
 
 // Enhanced Zod validation schema
 const accountSchema = z
@@ -76,6 +77,7 @@ const FORM_FIELDS = [
     type: "text",
     icon: UserIcon,
     placeholder: "Enter your full name",
+    disabled: false,
   },
   {
     label: "Contact Number",
@@ -83,6 +85,7 @@ const FORM_FIELDS = [
     type: "tel",
     icon: Phone,
     placeholder: "Enter your phone number",
+    disabled: true,
   },
   {
     label: "Email Address",
@@ -90,6 +93,7 @@ const FORM_FIELDS = [
     type: "email",
     icon: Mail,
     placeholder: "Enter your email address",
+    disabled: false,
   },
 ] as const;
 
@@ -103,7 +107,7 @@ interface FormFieldProps {
   type?: string;
   icon: React.ComponentType<{ className?: string }>;
   placeholder: string;
-
+  disabled?: boolean;
   value?: string;
 }
 
@@ -276,36 +280,28 @@ function ActionButtons({
   if (isEditing) {
     return (
       <div className="flex flex-col gap-3 sm:flex-row sm:gap-3 items-center">
-        <button
+        <Button
           type="button"
-          className="flex items-center justify-center gap-2 px-6 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[48px]"
+          className=" "
           onClick={onCancel}
           disabled={isSubmitting}
         >
           <X className="w-4 h-4" />
           Cancel
-        </button>
-        <button
-          type="submit"
-          className="flex items-center justify-center gap-2 px-6  text-sm font-medium text-white bg-primaryColor rounded-lg hover:bg-primaryColor/90 focus:outline-none focus:ring-2 focus:ring-primaryColor transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[48px]"
-          disabled={isSubmitting || !isValid}
-        >
+        </Button>
+        <Button type="submit" disabled={isSubmitting || !isValid}>
           <Save className="w-4 h-4" />
           {isSubmitting ? "Saving..." : "Save"}
-        </button>
+        </Button>
       </div>
     );
   }
 
   return (
-    <button
-      type="button"
-      className="flex items-center justify-center gap-2 px-4  text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-200 touch-manipulation min-h-[48px] w-full sm:w-auto"
-      onClick={onEdit}
-    >
+    <Button type="button" onClick={onEdit}>
       <Edit3 className="w-4 h-4" />
       Edit
-    </button>
+    </Button>
   );
 }
 
@@ -436,7 +432,7 @@ export default function AccountInfo({ user }: AccountInfoProps) {
       <form onSubmit={handleSubmit(onSubmit)} className=" overflow-hidden">
         {/* Card Header */}
         <div className="px-4 sm:px-0 py-2 border-b">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex  gap-4 justify-between">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 flex items-center justify-center">
                 <UserIcon className="w-6 h-6 text-primaryColor" />
@@ -472,6 +468,7 @@ export default function AccountInfo({ user }: AccountInfoProps) {
                   type={field.type}
                   icon={field.icon}
                   placeholder={field.placeholder}
+                  disabled={field.name === "contactNumber"}
                   value={watch(field.name)}
                 />
               ))}

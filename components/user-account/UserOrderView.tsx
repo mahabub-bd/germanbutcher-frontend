@@ -549,7 +549,7 @@ export default function UserOrderView({ order }: OrderViewProps) {
                 )}
               </div>
             </div>
-            {order.payments && (
+            {order.payments && order.payments.length >= 0 && (
               <div className="border rounded-lg p-4 bg-background">
                 <div className="pb-3">
                   <h3 className="text-base font-medium flex items-center">
@@ -614,39 +614,32 @@ export default function UserOrderView({ order }: OrderViewProps) {
               <div className="space-y-3 grid  md:grid-cols-2">
                 <div>
                   <p className="font-medium text-sm text-muted-foreground">
-                    Name:
-                  </p>
-                  <p className="text-sm">{order.user.name}</p>
-                </div>
-
-                <div>
-                  <p className="font-medium text-sm text-muted-foreground">
-                    Address:
-                  </p>
-                  <p className="text-sm">{order.address.address}</p>
-                </div>
-
-                <div>
-                  <p className="font-medium text-sm text-muted-foreground">
-                    Area / City:
-                  </p>
-                  <p className="text-sm">
-                    {order.address.area}, {order.address.city}
+                    Name: {order.user.name}
                   </p>
                 </div>
 
                 <div>
                   <p className="font-medium text-sm text-muted-foreground">
-                    Division:
+                    Address:{order.address.address}
                   </p>
-                  <p className="text-sm">{order.address.division}</p>
                 </div>
 
                 <div>
                   <p className="font-medium text-sm text-muted-foreground">
-                    Phone:
+                    Area / City: {order.address.area}, {order.address.city}
                   </p>
-                  <p className="text-sm">{order.user.mobileNumber}</p>
+                </div>
+
+                <div>
+                  <p className="font-medium text-sm text-muted-foreground">
+                    Division:{order.address.division}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="font-medium text-sm text-muted-foreground">
+                    Phone:{order.user.mobileNumber}
+                  </p>
                 </div>
               </div>
             </div>
