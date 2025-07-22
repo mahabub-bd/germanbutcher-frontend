@@ -41,21 +41,6 @@ import DeleteConfirmationDialog from "../delete-confirmation-dialog";
 import { LoadingIndicator } from "../loading-indicator";
 import { PageHeader } from "../page-header";
 
-interface ApiResponse {
-  message: string;
-  statusCode: number;
-  data: {
-    customers: User[];
-    others: User[];
-    pagination: {
-      total: number;
-      page: number;
-      limit: number;
-      totalPages: number;
-    };
-  };
-}
-
 interface UserListProps {
   initialPage?: number;
   initialLimit?: number;
@@ -87,7 +72,7 @@ export function UserList({
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [totalItems, setTotalItems] = useState(0);
+
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [limit] = useState(initialLimit);
   const [totalPages, setTotalPages] = useState(1);
@@ -121,7 +106,7 @@ export function UserList({
       const allUsers = [...response.data.others];
 
       setUsers(allUsers);
-      setTotalItems(response.data.pagination.total);
+
       setTotalPages(response.data.pagination.totalPages);
     } catch (error) {
       console.error("Error fetching users:", error);
