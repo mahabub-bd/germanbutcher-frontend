@@ -55,10 +55,10 @@ export function SearchModal() {
 
   return (
     <div
-      className="fixed inset-0 z-100  flex items-start justify-center md:pt-30 pt-24 px-4"
+      className="fixed inset-0 z-100  flex items-start justify-center md:pt-28 pt-22 px-4 left-1/2 transform -translate-x-1/2   "
       onClick={handleBackdropClick}
     >
-      <div className="bg-white rounded-xl shadow-2xl xl:w-120 lg:w-80 w-96 max-h-[80vh] overflow-hidden animate-in fade-in-0 zoom-in-95 duration-200">
+      <div className="bg-white rounded-sm shadow-2xl xl:w-160 lg:w-80 w-96 max-h-[80vh] overflow-hidden animate-in fade-in-0 zoom-in-95 duration-200">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50/50">
           <div className="flex items-center space-x-3">

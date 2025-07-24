@@ -1,5 +1,5 @@
 import { HeadingPrimary } from "@/components/common/heading-primary";
-import SisterConcernsList from "@/components/sisterconcern/sisterconcern-list";
+import SisterConcernsPage from "@/components/sisterconcern/sisterconcern-list";
 
 export default function OurBrands() {
   return (
@@ -10,7 +10,7 @@ export default function OurBrands() {
             offering unique culinary experiences and exceptional service across
             different cuisines and dining styles."
       />
-      <SisterConcernsList />
+      <SisterConcernsPage />
     </div>
   );
 }
