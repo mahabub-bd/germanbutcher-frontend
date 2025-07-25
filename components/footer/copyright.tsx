@@ -12,7 +12,7 @@ const Copyright = () => {
         <div className="py-8 md:py-12">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12  items-center h-full">
             {/* Payment Methods - 50% width */}
-            <div className="col-span-1 md:col-span-8 flex flex-col items-center space-y-4">
+            <div className="col-span-1 md:col-span-12 flex flex-col items-center space-y-4">
               <p className="font-semibold text-2xl gradient-text ">
                 Online Payment
               </p>
@@ -26,21 +26,6 @@ const Copyright = () => {
             </div>
 
             {/* Legal Links - 25% width */}
-
-            <div className="col-span-1 md:col-span-4 flex  md:flex-row items-center justify-center md:gap-4 gap-4 mx-auto">
-              <Link
-                className="px-4 md:px-4 py-2 md:py-2.5 text-xs  text-gray-300 border border-[#deb149] rounded-full backdrop-blur-sm transition-all duration-300 hover:bg-[#deb149] hover:text-black hover:border-[#deb149] hover:scale-105 hover:shadow-lg hover:shadow-[#deb149]/20 group overflow-hidden "
-                href="/privacy-policy"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                className="px-4 md:px-4 py-2 md:py-2.5 text-xs  text-gray-300 border border-[#deb149] rounded-full backdrop-blur-sm transition-all duration-300 hover:bg-[#deb149] hover:text-black hover:border-[#deb149] hover:scale-105 hover:shadow-lg hover:shadow-[#deb149]/20 group overflow-hidden "
-                href="/refund-policy"
-              >
-                Refund Policy
-              </Link>
-            </div>
           </div>
         </div>
 

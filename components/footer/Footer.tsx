@@ -120,20 +120,10 @@ export default function Footer() {
       links: [
         { text: "Our Story", href: "/about-us" },
         { text: "Our Clients", href: "/clients" },
-        { text: "Careers", href: "/careers" },
-        { text: "News & Updates", href: "/news" },
+        { text: "Certification", href: "/certification" },
+        { text: "Our Brands", href: "/our-brands" },
       ],
     },
-    products: {
-      title: "Products",
-      links: [
-        { text: "Fresh Meat", href: "/products/fresh-meat" },
-        { text: "Sausages", href: "/products/sausages" },
-        { text: "Deli Items", href: "/products/deli" },
-        { text: "Seasonal Specials", href: "/products/specials" },
-      ],
-    },
-
     support: {
       title: "Support",
       links: [
@@ -141,6 +131,14 @@ export default function Footer() {
         { text: "FAQ", href: "/faqs" },
         { text: "Recipes", href: "/recipes" },
         { text: "How To Order", href: "/how-to-order" },
+      ],
+    },
+    policy: {
+      title: "Policy",
+      links: [
+        { text: "Terms and Conditions", href: "/terms-and-conditions" },
+        { text: "Return and Refund Policy", href: "/return-refund-policy" },
+        { text: "Privacy Policy", href: "/privacy-policy" },
       ],
     },
   };
@@ -201,14 +199,15 @@ export default function Footer() {
                 title={menuData.company.title}
                 links={menuData.company.links}
               />
-              <MenuSection
-                title={menuData.products.title}
-                links={menuData.products.links}
-              />
 
               <MenuSection
                 title={menuData.support.title}
                 links={menuData.support.links}
+              />
+
+              <MenuSection
+                title={menuData.policy.title}
+                links={menuData.policy.links}
               />
             </div>
           </div>

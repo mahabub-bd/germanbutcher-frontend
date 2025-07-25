@@ -1,13 +1,14 @@
 import { fetchData } from "@/utils/api-utils";
 import type { Brand, Category, Product, Recipe } from "@/utils/types";
+import Link from "next/link";
 import { HeadingPrimary } from "../common/heading-primary";
-
 import RecipeCard from "../recipe/recipe-card";
 import ProductCard from "./product-card";
 
 interface ProductListProps {
   endpoint: string;
   path: "brands" | "categories";
+  showTitle?: boolean;
   searchParams?: {
     sort?: string;
     minPrice?: string;
@@ -18,10 +19,13 @@ interface ProductListProps {
 export default async function CategoryBrandProductList({
   endpoint,
   path,
+  showTitle = true,
 }: ProductListProps) {
   let title = "";
   let products: Product[] = [];
   let recipes: Recipe[] = [];
+  let description = "";
+  let productCount = 0;
 
   try {
     const response = (await fetchData(endpoint)) as unknown;
@@ -30,6 +34,8 @@ export default async function CategoryBrandProductList({
       const brand = response[0] as Brand;
       title = brand?.name || "";
       products = brand?.products || [];
+      description = brand?.description || "";
+      productCount = products.length;
     } else {
       const category = Array.isArray(response)
         ? (response[0] as Category)
@@ -37,14 +43,32 @@ export default async function CategoryBrandProductList({
       title = category?.name || "";
       products = category?.products || [];
       recipes = category?.recipes || [];
+      description = category?.description || "";
+      productCount = products.length;
     }
   } catch (error) {
     console.error(`Error fetching ${path}:`, error);
   }
 
   return (
-    <div className="container mx-auto py-4 sm:px-1  md:px-2">
-      <HeadingPrimary title={title} />
+    <div className="container mx-auto py-4 sm:px-1 md:px-2">
+      {/* Title Section - Only show if showTitle is true */}
+      {showTitle && title && (
+        <div className="mb-8">
+          <HeadingPrimary
+            title={title}
+            subtitle={
+              description ||
+              `Discover our premium ${title.toLowerCase()} collection`
+            }
+          />
+          {productCount > 0 && (
+            <p className="text-sm text-gray-600 mt-2">
+              Showing {productCount} product{productCount !== 1 ? "s" : ""}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Products Section */}
       {products?.length > 0 ? (
@@ -83,13 +107,36 @@ export default async function CategoryBrandProductList({
                 adjusting your search or filters.
               </p>
             </div>
+
+            {/* Back to Categories Button */}
+            <div className="mt-6">
+              <Link
+                href="/categories"
+                className="inline-flex items-center px-4 py-2 bg-primaryColor text-white text-sm font-medium rounded-lg hover:bg-primaryColor/90 transition-colors"
+              >
+                <svg
+                  className="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
+                Browse All Categories
+              </Link>
+            </div>
           </div>
         </div>
       )}
 
       {/* Recipes Section */}
       {recipes?.length > 0 && (
-        <div className="mt-8">
+        <div className="mt-12">
           <div className="mb-8">
             <HeadingPrimary
               title="Related Recipes"

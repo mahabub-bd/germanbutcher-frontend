@@ -1,5 +1,13 @@
 import { HeadingPrimary } from "@/components/common/heading-primary";
-import { Database, Eye, FileText, Lock, Shield, Users } from "lucide-react";
+import {
+  AlertTriangle,
+  Database,
+  Eye,
+  FileText,
+  Lock,
+  Shield,
+  Users,
+} from "lucide-react";
 import React from "react";
 
 const PrivacyPolicyComponent: React.FC = () => {
@@ -101,8 +109,50 @@ const PrivacyPolicyComponent: React.FC = () => {
             </div>
           </div>
 
+          {/* Third-Party Information Sharing */}
+          <div className="border-b pb-8">
+            <div className="flex items-center mb-4">
+              <AlertTriangle className="w-5 h-5 text-red-600 mr-3" />
+              <h2 className="text-xl font-semibold text-red-800">
+                Third-Party Information Sharing Policy
+              </h2>
+            </div>
+            <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+              <p className="text-red-800 font-medium mb-3">
+                <strong>Important Notice:</strong> German Butcher does not share
+                customer information with third parties for advertising or
+                marketing purposes.
+              </p>
+              <div className="space-y-2 text-red-700">
+                <p>
+                  <span className="font-semibold">
+                    No Third-Party Advertisements:
+                  </span>{" "}
+                  We do not allow third-party advertisements on our platform
+                  that could compromise your privacy.
+                </p>
+                <p>
+                  <span className="font-semibold">
+                    Customer Information Protection:
+                  </span>{" "}
+                  Any sharing of customer information with third parties would
+                  be done only under legal obligations and with proper customer
+                  consent.
+                </p>
+                <p>
+                  <span className="font-semibold">
+                    Merchant Responsibility:
+                  </span>{" "}
+                  If any unauthorized sharing of customer information occurs, it
+                  shall be the sole responsibility of the merchant and
+                  appropriate legal action will be taken.
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Information Disclosure */}
-          <div className="">
+          <div className="border-b pb-8">
             <div className="flex items-center mb-4">
               <Users className="w-5 h-5 text-gray-700 mr-3" />
               <h2 className="text-xl font-semibold">
@@ -110,8 +160,8 @@ const PrivacyPolicyComponent: React.FC = () => {
               </h2>
             </div>
             <p className="text-gray-700 mb-4">
-              We release account and other personal information when we believe
-              release is appropriate to:
+              We release account and other personal information only when we
+              believe release is appropriate and legally required to:
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
@@ -154,6 +204,99 @@ const PrivacyPolicyComponent: React.FC = () => {
               ))}
             </div>
           </div>
+
+          {/* Data Security */}
+          <div className="border-b pb-8">
+            <div className="flex items-center mb-4">
+              <Shield className="w-5 h-5 text-gray-700 mr-3" />
+              <h2 className="text-xl font-semibold">Data Security Measures</h2>
+            </div>
+            <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+              <ul className="space-y-2 text-green-800">
+                <li className="flex items-start">
+                  <span className="inline-block w-2 h-2 bg-green-600 rounded-full mt-2 mr-2"></span>
+                  We implement industry-standard security measures to protect
+                  your personal information
+                </li>
+                <li className="flex items-start">
+                  <span className="inline-block w-2 h-2 bg-green-600 rounded-full mt-2 mr-2"></span>
+                  All payment information is encrypted and processed through
+                  secure payment gateways
+                </li>
+                <li className="flex items-start">
+                  <span className="inline-block w-2 h-2 bg-green-600 rounded-full mt-2 mr-2"></span>
+                  Access to customer data is restricted to authorized personnel
+                  only
+                </li>
+                <li className="flex items-start">
+                  <span className="inline-block w-2 h-2 bg-green-600 rounded-full mt-2 mr-2"></span>
+                  Regular security audits are conducted to ensure data
+                  protection
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Customer Rights */}
+          <div className="">
+            <div className="flex items-center mb-4">
+              <Users className="w-5 h-5 text-gray-700 mr-3" />
+              <h2 className="text-xl font-semibold">Your Rights</h2>
+            </div>
+            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+              <p className="text-blue-800 mb-3 font-medium">
+                As our customer, you have the right to:
+              </p>
+              <ul className="space-y-2 text-blue-700">
+                <li className="flex items-start">
+                  <span className="inline-block w-2 h-2 bg-blue-600 rounded-full mt-2 mr-2"></span>
+                  Access and review your personal information we have collected
+                </li>
+                <li className="flex items-start">
+                  <span className="inline-block w-2 h-2 bg-blue-600 rounded-full mt-2 mr-2"></span>
+                  Request corrections to any inaccurate information
+                </li>
+                <li className="flex items-start">
+                  <span className="inline-block w-2 h-2 bg-blue-600 rounded-full mt-2 mr-2"></span>
+                  Request deletion of your personal data (subject to legal
+                  requirements)
+                </li>
+                <li className="flex items-start">
+                  <span className="inline-block w-2 h-2 bg-blue-600 rounded-full mt-2 mr-2"></span>
+                  Opt-out of marketing communications at any time
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Contact Information */}
+        <div className="text-center mt-8 md:p-6 p-2 rounded-lg bg-gray-50">
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            Privacy Questions?
+          </h3>
+          <p className="text-gray-600 text-sm mb-4">
+            If you have any questions about this Privacy Policy or how we handle
+            your data, please contact us.
+          </p>
+          <div className="flex flex-col space-y-2 sm:flex-row sm:justify-center sm:space-x-6 sm:space-y-0">
+            <a
+              href="tel:+880-1234-567890"
+              className="text-blue-600 hover:text-blue-800 font-medium text-sm sm:text-base"
+            >
+              📞 +880-1234-567890
+            </a>
+            <a
+              href="mailto:support@germanbutcherbd.com"
+              className="text-blue-600 hover:text-blue-800 font-medium text-sm sm:text-base break-all"
+            >
+              ✉️ support@germanbutcherbd.com
+            </a>
+          </div>
+          <p className="text-gray-500 text-xs mt-4">
+            This Privacy Policy was last updated on [Date]. We may update this
+            policy from time to time.
+          </p>
         </div>
       </div>
     </div>

@@ -37,7 +37,7 @@ export function AddToCartButton({
     return (
       <Button
         className={cn(
-          "md:py-3 py-0 border-primaryColor border px-4 bg-gray-100 text-gray-800 rounded-md font-semibold cursor-not-allowed transition-all duration-200",
+          "md:py-3 py-0 border-primaryColor border px-4 bg-gray-100 text-gray-800 rounded-sm font-semibold cursor-not-allowed transition-all duration-200",
           className
         )}
         disabled
