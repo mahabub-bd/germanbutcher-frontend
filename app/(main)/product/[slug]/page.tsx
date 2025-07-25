@@ -1,7 +1,7 @@
 import ProductDetails from "@/components/products/product-details/product-details";
 import { fetchData } from "@/utils/api-utils";
 
-import { Product } from "../../../../utils/types";
+import { Product } from "@/utils/types";
 
 export default async function ProductDetailspPage({
   params,
