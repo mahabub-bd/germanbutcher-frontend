@@ -38,9 +38,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.5,
     },
+    {
+      url: `${baseUrl}/certifications`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
   ];
 
   try {
+    // Fetch products
     const products: Product[] = await fetchData(
       "products?limit=1000&isActive=true"
     );
@@ -48,10 +55,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/products/${product.slug || product.id}`,
       lastModified: new Date(product.updatedAt),
       changeFrequency: "weekly" as const,
-      priority: 0.7,
+      priority: product.isFeatured ? 0.9 : 0.7,
     }));
 
-    const categories: Category[] = await fetchData("categories?limit=100");
+    const categories: Category[] = await fetchData("categories");
     const categoryPages: MetadataRoute.Sitemap = categories.map((category) => ({
       url: `${baseUrl}/categories/${category.slug || category.id}`,
       lastModified: new Date(category.updatedAt),
@@ -62,7 +69,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return [...staticPages, ...productPages, ...categoryPages];
   } catch (error) {
     console.error("Error generating sitemap:", error);
-
+    // Return static pages if API fails
     return staticPages;
   }
 }
