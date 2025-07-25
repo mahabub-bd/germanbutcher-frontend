@@ -246,17 +246,17 @@ export function CartItemProductPage({ item }: { item: CartItem }) {
           <div className="flex items-center gap-2">
             <Button
               variant="ghost"
-              size="sm"
+              size="icon"
               onClick={handleRemove}
               disabled={isRemoving}
-              className="h-8 text-sm text-muted-foreground hover:text-destructive disabled:opacity-50"
+              className="h-8 w-8 text-muted-foreground hover:text-destructive disabled:opacity-50"
             >
               {isRemoving ? (
-                <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                <Trash2 className="mr-1 h-4 w-4" />
+                <Trash2 className="h-4 w-4" />
               )}
-              {isRemoving ? "Removing..." : "Remove"}
+              <span className="sr-only">Remove item</span>
             </Button>
           </div>
         </div>
