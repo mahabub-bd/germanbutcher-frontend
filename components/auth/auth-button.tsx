@@ -86,7 +86,7 @@ const LoginButton: React.FC<{
     aria-label="Sign in to your account"
   >
     <User className={cn("lg:h-6 w-5 h-5 lg:w-6")} />
-    {!compact && <span className="hidden sm:inline">Login</span>}
+    {!compact && <span className="hidden sm:inline text-lg">Login</span>}
   </Button>
 );
 

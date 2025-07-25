@@ -19,9 +19,22 @@ export type FeatureData = {
   iconAlt: string;
   title: string;
   description: string;
-  iconBgColor?: string; // Optional for custom background colors
+  iconBgColor?: string;
 };
 
+interface NavigationLink {
+  id: string;
+  href: string;
+  label: string;
+}
+
+export const links: NavigationLink[] = [
+  { id: "home", href: "/", label: "Home" },
+  { id: "products", href: "/products", label: "Products" },
+  { id: "recipes", href: "/recipes", label: "Recipe" },
+  { id: "where-to-buy", href: "/where-to-buy", label: "Where to Buy" },
+  { id: "our-brands", href: "/our-brands", label: "Our Brands" },
+];
 export const defaultFeaturesData: FeatureData[] = [
   {
     iconSrc: HalalImage.src,

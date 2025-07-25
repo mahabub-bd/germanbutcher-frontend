@@ -41,7 +41,7 @@ export default function SignInForm() {
         </TabsContent>
       </Tabs>
 
-      <div className="relative my-6">
+      {/* <div className="relative my-6">
         <div className="absolute inset-0 flex items-center">
           <Separator />
         </div>
@@ -76,7 +76,7 @@ export default function SignInForm() {
           />
         </svg>
         Sign in with Google
-      </Button>
+      </Button> */}
 
       <p className="text-sm text-muted-foreground text-center mt-4">
         Don&apos;t have an account?{" "}
