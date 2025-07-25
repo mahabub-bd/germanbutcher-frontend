@@ -32,7 +32,7 @@ export function SortBar({ currentSort }: { currentSort?: string }) {
           value={currentSort || "featured"}
           onValueChange={handleSortChange}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="md:w-[180px]" >
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>

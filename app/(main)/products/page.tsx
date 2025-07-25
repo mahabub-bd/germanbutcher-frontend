@@ -58,7 +58,7 @@ export default async function ProductsPage({
   return (
     <div className="container mx-auto md:px-0 px-2">
       {/* Mobile Header */}
-      <div className="mb-6 md:hidden">
+      <div className="md:hidden">
         <ProductsBreadcrumb
           categoryName={
             (await searchParams).category
@@ -95,7 +95,7 @@ export default async function ProductsPage({
       </div>
 
       {/* Mobile Filters */}
-      <div className="flex flex-row justify-between items-center gap-4 mb-6 md:hidden">
+      <div className="flex flex-row justify-between items-center gap-4  md:hidden">
         <ProductFilters
           categories={categories}
           brands={brands}
