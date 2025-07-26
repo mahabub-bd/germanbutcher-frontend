@@ -205,7 +205,7 @@ const WhatsAppMessengerWidget = ({
       <button
         onClick={() => setIsOpen(true)}
         className={cn(
-          "fixed bottom-20 right-4 p-3 rounded-full text-white shadow-md z-50 transition-all duration-300 bg-primaryColor hover:bg-primaryColor/90",
+          "fixed bottom-15 right-4 p-3 rounded-full text-white shadow-md z-50 transition-all duration-300 bg-primaryColor hover:bg-primaryColor/90 md:mb-10 mb-6",
           isVisible
             ? "opacity-100 translate-y-0"
             : "opacity-0 translate-y-8 pointer-events-none",
@@ -229,7 +229,7 @@ const WhatsAppMessengerWidget = ({
   }
 
   return (
-    <div className="fixed bottom-2 right-5 z-50">
+    <div className="fixed bottom-2 right-2 z-50 md:mb-0 mb-16">
       <div
         className={`bg-white rounded-lg shadow-xl transition-all duration-300 ${
           isMinimized ? "w-80 h-16" : "w-80 min-h-96"

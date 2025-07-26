@@ -11,7 +11,7 @@ export default function CategoryCard({ category }: CategoryCardProps) {
     <Link
       href={`/categories/${category.slug || category.id}`}
       className="group block rounded-lg overflow-hidden"
-      prefetch={false}
+      prefetch={true}
     >
       <div className="flex w-full items-center justify-center">
         <div className="relative md:w-[150px] md:h-[150px] w-[100px] h-[100px] rounded-full p-2 flex items-center justify-center border-2 border-dashed border-primaryColor group-hover:border-primary transition-colors duration-200">
@@ -37,5 +37,3 @@ export default function CategoryCard({ category }: CategoryCardProps) {
     </Link>
   );
 }
-
-// Memoize the component to prevent unnecessary re-renders
