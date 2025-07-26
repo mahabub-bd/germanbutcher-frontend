@@ -35,7 +35,7 @@ export function ShippingMethodSelector({
         <RadioGroup
           value={selectedMethod}
           onValueChange={onSelectMethod}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+          className="grid grid-cols-2 gap-4"
         >
           {shippingMethods.map((method) => (
             <div
@@ -55,9 +55,7 @@ export function ShippingMethodSelector({
                   htmlFor={`shipping-${method.id}`}
                   className="flex cursor-pointer flex-col"
                 >
-                  <span className="font-medium text-sm md:text-base">
-                    {method.name}
-                  </span>
+                  <span className="font-medium text-sm">{method.name}</span>
                   <span className="text-xs md:text-sm text-muted-foreground">
                     {method.deliveryTime}
                   </span>

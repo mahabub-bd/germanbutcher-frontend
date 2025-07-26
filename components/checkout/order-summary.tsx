@@ -20,7 +20,6 @@ import {
   Tag,
   TicketPercent,
   Truck,
-  User,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -170,7 +169,7 @@ export function OrderSummary({
         </div>
       )}
 
-      <div className="space-y-3 text-sm grid grid-cols-2">
+      <div className=" text-sm grid md:grid-cols-3 grid-cols-2 gap-4">
         {selectedShippingMethod && (
           <div className="flex items-center gap-3 text-muted-foreground">
             <Truck className="h-4 w-4 flex-shrink-0" />
@@ -189,13 +188,6 @@ export function OrderSummary({
           <ShieldCheck className="h-4 w-4 flex-shrink-0" />
           <span>Secure checkout</span>
         </div>
-
-        {user && (
-          <div className="flex items-center gap-3 text-green-600">
-            <User className="h-4 w-4 flex-shrink-0" />
-            <span>Signed in as {user?.name || user.mobileNumber}</span>
-          </div>
-        )}
       </div>
 
       <div className="border-t pt-6 mt-6">
@@ -203,11 +195,11 @@ export function OrderSummary({
           <FileText className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
           <span>By placing your order, you agree to our</span>
           <Link
-            href="/terms"
+            href="/terms-and-conditions"
             className="underline hover:text-primary transition-colors"
             aria-label="Terms of Service"
           >
-            Terms of Service
+            Terms and Conditions
           </Link>
           <span>and</span>
           <Link

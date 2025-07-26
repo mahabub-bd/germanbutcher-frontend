@@ -44,7 +44,7 @@ export function PaymentMethodSelector({
       <RadioGroup
         value={selectedMethod}
         onValueChange={onSelectMethod}
-        className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4"
+        className="grid grid-cols-2  gap-3 mt-4"
       >
         {paymentMethods.map((method) => {
           const imageSrc = PAYMENT_METHOD_IMAGES[method.name];
@@ -72,7 +72,7 @@ export function PaymentMethodSelector({
                         src={imageSrc}
                         width={1600}
                         height={800}
-                        className="w-40 h-auto"
+                        className="w-30 h-auto"
                         alt={method.name}
                       />
                     ) : (
