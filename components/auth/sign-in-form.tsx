@@ -7,7 +7,6 @@ import { useState } from "react";
 import EmailLoginForm from "@/components/auth/email-login-form";
 import MobileLoginForm from "@/components/auth/mobile-login-form";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function SignInForm() {
