@@ -1,27 +1,10 @@
-import { contactInfo } from "@/constants";
+import { contactInfo, footerMenuData, socialPlatforms } from "@/constants";
 import { BgFooter, GermanbutcherLogo } from "@/public/images";
-import { Facebook, Instagram, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 // Social Media Links Component
 const SocialLinks = () => {
-  const socialPlatforms = [
-    {
-      Icon: Facebook,
-      bg: "bg-[#1877f2]",
-      name: "Facebook",
-      href: "https://www.facebook.com/germanbutcherbd",
-    },
-    {
-      Icon: Instagram,
-      bg: "bg-gradient-to-r from-purple-500 to-pink-500",
-      name: "Instagram",
-      href: "https://www.instagram.com/germanbutcherbd",
-    },
-    { Icon: Youtube, bg: "bg-[#ff0000]", name: "YouTube", href: "#" },
-  ];
-
   return (
     <div className="flex flex-wrap justify-center md:justify-start gap-3 sm:gap-4">
       {socialPlatforms.map(({ Icon, bg, name, href }) => (
@@ -126,35 +109,6 @@ const ContactItem = ({ icon: Icon, label, value, href }: ContactItemProps) => (
 
 // Main Footer Component
 export default function Footer() {
-  const menuData = {
-    company: {
-      title: "Company",
-      links: [
-        { text: "Our Story", href: "/about-us" },
-        { text: "Our Clients", href: "/clients" },
-        { text: "Certification", href: "/certification" },
-        { text: "Our Brands", href: "/our-brands" },
-      ],
-    },
-    support: {
-      title: "Support",
-      links: [
-        { text: "Contact Us", href: "/contact-us" },
-        { text: "FAQ", href: "/faqs" },
-        { text: "Recipes", href: "/recipes" },
-        { text: "How To Order", href: "/how-to-order" },
-      ],
-    },
-    policy: {
-      title: "Policy",
-      links: [
-        { text: "Terms and Conditions", href: "/terms-and-conditions" },
-        { text: "Return and Refund Policy", href: "/return-refund-policy" },
-        { text: "Privacy Policy", href: "/privacy-policy" },
-      ],
-    },
-  };
-
   return (
     <footer
       className="relative text-white overflow-hidden 
@@ -199,27 +153,21 @@ export default function Footer() {
 
           {/* Menu Section - Mobile: full width, Desktop: 50% */}
           <div className="col-span-1 lg:col-span-6 order-3 lg:order-2">
-            <div className="text-center lg:text-left mb-6 sm:mb-8">
-              <p className="font-bold text-xl sm:text-2xl text-white">
-                Quick Links
-              </p>
-            </div>
-
             {/* Menu Grid - 2 columns on mobile, 4 on desktop */}
             <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
               <MenuSection
-                title={menuData.company.title}
-                links={menuData.company.links}
+                title={footerMenuData.company.title}
+                links={footerMenuData.company.links}
               />
 
               <MenuSection
-                title={menuData.support.title}
-                links={menuData.support.links}
+                title={footerMenuData.support.title}
+                links={footerMenuData.support.links}
               />
 
               <MenuSection
-                title={menuData.policy.title}
-                links={menuData.policy.links}
+                title={footerMenuData.policy.title}
+                links={footerMenuData.policy.links}
               />
             </div>
           </div>

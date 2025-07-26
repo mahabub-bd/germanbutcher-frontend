@@ -12,7 +12,14 @@ import {
   TokyoKitchen,
 } from "@/public/images";
 import { FAQItem, SisterConcern } from "@/utils/types";
-import { Mail, MapPin, Phone } from "lucide-react";
+import {
+  Facebook,
+  Instagram,
+  Mail,
+  MapPin,
+  Phone,
+  Youtube,
+} from "lucide-react";
 
 export type FeatureData = {
   iconSrc: string;
@@ -364,4 +371,49 @@ export const contactInfo = [
     value: "Amigo D-149 Square, Mohammadpur, Dhaka 1207, Bangladesh",
     href: "https://maps.google.com/?q=Amigo+D-149+Square,+Mohammadpur,+Dhaka+1207,+Bangladesh",
   },
+];
+
+export const footerMenuData = {
+  company: {
+    title: "Company",
+    links: [
+      { text: "Our Story", href: "/about-us" },
+      { text: "Our Clients", href: "/clients" },
+      { text: "Certification", href: "/certification" },
+      { text: "Our Brands", href: "/our-brands" },
+    ],
+  },
+  support: {
+    title: "Support",
+    links: [
+      { text: "Contact Us", href: "/contact-us" },
+      { text: "FAQ", href: "/faqs" },
+      { text: "Recipes", href: "/recipes" },
+      { text: "How To Order", href: "/how-to-order" },
+    ],
+  },
+  policy: {
+    title: "Policy",
+    links: [
+      { text: "Terms and Conditions", href: "/terms-and-conditions" },
+      { text: "Return and Refund Policy", href: "/return-refund-policy" },
+      { text: "Privacy Policy", href: "/privacy-policy" },
+    ],
+  },
+};
+
+export const socialPlatforms = [
+  {
+    Icon: Facebook,
+    bg: "bg-[#1877f2]",
+    name: "Facebook",
+    href: "https://www.facebook.com/germanbutcherbd",
+  },
+  {
+    Icon: Instagram,
+    bg: "bg-gradient-to-r from-purple-500 to-pink-500",
+    name: "Instagram",
+    href: "https://www.instagram.com/germanbutcherbd",
+  },
+  { Icon: Youtube, bg: "bg-[#ff0000]", name: "YouTube", href: "#" },
 ];
