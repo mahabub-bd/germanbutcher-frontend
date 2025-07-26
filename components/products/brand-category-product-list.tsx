@@ -24,7 +24,7 @@ export default async function CategoryBrandProductList({
   let title = "";
   let products: Product[] = [];
   let recipes: Recipe[] = [];
-  let description = "";
+
   let productCount = 0;
 
   try {
@@ -34,7 +34,7 @@ export default async function CategoryBrandProductList({
       const brand = response[0] as Brand;
       title = brand?.name || "";
       products = brand?.products || [];
-      description = brand?.description || "";
+
       productCount = products.length;
     } else {
       const category = Array.isArray(response)
@@ -43,7 +43,7 @@ export default async function CategoryBrandProductList({
       title = category?.name || "";
       products = category?.products || [];
       recipes = category?.recipes || [];
-      description = category?.description || "";
+
       productCount = products.length;
     }
   } catch (error) {
