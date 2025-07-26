@@ -54,16 +54,10 @@ export default async function CategoryBrandProductList({
     <div className="container mx-auto py-4 sm:px-1 md:px-2">
       {/* Title Section - Only show if showTitle is true */}
       {showTitle && title && (
-        <div className="mb-8">
-          <HeadingPrimary
-            title={title}
-            subtitle={
-              description ||
-              `Discover our premium ${title.toLowerCase()} collection`
-            }
-          />
+        <div className="flex flex-row  justify-between items-center md:items-start">
+          <HeadingPrimary title={title} />
           {productCount > 0 && (
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-gray-600 md:mt-2">
               Showing {productCount} product{productCount !== 1 ? "s" : ""}
             </p>
           )}
@@ -72,7 +66,7 @@ export default async function CategoryBrandProductList({
 
       {/* Products Section */}
       {products?.length > 0 ? (
-        <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-2 md:gap-5 md:py-10 py-5">
+        <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-2 md:gap-5 md:py-5 py-5">
           {products?.map((product: Product) => (
             <ProductCard key={product.id} product={product} />
           ))}

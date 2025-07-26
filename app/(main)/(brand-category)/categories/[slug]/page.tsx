@@ -30,7 +30,7 @@ export default async function CategoryPage({
 
   return (
     <div className="container mx-auto md:px-0 px-2">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <CategoryBreadcrumb categoryName={formatSlugToTitle(slug)} />
         <SortBar currentSort={(await searchParams).sort} />
       </div>
