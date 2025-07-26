@@ -1,14 +1,24 @@
 import { contactInfo } from "@/constants";
 import { BgFooter, GermanbutcherLogo } from "@/public/images";
-import { Facebook, Linkedin, Youtube } from "lucide-react";
+import { Facebook, Instagram, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 // Social Media Links Component
 const SocialLinks = () => {
   const socialPlatforms = [
-    { Icon: Facebook, bg: "bg-[#1877f2]", name: "Facebook", href: "#" },
-    { Icon: Linkedin, bg: "bg-[#0077b5]", name: "LinkedIn", href: "#" },
+    {
+      Icon: Facebook,
+      bg: "bg-[#1877f2]",
+      name: "Facebook",
+      href: "https://www.facebook.com/germanbutcherbd",
+    },
+    {
+      Icon: Instagram,
+      bg: "bg-gradient-to-r from-purple-500 to-pink-500",
+      name: "Instagram",
+      href: "https://www.instagram.com/germanbutcherbd",
+    },
     { Icon: Youtube, bg: "bg-[#ff0000]", name: "YouTube", href: "#" },
   ];
 
@@ -38,35 +48,37 @@ interface MenuLinkProps {
   children: React.ReactNode;
 }
 
-const MenuLink = ({ href, children }: MenuLinkProps) => (
-  <div className="group">
-    <Link
-      href={href}
-      className="flex items-center space-x-3 text-white/80 hover:text-white 
-                 transition-all duration-300 group-hover:translate-x-2 
-                 focus:outline-none focus:text-white"
-    >
-      <div
-        className="w-2 h-2 bg-white/60 rounded-full group-hover:bg-white 
-                      transition-colors duration-300"
-      />
-      <span className="font-medium text-sm sm:text-base">{children}</span>
-    </Link>
-  </div>
-);
-
-// Menu Section Component
 interface MenuSectionProps {
   title: string;
   links: { text: string; href: string }[];
 }
 
+const MenuLink = ({ href, children }: MenuLinkProps) => (
+  <div className="group">
+    <Link
+      href={href}
+      className="inline-flex items-center space-x-0 md:space-x-3 
+                 text-white/80 hover:text-white 
+                 transition-all duration-300 group-hover:md:translate-x-2 
+                 focus:outline-none focus:text-white
+                 py-1 text-sm sm:text-base font-semibold"
+    >
+      <div
+        className="hidden md:block w-2 h-2 bg-white/60 rounded-full 
+                   group-hover:bg-white transition-colors duration-300 flex-shrink-0"
+      />
+      <span className="font-medium whitespace-nowrap">{children}</span>
+    </Link>
+  </div>
+);
+
 const MenuSection = ({ title, links }: MenuSectionProps) => (
   <div className="space-y-3 sm:space-y-4">
-    <p className="font-semibold text-base sm:text-lg text-white/90 mb-3 sm:mb-4">
+    <p className="font-semibold text-base sm:text-lg text-white/90 mb-3 sm:mb-4 text-center md:text-left">
       {title}
     </p>
-    <div className="space-y-2 sm:space-y-3">
+    {/* Mobile: flex-wrap horizontal layout, Desktop: vertical */}
+    <div className="flex flex-wrap justify-center md:justify-start md:flex-col gap-x-4 md:gap-x-0 gap-y-2 md:gap-y-3">
       {links.map((link) => (
         <MenuLink key={link.text} href={link.href}>
           {link.text}
@@ -194,7 +206,7 @@ export default function Footer() {
             </div>
 
             {/* Menu Grid - 2 columns on mobile, 4 on desktop */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
               <MenuSection
                 title={menuData.company.title}
                 links={menuData.company.links}

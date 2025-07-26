@@ -355,8 +355,8 @@ export const contactInfo = [
   {
     icon: Mail,
     label: "Email Us",
-    value: "info@germanbutcher.com",
-    href: "mailto:info@germanbutcher.com",
+    value: "support@germanbutcher.com",
+    href: "mailto:support@germanbutcher.com",
   },
   {
     icon: MapPin,
