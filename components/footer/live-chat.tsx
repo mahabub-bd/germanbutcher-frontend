@@ -380,7 +380,7 @@ const WhatsAppMessengerWidget = ({
                       key={message.id.toString()}
                       className="flex justify-start"
                     >
-                      <div className="bg-gray-100 text-gray-800 px-3 py-2 rounded-lg max-w-[220px]">
+                      <div className="bg-gray-100 text-gray-800 px-3 py-2 rounded-lg ">
                         <p className="text-sm">{message.text}</p>
                         <p className="text-xs text-gray-500 mt-1">
                           {message.timestamp}
