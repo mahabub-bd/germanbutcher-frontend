@@ -14,7 +14,7 @@ export default function CategoryCard({ category }: CategoryCardProps) {
       prefetch={true}
     >
       <div className="flex w-full items-center justify-center">
-        <div className="relative md:w-[150px] md:h-[150px] w-[100px] h-[100px] rounded-full p-2 flex items-center justify-center border-2 border-dashed border-primaryColor group-hover:border-primary transition-colors duration-200">
+        <div className="relative md:w-[150px] md:h-[150px] w-[90px] h-[90px] rounded-full p-2 flex items-center justify-center   group-hover:border-primary transition-colors duration-200">
           <div className="relative w-full h-full rounded-full overflow-hidden bg-gray-100">
             <Image
               src={category?.attachment?.url || "/category-placeholder.svg"}

@@ -571,11 +571,27 @@ export interface SalesPoint {
   shops: Shop[];
 }
 
+export interface SisterConcernDetails {
+  established?: number;
+  concept?: string;
+  location?: string;
+  specialties?: string[];
+  atmosphere?: string;
+  keyFeatures?: string[];
+  diningExperience?: string;
+  cuisineType?: string;
+  service?: string;
+  businessModel?: string;
+  cuisine?: string;
+  cookingMethods?: string[];
+}
+
 export interface SisterConcern {
   id: number;
   name: string;
   imageUrl: string;
   description: string;
+  details: SisterConcernDetails;
 }
 
 export interface FAQItem {

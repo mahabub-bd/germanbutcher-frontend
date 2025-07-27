@@ -160,44 +160,107 @@ export const sisterConcerns: SisterConcern[] = [
     id: 1,
     name: "Tokyo Kitchen",
     imageUrl: TokyoKitchen.src,
-    description:
-      "Authentic Japanese cuisine featuring fresh sushi, ramen, and traditional dishes prepared by skilled chefs using premium ingredients.",
+    description: "Authentic Japanese cuisine featuring fresh sushi, ramen, and traditional dishes prepared by skilled chefs using premium ingredients.",
+    details: {
+      established: 2014,
+      concept: "Japanese-inspired restaurant under the German Butcher brand",
+      location: "Bangladesh",
+      specialties: ["Sushi", "Ramen", "Contemporary Japanese dishes"],
+      atmosphere: "Cozy yet vibrant",
+      keyFeatures: [
+        "Blends traditional culinary techniques with modern dining",
+        "Quality ingredients with attention to detail",
+        "Flavorful, well-balanced meals",
+        "Over a decade of consistent service"
+      ]
+    }
   },
   {
     id: 2,
     name: "Steak and Sausage",
     imageUrl: SteakandSausage.src,
-    description:
-      "Premium steakhouse and grill specializing in high-quality cuts of meat, artisanal sausages, and hearty comfort food.",
+    description: "Premium steakhouse and grill specializing in high-quality cuts of meat, artisanal sausages, and hearty comfort food.",
+    details: {
+      specialties: ["Premium steaks", "Artisanal sausages", "Comfort food"],
+      diningExperience: "Casual premium",
+      keyFeatures: [
+        "High-quality meat cuts",
+        "Handcrafted sausage selection",
+        "Hearty portions",
+        "Grill-focused menu"
+      ]
+    }
   },
   {
     id: 3,
     name: "Pizzerie",
     imageUrl: Pizzerie.src,
-    description:
-      "Traditional Italian pizzeria serving wood-fired pizzas, pasta dishes, and classic Italian cuisine in a cozy atmosphere.",
+    description: "Traditional Italian pizzeria serving wood-fired pizzas, pasta dishes, and classic Italian cuisine in a cozy atmosphere.",
+    details: {
+      cuisineType: "Traditional Italian",
+      specialties: ["Wood-fired pizzas", "Pasta dishes"],
+      atmosphere: "Friendly and relaxed",
+      service: "Quick and efficient",
+      keyFeatures: [
+        "Quality ingredients",
+        "Handcrafted pizzas",
+        "Authentic Italian flavors",
+        "Casual dining experience"
+      ]
+    }
   },
   {
     id: 4,
     name: "German Deli",
     imageUrl: GermanDeli.src,
-    description:
-      "Authentic German delicatessen offering traditional sausages, breads, imported cheeses, and European specialty foods.",
+    description: "Authentic German delicatessen offering traditional sausages, breads, imported cheeses, and European specialty foods.",
+    details: {
+      concept: "Modern coffee shop and lifestyle café",
+      specialties: ["German sausages", "European specialty foods", "Coffee"],
+      atmosphere: "Calm and welcoming",
+      keyFeatures: [
+        "Designed for comfort and conversation",
+        "Perfect for relaxation",
+        "Quality and consistency",
+        "Blends café culture with deli offerings"
+      ]
+    }
   },
   {
     id: 5,
     name: "GB Express",
     imageUrl: GBEXPRESS.src,
-    description:
-      "Fast-casual dining experience providing quick, quality meals and convenient takeout options for busy customers.",
+    description: "Fast-casual dining experience providing quick, quality meals and convenient takeout options for busy customers.",
+    details: {
+      concept: "Everyday affordable dining",
+      businessModel: "Franchise by German Butcher",
+      specialties: ["Quick meals", "Budget-friendly options"],
+      keyFeatures: [
+        "Efficient service",
+        "Consistent quality across outlets",
+        "Accessible pricing",
+        "Welcoming atmosphere",
+        "Designed for daily dining needs"
+      ]
+    }
   },
   {
     id: 6,
     name: "Tandoor",
     imageUrl: Tandoor.src,
-    description:
-      "Authentic Indian restaurant featuring traditional tandoor-cooked dishes, aromatic curries, naan bread, and flavorful spices.",
-  },
+    description: "Authentic Indian restaurant featuring traditional tandoor-cooked dishes, aromatic curries, naan bread, and flavorful spices.",
+    details: {
+      cuisine: "Authentic Indian",
+      specialties: ["Tandoori dishes", "Flame-grilled kababs", "Fresh naan", "Aromatic curries"],
+      cookingMethods: ["Traditional tandoor cooking", "Indian spice blends"],
+      keyFeatures: [
+        "Bold and vibrant flavors",
+        "Traditional cooking techniques",
+        "Comforting dining experience",
+        "Commitment to quality and consistency"
+      ]
+    }
+  }
 ];
 
 export const faqData: FAQItem[] = [
@@ -243,7 +306,7 @@ export const faqData: FAQItem[] = [
     id: 6,
     question: "How do I place an order?",
     answer:
-      "You can place an order through our website germanbutcherbd.com, by calling us at +880-1234-567890, or by visiting our physical stores. Simply add items to your cart and proceed to checkout.",
+      "You can place an order through our website germanbutcherbd.com, by calling us at +8809666791991, or by visiting our physical stores. Simply add items to your cart and proceed to checkout.",
     category: "Orders & Shopping",
   },
   {
@@ -333,7 +396,7 @@ export const faqData: FAQItem[] = [
     id: 18,
     question: "How do I contact customer support?",
     answer:
-      "You can reach our customer support team at +880-1234-567890, email us at support@germanbutcherbd.com, or use the contact form on our website. Our support hours are Sunday-Thursday, 9:00 AM - 6:00 PM.",
+      "You can reach our customer support team at +8809666791991, email us at support@germanbutcherbd.com, or use the contact form on our website. Our support hours are Sunday-Thursday, 9:00 AM - 6:00 PM.",
     category: "Returns & Support",
   },
   {
@@ -356,20 +419,20 @@ export const contactInfo = [
   {
     icon: Phone,
     label: "Call Us",
-    value: "+880 1600000000",
-    href: "tel:+8801600000000",
+    value: "+880966791991",
+    href: "tel:+880966791991",
   },
   {
     icon: Mail,
     label: "Email Us",
-    value: "support@germanbutcher.com",
-    href: "mailto:support@germanbutcher.com",
+    value: "support@germanbutcherbd.com",
+    href: "mailto:support@germanbutcherb.com",
   },
   {
     icon: MapPin,
     label: "Visit Us",
-    value: "Amigo D-149 Square, Mohammadpur, Dhaka 1207, Bangladesh",
-    href: "https://maps.google.com/?q=Amigo+D-149+Square,+Mohammadpur,+Dhaka+1207,+Bangladesh",
+    value: "House 56/B, Rd 132, Gulshan-1, Dhaka 1212",
+    href: "https://maps.app.goo.gl/rP9kUCDczKa94otX7",
   },
 ];
 

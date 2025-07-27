@@ -112,13 +112,13 @@ const TermsAndConditions: React.FC = () => {
                 </li>
                 <li className="flex items-start">
                   <span className="inline-block w-2 h-2 bg-gray-700 rounded-full mt-2 mr-2"></span>
-                  Out-of-stock items are clearly marked with &quot;Out of Stock&quot;
-                  labels
+                  Out-of-stock items are clearly marked with &quot;Out of
+                  Stock&quot; labels
                 </li>
                 <li className="flex items-start">
                   <span className="inline-block w-2 h-2 bg-gray-700 rounded-full mt-2 mr-2"></span>
-                  Stock status is indicated as &quot;Available/Unavailable&quot; or &quot;In
-                  Stock/Out of Stock&quot;
+                  Stock status is indicated as &quot;Available/Unavailable&quot;
+                  or &quot;In Stock/Out of Stock&quot;
                 </li>
                 <li className="flex items-start">
                   <span className="inline-block w-2 h-2 bg-gray-700 rounded-full mt-2 mr-2"></span>
@@ -264,10 +264,10 @@ const TermsAndConditions: React.FC = () => {
           </p>
           <div className="flex flex-col space-y-2 sm:flex-row sm:justify-center sm:space-x-6 sm:space-y-0">
             <a
-              href="tel:+880-1234-567890"
+              href="tel:+8809666791991"
               className="text-blue-600 hover:text-blue-800 font-medium text-sm sm:text-base"
             >
-              📞 +880-1234-567890
+              📞 +8809666791991
             </a>
             <a
               href="mailto:support@germanbutcherbd.com"
@@ -277,8 +277,8 @@ const TermsAndConditions: React.FC = () => {
             </a>
           </div>
           <p className="text-gray-500 text-xs mt-4">
-            These Terms and Conditions were last updated on [Date]. We reserve
-            the right to update these terms at any time.
+            These Terms and Conditions were last updated on 27 July 2025. We
+            reserve the right to update these terms at any time.
           </p>
         </div>
       </div>

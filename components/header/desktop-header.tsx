@@ -11,10 +11,10 @@ export function DesktopHeader() {
       <div className="container mx-auto flex justify-between items-center  md:px-0 px-4 ">
         <div className="flex items-center">
           <Link href="/" className="flex items-center mr-6">
-            <div className="p-2 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 inline-block transition-all duration-300 group-hover:bg-white/15 group-hover:scale-105">
+            <div className="p-2">
               <Image
                 src={GermanbutcherLogo || "/placeholder.svg"}
-                alt="PurePac logo"
+                alt="P logo"
                 width={60}
                 height={60}
                 className="w-10 h-10 lg:w-15 lg:h-15"

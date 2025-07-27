@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function AddBannerPage() {
   return (
-    <div className="md:p-6 p:2 space-y-6 border rouunded-sm">
+    <div className="md:p-4 p:2 space-y-6 border rouunded-sm">
       <div className="md:p-6 p:2">
         <div className="flex justify-between items-center mb-6">
           <div>

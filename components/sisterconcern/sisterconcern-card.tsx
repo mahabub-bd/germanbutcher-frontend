@@ -1,9 +1,24 @@
 import { SisterConcern } from "@/utils/types";
 import Image from "next/image";
+import Link from "next/link";
+
+// Helper function to create SEO-friendly slugs
+const createSlug = (name: string): string => {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "") // Remove special characters
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
+    .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
+};
 
 const SisterConcernCard: React.FC<{ concern: SisterConcern }> = ({
   concern,
 }) => {
+  // Create SEO-friendly slug
+  const brandSlug = createSlug(concern.name);
+
   return (
     <div className=" p-2 group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
       <div className="relative aspect-[4/3] overflow-hidden w-[160px] mx-auto">
@@ -29,24 +44,25 @@ const SisterConcernCard: React.FC<{ concern: SisterConcern }> = ({
         </p>
 
         <div className="flex items-center justify-between pt-2">
-          <button className="group/btn bg-gradient-to-r from-primaryColor to-secondaryColor text-white px-6 py-2.5 rounded-lg hover:from-gray-700 hover:to-gray-800 transition-all duration-300 text-sm font-semibold shadow-md hover:shadow-lg transform hover:scale-105">
-            <span className="flex items-center gap-2">
-              Explore
-              <svg
-                className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-200"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </span>
-          </button>
+          <Link
+            href={`/our-brands/${brandSlug}`}
+            className="group/btn bg-gradient-to-r from-primaryColor to-secondaryColor text-white px-6 py-2.5 rounded-lg hover:from-gray-700 hover:to-gray-800 transition-all duration-300 text-sm font-semibold shadow-md hover:shadow-lg transform hover:scale-105 inline-flex items-center gap-2"
+          >
+            Explore
+            <svg
+              className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-200"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </Link>
 
           <div className="flex items-center gap-2 text-gray-400">
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

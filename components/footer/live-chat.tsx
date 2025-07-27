@@ -95,7 +95,7 @@ const WhatsAppMessengerWidget = ({
     },
   };
 
-  // Scroll visibility logic (same as GoToTop)
+  // Scroll visibility logic
   useEffect(() => {
     const toggleVisibility = () => {
       if (window.scrollY > threshold) {
@@ -106,7 +106,6 @@ const WhatsAppMessengerWidget = ({
     };
 
     window.addEventListener("scroll", toggleVisibility);
-
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, [threshold]);
 
@@ -133,6 +132,7 @@ const WhatsAppMessengerWidget = ({
 
   const handlePlatformSelect = (platform: Platform) => {
     setSelectedPlatform(platform);
+    setIsOpen(true);
     setUnreadCount(0);
   };
 
@@ -190,6 +190,7 @@ const WhatsAppMessengerWidget = ({
     setSelectedPlatform(null);
     setUserInfo({ name: "", message: "", submitted: false });
     setMessages([]);
+    setIsOpen(false);
   };
 
   const quickMessages = [
@@ -200,31 +201,60 @@ const WhatsAppMessengerWidget = ({
     "I want to speak to sales team",
   ];
 
+  // Render floating action buttons when chat is not open
   if (!isOpen) {
     return (
-      <button
-        onClick={() => setIsOpen(true)}
-        className={cn(
-          "fixed bottom-15 right-4 p-3 rounded-full text-white shadow-md z-50 transition-all duration-300 bg-primaryColor hover:bg-primaryColor/90 md:mb-10 mb-6",
-          isVisible
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 translate-y-8 pointer-events-none",
-          className
-        )}
-        aria-label="Open live chat widget"
-        aria-describedby={unreadCount > 0 ? "unread-messages" : undefined}
+      <div
+        className={cn("fixed bottom-15 right-4 z-50 md:mb-10 mb-6", className)}
       >
-        <MessageCircle className="w-4 h-4" />
+        {/* Container for both buttons */}
+        <div
+          className={cn(
+            "flex flex-col gap-3 transition-all duration-300",
+            isVisible
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-8 pointer-events-none"
+          )}
+        >
+          {/* WhatsApp Button */}
+          <button
+            onClick={() => handlePlatformSelect("whatsapp")}
+            className="group relative p-3 rounded-full text-white shadow-lg transition-all duration-300 bg-green-500 hover:bg-green-600 hover:scale-110"
+            aria-label="Open WhatsApp chat"
+          >
+            <WhatsAppIcon className="w-6 h-6" />
+            {/* Tooltip */}
+            <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1 bg-gray-800 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+              Chat on WhatsApp
+              <div className="absolute left-full top-1/2 -translate-y-1/2 border-4 border-transparent border-l-gray-800"></div>
+            </div>
+          </button>
+
+          {/* Messenger Button */}
+          <button
+            onClick={() => handlePlatformSelect("messenger")}
+            className="group relative p-3 rounded-full text-white shadow-lg transition-all duration-300 bg-blue-500 hover:bg-blue-600 hover:scale-110"
+            aria-label="Open Messenger chat"
+          >
+            <MessengerIcon className="w-6 h-6" />
+            {/* Tooltip */}
+            <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1 bg-gray-800 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+              Chat on Messenger
+              <div className="absolute left-full top-1/2 -translate-y-1/2 border-4 border-transparent border-l-gray-800"></div>
+            </div>
+          </button>
+        </div>
+
+        {/* Unread count badge (shows on WhatsApp button) */}
         {unreadCount > 0 && (
           <span
-            id="unread-messages"
-            className="absolute -top-1 -right-1 bg-white text-primaryColor text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold"
+            className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold"
             aria-label={`${unreadCount} unread messages`}
           >
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
-      </button>
+      </div>
     );
   }
 
@@ -239,15 +269,40 @@ const WhatsAppMessengerWidget = ({
         aria-modal="false"
       >
         {/* Header */}
-        <div className="bg-primaryColor text-white p-6 rounded-t-lg flex items-center justify-between">
+        <div
+          className={`text-white p-6 rounded-t-lg flex items-center justify-between ${
+            selectedPlatform === "whatsapp"
+              ? "bg-green-500"
+              : selectedPlatform === "messenger"
+                ? "bg-blue-500"
+                : "bg-gray-600"
+          }`}
+        >
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-              <MessageCircle className="w-5 h-5 text-white" />
+              {selectedPlatform === "whatsapp" ? (
+                <WhatsAppIcon size={20} className="text-white" />
+              ) : selectedPlatform === "messenger" ? (
+                <MessengerIcon size={20} className="text-white" />
+              ) : (
+                <MessageCircle className="w-5 h-5 text-white" />
+              )}
             </div>
             <div>
               <h3 id="chat-widget-title" className="font-semibold text-base">
-                Live Chat
+                {selectedPlatform === "whatsapp"
+                  ? "WhatsApp Chat"
+                  : selectedPlatform === "messenger"
+                    ? "Messenger Chat"
+                    : "Live Chat"}
               </h3>
+              {selectedPlatform && (
+                <p className="text-xs text-white/80">
+                  {selectedPlatform === "whatsapp"
+                    ? businessInfo.whatsapp.status
+                    : businessInfo.messenger.status}
+                </p>
+              )}
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -261,7 +316,7 @@ const WhatsAppMessengerWidget = ({
               <Minimize2 className="w-4 h-4" />
             </button>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={handleBack}
               className="p-1 hover:bg-white/20 rounded text-white focus:outline-none focus:ring-1 focus:ring-white"
               aria-label="Close chat widget"
             >
@@ -272,103 +327,9 @@ const WhatsAppMessengerWidget = ({
 
         {!isMinimized && (
           <>
-            {/* Platform Selection */}
-            {!selectedPlatform && (
-              <div className="p-6 h-80 flex flex-col justify-center">
-                <div className="text-center mb-6">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                    How would you like to chat?
-                  </h3>
-                </div>
-
-                <div
-                  className="space-y-4"
-                  role="group"
-                  aria-label="Choose messaging platform"
-                >
-                  {/* WhatsApp Option */}
-                  <button
-                    onClick={() => handlePlatformSelect("whatsapp")}
-                    className="w-full p-4 rounded-lg border border-gray-200 hover:border-green-500 transition-all duration-200 hover:bg-green-50 group focus:outline-none focus:ring-2 focus:ring-green-500"
-                    aria-label="Start WhatsApp conversation - Usually replies within minutes"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white">
-                        <WhatsAppIcon size={20} className="text-white" />
-                      </div>
-                      <div className="text-left">
-                        <h4 className="font-semibold text-base text-gray-800">
-                          WhatsApp
-                        </h4>
-                        <p className="text-sm text-gray-600">
-                          {businessInfo.whatsapp.status}
-                        </p>
-                      </div>
-                    </div>
-                  </button>
-
-                  {/* Messenger Option */}
-                  <button
-                    onClick={() => handlePlatformSelect("messenger")}
-                    className="w-full p-4 rounded-lg border border-gray-200 hover:border-blue-500 transition-all duration-200 hover:bg-blue-50 group focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    aria-label="Start Messenger conversation - Active now"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white">
-                        <MessengerIcon size={20} className="text-white" />
-                      </div>
-                      <div className="text-left">
-                        <h4 className="font-semibold text-base text-gray-800">
-                          Messenger
-                        </h4>
-                        <p className="text-sm text-gray-600">
-                          {businessInfo.messenger.status}
-                        </p>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Rest of the chat form and success message components remain the same */}
-            {/* I'll include them but they're identical to your original code */}
-
-            {/* Selected Platform Form */}
+            {/* Chat Form - Direct to selected platform */}
             {selectedPlatform && !userInfo.submitted && (
               <div className="p-6 h-80 overflow-y-auto">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-white ${
-                        selectedPlatform === "whatsapp"
-                          ? "bg-green-500"
-                          : "bg-blue-500"
-                      }`}
-                    >
-                      {selectedPlatform === "whatsapp" ? (
-                        <WhatsAppIcon size={16} className="text-white" />
-                      ) : (
-                        <MessengerIcon size={16} className="text-white" />
-                      )}
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-base text-gray-800">
-                        {selectedPlatform === "whatsapp"
-                          ? "WhatsApp"
-                          : "Messenger"}
-                      </h4>
-                    </div>
-                  </div>
-                  <button
-                    onClick={handleBack}
-                    className="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-1 focus:ring-gray-500 rounded"
-                    aria-label="Go back to platform selection"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-
                 {/* Messages */}
                 <div
                   className="space-y-3 mb-4"
@@ -380,7 +341,7 @@ const WhatsAppMessengerWidget = ({
                       key={message.id.toString()}
                       className="flex justify-start"
                     >
-                      <div className="bg-gray-100 text-gray-800 px-3 py-2 rounded-lg ">
+                      <div className="bg-gray-100 text-gray-800 px-3 py-2 rounded-sm">
                         <p className="text-sm">{message.text}</p>
                         <p className="text-xs text-gray-500 mt-1">
                           {message.timestamp}
@@ -414,9 +375,8 @@ const WhatsAppMessengerWidget = ({
                           name: e.target.value,
                         }))
                       }
-                      className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      className="w-full px-3 py-2 text-sm border rounded-sm focus:outline-none focus:ring-2 focus:ring-current"
                       required
-                      aria-describedby="name-help"
                     />
                   </div>
                   <div>
@@ -433,7 +393,7 @@ const WhatsAppMessengerWidget = ({
                           message: e.target.value,
                         }))
                       }
-                      className="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 h-20 resize-none"
+                      className="w-full px-3 py-2 text-sm border rounded-sm focus:outline-none focus:ring-2 focus:ring-current h-20 resize-none"
                       required
                     />
                   </div>
@@ -443,11 +403,7 @@ const WhatsAppMessengerWidget = ({
                     <p className="text-sm text-gray-600 mb-2">
                       Quick messages:
                     </p>
-                    <div
-                      className="flex flex-wrap gap-2"
-                      role="group"
-                      aria-label="Quick message options"
-                    >
+                    <div className="flex flex-wrap gap-2">
                       {quickMessages.map((msg, index) => (
                         <button
                           key={index}
@@ -479,7 +435,12 @@ const WhatsAppMessengerWidget = ({
                     ) : (
                       <MessengerIcon size={16} className="text-white" />
                     )}
-                    <span>Send</span>
+                    <span>
+                      Send to{" "}
+                      {selectedPlatform === "whatsapp"
+                        ? "WhatsApp"
+                        : "Messenger"}
+                    </span>
                   </button>
                 </form>
               </div>

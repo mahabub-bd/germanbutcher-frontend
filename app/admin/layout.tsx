@@ -24,7 +24,7 @@ export default async function AdminLayout({
       <SidebarMenu user={user} />
       <div className="transition-all duration-300 ease-in-out pt-1 md:pt-0 md:pl-[250px] lg:pl-[260px]">
         <AdminHeader user={user} />
-        <main className="md:p-8 p-2">{children}</main>
+        <main className="md:p-4 p-2">{children}</main>
       </div>
     </div>
   );

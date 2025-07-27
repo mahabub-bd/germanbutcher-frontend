@@ -195,7 +195,7 @@ const RefundPolicy: React.FC = () => {
                   step: "1",
                   title: "Contact Customer Service",
                   description:
-                    "Call us at +880-1234-567890 or email support@germanbutcherbd.com to initiate a return request.",
+                    "Call us at +8809666791991 or email support@germanbutcherbd.com to initiate a return request.",
                 },
                 {
                   step: "2",
@@ -276,10 +276,10 @@ const RefundPolicy: React.FC = () => {
           </p>
           <div className="flex flex-col space-y-2 sm:flex-row sm:justify-center sm:space-x-6 sm:space-y-0">
             <a
-              href="tel:+880-1234-567890"
+              href="tel:+8809666791991"
               className="text-blue-600 hover:text-blue-800 font-medium text-sm sm:text-base"
             >
-              📞 +880-1234-567890
+              📞 +8809666791991
             </a>
             <a
               href="mailto:support@germanbutcherbd.com"

@@ -17,7 +17,7 @@ export default async function OrdersPage({
       : 10;
 
   return (
-    <div className="md:p-6 p-4  border rounded-sm">
+    <div className="md:p-4 p-2 border rounded-sm">
       <OrderList
         initialPage={page}
         initialLimit={limit}

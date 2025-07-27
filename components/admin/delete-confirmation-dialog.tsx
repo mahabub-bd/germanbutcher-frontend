@@ -10,14 +10,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Loader2 } from "lucide-react";
 import { useTransition } from "react";
-import { toast } from "sonner";
 
 const DeleteConfirmationDialog = ({
   open,
   onClose,
   onConfirm,
-  defaultToast = true,
-  toastMessage = "Successfully deleted",
 }: {
   open: boolean;
   onClose: () => void;
@@ -36,11 +33,6 @@ const DeleteConfirmationDialog = ({
     await onConfirm();
 
     onClose();
-    if (defaultToast) {
-      toast.success(toastMessage, {
-        position: "top-right",
-      });
-    }
   };
 
   return (

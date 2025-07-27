@@ -121,9 +121,9 @@ const contactMethods: ContactMethod[] = [
     icon: <Phone className="w-8 h-8 text-red-600" />,
     title: "Call Us",
     description: "Speak directly with our support team",
-    action: "+880 1234 567890",
-    href: "tel:+8801234567890",
-    available: "9 AM - 9 PM, Daily",
+    action: "+8809666791991",
+    href: "tel:+8809666791991",
+    available: "9 AM - 6 PM, Daily",
   },
   {
     icon: <MessageSquare className="w-8 h-8 text-red-600" />,

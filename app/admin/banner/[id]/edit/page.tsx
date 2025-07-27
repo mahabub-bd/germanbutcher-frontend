@@ -45,17 +45,15 @@ export default function EditBannerPage() {
   }
 
   return (
-    <div className="md:p-6 p:2 space-y-6 border rouunded-sm">
-      <div className="md:p-6 p:2">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <CardTitle>Edit Banner</CardTitle>
-            <CardDescription>Update the banner information.</CardDescription>
-          </div>
-          <Button asChild variant="outline">
-            <Link href="/admin/banner/banner-list">Back to Banners</Link>
-          </Button>
+    <div className="md:p-4 p:2 space-y-6 border rouunded-sm">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <CardTitle>Edit Banner</CardTitle>
+          <CardDescription>Update the banner information.</CardDescription>
         </div>
+        <Button asChild variant="outline">
+          <Link href="/admin/banner/banner-list">Back to Banners</Link>
+        </Button>
       </div>
 
       <BannerForm mode="edit" banner={banner} />

@@ -14,10 +14,10 @@ export default async function CategoriesPage({
   const limit =
     typeof resolvedParams.limit === "string"
       ? Number.parseInt(resolvedParams.limit)
-      : 7;
+      : 10;
 
   return (
-    <div className="p-6 space-y-6 border rounded-sm">
+    <div className="p-4 space-y-6 border rounded-sm">
       <CategoryList
         initialPage={page}
         initialLimit={limit}

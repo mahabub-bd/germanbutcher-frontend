@@ -3,7 +3,6 @@ import { BgFooter, GermanbutcherLogo } from "@/public/images";
 import Image from "next/image";
 import Link from "next/link";
 
-// Social Media Links Component
 const SocialLinks = () => {
   return (
     <div className="flex flex-wrap justify-center md:justify-start gap-3 sm:gap-4">
@@ -133,10 +132,7 @@ export default function Footer() {
                          space-y-4 sm:space-y-6 order-1"
           >
             {/* Logo Container */}
-            <div
-              className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 sm:p-6 
-                           border border-white/100 shadow-lg"
-            >
+            <div className=" p-4 sm:p-6 ">
               <Image
                 src={GermanbutcherLogo || "/placeholder.svg"}
                 alt="German Butcher Logo"
@@ -177,13 +173,6 @@ export default function Footer() {
             className="col-span-1 lg:col-span-4 flex flex-col items-center lg:items-start 
                          space-y-4 sm:space-y-6 order-2 lg:order-3"
           >
-            {/* Section Header */}
-            <div className="text-center lg:text-left">
-              <p className="font-bold text-xl sm:text-2xl text-white mb-4 sm:mb-6">
-                Contact Us
-              </p>
-            </div>
-
             {/* Contact Information */}
             <div className="space-y-4 sm:space-y-6 w-full max-w-sm lg:max-w-none">
               {contactInfo.map((info) => (

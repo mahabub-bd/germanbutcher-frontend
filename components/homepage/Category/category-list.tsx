@@ -43,7 +43,7 @@ async function CategoryGrid({ endpoint }: { endpoint: string }) {
   }
 
   return (
-    <div className="container mx-auto grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-5 sm:gap-4 md:gap-8">
+    <div className="container mx-auto grid grid-cols-4 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-2 sm:gap-4 md:gap-8">
       {categories.map((category: Category) => (
         <CategoryCard key={category?.id} category={category} />
       ))}

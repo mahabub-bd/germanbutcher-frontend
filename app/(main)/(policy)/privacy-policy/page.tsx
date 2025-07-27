@@ -281,10 +281,10 @@ const PrivacyPolicyComponent: React.FC = () => {
           </p>
           <div className="flex flex-col space-y-2 sm:flex-row sm:justify-center sm:space-x-6 sm:space-y-0">
             <a
-              href="tel:+880-1234-567890"
+              href="tel:+8809666791991"
               className="text-blue-600 hover:text-blue-800 font-medium text-sm sm:text-base"
             >
-              📞 +880-1234-567890
+              📞 +8809666791991
             </a>
             <a
               href="mailto:support@germanbutcherbd.com"
@@ -294,8 +294,8 @@ const PrivacyPolicyComponent: React.FC = () => {
             </a>
           </div>
           <p className="text-gray-500 text-xs mt-4">
-            This Privacy Policy was last updated on [Date]. We may update this
-            policy from time to time.
+            This Privacy Policy was last updated on 27 July 2025. We may update
+            this policy from time to time.
           </p>
         </div>
       </div>
