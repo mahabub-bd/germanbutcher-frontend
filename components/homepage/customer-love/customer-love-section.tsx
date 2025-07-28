@@ -29,7 +29,7 @@ export default function CustomerLoveSection({
       {/* Render children at the top if provided */}
       {children}
 
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto md:px-4 px-2">
         {/* Title */}
         {title && (
           <div className="text-center mb-12">
@@ -47,7 +47,7 @@ export default function CustomerLoveSection({
         {/* Features Grid */}
         <div
           className={cn(
-            "grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 md:gap-6 gap-4",
+            "grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 md:gap-6 gap-2",
             gridClassName
           )}
         >

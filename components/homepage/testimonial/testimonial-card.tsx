@@ -1,5 +1,5 @@
-import { Quote, Star } from 'lucide-react';
-import Image from 'next/image';
+import { Quote, Star } from "lucide-react";
+import Image from "next/image";
 
 interface TestimonialProps {
   testimonial: {
@@ -16,9 +16,9 @@ export function TestimonialCard({ testimonial }: TestimonialProps) {
   return (
     <div className="group relative">
       {/* Main card */}
-      <div className="bg-white rounded-3xl shadow-lg p-8 h-full flex flex-col transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-gray-100 relative overflow-hidden">
+      <div className="bg-white rounded-xl shadow-lg md:p-6 p-2 h-full flex flex-col transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-gray-100 relative overflow-hidden">
         {/* Background gradient on hover */}
-        <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-yellow-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-yellow-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl"></div>
 
         {/* Content */}
         <div className="relative z-10">
@@ -36,8 +36,8 @@ export function TestimonialCard({ testimonial }: TestimonialProps) {
                 key={i}
                 className={`w-5 h-5 ${
                   i < testimonial.rating
-                    ? 'text-yellow-400 fill-yellow-400'
-                    : 'text-gray-300'
+                    ? "text-yellow-400 fill-yellow-400"
+                    : "text-gray-300"
                 }`}
               />
             ))}
@@ -53,7 +53,7 @@ export function TestimonialCard({ testimonial }: TestimonialProps) {
             <div className="relative">
               <div className="w-16 h-16 rounded-full overflow-hidden mr-4 shadow-lg relative">
                 <Image
-                  src={testimonial.image || '/placeholder.svg'}
+                  src={testimonial.image || "/placeholder.svg"}
                   alt={testimonial.name}
                   width={64}
                   height={64}

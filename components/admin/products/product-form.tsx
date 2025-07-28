@@ -53,7 +53,7 @@ import { useRouter } from "next/navigation";
 import { DatePicker } from "@/components/ui/date-picker";
 import RichTextEditor from "@/components/ui/jodit-editor";
 import { productSchema } from "@/utils/form-validation";
-import { InfoBox, Section } from "../helper";
+import { Section } from "../helper";
 
 type ProductFormValues = z.infer<typeof productSchema>;
 
@@ -384,7 +384,7 @@ export function ProductForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        <div className="p-6 space-y-6">
+        <div className="space-y-6">
           <Section title="Basic Information">
             <FormField
               control={form.control}
@@ -442,7 +442,7 @@ export function ProductForm({
 
           <Section title="Product Identification">
             <div className="grid grid-cols-1 gap-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <FormField
                   control={form.control}
                   name="productSku"
@@ -507,9 +507,6 @@ export function ProductForm({
                     </FormItem>
                   )}
                 />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="supplierId"
@@ -583,9 +580,7 @@ export function ProductForm({
                     </FormItem>
                   )}
                 />
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormItem className="w-full">
                   <FormLabel>Main Category</FormLabel>
                   <Select
@@ -651,7 +646,7 @@ export function ProductForm({
           </Section>
 
           <Section title="Pricing & Inventory">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <FormField
                 control={form.control}
                 name="purchasePrice"
@@ -715,10 +710,6 @@ export function ProductForm({
                 )}
               />
             </div>
-            <InfoBox
-              title="Inventory Management"
-              description="Stock levels will automatically update when orders are processed. You can manually adjust stock levels at any time."
-            />
           </Section>
 
           <Section title="Discount">
@@ -973,7 +964,7 @@ export function ProductForm({
             </Section>
 
             <Section title="Status">
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="isActive"

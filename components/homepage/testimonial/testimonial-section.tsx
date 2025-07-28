@@ -90,7 +90,7 @@ export function TestimonialSection() {
         <div className="absolute bottom-32 right-1/3 w-24 h-24 bg-yellow-400 rounded-full"></div>
       </div>
 
-      <div className="mx-auto container px-4 relative z-10">
+      <div className="mx-auto container md:px-4 relative z-10">
         <HeadingPrimary
           title="What Our Customers Say"
           subtitle="Join thousands of satisfied customers who trust us"
@@ -111,7 +111,7 @@ export function TestimonialSection() {
               {testimonials.map((testimonial) => (
                 <div
                   key={testimonial.id}
-                  className="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-4"
+                  className="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-2"
                 >
                   <TestimonialCard testimonial={testimonial} />
                 </div>

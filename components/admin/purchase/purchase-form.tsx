@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import { Section } from "../helper";
 
+import { DatePicker } from "@/components/ui/date-picker";
 import { fetchProtectedData, patchData, postData } from "@/utils/api-utils";
 import { purchaseSchema } from "@/utils/form-validation";
 import type { Product, Purchase, Supplier } from "@/utils/types";
@@ -313,11 +314,12 @@ export function PurchaseForm({ mode, purchase }: PurchaseFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Purchase Date</FormLabel>
-                    <Input
-                      type="date"
+
+                    <DatePicker
+                      value={field.value}
+                      onChange={field.onChange}
+                      placeholder="Select Purchase Date"
                       className="w-full"
-                      value={field.value.toISOString().split("T")[0]}
-                      onChange={(e) => field.onChange(new Date(e.target.value))}
                     />
                     <FormMessage />
                   </FormItem>

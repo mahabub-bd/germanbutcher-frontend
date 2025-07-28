@@ -47,22 +47,20 @@ export default function AddProductPage() {
     return <LoadingIndicator message="Loading Products" />;
   }
   return (
-    <div className="md:p-6 p:2 space-y-6 border rouunded-sm">
-      <div className=" md:p-6 p:2">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h2 className="text-2xl font-bold">Add New Product</h2>
-            <p className="text-sm text-muted-foreground">
-              Create a new product. Fill in all the required information.
-            </p>
-          </div>
-          <Button asChild variant="outline">
-            <Link href="/admin/products/products-list">Back to Products</Link>
-          </Button>
-        </div>
+    <div className="md:p-4 p:2 space-y-6 border rouunded-sm">
+      <div className="flex justify-between items-center mb-6">
         <div>
-          <ProductForm mode="create" brands={brands} categories={categories} />
+          <h2 className="text-2xl font-bold">Add New Product</h2>
+          <p className="text-sm text-muted-foreground">
+            Create a new product. Fill in all the required information.
+          </p>
         </div>
+        <Button asChild variant="outline">
+          <Link href="/admin/products/products-list">Back to Products</Link>
+        </Button>
+      </div>
+      <div>
+        <ProductForm mode="create" brands={brands} categories={categories} />
       </div>
     </div>
   );
