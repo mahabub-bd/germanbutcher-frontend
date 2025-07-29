@@ -67,8 +67,12 @@ export function CouponForm({ coupon, mode, onSuccess }: CouponFormProps) {
       console.error("Error submitting form:", error);
       toast.error(
         mode === "create"
-          ? "Failed to create coupon. Please try again."
-          : "Failed to update coupon. Please try again."
+          ? error instanceof Error
+            ? `${error.message}`
+            : "Failed to create coupon"
+          : error instanceof Error
+            ? `${error.message}`
+            : "Failed to update coupon"
       );
     } finally {
       setIsSubmitting(false);
