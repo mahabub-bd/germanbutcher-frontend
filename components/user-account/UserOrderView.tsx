@@ -232,6 +232,8 @@ export default function UserOrderView({ order }: OrderViewProps) {
     }
     return price - Number.parseFloat(discountValue);
   };
+  console.log(order.coupon?.value);
+
   return (
     <div>
       <div className="flex flex-col space-y-6 md:p-2">
@@ -670,7 +672,10 @@ export default function UserOrderView({ order }: OrderViewProps) {
                         Product Discounts
                       </span>
                       <span className="text-sm text-green-600">
-                        -৳{orderSummary.productDiscountTotal.toLocaleString()}
+                        -
+                        {formatCurrencyEnglish(
+                          orderSummary.productDiscountTotal
+                        )}
                       </span>
                     </div>
                   )}
@@ -682,7 +687,7 @@ export default function UserOrderView({ order }: OrderViewProps) {
                         Coupon Discount ({order.coupon.code})
                       </span>
                       <span className="text-sm text-green-600">
-                        -৳{orderSummary.couponDiscount.toLocaleString()}
+                        -{formatCurrencyEnglish(order.coupon.value)}
                       </span>
                     </div>
                   )}

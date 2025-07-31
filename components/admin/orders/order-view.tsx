@@ -701,7 +701,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                     Subtotal
                   </span>
                   <span className="text-sm">
-                    {orderSummary.originalSubtotal}
+                    {formatCurrencyEnglish(orderSummary.originalSubtotal)}
                   </span>
                 </div>
                 {orderSummary.productDiscountTotal > 0 && (
@@ -711,7 +711,8 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                       Product Discounts
                     </span>
                     <span className="text-sm text-green-600">
-                      -{orderSummary.productDiscountTotal}
+                      -
+                      {formatCurrencyEnglish(orderSummary.productDiscountTotal)}
                     </span>
                   </div>
                 )}
@@ -722,7 +723,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                       Coupon Discount ({order.coupon.code})
                     </span>
                     <span className="text-sm text-green-600">
-                      -{orderSummary.couponDiscount}
+                      -{formatCurrencyEnglish(order.coupon.value)}
                     </span>
                   </div>
                 )}
@@ -730,12 +731,14 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                   <span className="text-sm text-muted-foreground">
                     Shipping
                   </span>
-                  <span className="text-sm">{orderSummary.shippingCost}</span>
+                  <span className="text-sm">
+                    {formatCurrencyEnglish(orderSummary.shippingCost)}
+                  </span>
                 </div>
                 <Separator className="my-2" />
                 <div className="flex justify-between font-medium text-base">
                   <span>Total</span>
-                  <span>{orderSummary.total}</span>
+                  <span>{formatCurrencyEnglish(orderSummary.total)}</span>
                 </div>
                 {order.paymentStatus === "pending" && (
                   <div className="flex justify-between text-red-600 text-sm">
