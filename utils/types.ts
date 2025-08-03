@@ -59,6 +59,7 @@ export interface Category {
   parentId: number | null;
   name: string;
   slug?: string;
+  order: number;
   description: string;
   isMainCategory: boolean;
   parent: Category;

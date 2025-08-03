@@ -260,6 +260,9 @@ export function CategoryList({
             <TableHead className="hidden md:table-cell">Parent</TableHead>
             <TableHead className="hidden md:table-cell">Status</TableHead>
             <TableHead className="hidden md:table-cell text-center">
+              Display Order
+            </TableHead>
+            <TableHead className="hidden md:table-cell text-center">
               Products
             </TableHead>
             <TableHead className="text-right">Actions</TableHead>
@@ -298,6 +301,9 @@ export function CategoryList({
                 <Badge variant={category.isActive ? "default" : "destructive"}>
                   {category.isActive ? "Active" : "Inactive"}
                 </Badge>
+              </TableCell>
+              <TableCell className="hidden md:table-cell text-center">
+                {category.order}
               </TableCell>
               <TableCell className="hidden md:table-cell text-center">
                 {category.products?.length || 0}

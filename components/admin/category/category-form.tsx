@@ -44,6 +44,7 @@ const categorySchema = z
     isMainCategory: z.boolean().default(false),
     parentId: z.number().nullable().optional(),
     imageUrl: z.string().optional(),
+    order: z.number().min(0, "Order must be 0 or greater").default(0),
   })
   .refine((data) => !(data.isMainCategory && data.parentId), {
     message: "Main category cannot have a parent",
@@ -76,6 +77,7 @@ export function CategoryForm({ mode, category }: CategoryFormProps) {
       isMainCategory: category?.isMainCategory ?? false,
       parentId: category?.parentId || null,
       imageUrl: category?.attachment?.url || "",
+      order: category?.order ?? 0,
     },
   });
 
@@ -170,19 +172,42 @@ export function CategoryForm({ mode, category }: CategoryFormProps) {
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <div className="p-6 space-y-6">
           <Section title="Basic Information">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter category name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Category Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter category name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="order"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Display Order</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="0"
+                        min="0"
+                        {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                        value={field.value || 0}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}
