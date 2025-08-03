@@ -419,8 +419,8 @@ export const contactInfo = [
   {
     icon: Phone,
     label: "Call Us",
-    value: "+880966791991",
-    href: "tel:+880966791991",
+    value: "+8809666791991",
+    href: "tel:+8809666791991",
   },
   {
     icon: Mail,

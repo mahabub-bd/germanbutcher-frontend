@@ -525,7 +525,7 @@ export default async function OrderConfirmationPage({
                         Coupon Discount ({order.coupon.code})
                       </span>
                       <span className="text-sm text-green-600">
-                        -{formatCurrencyEnglish(orderSummary.couponDiscount)}
+                        -{formatCurrencyEnglish(order.coupon.value)}
                       </span>
                     </div>
                   )}

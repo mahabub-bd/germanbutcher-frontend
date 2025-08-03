@@ -85,23 +85,6 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: "#666666",
   },
-  // Status Badge
-  statusContainer: {
-    alignSelf: "flex-end",
-    marginTop: 8,
-  },
-  statusBadge: {
-    backgroundColor: "#f0f9ff",
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-  },
-  statusText: {
-    fontSize: 8,
-    fontWeight: "bold",
-    textTransform: "uppercase",
-  },
   // Info Grid
   infoGrid: {
     flexDirection: "row",
@@ -113,8 +96,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fafafa",
     padding: 12,
-    borderRadius: 6,
-    borderLeftWidth: 3,
+    borderRadius: 4,
+    borderLeftWidth: 1,
     borderLeftColor: "#8B0000",
   },
   cardTitle: {
@@ -148,7 +131,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 10,
     backgroundColor: "#f8fafc",
-    borderRadius: 6,
+    borderRadius: 4,
     borderWidth: 1,
     borderColor: "#e2e8f0",
     flexWrap: "wrap",
@@ -184,7 +167,7 @@ const styles = StyleSheet.create({
   table: {
     borderWidth: 1,
     borderColor: "#d1d5db",
-    borderRadius: 6,
+    borderRadius: 4,
     overflow: "hidden",
   },
   tableHeader: {
@@ -265,7 +248,7 @@ const styles = StyleSheet.create({
   summaryCard: {
     backgroundColor: "#f8fafc",
     padding: 12,
-    borderRadius: 6,
+    borderRadius: 4,
     borderWidth: 1,
     borderColor: "#e2e8f0",
   },
@@ -457,18 +440,19 @@ export const OrderPDFDocument = ({ order }: OrderPDFProps) => {
   };
 
   const getStatusColor = (status: string | undefined): string => {
-    if (!status) return "#6b7280";
+    if (!status) return "#4b5563"; // Darker gray for better print visibility
 
     const colors: Record<string, string> = {
-      pending: "#f59e0b",
-      processing: "#3b82f6",
-      shipped: "#8b5cf6",
-      delivered: "#10b981",
-      cancelled: "#ef4444",
-      paid: "#10b981",
-      unpaid: "#ef4444",
+      pending: "#b45309", // Darker amber - better print contrast
+      processing: "#1d4ed8", // Darker blue - maintains visibility when printed
+      shipped: "#7c3aed", // Darker purple - improved print readability
+      delivered: "#059669", // Darker green - excellent print contrast
+      cancelled: "#dc2626", // Darker red - maintains urgency in print
+      paid: "#059669", // Darker green - consistent with delivered
+      unpaid: "#dc2626", // Darker red - clear indication in print
     };
-    return colors[status.toLowerCase()] || "#6b7280";
+
+    return colors[status.toLowerCase()] || "#4b5563";
   };
 
   const orderSummary = calculateOrderSummary();
@@ -488,26 +472,6 @@ export const OrderPDFDocument = ({ order }: OrderPDFProps) => {
               <Text style={styles.orderDate}>
                 {formatDateTime(order.createdAt)}
               </Text>
-            </View>
-            <View style={styles.statusContainer}>
-              <View
-                style={[
-                  styles.statusBadge,
-                  {
-                    borderColor: getStatusColor(order.orderStatus),
-                    backgroundColor: `${getStatusColor(order.orderStatus)}20`,
-                  },
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.statusText,
-                    { color: getStatusColor(order.orderStatus) },
-                  ]}
-                >
-                  {order.orderStatus || "PENDING"}
-                </Text>
-              </View>
             </View>
           </View>
         </View>
@@ -730,7 +694,7 @@ export const OrderPDFDocument = ({ order }: OrderPDFProps) => {
               <Text style={styles.contact}>
                 Email: support@germanbutcherbd.com
               </Text>
-              <Text style={styles.contact}>Phone: +880-XXX-XXXXXX</Text>
+              <Text style={styles.contact}>Phone: +8809666791991</Text>
               <Text style={styles.contact}>Web: www.germanbutcherbd.com</Text>
             </View>
             <View style={styles.footerRight}>
