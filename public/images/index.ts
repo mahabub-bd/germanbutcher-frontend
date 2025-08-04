@@ -1,4 +1,4 @@
-import GermanbutcherLogo from "@/public/images/logo3.png";
+import GermanbutcherLogo from "@/public/images/logo.webp";
 
 import AvatarImageIcon from "@/public/images/avatar/avatar-1.png";
 

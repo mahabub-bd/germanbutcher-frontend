@@ -58,7 +58,7 @@ export default async function RecipePage({
     },
   ];
   return (
-    <div className="container mx-auto px-4  ">
+    <div className="container mx-auto px-2">
       <PageBreadcrumb items={breadcrumbItems} />
       <SearchForm initialQuery={searchQuery} />
       <CategoryList
@@ -99,12 +99,12 @@ export default async function RecipePage({
               </a>
             </div>
           )}
-          <a
+          <Link
             href="/recipes"
             className="text-gray-500 hover:text-gray-700 px-3 py-1 text-sm underline"
           >
             Clear all filters
-          </a>
+          </Link>
         </div>
       )}
 

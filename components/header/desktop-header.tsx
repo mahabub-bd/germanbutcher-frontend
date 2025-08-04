@@ -15,9 +15,9 @@ export function DesktopHeader() {
               <Image
                 src={GermanbutcherLogo || "/placeholder.svg"}
                 alt="P logo"
-                width={60}
-                height={60}
-                className="w-10 h-10 lg:w-15 lg:h-15"
+                width={80}
+                height={80}
+                className="w-10 h-10 lg:w-20 lg:h-20"
               />
             </div>
           </Link>
