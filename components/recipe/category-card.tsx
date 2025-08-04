@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { Category } from '@/utils/types';
-import Image from 'next/image';
+import { Category } from "@/utils/types";
+import Image from "next/image";
 
 interface CategoryCardProps {
   category: Category;
@@ -16,25 +16,21 @@ export function CategoryCard({
 }: CategoryCardProps) {
   const handleClick = () => {
     if (onClick) {
-      onClick(category.slug || '');
+      onClick(category.slug || "");
     }
   };
 
   return (
     <div
       onClick={handleClick}
-      className={`group block rounded-lg overflow-hidden transition-all duration-300 cursor-pointer`}
+      className="group block rounded-lg overflow-hidden transition-all duration-300 cursor-pointer"
     >
       <div className="flex w-full items-center justify-center">
         <div
-          className={`relative md:w-[100px] md:h-[100px] w-[100px] h-[100px] rounded-full p-2 flex items-center justify-center  border-2 border-dashed transition-all duration-300 ${
-            isActive
-              ? 'border-secondaryColor'
-              : 'border-primaryColor group-hover:border-secondaryColor'
-          }`}
+          className={`relative md:w-[160px] md:h-[160px] w-[160px] h-[160px] rounded-full p-2 flex items-center justify-center   transition-all duration-300 `}
         >
           <Image
-            src={category?.attachment?.url || '/category-placeholder.svg'}
+            src={category?.attachment?.url || "/category-placeholder.svg"}
             alt={`${category?.name} category icon`}
             width={600}
             height={600}
@@ -44,12 +40,11 @@ export function CategoryCard({
           />
         </div>
       </div>
-
       {/* Category Name */}
       <div className="p-2 text-center">
         <h3
           className={`text-md sm:text-lg font-semibold md:text-xl transition-colors line-clamp-2 h-[50px] flex items-center justify-center ${
-            isActive ? 'text-secondaryColor' : 'text-primaryColor '
+            isActive ? "text-secondaryColor" : "text-primaryColor "
           }`}
         >
           {category?.name}

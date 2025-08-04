@@ -12,17 +12,22 @@ interface CategoryLinksProps {
   onCategoryClick?: () => void;
 }
 
-// Enhanced loading skeleton component
 function CategorySkeleton() {
   return (
     <div className="grid grid-cols-3 gap-3">
-      {Array.from({ length: 9 }).map((_, index) => (
+      {Array.from({ length: 18 }).map((_, index) => (
         <div
           key={index}
-          className="flex flex-col items-center p-3 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-100"
+          className="group flex flex-col items-center p-2 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-100 animate-pulse"
         >
-          <div className="w-14 h-14 bg-gradient-to-br from-gray-200 to-gray-300 rounded-2xl animate-pulse mb-3 shadow-sm" />
-          <div className="h-2.5 w-14 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full animate-pulse" />
+          {/* Image placeholder */}
+          <div className="w-20 h-20 rounded-full bg-gray-300 mb-3 shadow-sm relative overflow-hidden" />
+
+          {/* Text placeholder */}
+          <div className="h-4 w-20 rounded-md bg-gray-300" />
+
+          {/* Optional subtle shine effect placeholder */}
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
         </div>
       ))}
     </div>
@@ -79,10 +84,10 @@ function CategoryItem({
   return (
     <Link
       href={`/categories/${category.slug || category.id}`}
-      className="group flex flex-col items-center p-3 rounded-2xl bg-white border  border-primaryColor/20 hover:shadow-lg hover:shadow-primaryColor/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor/30 transform hover:-translate-y-1"
+      className="group flex flex-col items-center p-2   hover:shadow-primaryColor/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor/30 transform hover:-translate-y-1"
       onClick={onClick}
     >
-      <div className="w-14 h-14 relative rounded-2xl overflow-hidden mb-3 shadow-sm group-hover:shadow-md transition-shadow duration-300">
+      <div className="w-24 h-24 relative rounded-lg overflow-hidden  transition-shadow duration-300">
         {category.attachment?.url ? (
           <Image
             src={category.attachment.url || "/placeholder.svg"}
@@ -99,7 +104,7 @@ function CategoryItem({
         )}
       </div>
 
-      <h3 className="text-gray-900  h-6 font-medium text-xs text-center leading-tight group-hover:text-primaryColor transition-colors duration-200">
+      <h3 className="text-gray-900  mt-1 h-10 font-medium text-sm text-center leading-tight group-hover:text-primaryColor transition-colors duration-200">
         {category.name}
       </h3>
 
@@ -157,7 +162,7 @@ export function CategoryLinks({ onCategoryClick }: CategoryLinksProps) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-gray-900 font-bold text-xl">Categories</h2>
+        <h2 className="text-primaryColor  text-2xl font-castor">Categories</h2>
         <div className="flex items-center gap-2">
           <span className="text-xs text-gray-500 font-medium">
             {categories.length} available
