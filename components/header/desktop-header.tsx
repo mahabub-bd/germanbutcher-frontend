@@ -7,7 +7,7 @@ import UserActions from "./user-actions";
 
 export function DesktopHeader() {
   return (
-    <div className="hidden bg-gradient-to-br from-primaryColor via-[#6d0000] to-primaryColor  lg:block  py-4  ">
+    <div className="hidden bg-gradient-to-br from-primaryColor via-[#6d0000] to-primaryColor  lg:block">
       <div className="container mx-auto flex justify-between items-center  md:px-0 px-4 ">
         <div className="flex items-center">
           <Link href="/" className="flex items-center mr-6">
