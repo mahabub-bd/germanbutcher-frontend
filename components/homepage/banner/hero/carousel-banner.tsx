@@ -19,7 +19,7 @@ interface AnimatedCarouselProps {
 
 // Skeleton component for loading state
 const CarouselSkeleton = memo(() => (
-  <div className="relative overflow-hidden w-full h-[400px] sm:h-[700px] bg-gray-100 animate-pulse">
+  <div className="relative overflow-hidden w-full h-[400px] sm:h-[700px] max-h-[700px] bg-gray-100 animate-pulse">
     <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%]" />
     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
       {[...Array(3)].map((_, i) => (
@@ -65,7 +65,7 @@ const CarouselSlide = memo(
               }
               alt={slide.title}
               fill
-              className="object-cover"
+              className="object-cover object-center"
               priority={priority && index === 0}
               loading={priority && index === 0 ? "eager" : "lazy"}
               sizes="100vw"
@@ -125,7 +125,6 @@ const CarouselIndicators = memo(
         <button
           key={index}
           className={cn(
-            // Minimum 44px touch target as per WCAG guidelines
             "min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full transition-all duration-300",
             "focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black/20",
             "hover:scale-110 active:scale-95"
@@ -169,8 +168,8 @@ const ControlButton = memo(
       className={cn(
         "backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg transition-all duration-200",
         "bg-black/40 hover:bg-black/60 text-white focus:outline-none focus:ring-2 focus:ring-white/50",
-        "w-10 h-10 sm:w-12 sm:h-12", // Larger touch targets
-        "hidden sm:flex", // Hide on mobile for better UX
+        "w-10 h-10 sm:w-12 sm:h-12",
+        "hidden sm:flex",
         className
       )}
       onClick={onClick}
@@ -189,7 +188,7 @@ const ControlButton = memo(
 ControlButton.displayName = "ControlButton";
 
 export const CarouselBanner = ({
-  autoPlayInterval = 4000, // Slightly longer for better UX
+  autoPlayInterval = 4000,
   showControls = true,
   showIndicators = true,
   activeOnly = true,
@@ -246,7 +245,6 @@ export const CarouselBanner = ({
       setIsAnimating(true);
       setCurrentIndex(index);
 
-      // Optimized animation timing
       setTimeout(() => {
         setIsAnimating(false);
       }, 200);
@@ -351,7 +349,7 @@ export const CarouselBanner = ({
   // Error state
   if (error || banners.length === 0) {
     return (
-      <div className="relative overflow-hidden w-full h-[400px] sm:h-[700px] bg-gray-100 flex items-center justify-center">
+      <div className="relative overflow-hidden w-full h-[400px] sm:h-[700px] max-h-[700px] bg-gray-100 flex items-center justify-center">
         <div className="text-center p-8">
           <p className="text-gray-500 mb-4">
             {error || "No banners available"}
@@ -370,7 +368,7 @@ export const CarouselBanner = ({
 
   return (
     <section
-      className="relative overflow-hidden w-full h-[400px] sm:h-[700px] focus-within:outline-none"
+      className="relative overflow-hidden w-full h-[400px] sm:h-[700px] max-h-[700px] focus-within:outline-none"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       role="region"
