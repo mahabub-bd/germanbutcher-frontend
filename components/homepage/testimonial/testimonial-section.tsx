@@ -1,56 +1,33 @@
 "use client";
 
 import { HeadingPrimary } from "@/components/common/heading-primary";
+import { fetchData } from "@/utils/api-utils";
+import { Testimonial } from "@/utils/types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { TestimonialCard } from "./testimonial-card";
 
-const testimonials = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    role: "Loyal Customer",
-    image: "/images/avatar/av-1.jpg",
-    rating: 5,
-    text: "I've been shopping here for years and the quality never disappoints. The customer service is exceptional and delivery is always on time!",
-  },
-  {
-    id: 2,
-    name: "Michael Chen",
-    role: "First-time Buyer",
-    image: "/images/avatar/av-2.jpg",
-    rating: 5,
-    text: "As a first-time customer, I was impressed by the easy shopping experience and the quality of products. Will definitely be ordering again!",
-  },
-  {
-    id: 3,
-    name: "Emma Rodriguez",
-    role: "Regular Shopper",
-    image: "/images/avatar/av-3.jpg",
-    rating: 4,
-    text: "The product selection is amazing and the website makes it so easy to find exactly what I'm looking for. Highly recommend!",
-  },
-  {
-    id: 4,
-    name: "David Thompson",
-    role: "Tech Enthusiast",
-    image: "/images/avatar/av-4.jpg",
-    rating: 5,
-    text: "The products are top-notch and shipping is lightning fast. This has become my go-to store for all my shopping needs.",
-  },
-  {
-    id: 5,
-    name: "Priya Patel",
-    role: "Fashion Blogger",
-    image: "/images/avatar/av-5.jpg",
-    rating: 5,
-    text: "I love the curated selection and attention to detail. Every purchase feels special and the quality exceeds expectations every time.",
-  },
-];
-
 export function TestimonialSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleCount, setVisibleCount] = useState(3);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const response: Testimonial[] = await fetchData(
+          "testimonials?isPublish=true"
+        );
+        setTestimonials(response);
+      } catch (err) {
+        console.error("Error fetching testimonials:", err);
+
+        setTestimonials([]);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {

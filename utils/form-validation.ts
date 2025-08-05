@@ -267,6 +267,37 @@ const addressSchema = z.object({
   }),
   isDefault: z.boolean().default(false),
 });
+
+const testimonialSchema = z.object({
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(100, "Name must be less than 100 characters"),
+
+  role: z
+    .string()
+    .min(2, "Role must be at least 2 characters")
+    .max(100, "Role must be less than 100 characters"),
+
+  text: z
+    .string()
+    .min(10, "Testimonial text must be at least 10 characters")
+    .max(2000, "Testimonial text must be less than 2000 characters"),
+
+  rating: z
+    .number()
+    .min(1, "Rating must be at least 1 star")
+    .max(5, "Rating cannot exceed 5 stars")
+    .int("Rating must be a whole number"),
+
+  isPublish: z.boolean().default(false),
+
+  imageUrl: z
+    .string()
+    .url("Image URL must be a valid URL")
+    .optional()
+    .or(z.literal("")),
+});
 export {
   addressSchema,
   bannerSchema,
@@ -282,5 +313,6 @@ export {
   registerSchema,
   roleSchema,
   supplierSchema,
+  testimonialSchema,
   userSchema,
 };

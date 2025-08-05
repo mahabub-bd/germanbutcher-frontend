@@ -615,3 +615,18 @@ export interface PaymentStatusConfig {
   badgeClass: string;
   actionText: string;
 }
+
+// Add this to your types file (utils/types.ts)
+
+export interface Testimonial {
+  id: number;
+  name: string;
+  role: string;
+  text: string;
+  rating: number;
+  isPublish: boolean;
+  attachmentId?: string;
+  attachment: Attachment;
+  createdAt: string;
+  updatedAt: string;
+}
