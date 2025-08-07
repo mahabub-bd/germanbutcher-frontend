@@ -56,11 +56,11 @@ const MenuLink = ({ href, children }: MenuLinkProps) => (
 
 const MenuSection = ({ title, links }: MenuSectionProps) => (
   <div className="space-y-3 sm:space-y-4">
-    <p className="font-semibold text-base sm:text-lg text-white/90 mb-3 sm:mb-4 text-center md:text-left">
+    <p className="font-semibold text-base sm:text-lg text-white/90 mb-3 sm:mb-4  md:text-left">
       {title}
     </p>
     {/* Mobile: flex-wrap horizontal layout, Desktop: vertical */}
-    <div className="flex flex-wrap justify-center md:justify-start md:flex-col gap-x-4 md:gap-x-0 gap-y-2 md:gap-y-3">
+    <div className="flex flex-wrap justify-start md:flex-col gap-x-4 md:gap-x-0 gap-y-2 md:gap-y-3">
       {links.map((link) => (
         <MenuLink key={link.text} href={link.href}>
           {link.text}
@@ -124,15 +124,21 @@ export default function Footer() {
       />
 
       {/* Content */}
-      <div className="container mx-auto relative z-10 py-8 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 md:gap-12 lg:gap-16">
+      <div className="container mx-auto relative z-10 py-8  px-4 sm:px-4 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8  lg:gap-16">
           {/* Logo Section - Mobile: full width, Desktop: 20% */}
           <div
-            className="col-span-1 lg:col-span-2 flex flex-col items-center lg:items-start 
-                         space-y-4 sm:space-y-6 order-1"
+            className="
+    col-span-1 lg:col-span-2 
+    flex flex-row md:flex-col
+    items-center lg:items-start
+    justify-center
+    space-y-0 md:space-y-4
+    order-1
+  "
           >
             {/* Logo Container */}
-            <div className=" p-4 sm:p-6 ">
+            <div className="p-4 sm:p-2">
               <Image
                 src={GermanbutcherLogo || "/placeholder.svg"}
                 alt="German Butcher Logo"
