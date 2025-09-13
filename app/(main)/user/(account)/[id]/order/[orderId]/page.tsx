@@ -2,7 +2,7 @@
 
 import { LoadingIndicator } from "@/components/admin/loading-indicator";
 import UserOrderView from "@/components/user-account/UserOrderView";
-import { fetchData } from "@/utils/api-utils";
+import { fetchProtectedData } from "@/utils/api-utils";
 import { Order } from "@/utils/types";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -15,7 +15,7 @@ export default function OrderPage() {
 
   const fetchOrder = async () => {
     try {
-      const response = await fetchData<Order>(`orders/${orderId}`);
+      const response = await fetchProtectedData<Order>(`orders/${orderId}`);
       setOrder(response);
     } catch (error) {
       console.error("Error fetching order:", error);
