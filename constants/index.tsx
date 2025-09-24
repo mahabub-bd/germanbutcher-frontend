@@ -40,7 +40,7 @@ export const links: NavigationLink[] = [
   { id: "products", href: "/products", label: "Products" },
   { id: "recipes", href: "/recipes", label: "Recipe" },
   { id: "where-to-buy", href: "/where-to-buy", label: "Where to Buy" },
-  { id: "our-brands", href: "/our-brands", label: "Our Brands" },
+  // { id: "our-brands", href: "/our-brands", label: "Our Brands" },
 ];
 export const defaultFeaturesData: FeatureData[] = [
   {
@@ -160,7 +160,8 @@ export const sisterConcerns: SisterConcern[] = [
     id: 1,
     name: "Tokyo Kitchen",
     imageUrl: TokyoKitchen.src,
-    description: "Authentic Japanese cuisine featuring fresh sushi, ramen, and traditional dishes prepared by skilled chefs using premium ingredients.",
+    description:
+      "Authentic Japanese cuisine featuring fresh sushi, ramen, and traditional dishes prepared by skilled chefs using premium ingredients.",
     details: {
       established: 2014,
       concept: "Japanese-inspired restaurant under the German Butcher brand",
@@ -171,15 +172,16 @@ export const sisterConcerns: SisterConcern[] = [
         "Blends traditional culinary techniques with modern dining",
         "Quality ingredients with attention to detail",
         "Flavorful, well-balanced meals",
-        "Over a decade of consistent service"
-      ]
-    }
+        "Over a decade of consistent service",
+      ],
+    },
   },
   {
     id: 2,
     name: "Steak and Sausage",
     imageUrl: SteakandSausage.src,
-    description: "Premium steakhouse and grill specializing in high-quality cuts of meat, artisanal sausages, and hearty comfort food.",
+    description:
+      "Premium steakhouse and grill specializing in high-quality cuts of meat, artisanal sausages, and hearty comfort food.",
     details: {
       specialties: ["Premium steaks", "Artisanal sausages", "Comfort food"],
       diningExperience: "Casual premium",
@@ -187,15 +189,16 @@ export const sisterConcerns: SisterConcern[] = [
         "High-quality meat cuts",
         "Handcrafted sausage selection",
         "Hearty portions",
-        "Grill-focused menu"
-      ]
-    }
+        "Grill-focused menu",
+      ],
+    },
   },
   {
     id: 3,
     name: "Pizzerie",
     imageUrl: Pizzerie.src,
-    description: "Traditional Italian pizzeria serving wood-fired pizzas, pasta dishes, and classic Italian cuisine in a cozy atmosphere.",
+    description:
+      "Traditional Italian pizzeria serving wood-fired pizzas, pasta dishes, and classic Italian cuisine in a cozy atmosphere.",
     details: {
       cuisineType: "Traditional Italian",
       specialties: ["Wood-fired pizzas", "Pasta dishes"],
@@ -205,15 +208,16 @@ export const sisterConcerns: SisterConcern[] = [
         "Quality ingredients",
         "Handcrafted pizzas",
         "Authentic Italian flavors",
-        "Casual dining experience"
-      ]
-    }
+        "Casual dining experience",
+      ],
+    },
   },
   {
     id: 4,
     name: "German Deli",
     imageUrl: GermanDeli.src,
-    description: "Authentic German delicatessen offering traditional sausages, breads, imported cheeses, and European specialty foods.",
+    description:
+      "Authentic German delicatessen offering traditional sausages, breads, imported cheeses, and European specialty foods.",
     details: {
       concept: "Modern coffee shop and lifestyle café",
       specialties: ["German sausages", "European specialty foods", "Coffee"],
@@ -222,15 +226,16 @@ export const sisterConcerns: SisterConcern[] = [
         "Designed for comfort and conversation",
         "Perfect for relaxation",
         "Quality and consistency",
-        "Blends café culture with deli offerings"
-      ]
-    }
+        "Blends café culture with deli offerings",
+      ],
+    },
   },
   {
     id: 5,
     name: "GB Express",
     imageUrl: GBEXPRESS.src,
-    description: "Fast-casual dining experience providing quick, quality meals and convenient takeout options for busy customers.",
+    description:
+      "Fast-casual dining experience providing quick, quality meals and convenient takeout options for busy customers.",
     details: {
       concept: "Everyday affordable dining",
       businessModel: "Franchise by German Butcher",
@@ -240,27 +245,33 @@ export const sisterConcerns: SisterConcern[] = [
         "Consistent quality across outlets",
         "Accessible pricing",
         "Welcoming atmosphere",
-        "Designed for daily dining needs"
-      ]
-    }
+        "Designed for daily dining needs",
+      ],
+    },
   },
   {
     id: 6,
     name: "Tandoor",
     imageUrl: Tandoor.src,
-    description: "Authentic Indian restaurant featuring traditional tandoor-cooked dishes, aromatic curries, naan bread, and flavorful spices.",
+    description:
+      "Authentic Indian restaurant featuring traditional tandoor-cooked dishes, aromatic curries, naan bread, and flavorful spices.",
     details: {
       cuisine: "Authentic Indian",
-      specialties: ["Tandoori dishes", "Flame-grilled kababs", "Fresh naan", "Aromatic curries"],
+      specialties: [
+        "Tandoori dishes",
+        "Flame-grilled kababs",
+        "Fresh naan",
+        "Aromatic curries",
+      ],
       cookingMethods: ["Traditional tandoor cooking", "Indian spice blends"],
       keyFeatures: [
         "Bold and vibrant flavors",
         "Traditional cooking techniques",
         "Comforting dining experience",
-        "Commitment to quality and consistency"
-      ]
-    }
-  }
+        "Commitment to quality and consistency",
+      ],
+    },
+  },
 ];
 
 export const faqData: FAQItem[] = [
