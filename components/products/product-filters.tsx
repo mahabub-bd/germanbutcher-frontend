@@ -90,22 +90,26 @@ export function ProductFilters({
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [openCategories, setOpenCategories] = useState<Set<number>>(new Set());
 
-  // Organize categories into hierarchical structure
   const organizedCategories = useMemo(() => {
-    const mainCategories = categories.filter(
-      (cat) => cat.isMainCategory && !cat.parentId
-    );
-    const subCategories = categories.filter(
-      (cat) => !cat.isMainCategory && cat.parentId
-    );
+    const grouped: Record<number, Category[]> = {};
+    categories.forEach((cat) => {
+      if (cat.parentId) {
+        if (!grouped[cat.parentId]) grouped[cat.parentId] = [];
+        grouped[cat.parentId].push(cat);
+      }
+    });
+    console.log(grouped);
 
-    return mainCategories.map((mainCat) => ({
-      ...mainCat,
-      children: subCategories.filter(
-        (subCat) => subCat.parentId === mainCat.id
-      ),
-    }));
+    // Attach children to parents
+    return categories
+      .filter((cat) => !cat.parentId)
+      .map((cat) => ({
+        ...cat,
+        children: grouped[cat.id] || [],
+      }));
   }, [categories]);
+
+  console.log(organizedCategories);
 
   const activeFiltersCount = [
     currentCategory ? 1 : 0,

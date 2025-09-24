@@ -4,7 +4,7 @@ import { LoadingIndicator } from "@/components/admin/loading-indicator";
 import { SupplierForm } from "@/components/admin/supplier/supplier-form";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardTitle } from "@/components/ui/card";
-import { fetchData } from "@/utils/api-utils";
+import { fetchProtectedData } from "@/utils/api-utils";
 import { Supplier } from "@/utils/types";
 
 import Link from "next/link";
@@ -20,7 +20,9 @@ export default function EditSupplierPage() {
 
   const fetchSupplier = async () => {
     try {
-      const response = await fetchData<Supplier>(`suppliers/${supplierId}`);
+      const response = await fetchProtectedData<Supplier>(
+        `suppliers/${supplierId}`
+      );
       setSupplier(response);
     } catch (error) {
       console.error("Error fetching supplier:", error);
