@@ -1,15 +1,200 @@
 "use client";
 
 import { formatCurrencyEnglish, formatDateTime } from "@/lib/utils";
-import logo from "@/public/images/logo.webp";
 import type { Order } from "@/utils/types";
-import Image from "next/image"; // ✅ Next.js image
+import {
+  Document,
+  Image,
+  Page,
+  PDFDownloadLink,
+  StyleSheet,
+  Text,
+  View,
+} from "@react-pdf/renderer";
 
 interface PrintOrderProps {
   order: Order;
 }
 
-export function PrintOrder({ order }: PrintOrderProps) {
+// PDF Styles
+const styles = StyleSheet.create({
+  page: {
+    fontFamily: "Helvetica",
+    fontSize: 10,
+    padding: 30,
+    lineHeight: 1.4,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 20,
+    paddingBottom: 15,
+    borderBottom: "1 solid #ddd",
+  },
+  logo: {
+    width: 80,
+    height: 80,
+  },
+  companyInfo: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  companyName: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: 10,
+    color: "#666",
+  },
+  orderInfo: {
+    alignItems: "flex-end",
+  },
+  orderNumber: {
+    fontSize: 12,
+    fontWeight: "bold",
+    marginBottom: 2,
+  },
+  orderDate: {
+    fontSize: 9,
+    color: "#666",
+    marginBottom: 4,
+  },
+  orderStatus: {
+    fontSize: 10,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+  },
+  section: {
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 12,
+    fontWeight: "bold",
+    marginBottom: 6,
+    color: "#333",
+  },
+  twoColumns: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 16,
+  },
+  column: {
+    flex: 1,
+    paddingRight: 20,
+  },
+  customerInfo: {
+    fontSize: 10,
+    lineHeight: 1.4,
+  },
+  customerName: {
+    fontWeight: "bold",
+    marginBottom: 2,
+  },
+  table: {
+    display: "flex",
+    width: "100%",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    marginBottom: 12,
+  },
+  tableRow: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    borderBottomStyle: "solid",
+    alignItems: "center",
+    minHeight: 24,
+  },
+  tableHeader: {
+    backgroundColor: "#f5f5f5",
+    fontWeight: "bold",
+  },
+  tableCol1: {
+    width: "40%",
+    padding: 6,
+    borderRightWidth: 1,
+    borderRightColor: "#ddd",
+    borderRightStyle: "solid",
+  },
+  tableCol2: {
+    width: "15%",
+    padding: 6,
+    textAlign: "center",
+    borderRightWidth: 1,
+    borderRightColor: "#ddd",
+    borderRightStyle: "solid",
+  },
+  tableCol3: {
+    width: "20%",
+    padding: 6,
+    textAlign: "right",
+    borderRightWidth: 1,
+    borderRightColor: "#ddd",
+    borderRightStyle: "solid",
+  },
+  tableCol4: {
+    width: "25%",
+    padding: 6,
+    textAlign: "right",
+  },
+  productName: {
+    fontWeight: "bold",
+    marginBottom: 2,
+  },
+  productSku: {
+    fontSize: 8,
+    color: "#666",
+  },
+  summaryContainer: {
+    alignSelf: "flex-end",
+    width: 250,
+    marginTop: 10,
+  },
+  summaryRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 3,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+    borderBottomStyle: "solid",
+  },
+  summaryTotal: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 6,
+    borderTopWidth: 2,
+    borderTopColor: "#333",
+    borderTopStyle: "solid",
+    fontWeight: "bold",
+  },
+  discountText: {
+    color: "#dc2626",
+  },
+  dueAmount: {
+    fontWeight: "bold",
+  },
+  footer: {
+    position: "absolute",
+    bottom: 30,
+    left: 30,
+    right: 30,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: "#ddd",
+    borderTopStyle: "solid",
+    fontSize: 8,
+    color: "#666",
+  },
+});
+
+// PDF Document Component
+const OrderPDF = ({ order }: { order: Order }) => {
   const calculateSubtotal = () => {
     return order.items.reduce((total, item) => {
       return total + item.product.sellingPrice * item.quantity;
@@ -24,419 +209,328 @@ export function PrintOrder({ order }: PrintOrderProps) {
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "pending":
-        return "text-yellow-600";
+        return "#d97706";
       case "processing":
-        return "text-blue-600";
+        return "#2563eb";
       case "shipped":
-        return "text-purple-600";
+        return "#7c3aed";
       case "delivered":
-        return "text-green-600";
+        return "#16a34a";
       case "cancelled":
-        return "text-red-600";
+        return "#dc2626";
       default:
-        return "text-gray-600";
+        return "#4b5563";
     }
   };
 
   return (
-    <div className="print-container">
-      <style jsx global>{`
-        @media print {
-          body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-          }
-          .print-container {
-            max-width: 100%;
-            margin: 0;
-            padding: 10mm;
-            font-size: 10px;
-            line-height: 1.3;
-          }
-          .no-print {
-            display: none !important;
-          }
-          .page-break {
-            page-break-before: always;
-          }
-          .avoid-break {
-            page-break-inside: avoid;
-          }
-          .print-header {
-            margin-bottom: 15px;
-          }
-          .print-section {
-            margin-bottom: 12px;
-          }
-          .print-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 8px;
-          }
-          .print-table th,
-          .print-table td {
-            border: 1px solid #ddd;
-            padding: 4px;
-            text-align: left;
-            font-size: 9px;
-          }
-          .print-table th {
-            background-color: #f5f5f5;
-            font-weight: bold;
-          }
-          .print-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-          }
-          .print-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          }
-          .print-right {
-            text-align: right;
-          }
-          .print-bold {
-            font-weight: bold;
-          }
-          .print-small {
-            font-size: 8px;
-            color: #666;
-          }
-        }
-
-        @media screen {
-          .print-container {
-            max-width: 210mm;
-            margin: 20px auto;
-            padding: 20mm;
-            background: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            font-size: 11px;
-          }
-          .print-header {
-            margin-bottom: 20px;
-          }
-          .print-section {
-            margin-bottom: 16px;
-          }
-          .print-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 12px;
-          }
-          .print-table th,
-          .print-table td {
-            border: 1px solid #ddd;
-            padding: 6px;
-            text-align: left;
-            font-size: 10px;
-          }
-          .print-table th {
-            background-color: #f5f5f5;
-            font-weight: bold;
-          }
-          .print-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-          }
-          .print-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          }
-          .print-right {
-            text-align: right;
-          }
-          .print-bold {
-            font-weight: bold;
-          }
-          .print-small {
-            font-size: 9px;
-            color: #666;
-          }
-        }
-      `}</style>
-
-      {/* Header */}
-      <div className="print-header">
-        <div className="print-flex">
-          <div>
-            <Image src={logo} alt="Logo" width={100} height={100} />
-          </div>
-          <div>
-            <h1
-              className="print-bold"
-              style={{ fontSize: "16px", margin: "0 0 4px 0" }}
+    <Document>
+      <Page size="A4" style={styles.page}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View>
+            <Image style={styles.logo} src="../../../public/images/logo.webp" />
+          </View>
+          <View style={styles.companyInfo}>
+            <Text style={styles.companyName}>German Butcher</Text>
+            <Text style={styles.subtitle}>Order Invoice</Text>
+          </View>
+          <View style={styles.orderInfo}>
+            <Text style={styles.orderNumber}>Order #{order.orderNo}</Text>
+            <Text style={styles.orderDate}>
+              {formatDateTime(order.createdAt)}
+            </Text>
+            <Text
+              style={[
+                styles.orderStatus,
+                { color: getStatusColor(order.orderStatus) },
+              ]}
             >
-              German Butcher
-            </h1>
-            <p className="print-small" style={{ margin: 0 }}>
-              Order Invoice
-            </p>
-          </div>
-          <div className="print-right">
-            <div className="print-bold">Order #{order.orderNo}</div>
-            <div className="print-small">{formatDateTime(order.createdAt)}</div>
-            <div className={`print-bold ${getStatusColor(order.orderStatus)}`}>
               {order.orderStatus.toUpperCase()}
+            </Text>
+          </View>
+        </View>
+
+        {/* Customer & Shipping Info */}
+        <View style={styles.twoColumns}>
+          <View style={styles.column}>
+            <Text style={styles.sectionTitle}>Customer Information</Text>
+            <View style={styles.customerInfo}>
+              <Text style={styles.customerName}>{order.user.name}</Text>
+              <Text>{order.user.email}</Text>
+              <Text>{order.user.mobileNumber}</Text>
+            </View>
+          </View>
+          <View style={styles.column}>
+            <Text style={styles.sectionTitle}>Shipping Address</Text>
+            <View style={styles.customerInfo}>
+              <Text>{order.address.address}</Text>
+              <Text>
+                {order.address.area}, {order.address.city}
+              </Text>
+              <Text>{order.address.division}</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Order Items */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Order Items</Text>
+          <View style={styles.table}>
+            {/* Table Header */}
+            <View style={[styles.tableRow, styles.tableHeader]}>
+              <View style={styles.tableCol1}>
+                <Text>Product</Text>
+              </View>
+              <View style={styles.tableCol2}>
+                <Text>Qty</Text>
+              </View>
+              <View style={styles.tableCol3}>
+                <Text>Price</Text>
+              </View>
+              <View style={styles.tableCol4}>
+                <Text>Total</Text>
+              </View>
+            </View>
+
+            {/* Table Rows */}
+            {order.items.map((item) => (
+              <View style={styles.tableRow} key={item.id}>
+                <View style={styles.tableCol1}>
+                  <Text style={styles.productName}>{item.product.name}</Text>
+                  <Text style={styles.productSku}>
+                    SKU: {item.product.productSku}
+                  </Text>
+                </View>
+                <View style={styles.tableCol2}>
+                  <Text>{item.quantity}</Text>
+                </View>
+                <View style={styles.tableCol3}>
+                  <Text>
+                    {formatCurrencyEnglish(item.product.sellingPrice)}
+                  </Text>
+                </View>
+                <View style={styles.tableCol4}>
+                  <Text style={{ fontWeight: "bold" }}>
+                    {formatCurrencyEnglish(
+                      item.product.sellingPrice * item.quantity
+                    )}
+                  </Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        {/* Order Summary */}
+        <View style={styles.summaryContainer}>
+          <View style={styles.summaryRow}>
+            <Text>Subtotal:</Text>
+            <Text>{formatCurrencyEnglish(subtotal)}</Text>
+          </View>
+
+          {order.totalDiscount > 0 && (
+            <View style={styles.summaryRow}>
+              <Text style={styles.discountText}>Discount:</Text>
+              <Text style={styles.discountText}>
+                -{formatCurrencyEnglish(order.totalDiscount)}
+              </Text>
+            </View>
+          )}
+
+          <View style={styles.summaryRow}>
+            <Text>Shipping ({order.shippingMethod?.name}):</Text>
+            <Text>{formatCurrencyEnglish(shippingCost)}</Text>
+          </View>
+
+          <View style={styles.summaryTotal}>
+            <Text>Total:</Text>
+            <Text>{formatCurrencyEnglish(total)}</Text>
+          </View>
+
+          <View style={styles.summaryRow}>
+            <Text>Paid Amount:</Text>
+            <Text>{formatCurrencyEnglish(paidAmount)}</Text>
+          </View>
+
+          <View style={styles.summaryRow}>
+            <Text style={styles.dueAmount}>Due Amount:</Text>
+            <Text
+              style={[
+                styles.dueAmount,
+                { color: paidAmount >= total ? "#16a34a" : "#dc2626" },
+              ]}
+            >
+              {formatCurrencyEnglish(Math.max(0, total - paidAmount))}
+            </Text>
+          </View>
+        </View>
+
+        {/* Payment Information */}
+        <View style={styles.twoColumns}>
+          <View style={styles.column}>
+            <Text style={styles.sectionTitle}>Payment Details</Text>
+            <View style={styles.customerInfo}>
+              <Text>Method: {order.paymentMethod?.name || "N/A"}</Text>
+              <Text>
+                Status:{" "}
+                <Text style={{ color: getStatusColor(order.paymentStatus) }}>
+                  {order.paymentStatus}
+                </Text>
+              </Text>
+            </View>
+          </View>
+          <View style={styles.column}>
+            <Text style={styles.sectionTitle}>Order Summary</Text>
+            <View style={styles.customerInfo}>
+              <Text>
+                Items: {order.items.length} product
+                {order.items.length !== 1 ? "s" : ""}
+              </Text>
+              <Text>
+                Total Quantity:{" "}
+                {order.items.reduce((sum, item) => sum + item.quantity, 0)}
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Footer */}
+        <View style={styles.footer}>
+          <Text>
+            Printed on: {new Date().toLocaleDateString()} at{" "}
+            {new Date().toLocaleTimeString()}
+          </Text>
+          <Text>German Butcher - Premium Quality Meats</Text>
+        </View>
+      </Page>
+    </Document>
+  );
+};
+
+// Main Component with Download Button
+export function PrintOrder({ order }: PrintOrderProps) {
+  return (
+    <div className="print-order-container">
+      <div className="max-w-4xl mx-auto p-6 bg-white">
+        {/* Preview Section */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            Order Invoice Preview
+          </h2>
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <div>
+                <span className="font-semibold">Order #:</span> {order.orderNo}
+              </div>
+              <div>
+                <span className="font-semibold">Customer:</span>{" "}
+                {order.user.name}
+              </div>
+              <div>
+                <span className="font-semibold">Total:</span>{" "}
+                {formatCurrencyEnglish(order.totalValue)}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Customer & Shipping Info */}
-      <div className="print-grid print-section">
-        <div>
-          <h3
-            className="print-bold"
-            style={{ margin: "0 0 6px 0", fontSize: "12px" }}
+        {/* Download Button */}
+        <div className="flex justify-center space-x-4">
+          <PDFDownloadLink
+            document={<OrderPDF order={order} />}
+            fileName={`order-${order.orderNo}.pdf`}
           >
-            Customer Information
-          </h3>
-          <div>{order.user.name}</div>
-          <div className="print-small">{order.user.email}</div>
-          <div className="print-small">{order.user.mobileNumber}</div>
-        </div>
-        <div>
-          <h3
-            className="print-bold"
-            style={{ margin: "0 0 6px 0", fontSize: "12px" }}
-          >
-            Shipping Address
-          </h3>
-          <div>{order.address.address}</div>
-          <div>
-            {order.address.area}, {order.address.city}
-          </div>
-          <div>{order.address.division}</div>
-        </div>
-      </div>
-
-      {/* Order Items */}
-      <div className="print-section avoid-break">
-        <h3
-          className="print-bold"
-          style={{ margin: "0 0 8px 0", fontSize: "12px" }}
-        >
-          Order Items
-        </h3>
-        <table className="print-table">
-          <thead>
-            <tr>
-              <th style={{ width: "40%" }}>Product</th>
-              <th style={{ width: "15%", textAlign: "center" }}>Qty</th>
-              <th style={{ width: "20%", textAlign: "right" }}>Price</th>
-              <th style={{ width: "25%", textAlign: "right" }}>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {order.items.map((item) => (
-              <tr key={item.id}>
-                <td>
-                  <div className="print-bold">{item.product.name}</div>
-                  <div className="print-small">
-                    SKU: {item.product.productSku}
-                  </div>
-                </td>
-                <td style={{ textAlign: "center" }}>{item.quantity}</td>
-                <td style={{ textAlign: "right" }}>
-                  {formatCurrencyEnglish(item.product.sellingPrice)}
-                </td>
-                <td style={{ textAlign: "right" }} className="print-bold">
-                  {formatCurrencyEnglish(
-                    item.product.sellingPrice * item.quantity
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Order Summary */}
-      <div className="print-section avoid-break">
-        <div style={{ marginLeft: "auto", width: "250px" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <tr>
-              <td style={{ padding: "3px 0", borderBottom: "1px solid #eee" }}>
-                Subtotal:
-              </td>
-              <td
-                style={{
-                  padding: "3px 0",
-                  textAlign: "right",
-                  borderBottom: "1px solid #eee",
-                }}
+            {({ blob, url, loading, error }) => (
+              <button
+                className={`px-6 py-3 rounded-lg font-medium text-white transition-colors ${
+                  loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700"
+                }`}
+                disabled={loading}
               >
-                {formatCurrencyEnglish(subtotal)}
-              </td>
-            </tr>
-            {order.totalDiscount > 0 && (
-              <tr>
-                <td
-                  style={{
-                    padding: "3px 0",
-                    borderBottom: "1px solid #eee",
-                    color: "#dc2626",
-                  }}
-                >
-                  Discount:
-                </td>
-                <td
-                  style={{
-                    padding: "3px 0",
-                    textAlign: "right",
-                    borderBottom: "1px solid #eee",
-                    color: "#dc2626",
-                  }}
-                >
-                  -{formatCurrencyEnglish(order.totalDiscount)}
-                </td>
-              </tr>
+                {loading ? "Generating PDF..." : "Download PDF"}
+              </button>
             )}
-            <tr>
-              <td style={{ padding: "3px 0", borderBottom: "1px solid #eee" }}>
-                Shipping ({order.shippingMethod?.name}):
-              </td>
-              <td
-                style={{
-                  padding: "3px 0",
-                  textAlign: "right",
-                  borderBottom: "1px solid #eee",
-                }}
-              >
-                {formatCurrencyEnglish(shippingCost)}
-              </td>
-            </tr>
-            <tr>
-              <td
-                style={{
-                  padding: "6px 0",
-                  fontWeight: "bold",
-                  borderTop: "2px solid #333",
-                }}
-              >
-                Total:
-              </td>
-              <td
-                style={{
-                  padding: "6px 0",
-                  textAlign: "right",
-                  fontWeight: "bold",
-                  borderTop: "2px solid #333",
-                }}
-              >
-                {formatCurrencyEnglish(total)}
-              </td>
-            </tr>
-            <tr>
-              <td style={{ padding: "3px 0", borderBottom: "1px solid #eee" }}>
-                Paid Amount:
-              </td>
-              <td
-                style={{
-                  padding: "3px 0",
-                  textAlign: "right",
-                  borderBottom: "1px solid #eee",
-                }}
-              >
-                {formatCurrencyEnglish(paidAmount)}
-              </td>
-            </tr>
-            <tr>
-              <td style={{ padding: "3px 0" }}>Due Amount:</td>
-              <td
-                style={{
-                  padding: "3px 0",
-                  textAlign: "right",
-                  color: paidAmount >= total ? "#16a34a" : "#dc2626",
-                  fontWeight: "bold",
-                }}
-              >
-                {formatCurrencyEnglish(Math.max(0, total - paidAmount))}
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </PDFDownloadLink>
 
-      {/* Payment Information */}
-      <div className="print-grid print-section">
-        <div>
-          <h3
-            className="print-bold"
-            style={{ margin: "0 0 6px 0", fontSize: "12px" }}
+          {/* Alternative: View in Browser */}
+          <PDFDownloadLink
+            document={<OrderPDF order={order} />}
+            fileName={`order-${order.orderNo}.pdf`}
           >
-            Payment Details
-          </h3>
-          <div>Method: {order.paymentMethod?.name || "N/A"}</div>
-          <div>
-            Status:{" "}
-            <span className={getStatusColor(order.paymentStatus)}>
-              {order.paymentStatus}
-            </span>
-          </div>
+            {({ blob, url, loading, error }) => (
+              <button
+                className={`px-6 py-3 rounded-lg font-medium border transition-colors ${
+                  loading
+                    ? "border-gray-300 text-gray-400 cursor-not-allowed"
+                    : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                }`}
+                disabled={loading}
+                onClick={(e) => {
+                  if (url) {
+                    e.preventDefault();
+                    window.open(url, "_blank");
+                  }
+                }}
+              >
+                {loading ? "Generating..." : "View PDF"}
+              </button>
+            )}
+          </PDFDownloadLink>
         </div>
-        <div>
-          <h3
-            className="print-bold"
-            style={{ margin: "0 0 6px 0", fontSize: "12px" }}
-          >
-            Order Summary
-          </h3>
-          <div>
-            Items: {order.items.length} product
-            {order.items.length !== 1 ? "s" : ""}
-          </div>
-          <div>
-            Total Quantity:{" "}
-            {order.items.reduce((sum, item) => sum + item.quantity, 0)}
-          </div>
-        </div>
-      </div>
 
-      {/* Footer */}
-      <div
-        className="print-section"
-        style={{
-          marginTop: "20px",
-          paddingTop: "10px",
-          borderTop: "1px solid #ddd",
-        }}
-      >
-        <div className="print-flex">
-          <div className="print-small">
-            Printed on: {new Date().toLocaleDateString()} at{" "}
-            {new Date().toLocaleTimeString()}
+        {/* Order Details Summary */}
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h3 className="font-semibold text-gray-800 mb-3">
+              Customer Information
+            </h3>
+            <div className="space-y-1 text-sm">
+              <p>
+                <span className="font-medium">Name:</span> {order.user.name}
+              </p>
+              <p>
+                <span className="font-medium">Email:</span> {order.user.email}
+              </p>
+              <p>
+                <span className="font-medium">Phone:</span>{" "}
+                {order.user.mobileNumber}
+              </p>
+            </div>
           </div>
-          <div className="print-small">
-            German Butcher - Premium Quality Meats
+
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h3 className="font-semibold text-gray-800 mb-3">Order Status</h3>
+            <div className="space-y-1 text-sm">
+              <p>
+                <span className="font-medium">Order Status:</span>
+                <span
+                  className={`ml-2 px-2 py-1 rounded text-xs font-medium ${
+                    order.orderStatus.toLowerCase() === "delivered"
+                      ? "bg-green-100 text-green-800"
+                      : order.orderStatus.toLowerCase() === "pending"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : order.orderStatus.toLowerCase() === "cancelled"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-blue-100 text-blue-800"
+                  }`}
+                >
+                  {order.orderStatus}
+                </span>
+              </p>
+              <p>
+                <span className="font-medium">Payment Status:</span>{" "}
+                {order.paymentStatus}
+              </p>
+              <p>
+                <span className="font-medium">Date:</span>{" "}
+                {formatDateTime(order.createdAt)}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Print Button (hidden when printing) */}
-      <div
-        className="no-print"
-        style={{ textAlign: "center", marginTop: "20px" }}
-      >
-        <button
-          onClick={() => window.print()}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#3b82f6",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            fontSize: "14px",
-          }}
-        >
-          Print Order
-        </button>
       </div>
     </div>
   );
