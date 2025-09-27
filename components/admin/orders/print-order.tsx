@@ -1,7 +1,9 @@
 "use client";
 
 import { formatCurrencyEnglish, formatDateTime } from "@/lib/utils";
+import logo from "@/public/images/logo.webp";
 import type { Order } from "@/utils/types";
+import Image from "next/image"; // ✅ Next.js image
 
 interface PrintOrderProps {
   order: Order;
@@ -161,6 +163,9 @@ export function PrintOrder({ order }: PrintOrderProps) {
       {/* Header */}
       <div className="print-header">
         <div className="print-flex">
+          <div>
+            <Image src={logo} alt="Logo" width={100} height={100} />
+          </div>
           <div>
             <h1
               className="print-bold"
