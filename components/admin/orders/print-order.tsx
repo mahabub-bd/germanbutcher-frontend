@@ -441,7 +441,7 @@ export function PrintOrder({ order }: PrintOrderProps) {
             document={<OrderPDF order={order} />}
             fileName={`order-${order.orderNo}.pdf`}
           >
-            {({ blob, url, loading, error }) => (
+            {({ loading }) => (
               <button
                 className={`px-6 py-3 rounded-lg font-medium text-white transition-colors ${
                   loading
@@ -460,7 +460,7 @@ export function PrintOrder({ order }: PrintOrderProps) {
             document={<OrderPDF order={order} />}
             fileName={`order-${order.orderNo}.pdf`}
           >
-            {({ blob, url, loading, error }) => (
+            {({ url, loading }) => (
               <button
                 className={`px-6 py-3 rounded-lg font-medium border transition-colors ${
                   loading
