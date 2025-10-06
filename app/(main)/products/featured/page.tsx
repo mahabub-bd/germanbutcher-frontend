@@ -2,7 +2,7 @@ import { HeadingPrimary } from "@/components/common/heading-primary";
 import ProductList from "@/components/products/product-list";
 
 export default function FeaturesProductPage() {
-  const endpoint = "products/discounted?page=1&limit=20";
+  const endpoint = "products?page=1&limit=10&featured=true";
 
   return (
     <div className="container mx-auto">

@@ -1,13 +1,13 @@
-import { HeadingPrimary } from '@/components/common/heading-primary';
-import ProductList from '@/components/products/product-list';
+import { HeadingPrimary } from "@/components/common/heading-primary";
+import ProductList from "@/components/products/product-list";
 
 export default function PopularPage() {
   return (
     <div className="container mx-auto ">
-      <ProductList endpoint="products/discounted?page=1&limit=20">
+      <ProductList endpoint="products/bestsellers?limit=20">
         <HeadingPrimary
-          title="SPECIAL OFFERS"
-          subtitle="Limited-time deals just for you"
+          title="POPULAR PRODUCTS"
+          subtitle="Discover amazing deals on top products"
           className="mb-10"
           titleClassName="text-green-600"
         />
