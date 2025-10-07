@@ -108,15 +108,19 @@ export function CategoryFilters({
         ? MAX_PRICE
         : Number(currentPriceRange.max),
     ]);
-  }, [currentPriceRange]);
+  }, [currentPriceRange, MAX_PRICE]);
 
   useEffect(() => {
     if (currentCategory) {
       const selectedCat = categories.find(
         (cat) => cat.id.toString() === currentCategory
       );
-      if (selectedCat?.parentId) {
-        setOpenCategories((prev) => new Set([...prev, selectedCat.parentId!]));
+      if (
+        selectedCat &&
+        selectedCat.parentId !== null &&
+        selectedCat.parentId !== undefined
+      ) {
+        setOpenCategories((prev) => new Set([...prev, selectedCat.parentId as number]));
       }
     }
   }, [currentCategory, categories]);
@@ -156,14 +160,14 @@ export function CategoryFilters({
     setIsSheetOpen(false);
   };
 
-  const handleFeaturedChange = (checked: boolean) => {
-    const params = {
-      featured: checked ? "true" : null,
-      page: "1",
-    };
-    router.push(`${pathname}?${createQueryString(params)}`);
-    setIsSheetOpen(false);
-  };
+  // const handleFeaturedChange = (checked: boolean) => {
+  //   const params = {
+  //     featured: checked ? "true" : null,
+  //     page: "1",
+  //   };
+  //   router.push(`${pathname}?${createQueryString(params)}`);
+  //   setIsSheetOpen(false);
+  // };
 
   const handlePriceRangeChange = (value: string) => {
     if (!value) {
@@ -182,7 +186,7 @@ export function CategoryFilters({
     router.push(
       `${pathname}?${createQueryString({
         minPrice: min,
-        maxPrice: max === "Infinity" ? max : max,
+        maxPrice: max,
         page: "1",
       })}`
     );
@@ -233,12 +237,12 @@ export function CategoryFilters({
       ? `${currentPriceRange.min}-${currentPriceRange.max}`
       : undefined;
 
-  const currentCategoryName = currentCategory
-    ? categories.find((c) => c.id.toString() === currentCategory)?.name
-    : null;
-  const currentBrandName = currentBrand
-    ? brands.find((b) => b.id.toString() === currentBrand)?.name
-    : null;
+  // const currentCategoryName = currentCategory
+  //   ? categories.find((c) => c.id.toString() === currentCategory)?.name
+  //   : null;
+  // const currentBrandName = currentBrand
+  //   ? brands.find((b) => b.id.toString() === currentBrand)?.name
+  //   : null;
 
   const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(
     null
@@ -330,7 +334,6 @@ export function CategoryFilters({
               <div className="space-y-3 pt-2">
                 {organizedCategories.map((category) => (
                   <div key={category.id} className="space-y-2">
-                    {/* Main Category */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
                         <Checkbox
@@ -363,7 +366,6 @@ export function CategoryFilters({
                       )}
                     </div>
 
-                    {/* Subcategories - Fixed to always show when parent is open */}
                     {category.children &&
                       category.children.length > 0 &&
                       openCategories.has(category.id) && (
@@ -426,7 +428,7 @@ export function CategoryFilters({
                     onValueChange={handlePriceRangeChange}
                     className="space-y-2"
                   >
-                    {priceRanges.map((range: any) => (
+                    {priceRanges.map((range) => (
                       <div
                         key={range.label}
                         className="flex items-center space-x-2"
