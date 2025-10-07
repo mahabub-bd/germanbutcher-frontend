@@ -9,9 +9,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
@@ -30,7 +30,6 @@ import {
 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { ScrollArea } from "../ui/scroll-area";
 
 interface Category {
   id: number;
@@ -64,22 +63,14 @@ interface ProductFiltersProps {
   };
 }
 
-const PRICE_RANGES: PriceRange[] = [
-  { min: 0, max: 500, label: "Under BDT 500" },
-  { min: 500, max: 1000, label: "BDT 500 - 1,000" },
-  { min: 1000, max: 2000, label: "BDT 1,000 - 2,000" },
-  { min: 2000, max: 3000, label: "BDT 2,000 - 3,000" },
-  { min: 3000, max: 4000, label: "BDT 3,000 - 4,000" },
-  { min: 4000, max: Number.POSITIVE_INFINITY, label: "Above BDT 4,000" },
-];
-
-export function ProductFilters({
+export function CategoryFilters({
   categories,
   brands,
   currentCategory,
   currentBrand,
   currentFeatured,
   currentPriceRange,
+  priceRanges,
 }: ProductFiltersProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -91,25 +82,8 @@ export function ProductFilters({
   const [openCategories, setOpenCategories] = useState<Set<number>>(new Set());
 
   const organizedCategories = useMemo(() => {
-    const grouped: Record<number, Category[]> = {};
-    categories.forEach((cat) => {
-      if (cat.parentId) {
-        if (!grouped[cat.parentId]) grouped[cat.parentId] = [];
-        grouped[cat.parentId].push(cat);
-      }
-    });
-    console.log(grouped);
-
-    // Attach children to parents
-    return categories
-      .filter((cat) => !cat.parentId)
-      .map((cat) => ({
-        ...cat,
-        children: grouped[cat.id] || [],
-      }));
+    return categories.filter((cat) => cat.isMainCategory);
   }, [categories]);
-
-  console.log(organizedCategories);
 
   const activeFiltersCount = [
     currentCategory ? 1 : 0,
@@ -336,116 +310,6 @@ export function ProductFilters({
         )}
       </div>
 
-      {hasActiveFilters && (
-        <div className="mb-6 p-4 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/30 dark:to-rose-950/30 rounded-lg border border-red-100 dark:border-red-700 border-dashed">
-          <h4 className="text-sm font-medium mb-3 text-foreground">
-            Active Filters
-          </h4>
-          <div className="flex flex-wrap gap-2">
-            {currentCategoryName && (
-              <Badge
-                variant="outline"
-                className="flex items-center gap-1 pl-3 pr-2 py-1.5 bg-background hover:bg-muted transition-colors border-red-200 text-red-800 dark:border-red-600 dark:text-red-200"
-              >
-                <span className="text-xs font-medium">
-                  Category: {currentCategoryName}
-                </span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-4 w-4 ml-1 rounded-full hover:bg-destructive/20"
-                  onClick={() =>
-                    handleCategoryChange(Number.parseInt(currentCategory!))
-                  }
-                >
-                  <X className="h-3 w-3" />
-                  <span className="sr-only">Remove category filter</span>
-                </Button>
-              </Badge>
-            )}
-            {currentBrandName && (
-              <Badge
-                variant="outline"
-                className="flex items-center gap-1 pl-3 pr-2 py-1.5 bg-background hover:bg-muted transition-colors border-red-200 text-red-800 dark:border-red-600 dark:text-red-200"
-              >
-                <span className="text-xs font-medium">
-                  Brand: {currentBrandName}
-                </span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-4 w-4 ml-1 rounded-full hover:bg-destructive/20"
-                  onClick={() =>
-                    handleBrandChange(Number.parseInt(currentBrand!))
-                  }
-                >
-                  <X className="h-3 w-3" />
-                  <span className="sr-only">Remove brand filter</span>
-                </Button>
-              </Badge>
-            )}
-            {currentFeatured && (
-              <Badge
-                variant="outline"
-                className="flex items-center gap-1 pl-3 pr-2 py-1.5 bg-background hover:bg-muted transition-colors border-red-200 text-red-800 dark:border-red-600 dark:text-red-200"
-              >
-                <span className="text-xs font-medium">Featured Only</span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-4 w-4 ml-1 rounded-full hover:bg-destructive/20"
-                  onClick={() => handleFeaturedChange(false)}
-                >
-                  <X className="h-3 w-3" />
-                  <span className="sr-only">Remove featured filter</span>
-                </Button>
-              </Badge>
-            )}
-            {(currentPriceRange?.min || currentPriceRange?.max) && (
-              <Badge
-                variant="outline"
-                className="flex items-center gap-1 pl-3 pr-2 py-1.5 bg-background hover:bg-muted transition-colors border-red-200 text-red-800 dark:border-red-600 dark:text-red-200"
-              >
-                <span className="text-xs font-medium">
-                  Price:{" "}
-                  {currentPriceRange.min && currentPriceRange.max
-                    ? `${formatCurrencyEnglish(
-                        Number(currentPriceRange.min)
-                      )} - ${
-                        currentPriceRange.max === "Infinity"
-                          ? `${formatCurrencyEnglish(MAX_PRICE)}+`
-                          : formatCurrencyEnglish(Number(currentPriceRange.max))
-                      }`
-                    : currentPriceRange.min
-                      ? `Min ${formatCurrencyEnglish(
-                          Number(currentPriceRange.min)
-                        )}`
-                      : `Max ${formatCurrencyEnglish(
-                          Number(currentPriceRange.max)
-                        )}`}
-                </span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-4 w-4 ml-1 rounded-full hover:bg-destructive/20"
-                  onClick={() =>
-                    router.push(
-                      `${pathname}?${createQueryString({
-                        minPrice: null,
-                        maxPrice: null,
-                      })}`
-                    )
-                  }
-                >
-                  <X className="h-3 w-3" />
-                  <span className="sr-only">Remove price filter</span>
-                </Button>
-              </Badge>
-            )}
-          </div>
-        </div>
-      )}
-
       <div className="space-y-6">
         <Accordion
           type="multiple"
@@ -499,10 +363,11 @@ export function ProductFilters({
                       )}
                     </div>
 
-                    {/* Subcategories */}
-                    {category.children && category.children.length > 0 && (
-                      <Collapsible open={openCategories.has(category.id)}>
-                        <CollapsibleContent className="ml-6 space-y-2 border-l-2 border-red-100 dark:border-red-800 pl-4">
+                    {/* Subcategories - Fixed to always show when parent is open */}
+                    {category.children &&
+                      category.children.length > 0 &&
+                      openCategories.has(category.id) && (
+                        <div className="ml-6 space-y-2 border-l-2 border-red-100 dark:border-red-800 pl-4">
                           {category.children.map((subCategory) => (
                             <div
                               key={subCategory.id}
@@ -519,20 +384,20 @@ export function ProductFilters({
                               />
                               <Label
                                 htmlFor={`category-${subCategory.id}`}
-                                className="text-sm font-normal cursor-pointer text-muted-foreground"
+                                className="text-sm font-normal cursor-pointer text-muted-foreground hover:text-foreground"
                               >
                                 {subCategory.name}
                               </Label>
                             </div>
                           ))}
-                        </CollapsibleContent>
-                      </Collapsible>
-                    )}
+                        </div>
+                      )}
                   </div>
                 ))}
               </div>
             </AccordionContent>
           </AccordionItem>
+
           <AccordionItem
             value="price"
             className="border border-red-100 dark:border-red-700 rounded-lg px-4 py-2 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/30 dark:to-rose-950/30"
@@ -561,7 +426,7 @@ export function ProductFilters({
                     onValueChange={handlePriceRangeChange}
                     className="space-y-2"
                   >
-                    {PRICE_RANGES.map((range) => (
+                    {priceRanges.map((range: any) => (
                       <div
                         key={range.label}
                         className="flex items-center space-x-2"
@@ -603,7 +468,7 @@ export function ProductFilters({
                         max={MAX_PRICE}
                         step={100}
                         onValueChange={handleSliderPriceChangeWithDebounce}
-                        className="mb-6 cursor-pointer [&_[role=slider]]:bg-red-800 [&_[role=slider]]:border-red-800"
+                        className="mb-6 cursor-pointer"
                       />
 
                       <div className="flex items-center justify-between mb-4">
@@ -646,7 +511,7 @@ export function ProductFilters({
                           }}
                           variant="outline"
                           size="sm"
-                          className="px-3 hover:bg-red-50 hover:text-red-800 hover:border-red-300 dark:hover:bg-red-950/50 dark:hover:text-red-200 dark:hover:border-red-600"
+                          className="px-3"
                         >
                           Reset
                         </Button>
@@ -657,6 +522,7 @@ export function ProductFilters({
               </Tabs>
             </AccordionContent>
           </AccordionItem>
+
           <AccordionItem
             value="brands"
             className="border border-rose-100 dark:border-rose-700 rounded-lg px-4 py-2 bg-gradient-to-br from-rose-50 to-red-50 dark:from-rose-950/20 dark:to-red-950/20"
@@ -688,47 +554,33 @@ export function ProductFilters({
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-
-        {hasActiveFilters && (
-          <div className="pt-4">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={handleResetFilters}
-            >
-              Reset All Filters
-            </Button>
-          </div>
-        )}
       </div>
     </>
   );
 
   return (
     <>
-      <ScrollArea className="min-w-76 shadow-none p-2 md:flex hidden  absolute top-2">
+      <ScrollArea className="min-w-76 shadow-none p-2 md:flex hidden absolute top-2">
         <div className="p-2">
           <FilterContent />
         </div>
       </ScrollArea>
 
-      {/* Mobile view - Sheet component that slides in from the right */}
-
       <div className="md:hidden z-50">
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
             <Button
-              className="relative group shadow-xl border-0 bg-gradient-to-r from-primaryColor to-primaryColor/90 hover:from-primaryColor/90 hover:to-secondaryColor text-white font-medium px-4  rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl"
+              className="relative group shadow-xl border-0 bg-gradient-to-r from-red-800 to-red-700 hover:from-red-900 hover:to-red-800 text-white font-medium px-4 rounded-full"
               size="lg"
             >
               <div className="flex items-center gap-2">
-                <Filter className="h-4 w-4 transition-transform group-hover:rotate-12" />
+                <Filter className="h-4 w-4" />
                 <span className="text-xs font-semibold">Filters</span>
               </div>
               {hasActiveFilters && (
                 <Badge
                   variant="destructive"
-                  className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 rounded-full text-xs font-bold bg-red-500 text-white border-2 border-white animate-pulse"
+                  className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 rounded-full text-xs font-bold"
                 >
                   {activeFiltersCount}
                 </Badge>
@@ -737,7 +589,7 @@ export function ProductFilters({
           </SheetTrigger>
           <SheetContent
             side="right"
-            className="sm:max-w-md overflow-y-auto p-6 bg-red-50 dark:bg-red-950/20"
+            className="sm:max-w-md overflow-y-auto p-6"
           >
             <SheetTitle className="sr-only">Filter Menu</SheetTitle>
             <div className="py-6">

@@ -1,4 +1,4 @@
-import { ProductFilters } from "@/components/products/product-filters";
+import { CategoryFilters } from "@/components/products/filter/category-filters";
 import ProductBarList from "@/components/products/product-grid";
 import { SortBar } from "@/components/products/sort-bar";
 import { formatSlugToTitle } from "@/lib/utils";
@@ -10,7 +10,7 @@ import { ProductsBreadcrumb } from "./product-breadcrumb";
 async function fetchInitialData() {
   try {
     const [categories, brands] = await Promise.all([
-      fetchData<Category[]>("categories"),
+      fetchData<Category[]>("categories/tree"),
       fetchData<Brand[]>("brands"),
     ]);
     return { categories, brands };
@@ -21,11 +21,12 @@ async function fetchInitialData() {
 }
 
 const priceRanges = [
-  { min: 0, max: 5000, label: "Under BDT 5,000" },
-  { min: 5000, max: 10000, label: "BDT 5,000 - 10,000" },
-  { min: 10000, max: 50000, label: "BDT 10,000 - 50,000" },
-  { min: 50000, max: 100000, label: "BDT 50,000 - 100,000" },
-  { min: 100000, max: Number.POSITIVE_INFINITY, label: "Above BDT 100,000" },
+  { min: 0, max: 200, label: "Under BDT 200" },
+  { min: 200, max: 500, label: "BDT 200 - 500" },
+  { min: 500, max: 1000, label: "BDT 500 - 1,000" },
+  { min: 1000, max: 1500, label: "BDT 1,000 - 1,500" },
+  { min: 1500, max: 2000, label: "BDT 1,500 - 2,000" },
+  { min: 2000, max: Number.POSITIVE_INFINITY, label: "Above BDT 2,000" },
 ];
 
 export default async function ProductsPage({
@@ -96,7 +97,7 @@ export default async function ProductsPage({
 
       {/* Mobile Filters */}
       <div className="flex flex-row justify-between items-center gap-4  md:hidden">
-        <ProductFilters
+        <CategoryFilters
           categories={categories}
           brands={brands}
           priceRanges={priceRanges}
@@ -113,7 +114,7 @@ export default async function ProductsPage({
 
       {/* Desktop Layout */}
       <div className="hidden md:flex md:flex-row md:justify-between gap-6">
-        <ProductFilters
+        <CategoryFilters
           categories={categories}
           brands={brands}
           priceRanges={priceRanges}
