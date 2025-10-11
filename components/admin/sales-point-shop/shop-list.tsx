@@ -80,7 +80,7 @@ export function ShopList({
     getInitialParam("status") as string
   );
   const [salesPointFilter, setSalesPointFilter] = useState(
-    getInitialParam("salesPoint") as string
+    getInitialParam("salesPointId") as string
   );
   const [divisionFilter, setDivisionFilter] = useState(
     getInitialParam("division") as string
@@ -101,7 +101,7 @@ export function ShopList({
     if (statusFilter && statusFilter !== "all")
       params.set("status", statusFilter);
     if (salesPointFilter && salesPointFilter !== "all")
-      params.set("salesPoint", salesPointFilter);
+      params.set("salesPointId", salesPointFilter);
     if (divisionFilter && divisionFilter !== "all")
       params.set("division", divisionFilter);
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
