@@ -26,7 +26,9 @@ export default function AddProductPage() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetchData<Category[]>("categories");
+      const response = await fetchData<Category[]>(
+        "categories?isMainCategory=true"
+      );
       if (Array.isArray(response)) {
         setCategories(response);
       }
