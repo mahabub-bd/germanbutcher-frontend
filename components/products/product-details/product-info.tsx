@@ -8,6 +8,7 @@ import {
   Tag,
   XCircle,
 } from "lucide-react";
+import Link from "next/link";
 
 interface ProductInfoProps {
   product: Product;
@@ -64,8 +65,12 @@ export function ProductInfo({ product }: ProductInfoProps) {
   return (
     <div className="bg-white rounded-md md:p-6 p-4 shadow-sm border">
       {/* Header Section with Brand and Category */}
+
       <div className="flex flex-wrap items-center gap-2 mb-4 sm:gap-3 sm:mb-6">
-        <div className="flex items-center gap-1.5 bg-gradient-to-r from-red-50 to-pink-50 px-2.5 py-1.5 rounded-full border border-red-200 sm:gap-2 sm:px-4 sm:py-2">
+        <Link
+          href={`/brands/${product.brand.slug}`}
+          className="flex items-center gap-1.5 bg-gradient-to-r from-red-50 to-pink-50 px-2.5 py-1.5 rounded-full border border-red-200 hover:from-red-100 hover:to-pink-100 transition-all duration-200 sm:gap-2 sm:px-4 sm:py-2"
+        >
           <Tag className="w-3 h-3 text-primaryColor sm:w-4 sm:h-4" />
           <span className="text-xs font-medium text-primaryColor sm:text-sm">
             Brand:
@@ -73,9 +78,12 @@ export function ProductInfo({ product }: ProductInfoProps) {
           <span className="text-xs font-semibold text-primaryColor sm:text-sm">
             {product.brand.name}
           </span>
-        </div>
+        </Link>
 
-        <div className="flex items-center gap-1.5 bg-gradient-to-r from-gray-50 to-slate-50 px-2.5 py-1.5 rounded-full border border-gray-200 sm:gap-2 sm:px-4 sm:py-2">
+        <Link
+          href={`/categories/${product.category.slug}`}
+          className="flex items-center gap-1.5 bg-gradient-to-r from-gray-50 to-slate-50 px-2.5 py-1.5 rounded-full border border-gray-200 hover:from-gray-100 hover:to-slate-100 transition-all duration-200 sm:gap-2 sm:px-4 sm:py-2"
+        >
           <Star className="w-3 h-3 text-gray-600 sm:w-4 sm:h-4" />
           <span className="text-xs font-medium text-gray-700 sm:text-sm">
             Category:
@@ -83,7 +91,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
           <span className="text-xs font-semibold text-gray-900 sm:text-sm">
             {product.category.name}
           </span>
-        </div>
+        </Link>
       </div>
 
       {/* Product Title */}

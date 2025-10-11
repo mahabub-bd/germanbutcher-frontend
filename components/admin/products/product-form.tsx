@@ -882,12 +882,12 @@ export function ProductForm({
                             key={`existing-${index}`}
                             className="relative group"
                           >
-                            <div className="relative w-full h-24 border rounded-md overflow-hidden bg-gray-50">
+                            <div className="relative  h-32 w-32 border rounded-md overflow-hidden bg-gray-50">
                               <Image
                                 src={preview || "/placeholder.svg"}
                                 alt={`Gallery image ${index + 1}`}
                                 fill
-                                className="object-cover"
+                                className="object-contain"
                               />
                             </div>
                             <Button
