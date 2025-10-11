@@ -367,7 +367,7 @@ export function ProductList({
   };
 
   const renderTableView = () => (
-    <div className="md:p-6 p-2">
+    <div className="md:p-4 p-2">
       <Table>
         <TableHeader>
           <TableRow>
@@ -465,7 +465,7 @@ export function ProductList({
 
   return (
     <>
-      <div className="w-full md:p-6 p-2">
+      <div className="w-full md:p-4 p-2">
         <PageHeader
           title="Products"
           description="Manage your product inventory"

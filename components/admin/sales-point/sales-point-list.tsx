@@ -164,7 +164,7 @@ export function SalesPointList({
   };
 
   const renderEmptyState = () => (
-    <div className="flex flex-col items-center justify-center p-8 text-center">
+    <div className="flex flex-col items-center justify-center  text-center">
       <Store className="h-10 w-10 text-muted-foreground mb-4" />
       <h3 className="text-lg font-semibold">No sales points found</h3>
       <p className="text-sm text-muted-foreground mt-2">
@@ -232,7 +232,7 @@ export function SalesPointList({
   };
 
   const renderTableView = () => (
-    <div className="md:p-6 p-2">
+    <div className="md:p-4 p-2">
       <Table>
         <TableHeader>
           <TableRow>
@@ -345,7 +345,7 @@ export function SalesPointList({
 
   return (
     <>
-      <div className="w-full md:p-6 p-2">
+      <div className="w-full md:p-4 p-2">
         <PageHeader
           title="Sales Points"
           description="Manage your sales points and their shops"

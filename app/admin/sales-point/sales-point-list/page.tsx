@@ -16,7 +16,7 @@ export default async function SalesPointsPage({
       : 10;
 
   return (
-    <div className="p-6 space-y-6 border rounded-sm">
+    <div className=" space-y-6 border rounded-sm">
       <SalesPointList
         initialPage={page}
         initialLimit={limit}

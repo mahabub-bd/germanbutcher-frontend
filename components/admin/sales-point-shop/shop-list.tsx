@@ -93,10 +93,13 @@ export function ShopList({
   const [limit] = useState(initialLimit);
   const [totalPages, setTotalPages] = useState(1);
 
+  // Separate URL update function (like ProductList)
   const updateUrl = useCallback(() => {
     const params = new URLSearchParams();
+
     params.set("page", currentPage.toString());
     params.set("limit", limit.toString());
+
     if (searchQuery) params.set("search", searchQuery);
     if (statusFilter && statusFilter !== "all")
       params.set("status", statusFilter);
@@ -104,6 +107,7 @@ export function ShopList({
       params.set("salesPointId", salesPointFilter);
     if (divisionFilter && divisionFilter !== "all")
       params.set("division", divisionFilter);
+
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   }, [
     router,
@@ -133,6 +137,7 @@ export function ShopList({
       const params = new URLSearchParams();
       params.append("page", currentPage.toString());
       params.append("limit", limit.toString());
+
       if (searchQuery) params.append("search", searchQuery);
       if (statusFilter && statusFilter !== "all")
         params.append("status", statusFilter);
@@ -159,11 +164,13 @@ export function ShopList({
     }
   };
 
+  // Initial fetch
   useEffect(() => {
     fetchSalesPoints();
     fetchShops();
   }, []);
 
+  // Fetch and update URL when dependencies change
   useEffect(() => {
     fetchShops();
     updateUrl();
@@ -391,7 +398,7 @@ export function ShopList({
 
   return (
     <>
-      <div className="w-full md:p-6 p-2">
+      <div className="w-full md:p-4 p-2">
         <PageHeader
           title="Sales Point Shops"
           description="Manage shops for your sales points"
@@ -441,7 +448,6 @@ export function ShopList({
                       )}
                     </div>
 
-                    {/* Status Filter */}
                     <div className="space-y-2">
                       <label className="text-xs text-muted-foreground">
                         Status
@@ -491,7 +497,6 @@ export function ShopList({
                       </div>
                     </div>
 
-                    {/* Sales Point Filter */}
                     <div className="space-y-2">
                       <label className="text-xs text-muted-foreground">
                         Sales Point
@@ -520,7 +525,6 @@ export function ShopList({
                       </Select>
                     </div>
 
-                    {/* Division Filter */}
                     <div className="space-y-2">
                       <label className="text-xs text-muted-foreground">
                         Division
