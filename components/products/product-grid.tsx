@@ -148,7 +148,7 @@ export default async function ProductBarList({
   let response: PaginatedResponse;
   try {
     response = await fetchDataPagination<PaginatedResponse>(
-      `products?${params.toString()}`
+      `products?isActive=true&${params.toString()}`
     );
   } catch (error) {
     console.error("Error fetching products:", error);

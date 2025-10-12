@@ -84,7 +84,7 @@ export function ProductList({
     getInitialParam("brand") as string
   );
   const [statusFilter, setStatusFilter] = useState(
-    getInitialParam("status") as string
+    getInitialParam("isActive") as string
   );
   const [featuredFilter, setFeaturedFilter] = useState(
     getInitialParam("featured") as string
@@ -107,8 +107,8 @@ export function ProductList({
     if (categoryFilter && categoryFilter !== "all")
       params.set("category", categoryFilter);
     if (brandFilter && brandFilter !== "all") params.set("brand", brandFilter);
-    if (statusFilter && statusFilter !== "all")
-      params.set("status", statusFilter);
+    if (statusFilter && statusFilter !== "all" && statusFilter !== "")
+      params.set("isActive", statusFilter);
     if (featuredFilter && featuredFilter !== "all")
       params.set("featured", featuredFilter);
 
@@ -137,10 +137,12 @@ export function ProductList({
         params.append("category", categoryFilter);
       if (brandFilter && brandFilter !== "all")
         params.append("brand", brandFilter);
-      if (statusFilter && statusFilter !== "all")
-        params.append("status", statusFilter);
+      if (statusFilter && statusFilter !== "all" && statusFilter !== "")
+        params.append("isActive", statusFilter);
       if (featuredFilter && featuredFilter !== "all")
         params.append("featured", featuredFilter);
+
+      console.log("API URL:", `products?${params.toString()}`);
 
       const response = await fetchDataPagination<{
         data: Product[];
@@ -335,7 +337,7 @@ export function ProductList({
             variant="outline"
             className="flex items-center gap-1 px-3 py-1"
           >
-            Status: {statusFilter}
+            Status: {statusFilter === "true" ? "Active" : "Inactive"}
             <button onClick={() => setStatusFilter("")} className="ml-1">
               <XCircle className="h-3 w-3" />
             </button>
@@ -561,8 +563,8 @@ export function ProductList({
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">All Status</SelectItem>
-                          <SelectItem value="active">Active</SelectItem>
-                          <SelectItem value="inactive">Inactive</SelectItem>
+                          <SelectItem value="true">Active</SelectItem>
+                          <SelectItem value="false">Inactive</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

@@ -14,7 +14,7 @@ export default async function ProductsPage({
   const limit =
     typeof resolvedParams.limit === "string"
       ? Number.parseInt(resolvedParams.limit)
-      : 7;
+      : 10;
 
   return (
     <div className=" space-y-6 border rounded-sm">
