@@ -4,7 +4,7 @@ import { LoadingIndicator } from "@/components/admin/loading-indicator";
 import { OrderForm } from "@/components/admin/orders/order-form";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardTitle } from "@/components/ui/card";
-import { fetchData } from "@/utils/api-utils";
+import { fetchProtectedData } from "@/utils/api-utils";
 import type { Order } from "@/utils/types";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -20,7 +20,7 @@ export default function EditOrderPage() {
 
   const fetchOrder = async () => {
     try {
-      const response = await fetchData<Order>(`orders/${orderId}`);
+      const response = await fetchProtectedData<Order>(`orders/${orderId}`);
       setOrder(response);
     } catch (error) {
       console.error("Error fetching order:", error);
