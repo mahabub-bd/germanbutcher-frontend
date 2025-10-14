@@ -33,7 +33,7 @@ import {
 } from "lucide-react";
 
 export default async function DashboardPage() {
-  const products = await fetchData<Product[]>("products?limit=100");
+  const products = await fetchData<Product[]>("products?limit=300");
 
   const categories = await fetchData<Category[]>("categories");
   const brands = await fetchData<Brand[]>("brands");
