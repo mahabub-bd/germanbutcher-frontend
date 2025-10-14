@@ -152,8 +152,15 @@ export function CategoryForm({ mode, category }: CategoryFormProps) {
         toast.error(response?.message || "An error occurred");
       }
     } catch (error) {
-      console.error("Error submitting category form:", error);
-      toast.error("An unexpected error occurred");
+      toast.error(
+             mode === "create"
+               ? error instanceof Error
+                 ? `${error.message}`
+                 : "Failed to create category"
+               : error instanceof Error
+                 ? `${error.message}`
+                 : "Failed to update category"
+           );
     } finally {
       setIsSubmitting(false);
     }

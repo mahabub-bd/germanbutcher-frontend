@@ -361,7 +361,15 @@ export function ProductForm({
       }
     } catch (error) {
       console.error("Error submitting product form:", error);
-      toast.error("An unexpected error occurred");
+      toast.error(
+        mode === "create"
+          ? error instanceof Error
+            ? `${error.message}`
+            : "Failed to create product"
+          : error instanceof Error
+            ? `${error.message}`
+            : "Failed to update product"
+      );
     } finally {
       setIsSubmitting(false);
     }
