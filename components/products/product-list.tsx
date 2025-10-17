@@ -1,7 +1,7 @@
 import { ReactNode, Suspense } from "react";
 import ViewAllButton from "../homepage/Category/view-all-button";
 import ProductGrid from "./product-homepage-grid";
-import { ProductGridSkeleton } from "./product-skeleton";
+import { ProductHomepageSkeleton } from "./product-skeleton";
 
 interface ProductListProps {
   children: ReactNode;
@@ -20,7 +20,7 @@ export default function ProductList({
     <div className="container mx-auto py-4 sm:px-1 md:py-5 lg:py-10 md:px-2">
       {children}
 
-      <Suspense fallback={<ProductGridSkeleton />}>
+      <Suspense fallback={<ProductHomepageSkeleton />}>
         <ProductGrid endpoint={endpoint} />
       </Suspense>
 

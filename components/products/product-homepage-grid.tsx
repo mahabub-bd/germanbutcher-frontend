@@ -2,7 +2,11 @@ import { fetchData } from "@/utils/api-utils";
 import { Product } from "@/utils/types";
 import ProductCard from "./product-card";
 
-export default async function ProductGrid({ endpoint }: { endpoint: string }) {
+export default async function ProductHomepageGrid({
+  endpoint,
+}: {
+  endpoint: string;
+}) {
   const products: Product[] = await fetchData(endpoint);
 
   if (!products?.length) {
