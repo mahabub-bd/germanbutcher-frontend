@@ -7,7 +7,6 @@ import { PaginationComponent } from "../common/pagination";
 import ProductCard from "./product-card";
 import { ProductSkeleton } from "./product-skeleton";
 
-
 interface ProductListProps {
   filterParams: {
     limit?: string;
@@ -169,7 +168,7 @@ export default async function ProductBarList({
   const paginationUrls = generatePaginationUrls(params, response.totalPages);
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 md:px-8 py-4 md:py-5">
+    <div className="container mx-auto px-4 sm:px-4 md:px-0 py-4 md:py-5">
       {response.data && response.data.length > 0 ? (
         <>
           <Suspense fallback={<ProductSkeleton />}>
