@@ -2,7 +2,7 @@ import { SalesPartnerList } from "@/components/admin/sales-partner/sales-partner
 
 export default function SalesPartnerListPage() {
   return (
-    <div className="md:p-4 p-2 space-y-6 border rounded-sm">
+    <div className=" space-y-6 border rounded-sm">
       <SalesPartnerList />
     </div>
   );

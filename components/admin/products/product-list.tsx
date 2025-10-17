@@ -243,7 +243,7 @@ export function ProductList({
   };
 
   const renderEmptyState = () => (
-    <div className="flex flex-col items-center justify-center p-8 text-center">
+    <div className="flex flex-col items-center justify-center text-center">
       <Package className="h-10 w-10 text-muted-foreground mb-4" />
       <h3 className="text-lg font-semibold">No products found</h3>
       <p className="text-sm text-muted-foreground mt-2">
@@ -369,7 +369,7 @@ export function ProductList({
   };
 
   const renderTableView = () => (
-    <div className="md:p-4 p-2">
+    <div className=" p-2">
       <Table>
         <TableHeader>
           <TableRow>

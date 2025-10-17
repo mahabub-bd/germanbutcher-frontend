@@ -16,7 +16,7 @@ export default async function ContactMessagesPage({
       : 10;
 
   return (
-    <div className="p-6 space-y-6 border rounded-sm">
+    <div className=" space-y-6 border rounded-sm">
       <ContactMessageList
         initialPage={page}
         initialLimit={limit}

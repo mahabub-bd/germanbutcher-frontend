@@ -17,7 +17,7 @@ export default function OrderPaymentsListPage() {
   const orderId = params.id as string;
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
- 
+
   useEffect(() => {
     const fetchOrderData = async () => {
       try {
@@ -49,8 +49,8 @@ export default function OrderPaymentsListPage() {
   const remainingAmount = order.totalValue - order.paidAmount;
 
   return (
-    <div className="w-full md:p-6 p-2 border rounded-sm">
-      <div className="md:p-6 p-2">
+    <div className="w-full  border rounded-sm">
+      <div className="md:p-4 p-2">
         <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
           <div>
             <PageHeader

@@ -17,7 +17,7 @@ export default async function CategoriesPage({
       : 10;
 
   return (
-    <div className="p-4 space-y-6 border rounded-sm">
+    <div className="space-y-6 border rounded-sm">
       <CategoryList
         initialPage={page}
         initialLimit={limit}

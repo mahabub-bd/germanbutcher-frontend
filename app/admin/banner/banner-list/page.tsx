@@ -17,7 +17,7 @@ export default async function BannersPage({
       : 10;
 
   return (
-    <div className="p-4 space-y-6 border rounded-sm">
+    <div className="space-y-6 border rounded-sm">
       <BannerList
         initialPage={page}
         initialLimit={limit}

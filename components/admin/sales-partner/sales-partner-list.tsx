@@ -81,7 +81,7 @@ export function SalesPartnerList() {
   };
 
   const renderEmptyState = () => (
-    <div className="flex flex-col items-center justify-center p-8 text-center">
+    <div className="flex flex-col items-center justify-center p-2 text-center">
       <Handshake className="h-10 w-10 text-muted-foreground mb-4" />
       <h3 className="text-lg font-semibold">No sales partners found</h3>
       <p className="text-sm text-muted-foreground mt-2">
@@ -96,7 +96,7 @@ export function SalesPartnerList() {
   );
 
   const renderTableView = () => (
-    <div className="md:p-6 p-2">
+    <div>
       <Table>
         <TableHeader>
           <TableRow>

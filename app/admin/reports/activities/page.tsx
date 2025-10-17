@@ -17,7 +17,7 @@ export default async function UserActivityPage({
       : 10;
 
   return (
-    <div className="p-6 space-y-6 border rounded-sm">
+    <div className="space-y-6 border rounded-sm">
       <UserActivityList
         initialPage={page}
         initialLimit={limit}
