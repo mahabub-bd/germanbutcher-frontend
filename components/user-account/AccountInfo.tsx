@@ -120,9 +120,12 @@ function FormField({
   type = "text",
   icon: Icon,
   placeholder,
-
+  disabled = false,
   value,
 }: FormFieldProps) {
+  // If field is disabled, never allow editing
+  const canEdit = isEditing && !disabled;
+
   return (
     <div className="space-y-3">
       <div className="space-y-2">
@@ -131,11 +134,11 @@ function FormField({
             <Icon className="w-4 h-4 text-primaryColor" />
           </div>
           {label}
-          <span className="text-red-500 text-xs">*</span>
+          {!disabled && <span className="text-red-500 text-xs">*</span>}
         </label>
       </div>
 
-      {isEditing ? (
+      {canEdit ? (
         <div className="space-y-3">
           <Input
             type={type}
@@ -159,6 +162,11 @@ function FormField({
           <p className="text-sm text-gray-800 font-medium">
             {value || "Not provided"}
           </p>
+          {disabled && (
+            <span className="ml-auto text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded">
+              Cannot be changed
+            </span>
+          )}
         </div>
       )}
     </div>
@@ -434,9 +442,6 @@ export default function AccountInfo({ user }: AccountInfoProps) {
         <div className="px-4 sm:px-0 py-2 border-b">
           <div className="flex  gap-4 justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 flex items-center justify-center">
-                <UserIcon className="w-6 h-6 text-primaryColor" />
-              </div>
               <div>
                 <h2 className="text-lg font-semibold text-gray-900">
                   Personal Details
@@ -468,7 +473,7 @@ export default function AccountInfo({ user }: AccountInfoProps) {
                   type={field.type}
                   icon={field.icon}
                   placeholder={field.placeholder}
-                  disabled={field.name === "contactNumber"}
+                  disabled={field.disabled}
                   value={watch(field.name)}
                 />
               ))}

@@ -37,7 +37,7 @@ export function AddToCartButton({
     return (
       <Button
         className={cn(
-          "md:py-3 py-0 border-primaryColor border px-4 bg-gray-100 text-gray-800 rounded-sm font-semibold cursor-not-allowed transition-all duration-200",
+          "md:py-1 py-0 border-primaryColor border px-4 bg-gray-100 text-gray-800 rounded-sm font-semibold cursor-not-allowed transition-all duration-200",
           className
         )}
         disabled
@@ -53,7 +53,7 @@ export function AddToCartButton({
   return (
     <Button
       className={cn(
-        " md:py-3 py-0 px-4 bg-primaryColor hover:bg-primaryColor/90 text-white rounded-sm font-semibold transition-all duration-200 transform  hover:shadow-lg active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none group md:text-md cursor-pointer",
+        " md:py-1 py-0 px-4 bg-primaryColor hover:bg-primaryColor/90 text-white rounded-sm font-semibold transition-all duration-200 transform  hover:shadow-lg active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none group md:text-md cursor-pointer",
         className
       )}
       onClick={handleAddToCart}

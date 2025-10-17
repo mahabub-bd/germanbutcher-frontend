@@ -19,7 +19,7 @@ function ProductCardSkeleton() {
 // Grid skeleton
 function ProductGridSkeleton() {
   return (
-    <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-2 md:gap-5">
+    <div className="grid grid-cols-1 md:px-0 px-8 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-2 md:gap-5">
       {Array.from({ length: 10 }).map((_, i) => (
         <ProductCardSkeleton key={i} />
       ))}
