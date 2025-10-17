@@ -27,16 +27,16 @@ export default async function ProductCard({ product }: { product: Product }) {
   const isOutOfStock = !product?.stock;
 
   return (
-    <div className="group relative bg-white rounded-sm border border-gray-100 shadow-sm hover:shadow-xl hover:border-gray-200 transition-all duration-500 overflow-hidden">
+    <div className="group relative bg-gray-100 rounded-sm border border-gray-100 shadow-sm hover:shadow-xl hover:border-gray-200 transition-all duration-500 overflow-hidden">
       <Link href={`/product/${product?.slug}`} className="block">
         {/* Image Container */}
-        <div className="w-full h-[220px] md:h-[180px] lg:h-[220px] bg-gray-100  overflow-hidden relative md:mb-3 mb-1">
+        <div className="w-full aspect-square bg-gray-100 overflow-hidden relative mb-3">
           {product?.attachment?.url && (
             <Image
               src={product.attachment.url}
               alt={product.name}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
               loading="lazy"
               sizes="100%"
             />

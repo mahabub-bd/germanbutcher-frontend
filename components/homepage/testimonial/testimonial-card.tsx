@@ -59,7 +59,7 @@ export function TestimonialCard({ testimonial }: TestimonialProps) {
               <h1 className="font-bold text-gray-900 text-lg">
                 {testimonial.name}
               </h1>
-              <p className="text-gray-500 font-medium">{testimonial.role}</p>
+              {/* <p className="text-gray-500 font-medium">{testimonial.role}</p> */}
             </div>
           </div>
         </div>

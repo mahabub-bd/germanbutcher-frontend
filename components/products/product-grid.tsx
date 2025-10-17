@@ -168,7 +168,7 @@ export default async function ProductBarList({
   const paginationUrls = generatePaginationUrls(params, response.totalPages);
 
   return (
-    <div className="container mx-auto py-4 sm:px-1 md:py-5 md:px-0">
+    <div className="container mx-auto px-4 sm:px-6 md:px-8 py-4 md:py-5">
       {response.data && response.data.length > 0 ? (
         <>
           <Suspense fallback={<ProductGridSkeleton />}>

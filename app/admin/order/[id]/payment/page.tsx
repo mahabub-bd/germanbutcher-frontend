@@ -23,7 +23,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 
 import { formatCurrencyEnglish } from "@/lib/utils";
-import { fetchData, postData } from "@/utils/api-utils";
+import { fetchProtectedData, postData } from "@/utils/api-utils";
+import { Order } from "@/utils/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -32,53 +33,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-
-interface Order {
-  id: number;
-  orderNo: string;
-  orderStatus: string;
-  paymentStatus: string;
-  totalValue: number;
-  totalDiscount: string;
-  paidAmount: string;
-  createdAt: string;
-  updatedAt: string;
-  user: {
-    id: number;
-    name: string;
-    email: string;
-    mobileNumber: string;
-  };
-  items: Array<{
-    id: number;
-    productId: number;
-    quantity: number;
-    product: {
-      id: number;
-      name: string;
-      sellingPrice: number;
-      attachment?: {
-        url: string;
-      };
-    };
-  }>;
-  payments: Payment[];
-}
-
-interface Payment {
-  id: number;
-  paymentNumber: string;
-  amount: string;
-  paymentDate: string;
-  sslPaymentId: string | null;
-  createdAt: string;
-  updatedAt: string;
-  paymentMethod: PaymentMethod;
-  createdBy: {
-    id: number;
-    name: string;
-  };
-}
 
 interface PaymentMethod {
   id: number;
@@ -121,15 +75,14 @@ export default function AddOrderPaymentPage() {
       try {
         setLoading(true);
         const [orderData, methodsData] = await Promise.all([
-          fetchData<Order>(`orders/${orderId}`).then((res) => res),
-          fetchData<PaymentMethod[]>("order-payment-methods"),
+          fetchProtectedData<Order>(`orders/${orderId}`).then((res) => res),
+          fetchProtectedData<PaymentMethod[]>("order-payment-methods"),
         ]);
 
         setOrder(orderData);
         setPaymentMethods(methodsData);
 
-        const remainingAmount =
-          orderData.totalValue - Number.parseFloat(orderData.paidAmount);
+        const remainingAmount = orderData.totalValue - orderData.paidAmount;
         form.setValue("amount", remainingAmount.toFixed(2));
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -156,7 +109,7 @@ export default function AddOrderPaymentPage() {
       await postData(`orders/${orderId}/payments`, paymentData);
 
       toast.success("Payment has been recorded successfully");
-      router.push(`/admin/order/${orderId}/payments`);
+      router.push(`/admin/orders`);
     } catch (error) {
       console.error("Error submitting payment:", error);
       toast("Failed to record payment");
@@ -177,8 +130,7 @@ export default function AddOrderPaymentPage() {
     );
   }
 
-  const remainingAmount =
-    order.totalValue - Number.parseFloat(order.paidAmount);
+  const remainingAmount = order.totalValue - order.paidAmount;
 
   return (
     <div className=" mx-auto p-6 space-y-6">
