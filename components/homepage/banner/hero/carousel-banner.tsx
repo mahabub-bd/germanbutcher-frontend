@@ -209,7 +209,9 @@ export const CarouselBanner = ({
         setIsLoading(true);
         setError(null);
 
-        const response = (await fetchDataPagination("banners")) as {
+        const response = (await fetchDataPagination(
+          "banners?type=main&position=top"
+        )) as {
           data: Banner[];
         };
 
@@ -368,7 +370,7 @@ export const CarouselBanner = ({
 
   return (
     <section
-      className="relative overflow-hidden w-full h-[400px] sm:h-[700px] max-h-[700px] focus-within:outline-none"
+      className="relative  w-full h-[500px] sm:h-[500px] max-h-[500px] focus-within:outline-none"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       role="region"

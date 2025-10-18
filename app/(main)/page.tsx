@@ -1,4 +1,5 @@
 import { HeadingPrimary } from "@/components/common/heading-primary";
+import PromotionalCarousel from "@/components/homepage/banner/hero/add/promotional-banner";
 import CarouselBanner from "@/components/homepage/banner/hero/carousel-banner";
 import BrandList from "@/components/homepage/brands/brand-list";
 import CategoryList from "@/components/homepage/Category/category-list";
@@ -16,7 +17,14 @@ export default function Home() {
       <div>
         <CarouselBanner />
       </div>
-
+      <div className="py-5">
+        <PromotionalCarousel
+          imagesPerSlide={2}
+          autoPlayInterval={4000}
+          showControls={true}
+          showIndicators={true}
+        />
+      </div>
       {/* Categories Section */}
       <section className="md:pt-18 pt-5 ">
         <CategoryList endpoint="categories?isMainCategory=true">
