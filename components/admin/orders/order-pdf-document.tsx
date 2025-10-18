@@ -1,5 +1,4 @@
 import { formatDateTime } from "@/lib/utils";
-import { GermanbutcherLogo } from "@/public/images";
 import type { Order, OrderItem } from "@/utils/types";
 import {
   Document,
@@ -11,27 +10,28 @@ import {
 } from "@react-pdf/renderer";
 
 const formatCurrency = (amount: number): string => {
-  return `BDT ${amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `BDT ${amount.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
 };
 
 const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
     backgroundColor: "#ffffff",
-    padding: 36,
-    fontSize: 10,
-    lineHeight: 1.3,
+    padding: 32,
+    fontSize: 9,
+    lineHeight: 1.25,
     color: "#333333",
-    position: "relative",
-    minHeight: "100%",
   },
   // Header Section
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    marginBottom: 25,
-    paddingBottom: 15,
+    marginBottom: 16,
+    paddingBottom: 10,
     borderBottomWidth: 2,
     borderBottomColor: "#8B0000",
   },
@@ -40,154 +40,135 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 80,
-    height: 80,
-    marginRight: 12,
+    width: 60,
+    height: 60,
+    marginRight: 10,
     objectFit: "contain",
-  },
-  companyInfo: {
-    flexDirection: "column",
-  },
-  companyName: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#8B0000",
-    marginBottom: 2,
-  },
-  companyTagline: {
-    fontSize: 8,
-    color: "#666666",
-    fontStyle: "italic",
   },
   invoiceHeader: {
     alignItems: "flex-end",
   },
   invoiceTitle: {
-    fontSize: 22,
+    fontSize: 19,
     fontWeight: "bold",
     color: "#8B0000",
-    marginBottom: 5,
+    marginBottom: 4,
   },
   orderDetails: {
+    marginTop: 10,
     alignItems: "flex-end",
-    paddingTop: 8,
-    paddingBottom: 8,
   },
   orderNumber: {
-    fontSize: 11,
+    fontSize: 10,
     color: "#333333",
     fontWeight: "bold",
     marginBottom: 2,
-    paddingTop: 4,
-    paddingBottom: 4,
   },
   orderDate: {
-    fontSize: 9,
+    fontSize: 8,
+    marginTop: 10,
     color: "#666666",
   },
   // Info Grid
   infoGrid: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 20,
-    gap: 15,
+    marginBottom: 12,
+    gap: 10,
   },
   infoCard: {
     flex: 1,
     backgroundColor: "#fafafa",
-    padding: 12,
-    borderRadius: 4,
-    borderLeftWidth: 1,
+    padding: 9,
+    borderRadius: 3,
+    borderLeftWidth: 2,
     borderLeftColor: "#8B0000",
   },
   cardTitle: {
-    fontSize: 11,
+    fontSize: 9,
     fontWeight: "bold",
     color: "#8B0000",
-    marginBottom: 8,
+    marginBottom: 5,
+    textTransform: "uppercase",
   },
   infoRow: {
     flexDirection: "row",
-    marginBottom: 3,
-    flexWrap: "wrap",
+    marginBottom: 2.5,
   },
   label: {
-    fontSize: 8,
+    fontSize: 7.5,
     color: "#666666",
-    width: 70,
-    textTransform: "uppercase",
+    width: 65,
+    fontWeight: "bold",
   },
   value: {
-    fontSize: 9,
+    fontSize: 8,
     color: "#333333",
     flex: 1,
-    fontWeight: "500",
-    flexWrap: "wrap",
   },
   // Order Status Section
   statusSection: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 20,
-    padding: 10,
+    marginBottom: 12,
+    padding: 8,
     backgroundColor: "#f8fafc",
-    borderRadius: 4,
+    borderRadius: 3,
     borderWidth: 1,
     borderColor: "#e2e8f0",
-    flexWrap: "wrap",
   },
   statusItem: {
     alignItems: "center",
-    minWidth: "20%",
+    flex: 1,
   },
   statusLabel: {
-    fontSize: 8,
+    fontSize: 6.5,
     color: "#64748b",
     textTransform: "uppercase",
-    marginBottom: 2,
+    marginBottom: 2.5,
+    letterSpacing: 0.3,
   },
   statusValue: {
-    fontSize: 10,
+    fontSize: 8.5,
     fontWeight: "bold",
     color: "#1e293b",
   },
   // Table Section
   tableSection: {
-    marginBottom: 20,
+    marginBottom: 12,
   },
   tableTitle: {
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: "bold",
     color: "#8B0000",
-    marginBottom: 10,
-    paddingBottom: 5,
+    marginBottom: 7,
+    paddingBottom: 3,
     borderBottomWidth: 1,
     borderBottomColor: "#e5e7eb",
+    textTransform: "uppercase",
   },
   table: {
     borderWidth: 1,
     borderColor: "#d1d5db",
-    borderRadius: 4,
-    overflow: "hidden",
   },
   tableHeader: {
     flexDirection: "row",
     backgroundColor: "#8B0000",
-    padding: 8,
+    padding: 6,
   },
   tableHeaderText: {
-    fontSize: 9,
+    fontSize: 8,
     fontWeight: "bold",
     color: "#ffffff",
     textTransform: "uppercase",
   },
   tableRow: {
     flexDirection: "row",
-    padding: 8,
+    padding: 6,
     borderBottomWidth: 1,
     borderBottomColor: "#e5e7eb",
-    backgroundColor: "#ffffff",
-    minHeight: 40,
+    minHeight: 30,
+    alignItems: "center",
   },
   tableRowAlt: {
     backgroundColor: "#f9fafb",
@@ -195,22 +176,21 @@ const styles = StyleSheet.create({
   tableCell: {
     fontSize: 8,
     color: "#374151",
-    flexWrap: "wrap",
   },
   productCell: {
-    flex: 4,
-    paddingRight: 8,
+    flex: 3,
+    paddingRight: 6,
   },
   quantityCell: {
-    flex: 1,
+    flex: 0.8,
     textAlign: "center",
   },
   priceCell: {
-    flex: 1.5,
+    flex: 1.2,
     textAlign: "right",
   },
   totalCell: {
-    flex: 1.5,
+    flex: 1.2,
     textAlign: "right",
   },
   productName: {
@@ -218,36 +198,26 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#1f2937",
     marginBottom: 2,
-    flexWrap: "wrap",
   },
   productSku: {
     fontSize: 7,
     color: "#6b7280",
-    marginBottom: 2,
-    flexWrap: "wrap",
   },
-  discountBadge: {
-    backgroundColor: "#dcfce7",
-    borderRadius: 8,
-    paddingHorizontal: 4,
-    paddingVertical: 1,
-    alignSelf: "flex-start",
-    marginTop: 2,
-  },
-  discountText: {
-    fontSize: 6,
-    color: "#16a34a",
-    fontWeight: "bold",
+  strikethrough: {
+    fontSize: 7,
+    color: "#9ca3af",
+    textDecoration: "line-through",
   },
   // Summary Section
   summaryContainer: {
     alignSelf: "flex-end",
-    width: "50%",
-    marginTop: 15,
+    width: "45%",
+    marginTop: 10,
+    marginBottom: 20,
   },
   summaryCard: {
     backgroundColor: "#f8fafc",
-    padding: 12,
+    padding: 10,
     borderRadius: 4,
     borderWidth: 1,
     borderColor: "#e2e8f0",
@@ -256,18 +226,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingVertical: 2,
-    flexWrap: "wrap",
   },
   summaryLabel: {
     fontSize: 9,
     color: "#64748b",
-    flex: 1,
   },
   summaryValue: {
     fontSize: 9,
     color: "#1e293b",
     fontWeight: "500",
-    textAlign: "right",
   },
   discountValue: {
     color: "#059669",
@@ -276,32 +243,32 @@ const styles = StyleSheet.create({
   summaryDivider: {
     height: 1,
     backgroundColor: "#cbd5e1",
-    marginVertical: 8,
+    marginVertical: 6,
   },
   summaryTotal: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingVertical: 8,
-    paddingHorizontal: 8,
+    paddingHorizontal: 10,
     marginTop: 5,
     backgroundColor: "#8B0000",
     borderRadius: 4,
   },
   totalLabel: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: "bold",
     color: "#ffffff",
   },
   totalValue: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "bold",
     color: "#ffffff",
   },
   dueAmount: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 4,
-    paddingHorizontal: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
     marginTop: 4,
     backgroundColor: "#fef2f2",
     borderRadius: 4,
@@ -318,23 +285,16 @@ const styles = StyleSheet.create({
     color: "#dc2626",
     fontWeight: "bold",
   },
-  // Footer Section
-  footerContainer: {
-    position: "absolute",
-    bottom: 36,
-    left: 36,
-    right: 36,
-  },
-  footerDivider: {
-    height: 1,
-    backgroundColor: "#e5e7eb",
-    marginBottom: 10,
-  },
+  // Footer Section - CHANGED: Removed absolute positioning
   footer: {
+    marginTop: 30,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: "#e5e7eb",
+  },
+  footerContent: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    flexWrap: "wrap",
   },
   footerLeft: {
     flex: 1,
@@ -343,13 +303,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: "bold",
     color: "#8B0000",
-    marginBottom: 2,
+    marginBottom: 3,
   },
   contact: {
     fontSize: 8,
     color: "#6b7280",
-    marginBottom: 1,
-    flexWrap: "wrap",
+    marginBottom: 2,
   },
   footerRight: {
     alignItems: "flex-end",
@@ -357,25 +316,6 @@ const styles = StyleSheet.create({
   printDate: {
     fontSize: 7,
     color: "#9ca3af",
-  },
-  signature: {
-    marginTop: 5,
-    fontSize: 8,
-    color: "#6b7280",
-  },
-
-  wordWrap: {
-    wordWrap: "break-word",
-    overflow: "hidden",
-  },
-  noBreak: {
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-  },
-  image: {
-    width: 45,
-    height: 45,
-    marginRight: 12,
   },
 });
 
@@ -440,16 +380,16 @@ export const OrderPDFDocument = ({ order }: OrderPDFProps) => {
   };
 
   const getStatusColor = (status: string | undefined): string => {
-    if (!status) return "#4b5563"; // Darker gray for better print visibility
+    if (!status) return "#4b5563";
 
     const colors: Record<string, string> = {
-      pending: "#b45309", // Darker amber - better print contrast
-      processing: "#1d4ed8", // Darker blue - maintains visibility when printed
-      shipped: "#7c3aed", // Darker purple - improved print readability
-      delivered: "#059669", // Darker green - excellent print contrast
-      cancelled: "#dc2626", // Darker red - maintains urgency in print
-      paid: "#059669", // Darker green - consistent with delivered
-      unpaid: "#dc2626", // Darker red - clear indication in print
+      pending: "#b45309",
+      processing: "#1d4ed8",
+      shipped: "#7c3aed",
+      delivered: "#059669",
+      cancelled: "#dc2626",
+      paid: "#059669",
+      unpaid: "#dc2626",
     };
 
     return colors[status.toLowerCase()] || "#4b5563";
@@ -463,7 +403,7 @@ export const OrderPDFDocument = ({ order }: OrderPDFProps) => {
         {/* Header with Logo */}
         <View style={styles.header}>
           <View style={styles.logoSection}>
-            <Image style={styles.logo} src={GermanbutcherLogo.src} />
+            <Image style={styles.logo} src="/images/logo3.png" />
           </View>
           <View style={styles.invoiceHeader}>
             <Text style={styles.invoiceTitle}>INVOICE</Text>
@@ -588,7 +528,7 @@ export const OrderPDFDocument = ({ order }: OrderPDFProps) => {
                 item.product?.discountValue && item.product.discountValue > 0;
 
               return (
-                <View key={item.id || index} style={styles.tableRow}>
+                <View key={item.id || index} style={[styles.tableRow]}>
                   <View style={[styles.tableCell, styles.productCell]}>
                     <Text style={styles.productName}>
                       {item.product?.name || "N/A"}
@@ -600,21 +540,14 @@ export const OrderPDFDocument = ({ order }: OrderPDFProps) => {
                   <Text style={[styles.tableCell, styles.quantityCell]}>
                     {item.quantity || 0}
                   </Text>
-                  <Text style={[styles.tableCell, styles.priceCell]}>
+                  <View style={[styles.tableCell, styles.priceCell]}>
                     {hasDiscount && (
-                      <Text
-                        style={{
-                          fontSize: 7,
-                          color: "#9ca3af",
-                          textDecoration: "line-through",
-                        }}
-                      >
+                      <Text style={styles.strikethrough}>
                         {formatCurrency(item.product?.sellingPrice || 0)}
-                        {"\n"}
                       </Text>
                     )}
-                    {formatCurrency(discountedPrice)}
-                  </Text>
+                    <Text>{formatCurrency(discountedPrice)}</Text>
+                  </View>
                   <Text
                     style={[
                       styles.tableCell,
@@ -683,10 +616,9 @@ export const OrderPDFDocument = ({ order }: OrderPDFProps) => {
           )}
         </View>
 
-        {/* Footer */}
-        <View style={styles.footerContainer}>
-          <View style={styles.footerDivider} />
-          <View style={styles.footer}>
+        {/* Footer - Now flows naturally with content */}
+        <View style={styles.footer}>
+          <View style={styles.footerContent}>
             <View style={styles.footerLeft}>
               <Text style={styles.thankYou}>
                 Thank you for choosing German Butcher

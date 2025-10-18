@@ -36,7 +36,9 @@ export default async function ProductCard({ product }: { product: Product }) {
               src={product.attachment.url}
               alt={product.name}
               fill
-              className="w-full  object-cover h-full transition-transform duration-300 group-hover:scale-105"
+              className={`w-full object-cover h-full transition-all duration-300 group-hover:scale-105 ${
+                isOutOfStock ? "grayscale" : ""
+              }`}
               loading="lazy"
               sizes="100%"
             />
@@ -47,7 +49,7 @@ export default async function ProductCard({ product }: { product: Product }) {
 
           {/* Out of Stock Overlay */}
           {isOutOfStock && (
-            <div className="absolute inset-0 bg-black/10 flex items-center justify-center backdrop-blur-xs">
+            <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
               <Badge
                 variant="destructive"
                 className="text-sm font-semibold px-4 py-2 rounded-full"
@@ -57,7 +59,7 @@ export default async function ProductCard({ product }: { product: Product }) {
             </div>
           )}
 
-          {/* Minimalist Clean Version */}
+          {/* Discount Badge */}
           {isDiscountActive &&
             product.discountType &&
             product.discountValue && (
@@ -65,13 +67,13 @@ export default async function ProductCard({ product }: { product: Product }) {
                 <div className="relative w-16 h-16">
                   <div className="absolute inset-2 bg-primaryColor rounded-full"></div>
 
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white ">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
                     <div className="text-[10px] leading-none font-black">
                       {product.discountType === DiscountType.PERCENTAGE
                         ? `${product.discountValue % 1 === 0 ? product.discountValue : product.discountValue.toFixed(3)}%`
                         : formatCurrencyEnglish(product.discountValue)}
                     </div>
-                    <span className="text-[10px]  uppercase tracking-wide font-medium">
+                    <span className="text-[10px] uppercase tracking-wide font-medium">
                       {product.discountType === DiscountType.PERCENTAGE
                         ? "OFF"
                         : "SAVE"}
@@ -85,7 +87,7 @@ export default async function ProductCard({ product }: { product: Product }) {
         {/* Content Section */}
         <div className="p-1 md:p-2 lg:p-2 flex flex-col gap-2">
           {/* Product Name */}
-          <h3 className="font-semibold text-gray-900 md:text-base text-sm  leading-tight line-clamp-2 group-hover:text-primaryColor transition-colors duration-200">
+          <h3 className="font-semibold text-gray-900 md:text-base text-sm leading-tight line-clamp-2 group-hover:text-primaryColor transition-colors duration-200">
             {product.name}
           </h3>
 
