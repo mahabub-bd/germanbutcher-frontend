@@ -17,16 +17,11 @@ export default function Home() {
       <div>
         <CarouselBanner />
       </div>
-      <div className="py-5">
-        <PromotionalCarousel
-          imagesPerSlide={2}
-          autoPlayInterval={4000}
-          showControls={true}
-          showIndicators={true}
-        />
+      <div className="md:py-10 py-5">
+        <PromotionalCarousel />
       </div>
       {/* Categories Section */}
-      <section className="md:pt-18 pt-5 ">
+      <section>
         <CategoryList endpoint="categories?isMainCategory=true">
           <HeadingPrimary title="All Category" />
         </CategoryList>

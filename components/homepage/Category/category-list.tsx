@@ -61,7 +61,7 @@ export default function CategoryList({
   endpoint,
 }: CategoryListProps) {
   return (
-    <div className="pt-5  md:pt-10 md:px-0 px-2">
+    <div className=" md:px-0 px-2">
       <div className="container mx-auto">{children}</div>
       <div className="py-10">
         <Suspense fallback={<CategoryGridSkeleton />}>
