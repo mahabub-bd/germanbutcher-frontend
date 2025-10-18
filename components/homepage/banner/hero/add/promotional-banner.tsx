@@ -47,6 +47,7 @@ const PromotionalCarousel = ({
         );
       } catch (err) {
         setError("Failed to load promotional banners");
+        console.log(err);
       } finally {
         setIsLoading(false);
       }

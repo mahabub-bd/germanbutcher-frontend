@@ -14,9 +14,15 @@ import "slick-carousel/slick/slick.css";
 interface AnimatedCarouselProps {
   autoPlayInterval?: number;
   showControls?: boolean;
-  showIndicators?: boolean;
+
   activeOnly?: boolean;
   priority?: boolean;
+}
+
+interface InnerSlider {
+  state?: {
+    autoplaying?: boolean;
+  };
 }
 
 // Skeleton component for loading state
@@ -65,7 +71,6 @@ ControlButton.displayName = "ControlButton";
 export const CarouselBanner = ({
   autoPlayInterval = 4000,
   showControls = true,
-  showIndicators = true,
   activeOnly = true,
   priority = true,
 }: AnimatedCarouselProps) => {
@@ -127,7 +132,9 @@ export const CarouselBanner = ({
         event.preventDefault();
         if (sliderRef.current) {
           // Toggle autoplay
-          const slider = sliderRef.current as any;
+          const slider = sliderRef.current as Slider & {
+            innerSlider?: InnerSlider;
+          };
           if (slider.innerSlider?.state?.autoplaying) {
             sliderRef.current.slickPause();
           } else {
