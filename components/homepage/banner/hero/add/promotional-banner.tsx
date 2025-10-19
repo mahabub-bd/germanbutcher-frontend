@@ -69,20 +69,22 @@ const PromotionalCarousel = ({
 
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: banners.length > 2, // Loop only if there are enough slides
     speed: 500,
-    slidesToShow: 2,
-    slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: autoPlayInterval,
-    pauseOnHover: true,
     arrows: false,
+    // Default setting for desktop: show 2 slides
+    slidesToShow: 2,
+    slidesToScroll: 1, // Scroll one at a time for a smoother feel
     responsive: [
       {
-        breakpoint: 768,
+        // Mobile breakpoint: show 1 slide on screens < 768px
+        breakpoint: 600,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
+          infinite: banners.length > 1, // Adjust infinite loop for mobile
         },
       },
     ],
@@ -90,7 +92,7 @@ const PromotionalCarousel = ({
 
   return (
     <div
-      className="relative w-full container md:max-w-5xl 2xl:max-w-6xl px-4 md:px-12 mx-auto"
+      className="relative w-full container md:max-w-6xl 2xl:max-w-6xl px-4 md:px-12 mx-auto"
       data-promotional-carousel
     >
       <Slider ref={sliderRef} {...settings}>
