@@ -72,7 +72,7 @@ const PromotionalCarousel = ({
     infinite: true,
     speed: 500,
     slidesToShow: 2,
-    slidesToScroll: 2,
+    slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: autoPlayInterval,
     pauseOnHover: true,
@@ -96,7 +96,7 @@ const PromotionalCarousel = ({
       <Slider ref={sliderRef} {...settings}>
         {banners.map((banner) => (
           <div key={banner.id} className="">
-            <div className="relative overflow-hidden  rounded-sm h-[260px] md:h-[260px]">
+            <div className="relative overflow-hidden rounded-sm h-[260px] md:h-[260px]">
               {banner.targetUrl ? (
                 <Link href={banner.targetUrl} className="block w-full h-full">
                   <Image
@@ -124,7 +124,7 @@ const PromotionalCarousel = ({
           <Button
             variant="outline"
             size="icon"
-            className="absolute left-2 md:-left-6 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg rounded-full z-10"
+            className="hidden md:flex absolute left-2 md:-left-6 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg rounded-full z-10"
             onClick={() => sliderRef.current?.slickPrev()}
           >
             <ChevronLeft className="w-4 h-4" />
@@ -132,7 +132,7 @@ const PromotionalCarousel = ({
           <Button
             variant="outline"
             size="icon"
-            className="absolute right-2 md:-right-6 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg rounded-full z-10"
+            className="hidden md:flex absolute right-2 md:-right-6 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg rounded-full z-10"
             onClick={() => sliderRef.current?.slickNext()}
           >
             <ChevronRight className="w-4 h-4" />

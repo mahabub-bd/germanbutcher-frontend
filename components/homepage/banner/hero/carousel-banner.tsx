@@ -53,7 +53,7 @@ const ControlButton = memo(
     <Button
       variant="outline"
       size="icon"
-      className={`backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg transition-all duration-200 bg-black/40 hover:bg-black/60 text-white focus:outline-none focus:ring-2 focus:ring-white/50 w-10 h-10 sm:w-12 sm:h-12 ${className}`}
+      className={`backdrop-blur-sm border-white/20 rounded-full z-20 shadow-lg transition-all duration-200 bg-black/40 hover:bg-black/60 text-white focus:outline-none focus:ring-2 focus:ring-white/50 w-10 h-10 sm:w-12 sm:h-12 hidden sm:flex ${className}`}
       onClick={onClick}
       aria-label={`${direction === "prev" ? "Previous" : "Next"} slide`}
     >
@@ -304,7 +304,7 @@ export const CarouselBanner = ({
         ))}
       </Slider>
 
-      {/* Controls */}
+      {/* Controls - Hidden on mobile */}
       {showControls && banners.length > 1 && (
         <>
           <ControlButton

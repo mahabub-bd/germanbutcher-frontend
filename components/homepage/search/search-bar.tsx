@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { useGlobalSearch } from "@/hooks/use-global-search";
 import { Search, X } from "lucide-react";
 import type React from "react";
-import { useCallback, useId } from "react";
+import { useCallback, useId, useRef } from "react";
 
 interface SearchBarProps {
   placeholder?: string;
@@ -20,21 +20,24 @@ export function SearchBar({
   const { searchQuery, setSearchQuery, handleSearch, clearSearch } =
     useGlobalSearch();
   const searchId = useId();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
+
       setSearchQuery(value);
-      handleSearch(value);
     },
-    [setSearchQuery, handleSearch]
+    [setSearchQuery]
   );
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       switch (e.key) {
         case "Escape":
+          e.preventDefault();
           clearSearch();
+          inputRef.current?.blur();
           break;
         case "Enter":
           e.preventDefault();
@@ -51,6 +54,7 @@ export function SearchBar({
     (e: React.MouseEvent) => {
       e.preventDefault();
       clearSearch();
+      inputRef.current?.focus();
     },
     [clearSearch]
   );
@@ -66,6 +70,7 @@ export function SearchBar({
         />
 
         <Input
+          ref={inputRef}
           id={searchId}
           type="text"
           role="searchbox"
