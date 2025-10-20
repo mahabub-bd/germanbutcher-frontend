@@ -6,14 +6,7 @@ import type { Banner } from "@/utils/types";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  memo,
-  useEffect,
-  useRef,
-  useState,
-  type MouseEvent,
-  type TouchEvent,
-} from "react";
+import { memo, useEffect, useRef, useState, type TouchEvent } from "react";
 
 interface AnimatedCarouselProps {
   autoPlayInterval?: number;
@@ -164,8 +157,8 @@ export const CarouselBanner = ({
     setCurrent((c) => (c + 1) % banners.length);
   };
 
-  const onMouseEnter = (_e: MouseEvent) => setIsPaused(true);
-  const onMouseLeave = (_e: MouseEvent) => setIsPaused(false);
+  const onMouseEnter = () => setIsPaused(true);
+  const onMouseLeave = () => setIsPaused(false);
   const onFocusIn = () => setIsPaused(true);
   const onFocusOut = () => setIsPaused(false);
 
