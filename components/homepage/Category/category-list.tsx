@@ -43,7 +43,7 @@ async function CategoryGrid({ endpoint }: { endpoint: string }) {
   }
 
   return (
-    <div className="container mx-auto grid grid-cols-4 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-2 sm:gap-4 md:gap-8">
+    <div className="container mx-auto grid grid-cols-4 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-2 sm:gap-4 md:gap-6">
       {categories.map((category: Category) => (
         <CategoryCard key={category?.id} category={category} />
       ))}
@@ -61,13 +61,12 @@ export default function CategoryList({
   endpoint,
 }: CategoryListProps) {
   return (
-    <div className=" md:px-0 px-2">
+    <div className=" md:px-0 px-2 pt-5">
       <div className="container mx-auto">{children}</div>
-      <div className="py-10">
-        <Suspense fallback={<CategoryGridSkeleton />}>
-          <CategoryGrid endpoint={endpoint} />
-        </Suspense>
-      </div>
+
+      <Suspense fallback={<CategoryGridSkeleton />}>
+        <CategoryGrid endpoint={endpoint} />
+      </Suspense>
     </div>
   );
 }

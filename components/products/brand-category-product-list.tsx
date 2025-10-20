@@ -51,7 +51,7 @@ export default async function CategoryBrandProductList({
   }
 
   return (
-    <div className="container mx-auto py-4 sm:px-1 md:px-2">
+    <div className="container mx-auto py-4 md:px-0 px-8">
       {/* Title Section - Only show if showTitle is true */}
       {showTitle && title && (
         <div className="flex flex-row  justify-between items-center md:items-start">
@@ -66,7 +66,7 @@ export default async function CategoryBrandProductList({
 
       {/* Products Section */}
       {products?.length > 0 ? (
-        <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-2 md:gap-5 md:py-5 py-5">
+        <div className="grid grid-cols-1 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-2 md:gap-5 md:py-5 py-5">
           {products?.map((product: Product) => (
             <ProductCard key={product.id} product={product} />
           ))}

@@ -6,26 +6,22 @@ import type { Banner } from "@/utils/types";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { memo, useEffect, useRef, useState } from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
+import {
+  memo,
+  useEffect,
+  useRef,
+  useState,
+  type MouseEvent,
+  type TouchEvent,
+} from "react";
 
 interface AnimatedCarouselProps {
   autoPlayInterval?: number;
   showControls?: boolean;
-
   activeOnly?: boolean;
   priority?: boolean;
 }
 
-interface InnerSlider {
-  state?: {
-    autoplaying?: boolean;
-  };
-}
-
-// Skeleton component for loading state
 const CarouselSkeleton = memo(() => (
   <div className="relative overflow-hidden w-full h-[400px] sm:h-[400px] max-h-[400px] bg-gray-100 animate-pulse">
     <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%]" />
@@ -36,10 +32,8 @@ const CarouselSkeleton = memo(() => (
     </div>
   </div>
 ));
-
 CarouselSkeleton.displayName = "CarouselSkeleton";
 
-// Control button component
 const ControlButton = memo(
   ({
     direction,
@@ -48,7 +42,7 @@ const ControlButton = memo(
   }: {
     direction: "prev" | "next";
     onClick: () => void;
-    className: string;
+    className?: string;
   }) => (
     <Button
       variant="outline"
@@ -65,11 +59,10 @@ const ControlButton = memo(
     </Button>
   )
 );
-
 ControlButton.displayName = "ControlButton";
 
 export const CarouselBanner = ({
-  autoPlayInterval = 4000,
+  autoPlayInterval = 2000,
   showControls = true,
   activeOnly = true,
   priority = true,
@@ -77,12 +70,17 @@ export const CarouselBanner = ({
   const [banners, setBanners] = useState<Banner[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const sliderRef = useRef<Slider>(null);
+  const [current, setCurrent] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  // touch swipe
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+  const touchThreshold = 50; // px
 
   useEffect(() => {
     let isMounted = true;
-
     const fetchBanners = async () => {
       try {
         setIsLoading(true);
@@ -90,71 +88,108 @@ export const CarouselBanner = ({
 
         const response = (await fetchDataPagination(
           "banners?type=main&position=top"
-        )) as {
-          data: Banner[];
-        };
+        )) as { data: Banner[] };
 
         if (!isMounted) return;
-
-        const filteredBanners = activeOnly
-          ? response.data.filter((banner) => banner.isActive)
+        const filtered = activeOnly
+          ? response.data.filter((b) => b.isActive)
           : response.data;
-
-        setBanners(filteredBanners);
+        setBanners(filtered);
+        setCurrent(0);
       } catch (err) {
         if (!isMounted) return;
         console.error("Failed to fetch banners:", err);
         setError("Failed to load banners");
       } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+        if (isMounted) setIsLoading(false);
       }
     };
 
     fetchBanners();
-
     return () => {
       isMounted = false;
     };
   }, [activeOnly]);
 
-  // Keyboard navigation
+  // autoplay
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "ArrowLeft") {
-        event.preventDefault();
-        sliderRef.current?.slickPrev();
-      } else if (event.key === "ArrowRight") {
-        event.preventDefault();
-        sliderRef.current?.slickNext();
-      } else if (event.key === " ") {
-        event.preventDefault();
-        if (sliderRef.current) {
-          // Toggle autoplay
-          const slider = sliderRef.current as Slider & {
-            innerSlider?: InnerSlider;
-          };
-          if (slider.innerSlider?.state?.autoplaying) {
-            sliderRef.current.slickPause();
-          } else {
-            sliderRef.current.slickPlay();
-          }
-        }
+    if (!banners.length) return;
+    if (isPaused) return;
+
+    const tick = () =>
+      setCurrent((prev) => {
+        return (prev + 1) % banners.length;
+      });
+
+    const id = window.setInterval(tick, autoPlayInterval);
+
+    return () => {
+      window.clearInterval(id);
+    };
+  }, [banners, autoPlayInterval, isPaused]);
+
+  // keyboard navigation & space to toggle play/pause
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        prev();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        next();
+      } else if (e.key === " ") {
+        e.preventDefault();
+        setIsPaused((p) => !p);
       }
     };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [banners]);
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  // preloads next image for performance
+  useEffect(() => {
+    if (!banners.length) return;
+    const nextIndex = (current + 1) % banners.length;
+    const nextUrl = banners[nextIndex]?.image?.url;
+    if (nextUrl) {
+      const img = new window.Image();
+      img.src = nextUrl;
+    }
+  }, [current, banners]);
 
-  // Loading state
-  if (isLoading) {
-    return <CarouselSkeleton />;
-  }
+  const prev = () => {
+    setCurrent((c) => (c - 1 + banners.length) % banners.length);
+  };
+  const next = () => {
+    setCurrent((c) => (c + 1) % banners.length);
+  };
 
-  // Error state
-  if (error || banners.length === 0) {
+  const onMouseEnter = (_e: MouseEvent) => setIsPaused(true);
+  const onMouseLeave = (_e: MouseEvent) => setIsPaused(false);
+  const onFocusIn = () => setIsPaused(true);
+  const onFocusOut = () => setIsPaused(false);
+
+  const handleTouchStart = (e: TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = null;
+  };
+  const handleTouchMove = (e: TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = () => {
+    if (touchStartX.current == null || touchEndX.current == null) return;
+    const delta = touchStartX.current - touchEndX.current;
+    if (Math.abs(delta) > touchThreshold) {
+      if (delta > 0) next();
+      else prev();
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
+  if (isLoading) return <CarouselSkeleton />;
+
+  if (error || banners.length === 0)
     return (
       <div className="relative overflow-hidden w-full h-[400px] sm:h-[400px] max-h-[400px] bg-gray-100 flex items-center justify-center">
         <div className="text-center p-8">
@@ -171,106 +206,79 @@ export const CarouselBanner = ({
         </div>
       </div>
     );
-  }
-
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: autoPlayInterval,
-    pauseOnHover: true,
-    pauseOnFocus: true,
-    swipe: true,
-    swipeToSlide: true,
-    touchThreshold: 10,
-    arrows: false,
-    fade: true,
-    cssEase: "ease-in-out",
-    beforeChange: (_current: number, next: number) => setCurrentSlide(next),
-  };
 
   return (
     <section
+      ref={containerRef}
       className="relative w-full h-[400px] sm:h-[400px] max-h-[500px] 2xl:h-[500px] focus-within:outline-none"
       role="region"
       aria-label="Featured banners carousel"
       aria-live="polite"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      onFocus={onFocusIn}
+      onBlur={onFocusOut}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
       data-carousel
     >
-      <style jsx global>{`
-        .slick-dots li.slick-active button div {
-          background-color: var(--primary-color, #000) !important;
-          width: 32px !important;
-          height: 12px !important;
+      <style jsx>{`
+        .carousel-slide {
+          transition: opacity 700ms ease-in-out;
+          will-change: opacity;
         }
-        .slick-dots {
-          position: absolute !important;
-          bottom: 1rem !important;
-          left: 0 !important;
-          right: 0 !important;
-          transform: none !important;
-          z-index: 20 !important;
-          display: flex !important;
-          justify-content: center !important;
-          align-items: center !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          width: 100% !important;
+        /* small decorative dots (optional) */
+        .dots {
+          display: flex;
+          gap: 0.5rem;
         }
-        .slick-dots li {
-          margin: 0 !important;
-          display: inline-flex !important;
+        .dot {
+          width: 32px;
+          height: 12px;
+          border-radius: 9999px;
+          background: rgba(255, 255, 255, 0.4);
         }
-        .slick-dots li button {
-          padding: 0 !important;
-        }
-        .slick-list,
-        .slick-track {
-          height: 100% !important;
-        }
-        .slick-slide > div {
-          height: 100% !important;
-        }
-        @media (min-width: 640px) {
-          .slick-dots {
-            bottom: 1.5rem !important;
-          }
+        .dot.active {
+          background: var(--primary-color, rgb(0, 0, 0));
         }
       `}</style>
 
-      {/* Preload next image for better performance */}
-      {banners[currentSlide + 1] && (
+      {/* Preload next image */}
+      {banners[(current + 1) % banners.length]?.image?.url && (
         <link
           rel="preload"
           as="image"
-          href={banners[currentSlide + 1].image?.url}
+          href={banners[(current + 1) % banners.length].image!.url}
         />
       )}
 
-      <Slider ref={sliderRef} {...settings}>
-        {banners.map((slide, index) => (
-          <div
-            key={slide.id}
-            className="relative w-full h-[400px] sm:h-[400px] max-h-[500px] 2xl:h-[500px]"
-          >
-            <div className="relative w-full h-full">
+      {/* Slides: stacked absolutely and fade via opacity */}
+      <div className="relative w-full h-full overflow-hidden">
+        {banners.map((slide, idx) => {
+          const isActive = idx === current;
+          return (
+            <div
+              key={slide.id}
+              className={`carousel-slide absolute inset-0 w-full h-full ${isActive ? "opacity-100 z-10" : "opacity-0 z-0"}`}
+              aria-hidden={!isActive}
+            >
               <Image
                 src={
                   slide?.image?.url ||
                   "/placeholder.svg?height=600&width=1200&query=banner"
                 }
-                alt={slide.title}
+                alt={slide.title || ""}
                 fill
                 className="object-cover object-center"
-                priority={priority && index === 0}
-                loading={priority && index === 0 ? "eager" : "lazy"}
+                priority={priority && idx === 0}
+                loading={priority && idx === 0 ? "eager" : "lazy"}
                 sizes="100vw"
-                quality={index === 0 ? 85 : 70}
+                quality={idx === 0 ? 85 : 70}
               />
+              {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              {/* Content */}
               <div className="absolute top-0 left-0 p-3 sm:p-4 lg:p-6 xl:p-8 w-full h-full text-white">
                 <div className="flex container items-center justify-center sm:justify-start h-full xl:px-24">
                   <div className="max-w-3xl text-center sm:text-left">
@@ -300,36 +308,52 @@ export const CarouselBanner = ({
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </Slider>
+          );
+        })}
+      </div>
 
-      {/* Controls - Hidden on mobile */}
+      {/* Controls (hidden on small screens) */}
       {showControls && banners.length > 1 && (
         <>
           <ControlButton
             direction="prev"
-            onClick={() => sliderRef.current?.slickPrev()}
+            onClick={prev}
             className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2"
           />
           <ControlButton
             direction="next"
-            onClick={() => sliderRef.current?.slickNext()}
+            onClick={next}
             className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2"
           />
         </>
       )}
 
-      {/* Screen reader announcements */}
-      <div className="sr-only" aria-live="polite" aria-atomic="true">
-        Slide {currentSlide + 1} of {banners.length}:{" "}
-        {banners[currentSlide]?.title}
+      {/* Dots */}
+      <div className="absolute bottom-4 left-0 right-0 flex justify-center z-20 pointer-events-none">
+        <div className="dots pointer-events-auto">
+          {banners.map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => setCurrent(i)}
+              className={`dot ${i === current ? "active" : ""}`}
+              style={{
+                border: "none",
+                cursor: "pointer",
+                opacity: i === current ? 1 : 0.6,
+              }}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Instructions for screen readers */}
+      {/* Accessibility: screen reader hints */}
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        Slide {current + 1} of {banners.length}: {banners[current]?.title}
+      </div>
       <div className="sr-only">
-        Use arrow keys to navigate slides, or space bar to pause auto-play.
-        Swipe left or right on touch devices.
+        Use arrow keys to navigate slides, space bar to pause auto-play. Swipe
+        left or right on touch devices.
       </div>
     </section>
   );

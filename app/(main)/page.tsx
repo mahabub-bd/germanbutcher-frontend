@@ -17,7 +17,7 @@ export default function Home() {
       <div>
         <CarouselBanner />
       </div>
-      <div className="md:py-10 py-2">
+      <div className="md:py-10 py-5">
         <PromotionalCarousel />
       </div>
       {/* Categories Section */}

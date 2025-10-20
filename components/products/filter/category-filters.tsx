@@ -94,7 +94,7 @@ export function CategoryFilters({
 
   const hasActiveFilters = activeFiltersCount > 0;
 
-  const MAX_PRICE = 5000;
+  const MAX_PRICE = 4000;
 
   const [priceRange, setPriceRange] = useState<[number, number]>([
     Number(currentPriceRange?.min || 0),
@@ -120,7 +120,9 @@ export function CategoryFilters({
         selectedCat.parentId !== null &&
         selectedCat.parentId !== undefined
       ) {
-        setOpenCategories((prev) => new Set([...prev, selectedCat.parentId as number]));
+        setOpenCategories(
+          (prev) => new Set([...prev, selectedCat.parentId as number])
+        );
       }
     }
   }, [currentCategory, categories]);

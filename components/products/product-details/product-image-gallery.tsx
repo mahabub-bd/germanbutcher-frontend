@@ -37,7 +37,7 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
     <div className="sticky top-16">
       <div
         ref={imageRef}
-        className="relative w-full h-100 bg-white rounded-md overflow-hidden shadow-md border cursor-zoom-in"
+        className="relative w-full aspect-video bg-white rounded-md overflow-hidden shadow-md border cursor-zoom-in"
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -47,7 +47,7 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
           src={selectedImage || "/placeholder.svg"}
           alt={product.name}
           fill
-          className="object-cover transition-transform duration-300"
+          className="object-contain transition-transform duration-300 aspect-video"
         />
 
         {/* Zoomed Image Overlay */}
@@ -88,7 +88,7 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
       {/* Thumbnail Gallery */}
       <div className="flex space-x-2 mt-4 overflow-x-auto pb-2">
         <div
-          className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${
+          className={`flex-shrink-0 w-24 aspect-video rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${
             selectedImage === product.attachment.url
               ? "border-primaryColor ring-2 ring-red-100"
               : "border-gray-200 hover:border-gray-300"
@@ -98,16 +98,15 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
           <Image
             src={product.attachment.url || "/placeholder.svg"}
             alt={product.name}
-            width={64}
-            height={64}
-            className="object-cover w-full h-full"
+            fill
+            className="object-cover"
           />
         </div>
 
         {product.gallery?.attachments?.map((image: Attachment) => (
           <div
             key={image.id}
-            className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${
+            className={`flex-shrink-0 w-24 aspect-video rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${
               selectedImage === image.url
                 ? "border-primaryColor ring-2 ring-red-100"
                 : "border-gray-200 hover:border-gray-300"
@@ -117,9 +116,8 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
             <Image
               src={image.url || "/placeholder.svg"}
               alt={image.fileName}
-              width={64}
-              height={64}
-              className="object-cover w-full h-full"
+              fill
+              className="object-cover"
             />
           </div>
         ))}

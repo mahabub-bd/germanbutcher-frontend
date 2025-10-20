@@ -1,13 +1,16 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 import { fetchDataPagination } from "@/utils/api-utils";
 import type { Banner } from "@/utils/types";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import Link from "next/link";
-import { memo, useEffect, useRef, useState } from "react";
-import Slider from "react-slick";
+import * as React from "react";
 
 interface PromotionalCarouselProps {
   autoPlayInterval?: number;
@@ -15,7 +18,7 @@ interface PromotionalCarouselProps {
   activeOnly?: boolean;
 }
 
-const CarouselSkeleton = memo(() => (
+const CarouselSkeleton = React.memo(() => (
   <div className="relative overflow-hidden w-full h-[250px] md:h-[300px] bg-gray-100 animate-pulse rounded-lg" />
 ));
 CarouselSkeleton.displayName = "CarouselSkeleton";
@@ -25,20 +28,21 @@ const PromotionalCarousel = ({
   showControls = true,
   activeOnly = true,
 }: PromotionalCarouselProps) => {
-  const [banners, setBanners] = useState<Banner[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const sliderRef = useRef<Slider>(null);
+  const [banners, setBanners] = React.useState<Banner[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
 
-  // ✅ Fetch banners
-  useEffect(() => {
+  // ✅ Fetch banners on mount
+  React.useEffect(() => {
     let isMounted = true;
-    const fetchBanners = async () => {
+
+    const loadBanners = async () => {
       try {
         setIsLoading(true);
         const response = (await fetchDataPagination(
           "banners?type=promotional&position=middle"
         )) as { data: Banner[] };
+
         if (!isMounted) return;
         setBanners(
           activeOnly
@@ -47,12 +51,14 @@ const PromotionalCarousel = ({
         );
       } catch (err) {
         setError("Failed to load promotional banners");
-        console.log(err);
+        console.error(err);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchBanners();
+
+    loadBanners();
+
     return () => {
       isMounted = false;
     };
@@ -67,78 +73,45 @@ const PromotionalCarousel = ({
       </div>
     );
 
-  const settings = {
-    dots: false,
-    infinite: banners.length > 2,
-    speed: 500,
-    autoplay: true,
-    autoplaySpeed: autoPlayInterval,
-    arrows: false,
-    slidesToShow: 2,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 768, // 👈 apply for screens below 768px
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          infinite: banners.length > 1,
-        },
-      },
-    ],
-  };
-
   return (
-    <div
-      className="relative w-full container md:max-w-6xl 2xl:max-w-6xl px-4 md:px-12 mx-auto"
-      data-promotional-carousel
-    >
-      <Slider ref={sliderRef} {...settings}>
-        {banners.map((banner) => (
-          <div key={banner.id} className="">
-            <div className="relative overflow-hidden rounded-sm h-[260px] md:h-[260px]">
-              {banner.targetUrl ? (
-                <Link href={banner.targetUrl} className="block w-full h-full">
+    <div className="relative w-full container md:max-w-6xl 2xl:max-w-6xl px-4 md:px-12 mx-auto">
+      <Carousel
+        opts={{ align: "start", loop: banners.length > 1 }}
+        plugins={[Autoplay({ delay: autoPlayInterval })]}
+        className="w-full"
+      >
+        <CarouselContent className="-ml-2 md:-ml-4">
+          {banners.map((banner) => (
+            <CarouselItem
+              key={banner.id}
+              className="pl-2 md:pl-4 md:basis-1/2 basis-full"
+            >
+              <div className="relative overflow-hidden  h-[250px] md:h-[250px] ">
+                {banner.targetUrl ? (
+                  <Link
+                    href={banner.targetUrl}
+                    className="block w-full h-full "
+                  >
+                    <Image
+                      src={banner.image?.url || "/placeholder.svg"}
+                      alt={banner.title}
+                      fill
+                      className="object-contain rounded-sm"
+                    />
+                  </Link>
+                ) : (
                   <Image
                     src={banner.image?.url || "/placeholder.svg"}
                     alt={banner.title}
                     fill
-                    className="object-contain"
+                    className="object-contain rounded-sm"
                   />
-                </Link>
-              ) : (
-                <Image
-                  src={banner.image?.url || "/placeholder.svg"}
-                  alt={banner.title}
-                  fill
-                  className="object-cover"
-                />
-              )}
-            </div>
-          </div>
-        ))}
-      </Slider>
-
-      {showControls && banners.length > 1 && (
-        <>
-          <Button
-            variant="outline"
-            size="icon"
-            className="hidden md:flex absolute left-2 md:-left-6 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg rounded-full z-10"
-            onClick={() => sliderRef.current?.slickPrev()}
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="hidden md:flex absolute right-2 md:-right-6 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg rounded-full z-10"
-            onClick={() => sliderRef.current?.slickNext()}
-          >
-            <ChevronRight className="w-4 h-4" />
-          </Button>
-        </>
-      )}
+                )}
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
     </div>
   );
 };

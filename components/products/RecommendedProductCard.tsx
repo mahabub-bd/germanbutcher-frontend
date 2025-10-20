@@ -1,6 +1,5 @@
 import { Badge } from "@/components/ui/badge";
 import { formatCurrencyEnglish, formatWeight } from "@/lib/utils";
-import { getBlurData } from "@/utils/blur-generator";
 import type { Product } from "@/utils/types";
 import { DiscountType } from "@/utils/types";
 import Image from "next/image";
@@ -14,8 +13,6 @@ export default async function RecommendedProductCard({
 }: {
   product: Product;
 }) {
-  const { base64 } = await getBlurData(product?.attachment?.url);
-
   const isDiscountActive =
     product.discountType &&
     product.discountValue &&
@@ -49,8 +46,6 @@ export default async function RecommendedProductCard({
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                 loading="lazy"
                 sizes="100%"
-                placeholder="blur"
-                blurDataURL={base64}
               />
             )}
             {isDiscountActive &&
