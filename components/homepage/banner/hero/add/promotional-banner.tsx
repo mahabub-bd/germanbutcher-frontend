@@ -69,22 +69,20 @@ const PromotionalCarousel = ({
 
   const settings = {
     dots: false,
-    infinite: banners.length > 2, // Loop only if there are enough slides
+    infinite: banners.length > 2,
     speed: 500,
     autoplay: true,
     autoplaySpeed: autoPlayInterval,
     arrows: false,
-    // Default setting for desktop: show 2 slides
     slidesToShow: 2,
-    slidesToScroll: 1, // Scroll one at a time for a smoother feel
+    slidesToScroll: 1,
     responsive: [
       {
-        // Mobile breakpoint: show 1 slide on screens < 768px
-        breakpoint: 600,
+        breakpoint: 768, // 👈 apply for screens below 768px
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          infinite: banners.length > 1, // Adjust infinite loop for mobile
+          infinite: banners.length > 1,
         },
       },
     ],

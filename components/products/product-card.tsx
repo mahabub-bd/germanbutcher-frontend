@@ -30,13 +30,13 @@ export default async function ProductCard({ product }: { product: Product }) {
     <div className="group relative bg-gray-100 rounded-sm border border-gray-100 shadow-sm hover:shadow-xl hover:border-gray-200 transition-all duration-500 overflow-hidden">
       <Link href={`/product/${product?.slug}`} className="block">
         {/* Image Container */}
-        <div className="w-full aspect-square bg-gray-100 overflow-hidden relative mb-3">
+        <div className="w-full aspect-video bg-gray-100 overflow-hidden relative mb-3">
           {product?.attachment?.url && (
             <Image
               src={product.attachment.url}
               alt={product.name}
               fill
-              className={`object-cover transition-all duration-300 group-hover:scale-105 ${
+              className={`object-contain transition-all duration-300 group-hover:scale-105 ${
                 isOutOfStock ? "grayscale" : ""
               }`}
               loading="lazy"
