@@ -7,6 +7,7 @@ import { ArrowRight, Search, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type React from "react";
+import { useEffect } from "react"; // ✅ Add this import
 import { EmptySearchState } from "./empty-search-state";
 import { ProductSearchItem } from "./product-search-item";
 
@@ -22,6 +23,16 @@ export function SearchModal() {
   } = useGlobalSearch();
 
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (isOpen && !searchQuery.trim()) {
+      const timer = setTimeout(() => {
+        setIsOpen(false);
+      }, 300); // 300ms delay
+
+      return () => clearTimeout(timer);
+    }
+  }, [searchQuery, isOpen, setIsOpen]);
 
   const shouldShowModal = () => {
     const adminRoutes = ["/admin"];
@@ -58,6 +69,7 @@ export function SearchModal() {
       className="fixed inset-0 z-100  flex items-start justify-center md:pt-28 pt-22 px-4 "
       onClick={handleBackdropClick}
     >
+      {/* Rest of your modal JSX remains the same */}
       <div className="bg-white rounded-sm shadow-2xl xl:w-160 lg:w-80 w-96 max-h-[80vh] overflow-hidden animate-in fade-in-0 zoom-in-95 duration-200">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50/50">

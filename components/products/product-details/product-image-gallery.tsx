@@ -88,7 +88,7 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
       {/* Thumbnail Gallery */}
       <div className="flex space-x-2 mt-4 overflow-x-auto pb-2">
         <div
-          className={`flex-shrink-0 w-24 aspect-video rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${
+          className={`relative flex-shrink-0 w-24 h-16 rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${
             selectedImage === product.attachment.url
               ? "border-primaryColor ring-2 ring-red-100"
               : "border-gray-200 hover:border-gray-300"
@@ -106,7 +106,7 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
         {product.gallery?.attachments?.map((image: Attachment) => (
           <div
             key={image.id}
-            className={`flex-shrink-0 w-24 aspect-video rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${
+            className={`relative flex-shrink-0 w-24 h-16 rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${
               selectedImage === image.url
                 ? "border-primaryColor ring-2 ring-red-100"
                 : "border-gray-200 hover:border-gray-300"

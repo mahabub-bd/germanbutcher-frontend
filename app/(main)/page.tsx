@@ -17,7 +17,7 @@ export default function Home() {
       <div>
         <CarouselBanner />
       </div>
-      <div className="md:py-10 py-5">
+      <div className="md:py-10 py-5 product-bg">
         <PromotionalCarousel />
       </div>
       {/* Categories Section */}
@@ -43,7 +43,11 @@ export default function Home() {
       {/* Popular Products Section */}
       <section className="md:py-10 py-5 ">
         <div className="container mx-auto ">
-          <ProductList endpoint="products" isHomePage href="products/popular">
+          <ProductList
+            endpoint="products/bestsellers?limit=20"
+            isHomePage
+            href="products/popular"
+          >
             <HeadingPrimary title="Popular Products" className="mb-10" />
           </ProductList>
         </div>
@@ -52,7 +56,7 @@ export default function Home() {
       {/* Brands Section */}
       <section className="lg:py-10 py-5 product-bg">
         <div className="container mx-auto ">
-          <BrandList endpoint="products">
+          <BrandList endpoint="products?isActive=true">
             <HeadingPrimary title="Recommended for you" className="mb-10" />
           </BrandList>
         </div>

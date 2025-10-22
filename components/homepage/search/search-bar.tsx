@@ -24,6 +24,7 @@ export function SearchBar({
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
+      e.stopPropagation();
       const value = e.target.value;
 
       setSearchQuery(value);
@@ -33,6 +34,7 @@ export function SearchBar({
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
+      e.stopPropagation();
       switch (e.key) {
         case "Escape":
           e.preventDefault();
@@ -53,6 +55,7 @@ export function SearchBar({
   const handleClearSearch = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
+      e.stopPropagation();
       clearSearch();
       inputRef.current?.focus();
     },
