@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { postData } from "@/utils/api-utils";
-import type { Product } from "@/utils/types";
+import type { Product, User } from "@/utils/types";
 import { Heart, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner"; // Assuming you're using sonner for toast notifications
@@ -15,7 +15,7 @@ interface AddToWishlistButtonProps {
   variant?: "default" | "outline";
   size?: "default" | "sm" | "lg";
   showText?: boolean;
-  user: any;
+  user: User | null;
 }
 
 export function AddToWishlistButton({
@@ -134,7 +134,7 @@ export function AddToWishlistIcon({
   className,
 }: {
   product: Product;
-  user: any;
+  user: User | null;
   disabled?: boolean;
   className?: string;
 }) {
