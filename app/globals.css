@@ -2,8 +2,6 @@
 
 @plugin "tailwindcss-animate";
 
-
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -304,7 +302,15 @@
   contain: layout style paint;
   transform: translateZ(0);
 }
-
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
 /* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
   .carousel-slide {
