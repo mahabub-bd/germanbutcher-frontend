@@ -112,12 +112,13 @@ export function CartItemProduct({ item }: { item: CartItem }) {
   return (
     <div className={`flex gap-3 ${isOutOfStock ? "opacity-60" : ""}`}>
       {/* Product Image */}
-      <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border">
+      <div className="relative aspect-[16/9] w-24 flex-shrink-0 overflow-hidden rounded-md border">
         <Image
           src={item.product.attachment?.url || "/placeholder.svg"}
           alt={item.product.name}
           fill
           className={`object-cover ${isOutOfStock ? "grayscale" : ""}`}
+          sizes="96px"
         />
         {isOutOfStock && (
           <div className="absolute inset-0 bg-black/20 flex items-center justify-center">

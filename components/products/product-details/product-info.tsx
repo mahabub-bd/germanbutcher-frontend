@@ -32,7 +32,6 @@ export function ProductInfo({ product }: ProductInfoProps) {
   const stockQuantity = product.stock || 0;
   const isOutOfStock = stockQuantity === 0;
   const isLowStock = stockQuantity > 0 && stockQuantity <= 5;
-  const isInStock = stockQuantity > 5;
 
   const getStockStatus = () => {
     if (isOutOfStock) {
@@ -113,16 +112,6 @@ export function ProductInfo({ product }: ProductInfoProps) {
             <StockIcon className="w-4 h-4" />
             <span className="font-medium text-sm">{stockStatus.label}</span>
           </div>
-
-          {/* Stock quantity display for in-stock items */}
-          {isInStock && (
-            <div className="flex items-center gap-2 text-gray-600">
-              <Package className="w-4 h-4" />
-              <span className="text-sm font-medium">
-                {stockQuantity} units available
-              </span>
-            </div>
-          )}
         </div>
       </div>
 
@@ -131,7 +120,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-baseline gap-2">
             <span
-              className={`text-4xl font-bold ${isOutOfStock ? "text-gray-400" : "text-primaryColor"}`}
+              className={`text-3xl font-bold ${isOutOfStock ? "text-gray-400" : "text-primaryColor"}`}
             >
               ৳{finalPrice.toFixed(2)}
             </span>
@@ -172,7 +161,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
           </span>
         </div>
 
-        {/* Stock quantity as product detail */}
+        {/* Stock quantity as product detail - only show quantity for low stock */}
         <div className="flex items-center gap-2 text-gray-700">
           <div
             className={`w-3 h-3 rounded-full ${
@@ -189,7 +178,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
               ? "Unavailable"
               : isLowStock
                 ? `Low Stock (${stockQuantity})`
-                : `Available (${stockQuantity})`}
+                : "Available"}
           </span>
         </div>
       </div>

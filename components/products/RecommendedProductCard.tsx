@@ -10,8 +10,10 @@ import { AddToCartButton } from "../cart/add-to-cart-button";
 
 export default async function RecommendedProductCard({
   product,
+  className = "",
 }: {
   product: Product;
+  className?: string;
 }) {
   const isDiscountActive =
     product.discountType &&
@@ -30,13 +32,15 @@ export default async function RecommendedProductCard({
       : null;
 
   return (
-    <div className="relative group mt-20 mb-5  transition-all duration-300 border border-gray-200 hover:bg-[#FDFBF4]  p-4 flex flex-col items-center rounded-lg shadow-sm hover:shadow-md">
+    <div
+      className={`relative group mt-20 mb-5 transition-all duration-300 border border-gray-200 hover:bg-[#FDFBF4] p-4 flex flex-col items-center rounded-lg shadow-sm hover:shadow-md ${className}`}
+    >
       <Link
         href={`/product/${product.slug}`}
-        className="flex flex-col  w-full h-full"
+        className="flex flex-col w-full h-full"
       >
         {/* Image Container */}
-        <div className=" w-[180px] h-[140px] absolute -top-[90px] left-1/2 -translate-x-1/2 bg-gray-100 rounded-md overflow-hidden  mb-3">
+        <div className="w-[180px] h-[140px] absolute -top-[90px] left-1/2 -translate-x-1/2 bg-gray-100 rounded-md overflow-hidden mb-3">
           <div>
             {product?.attachment?.url && (
               <Image

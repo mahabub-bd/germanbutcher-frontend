@@ -1,3 +1,4 @@
+import { getUser } from "@/actions/auth";
 import { HeadingPrimary } from "@/components/common/heading-primary";
 import type { Product } from "@/utils/types";
 import ProductList from "../product-list";
@@ -12,7 +13,8 @@ interface ProductDetailsProps {
   product: Product;
 }
 
-export default function ProductDetails({ product }: ProductDetailsProps) {
+export default async function ProductDetails({ product }: ProductDetailsProps) {
+  const user = await getUser();
   return (
     <div className="min-h-screen bg-gray-50">
       <ProductBreadcrumb product={product} />
@@ -27,7 +29,7 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
           {/* Product Information */}
           <div className="lg:col-span-2 flex flex-col md:gap-6 gap-4">
             <ProductInfo product={product} />
-            <ProductPurchaseSection product={product} />
+            <ProductPurchaseSection product={product} user={user} />
             <ProductFeatures />
             <ProductDetailsCard product={product} />
           </div>

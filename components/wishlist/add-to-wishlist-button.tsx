@@ -15,6 +15,7 @@ interface AddToWishlistButtonProps {
   variant?: "default" | "outline";
   size?: "default" | "sm" | "lg";
   showText?: boolean;
+  user: any;
 }
 
 export function AddToWishlistButton({
@@ -24,6 +25,7 @@ export function AddToWishlistButton({
   variant = "outline",
   size = "default",
   showText = true,
+  user,
 }: AddToWishlistButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isInWishlist, setIsInWishlist] = useState(false);
@@ -73,7 +75,9 @@ export function AddToWishlistButton({
       </Button>
     );
   }
-
+  if (!user) {
+    return null;
+  }
   return (
     <Button
       className={cn(
@@ -122,18 +126,22 @@ export function AddToWishlistButton({
 }
 
 // Alternative icon-only version for space-constrained areas
+// Alternative icon-only version for space-constrained areas
 export function AddToWishlistIcon({
   product,
+  user,
   disabled = false,
   className,
 }: {
   product: Product;
+  user: any;
   disabled?: boolean;
   className?: string;
 }) {
   return (
     <AddToWishlistButton
       product={product}
+      user={user}
       disabled={disabled}
       className={cn("px-2 py-2", className)}
       variant="outline"

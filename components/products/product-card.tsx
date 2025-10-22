@@ -7,7 +7,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { AddToCartButton } from "../cart/add-to-cart-button";
 
-export default async function ProductCard({ product }: { product: Product }) {
+export default async function ProductCard({
+  product,
+  className = "",
+}: {
+  product: Product;
+  className?: string;
+}) {
   const isDiscountActive =
     product.discountType &&
     product.discountValue &&
@@ -27,7 +33,9 @@ export default async function ProductCard({ product }: { product: Product }) {
   const isOutOfStock = !product?.stock;
 
   return (
-    <div className="group relative bg-gray-100 rounded-sm border border-gray-100 shadow-sm hover:shadow-xl hover:border-gray-200 transition-all duration-500 overflow-hidden">
+    <div
+      className={`group relative bg-gray-100 rounded-sm border border-gray-100 shadow-sm hover:shadow-xl hover:border-gray-200 transition-all duration-500 overflow-hidden ${className}`}
+    >
       <Link href={`/product/${product?.slug}`} className="block">
         {/* Image Container */}
         <div className="w-full aspect-[16/9] bg-gray-100 overflow-hidden relative mb-3">

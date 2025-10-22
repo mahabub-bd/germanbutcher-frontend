@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { AddToWishlistButton } from "@/components/wishlist/add-to-wishlist-button";
 import { useCartContext } from "@/contexts/cart-context";
-import type { Product } from "@/utils/types";
+import type { Product, User } from "@/utils/types";
 import {
   Facebook,
   Linkedin,
@@ -26,10 +26,12 @@ import { useState } from "react";
 
 interface ProductPurchaseSectionProps {
   product: Product;
+  user: User;
 }
 
 export function ProductPurchaseSection({
   product,
+  user,
 }: ProductPurchaseSectionProps) {
   const [quantity, setQuantity] = useState(1);
   const { addItem } = useCartContext();
@@ -80,16 +82,9 @@ export function ProductPurchaseSection({
 
   return (
     <div className="bg-white rounded-md  md:p-6 p-4 shadow-sm border">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
-        Purchase Options
-      </h3>
-
       <div className="space-y-4">
         {/* Quantity Selector */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
-            Quantity
-          </label>
           <div className="flex items-center space-x-4">
             <div className="flex items-center bg-gray-50 rounded-lg border border-gray-200">
               <Button
@@ -97,11 +92,11 @@ export function ProductPurchaseSection({
                 size="sm"
                 onClick={decrementQuantity}
                 disabled={quantity <= 1}
-                className="h-12 w-12 rounded-l-lg hover:bg-gray-100 disabled:opacity-50"
+                className="h-8 w-8 rounded-l-lg hover:bg-gray-100 disabled:opacity-50"
               >
                 <Minus className="w-4 h-4" />
               </Button>
-              <div className="px-4 py-3 font-semibold text-lg min-w-[4rem] text-center bg-white border-x border-gray-200">
+              <div className="px-2 py-1 font-semibold text-base min-w-[4rem] text-center bg-white border-x border-gray-200">
                 {quantity}
               </div>
               <Button
@@ -109,7 +104,7 @@ export function ProductPurchaseSection({
                 size="sm"
                 onClick={incrementQuantity}
                 disabled={quantity >= product.stock}
-                className="h-12 w-12 rounded-r-lg hover:bg-gray-100 disabled:opacity-50"
+                className="h-8 w-8 rounded-r-lg hover:bg-gray-100 disabled:opacity-50"
               >
                 <Plus className="w-4 h-4" />
               </Button>
@@ -154,6 +149,7 @@ export function ProductPurchaseSection({
           <div className="grid grid-cols-2 gap-3">
             <AddToWishlistButton
               product={product}
+              user={user}
               variant="outline"
               className="py-3 border-gray-300 hover:border-primaryColor hover:text-primaryColor"
             />
