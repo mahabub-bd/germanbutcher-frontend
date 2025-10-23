@@ -118,7 +118,7 @@ export function BrandForm({ mode, brand }: BrandFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        <div className="p-6 space-y-6">
+        <div className="p-2 md:p-4 space-y-6">
           {/* Basic Information Section */}
           <Section title="Basic Information">
             <FormField
