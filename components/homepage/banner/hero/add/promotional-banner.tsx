@@ -15,18 +15,16 @@ import { useEffect } from "react";
 
 interface PromotionalCarouselProps {
   autoPlayInterval?: number;
-
   activeOnly?: boolean;
 }
 
 const CarouselSkeleton = React.memo(() => (
-  <div className="relative overflow-hidden w-full h-[250px] md:h-[300px] bg-gray-100 animate-pulse rounded-lg" />
+  <div className="relative overflow-hidden w-full h-[250px] bg-gray-100 animate-pulse rounded-lg" />
 ));
 CarouselSkeleton.displayName = "CarouselSkeleton";
 
 const PromotionalCarousel = ({
   autoPlayInterval = 4000,
-
   activeOnly = true,
 }: PromotionalCarouselProps) => {
   const [banners, setBanners] = React.useState<Banner[]>([]);
@@ -53,7 +51,7 @@ const PromotionalCarousel = ({
         setError("Failed to load promotional banners");
         console.error(err);
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     };
 
@@ -66,18 +64,21 @@ const PromotionalCarousel = ({
 
   if (isLoading) return <CarouselSkeleton />;
 
-  if (error || banners.length === 0)
+  if (error || banners.length === 0) {
     return (
-      <div className="h-[250px] md:h-[350px] flex items-center justify-center bg-gray-100 rounded-lg">
-        No banners available
+      <div className="h-[250px] flex items-center justify-center bg-gray-100 rounded-lg text-gray-500">
+        {error || "No banners available"}
       </div>
     );
+  }
 
   return (
     <div className="relative w-full container md:max-w-6xl 2xl:max-w-6xl px-4 md:px-12 mx-auto">
       <Carousel
         opts={{ align: "start", loop: banners.length > 1 }}
-        plugins={[Autoplay({ delay: autoPlayInterval })]}
+        plugins={[
+          Autoplay({ delay: autoPlayInterval, stopOnInteraction: true }),
+        ]}
         className="w-full"
       >
         <CarouselContent className="-ml-2 md:-ml-4">
@@ -86,17 +87,20 @@ const PromotionalCarousel = ({
               key={banner.id}
               className="pl-2 md:pl-4 md:basis-1/2 basis-full"
             >
-              <div className="relative overflow-hidden  h-[250px] md:h-[250px] ">
+              <div className="relative w-full h-[220px] rounded-sm overflow-hidden">
                 {banner.targetUrl ? (
                   <Link
                     href={banner.targetUrl}
-                    className="block w-full h-full "
+                    className="block w-full h-full"
+                    aria-label={banner.title}
                   >
                     <Image
                       src={banner.image?.url || "/placeholder.svg"}
                       alt={banner.title}
                       fill
-                      className="object-contain rounded-sm"
+                      sizes="(max-width: 768px) 400px, 600px"
+                      className="object-contain"
+                      priority={banners.indexOf(banner) < 2}
                     />
                   </Link>
                 ) : (
@@ -104,7 +108,9 @@ const PromotionalCarousel = ({
                     src={banner.image?.url || "/placeholder.svg"}
                     alt={banner.title}
                     fill
-                    className="object-contain rounded-sm"
+                    sizes="(max-width: 768px) 400px, 600px"
+                    className="object-cover "
+                    priority={banners.indexOf(banner) < 2}
                   />
                 )}
               </div>
