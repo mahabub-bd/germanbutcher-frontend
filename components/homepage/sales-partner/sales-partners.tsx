@@ -45,13 +45,13 @@ export async function SalesPartnersCompact({
     <div className={`w-full py-6 md:py-8 ${className}`}>
       {children}
       <div className="container mx-auto px-4">
-        {/* Compact Horizontal Layout */}
-        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-10">
-          {salesPartners.map((partner, index) => (
+        {/* Grid Layout - 2 Rows with Responsive Columns */}
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 sm:gap-6 md:gap-8 lg:gap-10 max-w-7xl mx-auto">
+          {salesPartners.slice(0, 12).map((partner, index) => (
             <div
               key={partner.Id}
               className="group flex items-center justify-center 
-                         w-24 h-16 sm:w-32 sm:h-20 md:w-40 md:h-24 lg:w-48 lg:h-28
+                         aspect-[3/2]
                          bg-white rounded-lg shadow-sm border border-primaryColor/20
                          hover:shadow-md hover:border-gray-200 
                          transition-all duration-300 hover:scale-105 p-3 sm:p-4"
@@ -62,8 +62,8 @@ export async function SalesPartnersCompact({
                   alt={`${partner.name} logo`}
                   fill
                   className="object-contain transition-all duration-300 
-                           group-hover:scale-110 "
-                  sizes="(max-width: 640px) 96px, (max-width: 768px) 128px, (max-width: 1024px) 160px, 192px"
+                           group-hover:scale-110"
+                  sizes="(max-width: 640px) 33vw, (max-width: 768px) 25vw, 16vw"
                   loading={index < 8 ? "eager" : "lazy"}
                   priority={index < 8}
                 />

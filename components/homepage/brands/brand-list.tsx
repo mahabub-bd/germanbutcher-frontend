@@ -26,23 +26,19 @@ export default async function BrandList({
             </div>
           }
         >
-          {/* First 8 products - visible on all screen sizes */}
-          {products
-            ?.slice(0, 8)
-            ?.map((product: Product) => (
+          {products?.map((product: Product, index: number) => {
+            // Hide products 9 and 10 (index 8 and 9) on screens smaller than 2xl
+            if (index >= 8) {
+              return (
+                <div key={product.id} className="hidden 2xl:block">
+                  <RecommendedProductCard product={product} />
+                </div>
+              );
+            }
+            return (
               <RecommendedProductCard key={product.id} product={product} />
-            ))}
-
-          {/* Last 2 products - only visible on desktop (2xl breakpoint) */}
-          {products
-            ?.slice(8, 10)
-            ?.map((product: Product) => (
-              <RecommendedProductCard
-                key={product.id}
-                product={product}
-                className="hidden 2xl:block"
-              />
-            ))}
+            );
+          })}
         </Suspense>
       </div>
     </div>
