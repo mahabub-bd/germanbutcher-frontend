@@ -287,7 +287,10 @@ const styles = StyleSheet.create({
   },
   // Footer Section - CHANGED: Removed absolute positioning
   footer: {
-    marginTop: 30,
+    position: "absolute",
+    bottom: 20,
+    left: 32,
+    right: 32,
     paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: "#e5e7eb",
@@ -296,6 +299,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+
   footerLeft: {
     flex: 1,
   },
