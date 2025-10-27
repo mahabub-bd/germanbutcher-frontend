@@ -9,7 +9,6 @@ import { fetchDataPagination } from "@/utils/api-utils";
 import type { Banner } from "@/utils/types";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
-import Link from "next/link";
 import * as React from "react";
 import { useEffect } from "react";
 
@@ -73,7 +72,7 @@ const PromotionalCarousel = ({
   }
 
   return (
-    <div className="relative w-full container md:max-w-6xl 2xl:max-w-6xl px-4 md:px-12 mx-auto">
+    <div className="relative w-full container md:max-w-6xl 2xl:max-w-6xl px-2 md:px-12 mx-auto">
       <Carousel
         opts={{ align: "start", loop: banners.length > 1 }}
         plugins={[
@@ -81,38 +80,22 @@ const PromotionalCarousel = ({
         ]}
         className="w-full"
       >
-        <CarouselContent className="-ml-2 md:-ml-4">
+        <CarouselContent className="-ml-1 md:-ml-4">
           {banners.map((banner) => (
             <CarouselItem
               key={banner.id}
-              className="pl-2 md:pl-4 md:basis-1/2 basis-full"
+              className="pl-1 md:pl-4 md:basis-1/2 basis-full"
             >
-              <div className="relative w-full h-[220px] rounded-sm overflow-hidden">
-                {banner.targetUrl ? (
-                  <Link
-                    href={banner.targetUrl}
-                    className="block w-full h-full"
-                    aria-label={banner.title}
-                  >
-                    <Image
-                      src={banner.image?.url || "/placeholder.svg"}
-                      alt={banner.title}
-                      fill
-                      sizes="(max-width: 768px) 400px, 600px"
-                      className="object-cover"
-                      priority={banners.indexOf(banner) < 2}
-                    />
-                  </Link>
-                ) : (
-                  <Image
-                    src={banner.image?.url || "/placeholder.svg"}
-                    alt={banner.title}
-                    fill
-                    sizes="(max-width: 768px) 400px, 600px"
-                    className="object-cover "
-                    priority={banners.indexOf(banner) < 2}
-                  />
-                )}
+              <div className="relative w-full h-[200px] md:h-[220px] rounded-sm overflow-hidden">
+                {/* Image component with responsive object-fit */}
+                <Image
+                  src={banner.image?.url || "/placeholder.svg"}
+                  alt={banner.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 600px"
+                  className="object-contain md:object-cover bg-gray-50"
+                  priority={banners.indexOf(banner) < 2}
+                />
               </div>
             </CarouselItem>
           ))}
