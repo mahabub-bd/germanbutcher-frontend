@@ -9,6 +9,7 @@ import { fetchDataPagination } from "@/utils/api-utils";
 import type { Banner } from "@/utils/types";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
+import Link from "next/link";
 import * as React from "react";
 import { useEffect } from "react";
 
@@ -80,22 +81,38 @@ const PromotionalCarousel = ({
         ]}
         className="w-full"
       >
-        <CarouselContent className="-ml-1 md:-ml-4">
+        <CarouselContent className="-ml-0.5 md:-ml-4">
           {banners.map((banner) => (
             <CarouselItem
               key={banner.id}
-              className="pl-1 md:pl-4 md:basis-1/2 basis-full"
+              className="pl-0.5 md:pl-4 md:basis-1/2 basis-full"
             >
-              <div className="relative w-full h-[200px] md:h-[220px] rounded-sm overflow-hidden">
-                {/* Image component with responsive object-fit */}
-                <Image
-                  src={banner.image?.url || "/placeholder.svg"}
-                  alt={banner.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 600px"
-                  className="object-contain md:object-cover bg-gray-50"
-                  priority={banners.indexOf(banner) < 2}
-                />
+              <div className="relative w-full h-[180px] sm:h-[200px] md:h-[220px] rounded-sm overflow-hidden">
+                {banner.targetUrl ? (
+                  <Link
+                    href={banner.targetUrl}
+                    className="block w-full h-full"
+                    aria-label={banner.title}
+                  >
+                    <Image
+                      src={banner.image?.url || "/placeholder.svg"}
+                      alt={banner.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 600px"
+                      className="object-cover object-center"
+                      priority={banners.indexOf(banner) < 2}
+                    />
+                  </Link>
+                ) : (
+                  <Image
+                    src={banner.image?.url || "/placeholder.svg"}
+                    alt={banner.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 600px"
+                    className="object-cover object-center"
+                    priority={banners.indexOf(banner) < 2}
+                  />
+                )}
               </div>
             </CarouselItem>
           ))}
