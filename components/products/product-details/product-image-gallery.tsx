@@ -47,7 +47,7 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
           src={selectedImage || "/placeholder.svg"}
           alt={product.name}
           fill
-          className="object-contain transition-transform duration-300 aspect-video"
+          className="object-cover transition-transform duration-300 aspect-video"
         />
 
         {/* Zoomed Image Overlay */}

@@ -99,7 +99,7 @@ const PromotionalCarousel = ({
                       alt={banner.title}
                       fill
                       sizes="(max-width: 768px) 400px, 600px"
-                      className="object-contain"
+                      className="object-cover"
                       priority={banners.indexOf(banner) < 2}
                     />
                   </Link>
