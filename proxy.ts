@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 import { getUser } from "./actions/auth";
 
-export async function middleware(req: any) {
+export async function proxy(req: any) {
   const { pathname } = req.nextUrl;
 
   const userProtectedRoutes = ["/user", "/order-confirmation"];
