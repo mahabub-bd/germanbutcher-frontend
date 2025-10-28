@@ -69,8 +69,6 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
     }
   };
 
-
-
   const generateOrderTimeline = () => {
     // Create a map of all possible statuses
     const allStatuses = [
@@ -379,7 +377,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                               ) : (
                                 isActive && (
                                   <Badge variant="outline" className="text-xs">
-                                    {status === order.orderStatus
+                                    {status === order.orderStatus.toLowerCase()
                                       ? "Current"
                                       : ""}
                                   </Badge>
@@ -524,7 +522,6 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                 {orderSummary.productDiscountTotal > 0 && (
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground flex items-center">
-                      
                       Product Discounts
                     </span>
                     <span className="text-sm text-green-600">

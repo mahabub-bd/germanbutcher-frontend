@@ -1,7 +1,6 @@
 import PayNow from "@/components/payment/pay-now";
 import {
   Building,
-  CheckCircle,
   Clock,
   CreditCard,
   FileText,
@@ -13,7 +12,6 @@ import {
   Tag,
   Truck,
   User,
-  XCircle,
 } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -24,16 +22,12 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrencyEnglish, formatDateTime } from "@/lib/utils";
 import { fetchProtectedData } from "@/utils/api-utils";
+import {
+  getOrderStatusColor,
+  getPaymentStatusColor,
+  getStatusIcon,
+} from "@/utils/order-helper";
 import type { Order, OrderItem } from "@/utils/types";
-
-// Order status enum
-enum OrderStatus {
-  PENDING = "pending",
-  PROCESSING = "processing",
-  SHIPPED = "shipped",
-  DELIVERED = "delivered",
-  CANCELLED = "cancelled",
-}
 
 // Payment method constants
 const PAYMENT_METHODS = {
@@ -50,56 +44,6 @@ async function fetchOrder(id: string) {
     return null;
   }
 }
-
-// Utility functions
-const getOrderStatusColor = (status: string) => {
-  switch (status.toLowerCase()) {
-    case OrderStatus.PENDING:
-      return "bg-yellow-100 text-yellow-800";
-    case OrderStatus.PROCESSING:
-      return "bg-blue-100 text-blue-800";
-    case OrderStatus.SHIPPED:
-      return "bg-purple-100 text-purple-800";
-    case OrderStatus.DELIVERED:
-      return "bg-green-100 text-green-800";
-    case OrderStatus.CANCELLED:
-      return "bg-red-100 text-red-800";
-    default:
-      return "bg-gray-100 text-gray-800";
-  }
-};
-
-const getPaymentStatusColor = (status: string) => {
-  switch (status.toLowerCase()) {
-    case "paid":
-      return "bg-green-100 text-green-800";
-    case "pending":
-      return "bg-yellow-100 text-yellow-800";
-    case "failed":
-      return "bg-red-100 text-red-800";
-    default:
-      return "bg-gray-100 text-gray-800";
-  }
-};
-
-const getStatusIcon = (status: string) => {
-  switch (status.toLowerCase()) {
-    case "paid":
-    case OrderStatus.DELIVERED:
-    case "completed":
-      return <CheckCircle className="size-4 mr-1" />;
-    case OrderStatus.PENDING:
-    case OrderStatus.PROCESSING:
-      return <Clock className="size-4 mr-1" />;
-    case OrderStatus.CANCELLED:
-    case "failed":
-      return <XCircle className="size-4 mr-1" />;
-    case OrderStatus.SHIPPED:
-      return <Truck className="size-4 mr-1" />;
-    default:
-      return null;
-  }
-};
 
 const formatStatus = (status: string) => {
   return status.charAt(0).toUpperCase() + status.slice(1);

@@ -54,8 +54,9 @@ import {
 } from "@/components/ui/timeline";
 import { formatCurrencyEnglish, formatDateTime } from "@/lib/utils";
 import { patchData } from "@/utils/api-utils";
-import type { Order } from "@/utils/types";
-import { CheckCircle, Truck, XCircle } from "lucide-react";
+import { getStatusDotColor, getStatusIcon } from "@/utils/order-helper";
+import { OrderStatus, type Order } from "@/utils/types";
+import { XCircle } from "lucide-react";
 import { Section } from "../helper";
 
 const orderUpdateSchema = z.object({
@@ -69,13 +70,6 @@ const orderUpdateSchema = z.object({
 });
 
 // Order status enum
-enum OrderStatus {
-  PENDING = "pending",
-  PROCESSING = "processing",
-  SHIPPED = "shipped",
-  DELIVERED = "delivered",
-  CANCELLED = "cancelled",
-}
 
 type OrderUpdateValues = z.infer<typeof orderUpdateSchema>;
 
@@ -182,40 +176,6 @@ export function OrderForm({ order }: OrderFormProps) {
   const shippingCost = Number(order.shippingMethod?.cost || 0);
   const total = order.totalValue;
   const paidAmount = order.paidAmount || 0;
-
-  // Status timeline helpers
-  const getStatusDotColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case OrderStatus.PENDING:
-        return "bg-yellow-500";
-      case OrderStatus.PROCESSING:
-        return "bg-blue-500";
-      case OrderStatus.SHIPPED:
-        return "bg-purple-500";
-      case OrderStatus.DELIVERED:
-        return "bg-green-500";
-      case OrderStatus.CANCELLED:
-        return "bg-red-500";
-      default:
-        return "bg-gray-500";
-    }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status.toLowerCase()) {
-      case OrderStatus.DELIVERED:
-        return <CheckCircle className="h-4 w-4 mr-1" />;
-      case OrderStatus.PENDING:
-      case OrderStatus.PROCESSING:
-        return <Clock className="h-4 w-4 mr-1" />;
-      case OrderStatus.CANCELLED:
-        return <XCircle className="h-4 w-4 mr-1" />;
-      case OrderStatus.SHIPPED:
-        return <Truck className="h-4 w-4 mr-1" />;
-      default:
-        return null;
-    }
-  };
 
   // Generate a complete timeline with all order statuses
   const generateOrderTimeline = () => {

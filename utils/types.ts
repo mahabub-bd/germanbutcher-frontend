@@ -1,11 +1,4 @@
 type UserRole = "superadmin" | "admin" | "user";
-export enum OrderStatus {
-  PENDING = "PENDING",
-  PROCESSING = "PROCESSING",
-  SHIPPED = "SHIPPED",
-  DELIVERED = "DELIVERED",
-  CANCELLED = "CANCELLED",
-}
 
 export type PaginatedResponse<T> = {
   message: string;
@@ -634,4 +627,10 @@ export interface Testimonial {
   updatedAt: string;
 }
 
-
+export enum OrderStatus {
+  PENDING = "pending",
+  PROCESSING = "processing",
+  SHIPPED = "shipped",
+  DELIVERED = "delivered",
+  CANCELLED = "cancelled",
+}
