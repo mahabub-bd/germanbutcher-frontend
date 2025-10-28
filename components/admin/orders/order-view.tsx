@@ -14,11 +14,16 @@ import {
   TimelineSeparator,
 } from "@/components/ui/timeline";
 import { formatCurrencyEnglish, formatDateTime } from "@/lib/utils";
-import type { Order, OrderItem } from "@/utils/types";
+import {
+  getOrderStatusColor,
+  getPaymentStatusColor,
+  getStatusDotColor,
+  getStatusIcon,
+} from "@/utils/order-helper";
+import { OrderStatus, type Order, type OrderItem } from "@/utils/types";
 import { pdf } from "@react-pdf/renderer";
 import {
   ArrowLeft,
-  CheckCircle,
   Clock,
   CreditCard,
   Download,
@@ -27,23 +32,12 @@ import {
   Package,
   Pencil,
   Tag,
-  Truck,
   User,
-  XCircle,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { OrderPDFDocument } from "./order-pdf-document";
-
-// Order status enum
-enum OrderStatus {
-  PENDING = "pending",
-  PROCESSING = "processing",
-  SHIPPED = "shipped",
-  DELIVERED = "delivered",
-  CANCELLED = "cancelled",
-}
 
 interface OrderViewProps {
   order: Order;
@@ -70,23 +64,6 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
       // You might want to show a toast notification here
     } finally {
       setIsGeneratingPDF(false);
-    }
-  };
-
-  const getStatusDotColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case OrderStatus.PENDING:
-        return "bg-yellow-500";
-      case OrderStatus.PROCESSING:
-        return "bg-blue-500";
-      case OrderStatus.SHIPPED:
-        return "bg-purple-500";
-      case OrderStatus.DELIVERED:
-        return "bg-green-500";
-      case OrderStatus.CANCELLED:
-        return "bg-red-500";
-      default:
-        return "bg-gray-500";
     }
   };
 
@@ -167,63 +144,14 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
   // Generate the timeline statuses
   const timelineStatuses = generateOrderTimeline();
 
-  const getOrderStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case OrderStatus.PENDING:
-        return "bg-yellow-100 text-yellow-800";
-      case OrderStatus.PROCESSING:
-        return "bg-blue-100 text-blue-800";
-      case OrderStatus.SHIPPED:
-        return "bg-purple-100 text-purple-800";
-      case OrderStatus.DELIVERED:
-        return "bg-green-100 text-green-800";
-      case OrderStatus.CANCELLED:
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getPaymentStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "paid":
-        return "bg-green-100 text-green-800";
-      case "pending":
-        return "bg-yellow-100 text-yellow-800";
-      case "failed":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "paid":
-      case OrderStatus.DELIVERED:
-      case "completed":
-        return <CheckCircle className="size-4 mr-1" />;
-      case OrderStatus.PENDING:
-      case OrderStatus.PROCESSING:
-        return <Clock className="size-4 mr-1" />;
-      case OrderStatus.CANCELLED:
-      case "failed":
-        return <XCircle className="size-4 mr-1" />;
-      case OrderStatus.SHIPPED:
-        return <Truck className="size-4 mr-1" />;
-      default:
-        return null;
-    }
-  };
-
-  // Calculate order summary using stored prices from OrderItem
   const calculateOrderSummary = () => {
     // Calculate subtotal from stored item prices
     const itemsSubtotal = order.items.reduce((sum, item) => {
       // Use stored totalPrice if available, otherwise fallback to calculation
       const itemTotal =
-        item.totalPrice || (item.unitPrice || 0) * item.quantity;
-      return sum + Number(itemTotal);
+        Number(item.totalPrice) ||
+        (Number(item.unitPrice) || 0) * item.quantity;
+      return sum + itemTotal;
     }, 0);
 
     // Calculate product discount total from stored unitDiscount
@@ -330,10 +258,13 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
               <div className="space-y-4">
                 {order.items.map((item: OrderItem) => {
                   // Use stored prices from OrderItem
-                  const unitPrice = item.unitPrice || item.product.sellingPrice;
+                  const unitPrice =
+                    Number(item.unitPrice) ||
+                    Number(item.product.sellingPrice) ||
+                    0;
                   const totalPrice =
-                    item.totalPrice || unitPrice * item.quantity;
-                  const unitDiscount = item.unitDiscount || 0;
+                    Number(item.totalPrice) || unitPrice * item.quantity;
+                  const unitDiscount = Number(item.unitDiscount) || 0;
 
                   return (
                     <div
@@ -591,7 +522,6 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                 {orderSummary.productDiscountTotal > 0 && (
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground flex items-center">
-                      <Tag className="size-3 mr-1" />
                       Product Discounts
                     </span>
                     <span className="text-sm text-green-600">
