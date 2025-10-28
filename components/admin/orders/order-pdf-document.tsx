@@ -277,98 +277,76 @@ const styles = StyleSheet.create({
   },
   dueLabel: {
     fontSize: 9,
-    color: "#dc2626",
     fontWeight: "bold",
+    color: "#dc2626",
   },
   dueValue: {
     fontSize: 10,
-    color: "#dc2626",
     fontWeight: "bold",
+    color: "#dc2626",
   },
-  // Footer Section - CHANGED: Removed absolute positioning
+  // Footer
   footer: {
-    position: "absolute",
-    bottom: 20,
-    left: 32,
-    right: 32,
-    paddingTop: 12,
+    marginTop: "auto",
+    paddingTop: 15,
     borderTopWidth: 1,
     borderTopColor: "#e5e7eb",
   },
   footerContent: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "flex-end",
   },
-
   footerLeft: {
     flex: 1,
-  },
-  thankYou: {
-    fontSize: 10,
-    fontWeight: "bold",
-    color: "#8B0000",
-    marginBottom: 3,
-  },
-  contact: {
-    fontSize: 8,
-    color: "#6b7280",
-    marginBottom: 2,
   },
   footerRight: {
     alignItems: "flex-end",
   },
+  thankYou: {
+    fontSize: 9,
+    fontWeight: "bold",
+    color: "#8B0000",
+    marginBottom: 4,
+  },
+  contact: {
+    fontSize: 7,
+    color: "#6b7280",
+    marginBottom: 1,
+  },
   printDate: {
     fontSize: 7,
     color: "#9ca3af",
+    fontStyle: "italic",
   },
 });
 
-interface OrderPDFProps {
+interface OrderPDFDocumentProps {
   order: Order;
 }
 
-export const OrderPDFDocument = ({ order }: OrderPDFProps) => {
-  const calculateDiscountedPrice = (
-    price: number,
-    discountType: string | null | undefined,
-    discountValue: string | number | null | undefined
-  ): number => {
-    if (!discountType || !discountValue) return price;
-
-    const discount =
-      typeof discountValue === "string"
-        ? Number.parseFloat(discountValue)
-        : discountValue;
-
-    if (discountType === "percentage") {
-      return price - price * (discount / 100);
-    }
-    return price - discount;
-  };
-
+export const OrderPDFDocument = ({ order }: OrderPDFDocumentProps) => {
+  // Calculate order summary using stored prices from OrderItem
   const calculateOrderSummary = () => {
-    let originalSubtotal = 0;
-    let productDiscountTotal = 0;
+    // Calculate subtotal from stored item prices
+    const itemsSubtotal = order.items.reduce((sum, item) => {
+      // Use stored totalPrice if available, otherwise fallback to calculation
+      const itemTotal =
+        item.totalPrice || (item.unitPrice || 0) * item.quantity;
+      return sum + Number(itemTotal);
+    }, 0);
 
-    order.items.forEach((item) => {
-      const originalItemPrice = item.product.sellingPrice * item.quantity;
-      originalSubtotal += originalItemPrice;
+    // Calculate product discount total from stored unitDiscount
+    const productDiscountTotal = order.items.reduce((sum, item) => {
+      const discountTotal = (item.unitDiscount || 0) * item.quantity;
+      return sum + Number(discountTotal);
+    }, 0);
 
-      if (item.product.discountValue && item.product.discountValue > 0) {
-        let discountAmount = 0;
-        if (item.product.discountType === "percentage") {
-          discountAmount =
-            originalItemPrice * (Number(item.product.discountValue) / 100);
-        } else if (item.product.discountType === "fixed") {
-          discountAmount = Number(item.product.discountValue) * item.quantity;
-        }
-        productDiscountTotal += discountAmount;
-      }
-    });
+    // Original subtotal (before product discounts)
+    const originalSubtotal = itemsSubtotal + productDiscountTotal;
 
-    const couponDiscount = order.coupon
-      ? Number(order.totalDiscount || 0) - productDiscountTotal
-      : 0;
+    // Coupon discount is total discount minus product discounts
+    const couponDiscount = Number(order.totalDiscount) - productDiscountTotal;
 
     return {
       originalSubtotal,
@@ -522,14 +500,13 @@ export const OrderPDFDocument = ({ order }: OrderPDFProps) => {
               </Text>
             </View>
             {order.items?.map((item: OrderItem, index: number) => {
-              const discountedPrice = calculateDiscountedPrice(
-                item.product?.sellingPrice || 0,
-                item.product?.discountType,
-                item.product?.discountValue
-              );
-              const totalPrice = discountedPrice * (item.quantity || 0);
-              const hasDiscount =
-                item.product?.discountValue && item.product.discountValue > 0;
+              // Use stored prices from OrderItem
+              const unitPrice =
+                item.unitPrice || item.product?.sellingPrice || 0;
+              const totalPrice = item.totalPrice || unitPrice * item.quantity;
+              const unitDiscount = item.unitDiscount || 0;
+              const hasDiscount = unitDiscount > 0;
+              const originalPrice = unitPrice + unitDiscount;
 
               return (
                 <View key={item.id || index} style={[styles.tableRow]}>
@@ -547,10 +524,10 @@ export const OrderPDFDocument = ({ order }: OrderPDFProps) => {
                   <View style={[styles.tableCell, styles.priceCell]}>
                     {hasDiscount && (
                       <Text style={styles.strikethrough}>
-                        {formatCurrency(item.product?.sellingPrice || 0)}
+                        {formatCurrency(originalPrice)}
                       </Text>
                     )}
-                    <Text>{formatCurrency(discountedPrice)}</Text>
+                    <Text>{formatCurrency(unitPrice)}</Text>
                   </View>
                   <Text
                     style={[

@@ -216,122 +216,108 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
     }
   };
 
+  // Calculate order summary using stored prices from OrderItem
   const calculateOrderSummary = () => {
-    let originalSubtotal = 0;
-    let productDiscountTotal = 0;
-    order.items.forEach((item) => {
-      const originalItemPrice = item.product.sellingPrice * item.quantity;
-      originalSubtotal += originalItemPrice;
-      if (item.product.discountValue) {
-        let discountAmount = 0;
-        if (item.product.discountType === "percentage") {
-          discountAmount =
-            originalItemPrice * (Number(item.product.discountValue) / 100);
-        } else if (item.product.discountType === "fixed") {
-          discountAmount = Number(item.product.discountValue) * item.quantity;
-        }
-        productDiscountTotal += discountAmount;
-      }
-    });
+    // Calculate subtotal from stored item prices
+    const itemsSubtotal = order.items.reduce((sum, item) => {
+      // Use stored totalPrice if available, otherwise fallback to calculation
+      const itemTotal =
+        item.totalPrice || (item.unitPrice || 0) * item.quantity;
+      return sum + Number(itemTotal);
+    }, 0);
 
-    const couponDiscount = order.coupon
-      ? Number(order.totalDiscount) - productDiscountTotal
-      : 0;
+    // Calculate product discount total from stored unitDiscount
+    const productDiscountTotal = order.items.reduce((sum, item) => {
+      const discountTotal = (item.unitDiscount || 0) * item.quantity;
+      return sum + Number(discountTotal);
+    }, 0);
+
+    // Original subtotal (before product discounts)
+    const originalSubtotal = itemsSubtotal + productDiscountTotal;
+
+    // Coupon discount is total discount minus product discounts
+    const couponDiscount = Number(order.totalDiscount) - productDiscountTotal;
+
+    const shippingCost = Number(order.shippingMethod.cost);
+
+    // Total should match order.totalValue
+    const total = Number(order.totalValue);
 
     return {
       originalSubtotal,
       productDiscountTotal,
       couponDiscount,
-      shippingCost: Number(order.shippingMethod.cost),
-      total: order.totalValue,
+      itemsSubtotal,
+      shippingCost,
+      total,
     };
   };
 
   const orderSummary = calculateOrderSummary();
 
-  const calculateDiscountedPrice = (
-    price: number,
-    discountType: string,
-    discountValue: string
-  ) => {
-    if (discountType === "percentage") {
-      return price - price * (Number.parseFloat(discountValue) / 100);
-    }
-    return price - Number.parseFloat(discountValue);
-  };
-
   return (
-    <div className="flex flex-col space-y-6 p-4 md:p-6">
-      {/* Header with back button and actions */}
+    <div className="container mx-auto py-6 space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {onBack && (
-            <Button variant="outline" size="icon" onClick={onBack}>
+            <Button variant="ghost" size="icon" onClick={onBack}>
               <ArrowLeft className="size-4" />
             </Button>
           )}
-          <h1 className="text-2xl font-bold">Order Details</h1>
+          <div>
+            <h1 className="text-2xl font-bold">Order Details</h1>
+            <p className="text-sm text-muted-foreground">
+              Order #{order.orderNo}
+            </p>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Button variant="default" asChild>
-            <Link href={`/admin/order/${order.id}/edit`}>
-              <Pencil className="mr-2 h-4 w-4" />
-              Edit
-            </Link>
-          </Button>
+        <div className="flex items-center gap-2">
+          <Link href={`/admin/order/${order.id}/edit`}>
+            <Button variant="outline" size="sm">
+              <Pencil className="size-4 mr-2" />
+              Edit Order
+            </Button>
+          </Link>
           <Button
             variant="outline"
+            size="sm"
             onClick={handleGeneratePDF}
             disabled={isGeneratingPDF}
-            className="min-w-[140px]"
           >
-            <Download className="size-4 mr-2" />
-            {isGeneratingPDF ? "Generating..." : "Download"}
+            {isGeneratingPDF ? (
+              <>
+                <Clock className="size-4 mr-2 animate-spin" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <Download className="size-4 mr-2" />
+                Download Invoice
+              </>
+            )}
           </Button>
         </div>
       </div>
 
-      {/* Order Summary Header */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h2 className="text-xl font-bold text-blue-900 dark:text-blue-100">
-              Order #{order.orderNo}
-            </h2>
-            <p className="text-blue-700 dark:text-blue-300 mt-1">
-              Placed on {formatDateTime(order.createdAt)}
-            </p>
-            <p className="text-blue-600 dark:text-blue-400 text-sm mt-2">
-              {order.items.length} item{order.items.length !== 1 ? "s" : ""} •
-              Total: {formatCurrencyEnglish(order.totalValue)}
-            </p>
-          </div>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-            <Badge
-              variant="secondary"
-              className={getOrderStatusColor(order.orderStatus)}
-            >
-              {getStatusIcon(order.orderStatus)}
-              Order:{" "}
-              {order.orderStatus.charAt(0).toUpperCase() +
-                order.orderStatus.slice(1)}
-            </Badge>
-            <Badge
-              variant="secondary"
-              className={getPaymentStatusColor(order.paymentStatus)}
-            >
-              <CreditCard className="size-3 mr-1" />
-              Payment:{" "}
-              {order.paymentStatus.charAt(0).toUpperCase() +
-                order.paymentStatus.slice(1)}
-            </Badge>
-          </div>
-        </div>
+      {/* Status Badges */}
+      <div className="flex gap-2">
+        <Badge className={getOrderStatusColor(order.orderStatus)}>
+          {getStatusIcon(order.orderStatus)}
+          {order.orderStatus.charAt(0).toUpperCase() +
+            order.orderStatus.slice(1)}
+        </Badge>
+        <Badge className={getPaymentStatusColor(order.paymentStatus)}>
+          {getStatusIcon(order.paymentStatus)}
+          {order.paymentStatus.charAt(0).toUpperCase() +
+            order.paymentStatus.slice(1)}
+        </Badge>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Order Items */}
-        <div className="md:col-span-2 space-y-6">
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column - Order Items and Timeline */}
+        <div className="lg:col-span-2 space-y-6">
           {/* Order Items */}
           <div className="border rounded-lg p-4 bg-background">
             <div className="pb-3">
@@ -343,81 +329,63 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
             <div>
               <div className="space-y-4">
                 {order.items.map((item: OrderItem) => {
-                  const discountedPrice = calculateDiscountedPrice(
-                    item.product.sellingPrice,
-                    item.product.discountType ?? "",
-                    (item.product.discountValue ?? 0).toString()
-                  );
-                  const hasDiscount =
-                    item.product.discountValue &&
-                    item.product.discountValue > 0;
+                  // Use stored prices from OrderItem
+                  const unitPrice = item.unitPrice || item.product.sellingPrice;
+                  const totalPrice =
+                    item.totalPrice || unitPrice * item.quantity;
+                  const unitDiscount = item.unitDiscount || 0;
 
                   return (
                     <div
                       key={item.id}
-                      className="grid grid-cols-[64px_1fr_auto] gap-4 py-3 border-b last:border-0"
+                      className="flex items-start gap-4 p-3 rounded-lg border"
                     >
-                      {/* Product Image */}
-                      <div className="relative h-16 w-16 rounded-md overflow-hidden bg-muted">
-                        {item.product.attachment ? (
-                          <Image
-                            src={
-                              item.product.attachment.url || "/placeholder.svg"
-                            }
-                            alt={item.product.name}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 64px, 96px"
-                          />
-                        ) : (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <Package className="size-6 text-muted-foreground" />
+                      <div className="relative size-16 rounded-md overflow-hidden bg-muted flex-shrink-0">
+                        <Image
+                          src={
+                            item.product.attachment?.url || "/placeholder.svg"
+                          }
+                          alt={item.product.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1">
+                            <h4 className="font-medium text-sm line-clamp-1">
+                              {item.product.name}
+                            </h4>
+                            <div className="flex flex-wrap items-center gap-2 mt-1">
+                              <span className="text-sm text-muted-foreground">
+                                {formatCurrencyEnglish(unitPrice)} ×{" "}
+                                {item.quantity} {item.product.unit?.name}
+                              </span>
+                              {unitDiscount > 0 && (
+                                <Badge variant="secondary" className="text-xs">
+                                  -{formatCurrencyEnglish(unitDiscount)} off
+                                </Badge>
+                              )}
+                            </div>
                           </div>
+                          <div className="text-right">
+                            <p className="font-medium text-sm">
+                              {formatCurrencyEnglish(totalPrice)}
+                            </p>
+                            {unitDiscount > 0 && (
+                              <p className="text-xs text-muted-foreground line-through">
+                                {formatCurrencyEnglish(
+                                  (unitPrice + unitDiscount) * item.quantity
+                                )}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        {item.product.supplier && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Supplier: {item.product.supplier.name}
+                          </p>
                         )}
-                      </div>
-
-                      {/* Product Details */}
-                      <div className="space-y-1.5">
-                        <h4 className="text-sm font-semibold line-clamp-2">
-                          {item.product.name}
-                        </h4>
-                        <p className="text-xs text-muted-foreground line-clamp-2">
-                          {item.product.description}
-                        </p>
-                        {hasDiscount && (
-                          <Badge
-                            variant="outline"
-                            className="mt-1 text-[0.7rem] bg-green-100 text-green-800 border-green-200"
-                          >
-                            {item.product.discountType === "percentage"
-                              ? `${item.product.discountValue}% OFF`
-                              : `${item.product.discountValue} OFF`}
-                          </Badge>
-                        )}
-                      </div>
-
-                      {/* Pricing */}
-                      <div className="flex flex-col items-end space-y-1.5">
-                        <div className="flex items-center gap-2">
-                          {hasDiscount && (
-                            <span className="text-xs text-muted-foreground line-through">
-                              {formatCurrencyEnglish(item.product.sellingPrice)}
-                            </span>
-                          )}
-                          <span
-                            className={`text-sm ${hasDiscount ? "text-green-700 font-semibold" : "font-medium"}`}
-                          >
-                            {formatCurrencyEnglish(discountedPrice)}
-                          </span>
-                        </div>
-                        <div className="text-sm font-medium">
-                          {formatCurrencyEnglish(
-                            discountedPrice * item.quantity
-                          )}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          × {item.quantity} {item.product.unit?.name || "pc"}
-                        </div>
                       </div>
                     </div>
                   );
@@ -426,100 +394,16 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Payment Information */}
-            <div className="border rounded-lg p-4 bg-background">
-              <div className="pb-3">
-                <h3 className="text-base font-medium flex items-center">
-                  <CreditCard className="size-5 mr-2" />
-                  Payment Information
-                </h3>
-              </div>
-              <div>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">
-                      Payment Method
-                    </span>
-                    <span className="text-sm font-medium">
-                      {order.paymentMethod.name}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">
-                      Payment Status
-                    </span>
-                    <Badge
-                      variant="outline"
-                      className={getPaymentStatusColor(order.paymentStatus)}
-                    >
-                      {getStatusIcon(order.paymentStatus)}
-                      {order.paymentStatus.charAt(0).toUpperCase() +
-                        order.paymentStatus.slice(1)}
-                    </Badge>
-                  </div>
-                  {order.paidAmount > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">
-                        Amount Paid
-                      </span>
-                      <span className="text-sm font-medium">
-                        {formatCurrencyEnglish(order.paidAmount)}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Shipping Information */}
-            <div className="border rounded-lg p-4 bg-background">
-              <div className="pb-3">
-                <h3 className="text-base font-medium flex items-center">
-                  <Truck className="size-5 mr-2" />
-                  Shipping Information
-                </h3>
-              </div>
-              <div>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">
-                      Shipping Method
-                    </span>
-                    <span className="text-sm font-medium">
-                      {order.shippingMethod.name}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">
-                      Delivery Time
-                    </span>
-                    <span className="text-sm">
-                      {order.shippingMethod.deliveryTime}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">
-                      Shipping Cost
-                    </span>
-                    <span className="text-sm font-medium">
-                      {formatCurrencyEnglish(Number(order.shippingMethod.cost))}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          {/* Order Timeline */}
           <div className="border rounded-lg p-4 bg-background">
             <div className="pb-3">
               <h3 className="text-base font-medium flex items-center">
-                <Tag className="size-5 mr-2" />
-                Order Status Timeline
+                <Clock className="size-5 mr-2" />
+                Order Timeline
               </h3>
             </div>
-            <div className="pl-2">
-              {order.statusTracks.length > 0 ? (
+            <div>
+              {order.statusTracks && order.statusTracks.length > 0 ? (
                 <Timeline>
                   {timelineStatuses.map((status, index) => {
                     const isActive = isStatusActive(status);
@@ -528,7 +412,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                     const updatedBy = getStatusUpdatedBy(status);
 
                     return (
-                      <TimelineItem key={status}>
+                      <TimelineItem key={index}>
                         <TimelineSeparator>
                           <TimelineDot
                             className={
@@ -723,7 +607,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                       Coupon Discount ({order.coupon.code})
                     </span>
                     <span className="text-sm text-green-600">
-                      -{formatCurrencyEnglish(order.coupon.value)}
+                      -{formatCurrencyEnglish(orderSummary.couponDiscount)}
                     </span>
                   </div>
                 )}
@@ -743,7 +627,11 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                 {order.paymentStatus === "pending" && (
                   <div className="flex justify-between text-red-600 text-sm">
                     <span>Due Amount</span>
-                    <span>{order.totalValue - order.paidAmount}</span>
+                    <span>
+                      {formatCurrencyEnglish(
+                        order.totalValue - order.paidAmount
+                      )}
+                    </span>
                   </div>
                 )}
               </div>

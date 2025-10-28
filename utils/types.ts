@@ -446,6 +446,9 @@ export interface OrderItem {
   id: number;
   productId: number;
   quantity: number;
+  unitPrice?: number;
+  totalPrice?: number;
+  unitDiscount?: number;
   createdAt: string;
   updatedAt: string;
   product: Product;
