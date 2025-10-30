@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { deleteData, fetchData } from "@/utils/api-utils";
+import { deleteData, fetchProtectedData } from "@/utils/api-utils";
 import type { Role } from "@/utils/types";
 import { MoreHorizontal, Pencil, Plus, Shield, Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -36,7 +36,7 @@ export function RoleList() {
   const fetchRoles = async () => {
     setIsLoading(true);
     try {
-      const response = (await fetchData("roles")) as Role[];
+      const response = (await fetchProtectedData("roles")) as Role[];
       setRoles(response);
     } catch (error) {
       console.error("Error fetching roles:", error);
