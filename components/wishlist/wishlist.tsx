@@ -67,9 +67,9 @@ const WishlistSection = ({
         {wishlistData.items.map((item) => (
           <div
             key={item.id}
-            className="flex md:flex-row flex-col justify-between gap-4 border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow relative bg-white"
+            className="flex md:flex-row flex-col gap-4 border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow relative bg-white"
           >
-            <div className="flex gap-4 ">
+            <div className="flex gap-4 min-w-0 flex-1">
               <div className="relative w-24 h-24 sm:w-36 sm:h-24 flex-shrink-0">
                 <Image
                   width={400}
@@ -80,20 +80,20 @@ const WishlistSection = ({
                 />
               </div>
 
-              <div className="flex-1 flex flex-col">
+              <div className="flex-1 flex flex-col min-w-0">
                 <div className="flex-1">
                   <Link
                     href={`/product/${item.product?.slug}`}
-                    className="font-semibold text-gray-900 text-lg mb-2 hover:text-primaryColor transition-colors block"
+                    className="font-semibold text-gray-900 text-lg mb-2 hover:text-primaryColor transition-colors block break-words"
                   >
                     {item.product.name}
                   </Link>
                   {item.product.description && (
-                    <p className="text-gray-600 text-sm line-clamp-2 mb-4">
+                    <p className="text-gray-600 text-sm line-clamp-2 mb-4 break-words">
                       {item.product.description}
                     </p>
                   )}
-                  <div className="flex items-center gap-2 mt-auto">
+                  <div className="flex items-center gap-2 mt-auto flex-wrap">
                     {(() => {
                       // Discount calculations
                       const now = new Date();
@@ -147,7 +147,7 @@ const WishlistSection = ({
                             </span>
                           )}
                           {hasDiscount && (
-                            <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full font-medium">
+                            <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full font-medium whitespace-nowrap">
                               Save {formatCurrencyEnglish(savingsAmount)}
                             </span>
                           )}
@@ -164,7 +164,7 @@ const WishlistSection = ({
               </div>
             </div>
 
-            <div className="flex items-center gap-4 mt-4 lg:mt-0">
+            <div className="flex md:flex-col md:justify-center items-start md:items-center gap-2 md:gap-3 flex-shrink-0">
               <AddToCartButton
                 product={item.product}
                 disabled={item.product.stock === 0}
