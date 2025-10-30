@@ -1,13 +1,42 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { formatCurrencyEnglish, formatWeight } from "@/lib/utils";
 import type { Product } from "@/utils/types";
 import { DiscountType } from "@/utils/types";
-import { Weight } from "lucide-react";
+import { Clock, Weight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { AddToCartButton } from "../cart/add-to-cart-button";
 
-export default async function ProductCard({
+interface TimeRemaining {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  isExpired: boolean;
+}
+
+function calculateTimeRemaining(endDate: Date): TimeRemaining {
+  const now = new Date().getTime();
+  const end = new Date(endDate).getTime();
+  const difference = end - now;
+
+  if (difference <= 0) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true };
+  }
+
+  return {
+    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+    minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+    seconds: Math.floor((difference % (1000 * 60)) / 1000),
+    isExpired: false,
+  };
+}
+
+export default function ProductCard({
   product,
   className = "",
 }: {
@@ -21,6 +50,32 @@ export default async function ProductCard({
     product.discountEndDate &&
     new Date() >= new Date(product.discountStartDate) &&
     new Date() <= new Date(product.discountEndDate);
+
+  const [timeRemaining, setTimeRemaining] = useState<TimeRemaining | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (!isDiscountActive || !product.discountEndDate) return;
+
+    // Initial calculation
+    setTimeRemaining(calculateTimeRemaining(new Date(product.discountEndDate)));
+
+    // Update every second
+    const interval = setInterval(() => {
+      const remaining = calculateTimeRemaining(
+        new Date(product.discountEndDate!)
+      );
+      setTimeRemaining(remaining);
+
+      // Clear interval if expired
+      if (remaining.isExpired) {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isDiscountActive, product.discountEndDate]);
 
   const discountedPrice =
     isDiscountActive && product.discountType && product.discountValue
@@ -51,10 +106,8 @@ export default async function ProductCard({
               sizes="(max-width: 768px) 260px, (max-width: 1024px) 280px, 320px"
             />
           )}
-
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
           {/* Out of Stock Overlay */}
           {isOutOfStock && (
             <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
@@ -66,22 +119,29 @@ export default async function ProductCard({
               </Badge>
             </div>
           )}
-
           {/* Discount Badge */}
           {isDiscountActive &&
             product.discountType &&
             product.discountValue && (
               <div className="absolute top-[2px] right-[2px] z-10">
-                <div className="relative w-16 h-16">
-                  <div className="absolute inset-2 bg-primaryColor rounded-full"></div>
+                <div className="relative w-16 h-16 animate-[spin_3s_linear_infinite]">
+                  {/* Outer ring */}
+                  <div className="absolute inset-0 rounded-full border-4 border-dashed border-primaryColor/30 animate-[spin_4s_linear_infinite_reverse]"></div>
 
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                    <div className="text-[10px] leading-none font-black">
+                  {/* Main badge with 3D effect */}
+                  <div className="absolute inset-2 bg-gradient-to-br from-red-500 via-primaryColor to-orange-500 rounded-full shadow-[0_0_20px_rgba(239,68,68,0.5)] transform hover:scale-110 transition-transform duration-300">
+                    {/* Inner shine effect */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent rounded-full"></div>
+                  </div>
+
+                  {/* Content - counter-rotate to keep text upright */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white animate-[spin_3s_linear_infinite_reverse]">
+                    <div className="text-[12px] leading-none font-black drop-shadow-lg">
                       {product.discountType === DiscountType.PERCENTAGE
-                        ? `${product.discountValue % 1 === 0 ? product.discountValue : product.discountValue.toFixed(3)}%`
+                        ? `${product.discountValue % 1 === 0 ? product.discountValue : product.discountValue.toFixed(1)}%`
                         : formatCurrencyEnglish(product.discountValue)}
                     </div>
-                    <span className="text-[10px] uppercase tracking-wide font-medium">
+                    <span className="text-[9px] uppercase tracking-wider font-bold mt-0.5">
                       {product.discountType === DiscountType.PERCENTAGE
                         ? "OFF"
                         : "SAVE"}
@@ -90,6 +150,20 @@ export default async function ProductCard({
                 </div>
               </div>
             )}
+          {/* Discount Countdown Timer - Top Left */}
+          {isDiscountActive && timeRemaining && !timeRemaining.isExpired && (
+            <div className="absolute top-1 left-1 z-10">
+              <div className="bg-black/60 backdrop-blur-sm rounded-sm px-2 py-1 shadow-lg">
+                <div className="flex items-center gap-1 text-white text-xs font-bold">
+                  <Clock size={10} />
+                  {timeRemaining.days > 0 && `${timeRemaining.days}d `}
+                  {String(timeRemaining.hours).padStart(2, "0")}:
+                  {String(timeRemaining.minutes).padStart(2, "0")}:
+                  {String(timeRemaining.seconds).padStart(2, "0")}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Content Section */}

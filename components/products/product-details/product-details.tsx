@@ -34,9 +34,7 @@ export default async function ProductDetails({ product }: ProductDetailsProps) {
             <ProductDetailsCard product={product} />
           </div>
         </div>
-        <ProductList
-          endpoint={`products?page=1&limit=8&category=${product?.category?.id}`}
-        >
+        <ProductList endpoint={`products/${product.id}/similar`}>
           <HeadingPrimary title="Related Products" className="mb-8" />
         </ProductList>
       </div>

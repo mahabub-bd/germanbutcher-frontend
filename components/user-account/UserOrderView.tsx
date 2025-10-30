@@ -30,12 +30,10 @@ import {
   FileText,
   MapPin,
   Package,
-  Pencil,
   Tag,
   User,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import { OrderPDFDocument } from "../admin/orders/order-pdf-document";
 
@@ -201,12 +199,6 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Link href={`/admin/order/${order.id}/edit`}>
-            <Button variant="outline" size="sm">
-              <Pencil className="size-4 mr-2" />
-              Edit Order
-            </Button>
-          </Link>
           <Button
             variant="outline"
             size="sm"
