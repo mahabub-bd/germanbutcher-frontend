@@ -15,18 +15,47 @@ interface ProductInfoProps {
 }
 
 export function ProductInfo({ product }: ProductInfoProps) {
-  const discountAmount =
-    product.discountType === "fixed"
+  // Check if discount is currently valid
+  const isDiscountValid = () => {
+    if (!product.discountValue) {
+      return false;
+    }
+
+    const now = new Date();
+    const startDate = product.discountStartDate
+      ? new Date(product.discountStartDate)
+      : null;
+    const endDate = product.discountEndDate
+      ? new Date(product.discountEndDate)
+      : null;
+
+    // Check if current date is within discount period
+    if (startDate && now < startDate) {
+      return false; // Discount hasn't started yet
+    }
+
+    if (endDate && now > endDate) {
+      return false; // Discount has expired
+    }
+
+    return true;
+  };
+
+  const hasValidDiscount = isDiscountValid();
+
+  const discountAmount = hasValidDiscount
+    ? product.discountType === "fixed"
       ? Number.parseFloat(String(product.discountValue ?? "0"))
       : (product.sellingPrice *
           Number.parseFloat(String(product.discountValue ?? "0"))) /
-        100;
+        100
+    : 0;
 
   const finalPrice = product.sellingPrice - discountAmount;
-  const discountPercentage = (
-    (discountAmount / product.sellingPrice) *
-    100
-  ).toFixed(0);
+  const discountPercentage =
+    discountAmount > 0
+      ? ((discountAmount / product.sellingPrice) * 100).toFixed(0)
+      : "0";
 
   // Stock status logic
   const stockQuantity = product.stock || 0;
@@ -94,7 +123,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
       </div>
 
       {/* Product Title */}
-      <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+      <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight">
         {product.name}
       </h1>
 

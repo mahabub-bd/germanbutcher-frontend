@@ -10,7 +10,7 @@ export function ProductBreadcrumb({ product }: ProductBreadcrumbProps) {
   return (
     <div className="  sticky top-0 z-10 ">
       <div className="container mx-auto  py-2 sm:py-3 lg:py-4">
-        <nav className="flex items-center text-xs sm:text-sm  rounded-lg px-2 sm:px-3 lg:px-4 py-2 sm:py-3   overflow-x-auto">
+        <nav className="flex items-center text-xs sm:text-sm  rounded-lg  overflow-x-auto">
           {/* Home Link */}
           <Link
             href="/"

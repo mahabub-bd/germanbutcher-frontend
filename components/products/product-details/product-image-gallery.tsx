@@ -10,14 +10,14 @@ interface ProductImageGalleryProps {
 }
 
 export function ProductImageGallery({ product }: ProductImageGalleryProps) {
-  const [selectedImage, setSelectedImage] = useState(product.attachment.url);
+  const [selectedImage, setSelectedImage] = useState(product?.attachment?.url);
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
   const [isMainImageLoading, setIsMainImageLoading] = useState(true);
   const [loadingThumbnails, setLoadingThumbnails] = useState<Set<string>>(
     new Set([
       product.attachment.url,
-      ...(product.gallery?.attachments?.map((img: Attachment) => img.url) ||
+      ...(product?.gallery?.attachments?.map((img: Attachment) => img.url) ||
         []),
     ])
   );
@@ -124,27 +124,27 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
       <div className="flex space-x-2 mt-4 overflow-x-auto pb-2">
         <div
           className={`relative flex-shrink-0 w-24 h-16 rounded-sm overflow-hidden cursor-pointer border-1 transition-all ${
-            selectedImage === product.attachment.url
+            selectedImage === product?.attachment?.url
               ? "border-primaryColor ring-1 ring-red-100"
               : "border-gray-200 hover:border-gray-300"
           }`}
-          onClick={() => handleImageChange(product.attachment.url)}
+          onClick={() => handleImageChange(product?.attachment?.url)}
         >
           {/* Thumbnail Skeleton */}
-          {loadingThumbnails.has(product.attachment.url) && (
+          {loadingThumbnails.has(product?.attachment?.url) && (
             <div className="absolute inset-0 bg-gray-200 animate-pulse" />
           )}
 
           <Image
-            src={product.attachment.url || "/placeholder.svg"}
-            alt={product.name}
+            src={product?.attachment?.url || "/placeholder.svg"}
+            alt={product?.name}
             fill
             className="object-cover"
-            onLoad={() => handleThumbnailLoad(product.attachment.url)}
+            onLoad={() => handleThumbnailLoad(product?.attachment?.url)}
           />
         </div>
 
-        {product.gallery?.attachments?.map((image: Attachment) => (
+        {product?.gallery?.attachments?.map((image: Attachment) => (
           <div
             key={image.id}
             className={`relative flex-shrink-0 w-24 h-16 rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${

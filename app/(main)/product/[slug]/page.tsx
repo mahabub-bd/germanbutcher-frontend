@@ -83,7 +83,7 @@ export async function generateMetadata({
             height: 630,
             alt: product.name,
           },
-          ...(product.gallery.attachments?.slice(0, 3).map((img) => ({
+          ...(product?.gallery?.attachments?.slice(0, 3).map((img) => ({
             url: img.url,
             width: 800,
             height: 600,
