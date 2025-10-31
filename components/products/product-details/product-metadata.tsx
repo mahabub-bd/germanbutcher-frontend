@@ -55,7 +55,7 @@ export function generateProductMetadata({
   const availability = product.stock > 0 ? "InStock" : "OutOfStock";
 
   return {
-    title: `${product.name} | ${product.brand?.name || "Your Store"} - ${formatCurrencyEnglish(finalPrice)}`,
+    title: `${product.name} | ${product.brand?.name} - ${formatCurrencyEnglish(finalPrice)}`,
     description: metaDescription,
     keywords,
 
@@ -64,7 +64,7 @@ export function generateProductMetadata({
       title: `${product.name} - ${formatCurrencyEnglish(finalPrice)}`,
       description: metaDescription,
       url: productUrl,
-      siteName: "Your Store Name",
+      siteName: "German Butcher Bangladesh",
       images: [
         {
           url: product.attachment?.url || "/placeholder-product.jpg",
@@ -130,7 +130,7 @@ export function generateProductMetadata({
           availability: `https://schema.org/${availability}`,
           seller: {
             "@type": "Organization",
-            name: "Your Store Name", // Replace with your store name
+            name: "German Butcher Bangladesh",
           },
           itemCondition: "https://schema.org/NewCondition",
         },

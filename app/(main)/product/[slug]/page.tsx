@@ -41,7 +41,7 @@ export async function generateMetadata({
       }
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://yourstore.com";
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://germanbutcherbd.com";
     const productUrl = `${baseUrl}/products/${product.slug || product.id}`;
 
     const description =
@@ -75,7 +75,7 @@ export async function generateMetadata({
         title: `${product.name} - ${formatCurrencyEnglish(finalPrice)}`,
         description: metaDescription,
         url: productUrl,
-        siteName: "Your Store Name",
+        siteName: "German Butcher Bangladesh",
         images: [
           {
             url: product.attachment?.url || "/placeholder-product.jpg",
@@ -137,7 +137,7 @@ export async function generateMetadata({
             availability: `https://schema.org/${availability}`,
             seller: {
               "@type": "Organization",
-              name: "Your Store Name", // Replace with your store name
+              name: "German Butcher Bangladesh", // Replace with your store name
             },
             itemCondition: "https://schema.org/NewCondition",
           },
