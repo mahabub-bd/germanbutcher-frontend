@@ -22,7 +22,8 @@ import {
   LinkedinShareButton,
   WhatsappShareButton,
 } from "next-share";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface ProductPurchaseSectionProps {
   product: Product;
@@ -33,10 +34,25 @@ export function ProductPurchaseSection({
   product,
   user,
 }: ProductPurchaseSectionProps) {
-  const [quantity, setQuantity] = useState(1);
-  const { addItem } = useCartContext();
+  const { addItem, updateItemQuantity, cart } = useCartContext();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [showShareOptions, setShowShareOptions] = useState(false);
+
+  // Check if product is already in cart
+  const cartItem = cart?.items?.find((item) => item.product.id === product.id);
+  const isInCart = !!cartItem;
+  const cartQuantity = cartItem?.quantity || 0;
+
+  // Use cart quantity if item is in cart, otherwise default to 1
+  const [quantity, setQuantity] = useState(isInCart ? cartQuantity : 1);
+
+  // Sync quantity with cart when cart changes
+  useEffect(() => {
+    if (isInCart && cartQuantity !== quantity) {
+      setQuantity(cartQuantity);
+    }
+  }, [isInCart, cartQuantity]);
 
   const discountAmount =
     product.discountType === "fixed"
@@ -47,26 +63,91 @@ export function ProductPurchaseSection({
 
   const finalPrice = product.sellingPrice - discountAmount;
 
-  const incrementQuantity = () => {
-    if (quantity < product.stock) {
-      setQuantity(quantity + 1);
+  const incrementQuantity = async () => {
+    if (quantity >= product.stock) {
+      toast.error("Maximum stock reached", {
+        description: `Only ${product.stock} items available`,
+      });
+      return;
+    }
+
+    const newQuantity = quantity + 1;
+
+    if (isInCart && cartItem) {
+      // Update cart if already in cart
+      setIsUpdating(true);
+      try {
+        await updateItemQuantity(cartItem.id || product.id, newQuantity);
+        setQuantity(newQuantity);
+      } catch (error) {
+        console.error("Error updating quantity:", error);
+        toast.error("Failed to update quantity");
+      } finally {
+        setIsUpdating(false);
+      }
+    } else {
+      // Just update local state if not in cart
+      setQuantity(newQuantity);
     }
   };
 
-  const decrementQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
+  const decrementQuantity = async () => {
+    if (quantity <= 1) {
+      toast.error("Minimum quantity is 1");
+      return;
+    }
+
+    const newQuantity = quantity - 1;
+
+    if (isInCart && cartItem) {
+      // Update cart if already in cart
+      setIsUpdating(true);
+      try {
+        await updateItemQuantity(cartItem.id || product.id, newQuantity);
+        setQuantity(newQuantity);
+      } catch (error) {
+        console.error("Error updating quantity:", error);
+        toast.error("Failed to update quantity");
+      } finally {
+        setIsUpdating(false);
+      }
+    } else {
+      // Just update local state if not in cart
+      setQuantity(newQuantity);
     }
   };
 
   const handleAddToCart = async () => {
     setIsAddingToCart(true);
     try {
-      for (let i = 0; i < quantity; i++) {
-        await addItem(product);
+      if (isInCart && cartItem) {
+        // If already in cart, update the quantity
+        const newQuantity = cartQuantity + quantity;
+        if (newQuantity > product.stock) {
+          toast.error("Insufficient stock", {
+            description: `Only ${product.stock} items available`,
+          });
+          return;
+        }
+        await updateItemQuantity(cartItem.id || product.id, newQuantity);
+        toast.success("Cart updated", {
+          description: `Quantity updated to ${newQuantity}`,
+        });
+      } else {
+        // Add new item with specified quantity
+        for (let i = 0; i < quantity; i++) {
+          await addItem(product);
+        }
       }
     } catch (error) {
       console.error("Error adding to cart:", error);
+      if (error instanceof Error && error.message.includes("stock")) {
+        toast.error("Stock unavailable", {
+          description: `${product.name} is out of stock`,
+        });
+      } else {
+        toast.error("Failed to add to cart");
+      }
     } finally {
       setIsAddingToCart(false);
     }
@@ -81,8 +162,19 @@ export function ProductPurchaseSection({
   const shareBody = `${product.name} - ${product.description}`;
 
   return (
-    <div className="bg-white rounded-md  md:p-6 p-4 shadow-sm border">
+    <div className="bg-white rounded-md md:p-6 p-4 shadow-sm border">
       <div className="space-y-4">
+        {/* In Cart Indicator */}
+        {isInCart && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
+            <ShoppingCart size={16} className="text-green-600" />
+            <span className="text-sm font-medium text-green-700">
+              {cartQuantity} {cartQuantity === 1 ? "item" : "items"} already in
+              your cart
+            </span>
+          </div>
+        )}
+
         {/* Quantity Selector */}
         <div className="space-y-2">
           <div className="flex items-center space-x-4">
@@ -91,19 +183,25 @@ export function ProductPurchaseSection({
                 variant="ghost"
                 size="sm"
                 onClick={decrementQuantity}
-                disabled={quantity <= 1}
+                disabled={quantity <= 1 || isUpdating || isAddingToCart}
                 className="h-8 w-8 rounded-l-lg hover:bg-gray-100 disabled:opacity-50"
               >
                 <Minus className="w-4 h-4" />
               </Button>
               <div className="px-2 py-1 font-semibold text-base min-w-[4rem] text-center bg-white border-x border-gray-200">
-                {quantity}
+                {isUpdating ? (
+                  <Loader2 className="w-4 h-4 mx-auto animate-spin" />
+                ) : (
+                  quantity
+                )}
               </div>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={incrementQuantity}
-                disabled={quantity >= product.stock}
+                disabled={
+                  quantity >= product.stock || isUpdating || isAddingToCart
+                }
                 className="h-8 w-8 rounded-r-lg hover:bg-gray-100 disabled:opacity-50"
               >
                 <Plus className="w-4 h-4" />
@@ -122,6 +220,12 @@ export function ProductPurchaseSection({
             <span className="text-sm text-gray-600">Quantity:</span>
             <span className="font-medium">{quantity}</span>
           </div>
+          {isInCart && (
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">In Cart:</span>
+              <span className="font-medium text-green-600">{cartQuantity}</span>
+            </div>
+          )}
           <Separator />
           <div className="flex justify-between items-center">
             <span className="font-semibold text-gray-900">Total:</span>
@@ -135,15 +239,20 @@ export function ProductPurchaseSection({
         <div className="space-y-3 grid md:grid-cols-2 grid-cols-1 gap-8">
           <Button
             className="w-full bg-gradient-to-r from-primaryColor to-secondaryColor hover:from-secondaryColor hover:to-primaryColor text-white py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
-            disabled={product.stock === 0 || isAddingToCart}
+            disabled={product.stock === 0 || isAddingToCart || isUpdating}
             onClick={handleAddToCart}
           >
             {isAddingToCart ? (
-              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+              <>
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                {isInCart ? "Updating Cart..." : "Adding to Cart..."}
+              </>
             ) : (
-              <ShoppingCart className="w-5 h-5 mr-2" />
+              <>
+                <ShoppingCart className="w-5 h-5 mr-2" />
+                {isInCart ? "Update Cart" : "Add to Cart"}
+              </>
             )}
-            Add to Cart
           </Button>
 
           <div className="grid grid-cols-2 gap-3">
@@ -166,7 +275,7 @@ export function ProductPurchaseSection({
 
               {showShareOptions && (
                 <div className="absolute z-10 mt-2 w-64 bg-white rounded-md shadow-lg border border-gray-200 right-0">
-                  <div className="p-2 space-y-1  flex  gap-4">
+                  <div className="p-2 space-y-1 flex gap-4">
                     <FacebookShareButton
                       url={shareUrl}
                       quote={shareTitle}

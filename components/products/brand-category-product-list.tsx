@@ -54,7 +54,7 @@ export default async function CategoryBrandProductList({
     <div className="container mx-auto py-4 ">
       {/* Title Section - Only show if showTitle is true */}
       {showTitle && title && (
-        <div className="flex flex-row  justify-between items-center md:items-start">
+        <div className="flex flex-row px-2 md:px-0 justify-between items-center md:items-start">
           <HeadingPrimary title={title} />
           {productCount > 0 && (
             <p className="text-sm text-gray-600 md:mt-2">

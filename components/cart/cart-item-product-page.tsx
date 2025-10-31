@@ -2,6 +2,7 @@
 
 import { AlertCircle, Loader2, Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -15,6 +16,7 @@ export function CartItemProductPage({ item }: { item: CartItem }) {
   const [isRemoving, setIsRemoving] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [localQuantity, setLocalQuantity] = useState(item.quantity);
+  const [isImageLoading, setIsImageLoading] = useState(true);
   const { updateItemQuantity, removeItem, getDiscountedPrice } =
     useCartContext();
 
@@ -112,17 +114,33 @@ export function CartItemProductPage({ item }: { item: CartItem }) {
     }
   };
 
+  const handleImageLoad = () => {
+    setIsImageLoading(false);
+  };
+
   return (
     <div
       className={`flex items-start gap-4 border-b pb-6 ${isOutOfStock ? "opacity-60" : ""}`}
     >
-      <div className="aspect-[16/9] w-32 flex-shrink-0 overflow-hidden rounded-md border bg-muted relative">
+      {/* Product Image with Link */}
+      <Link
+        href={`/product/${item.product.slug}`}
+        className="aspect-[16/9] w-32 flex-shrink-0 overflow-hidden rounded-md border bg-muted relative hover:border-primaryColor transition-colors block"
+      >
+        {/* Loading Skeleton */}
+        {isImageLoading && (
+          <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+            <Loader2 className="h-6 w-6 text-gray-400 animate-spin" />
+          </div>
+        )}
+
         <Image
           src={item.product.attachment?.url || "/placeholder.svg"}
           alt={item.product.name}
           fill
           className={`object-cover ${isOutOfStock ? "grayscale" : ""}`}
           sizes="128px"
+          onLoad={handleImageLoad}
         />
         {isOutOfStock && (
           <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
@@ -131,17 +149,22 @@ export function CartItemProductPage({ item }: { item: CartItem }) {
             </Badge>
           </div>
         )}
-      </div>
+      </Link>
 
       <div className="flex-1 space-y-2">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <h3
-                className={`font-medium text-sm ${isOutOfStock ? "text-muted-foreground" : ""}`}
+              <Link
+                href={`/product/${item.product.slug}`}
+                className="hover:text-primaryColor transition-colors"
               >
-                {item.product.name}
-              </h3>
+                <h3
+                  className={`font-medium text-sm ${isOutOfStock ? "text-muted-foreground" : ""}`}
+                >
+                  {item.product.name}
+                </h3>
+              </Link>
               {isOutOfStock && (
                 <Badge variant="destructive" className="text-xs hidden md:flex">
                   Out of Stock

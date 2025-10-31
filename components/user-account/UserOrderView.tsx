@@ -28,12 +28,14 @@ import {
   CreditCard,
   Download,
   FileText,
+  Loader2,
   MapPin,
   Package,
   Tag,
   User,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { OrderPDFDocument } from "../admin/orders/order-pdf-document";
 
@@ -46,6 +48,17 @@ interface OrderViewProps {
 
 export default function OrderView({ order, onBack }: OrderViewProps) {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [loadingImages, setLoadingImages] = useState<Set<string>>(
+    new Set(order.items.map((item) => String(item.product.id)))
+  );
+
+  const handleImageLoad = (productId: string | number) => {
+    setLoadingImages((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(String(productId));
+      return newSet;
+    });
+  };
 
   const handleGeneratePDF = async () => {
     setIsGeneratingPDF(true);
@@ -263,7 +276,18 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                       key={item.id}
                       className="flex items-start gap-4 p-3 rounded-lg border"
                     >
-                      <div className="relative size-16 rounded-md overflow-hidden bg-muted flex-shrink-0">
+                      {/* Product Image with Link */}
+                      <Link
+                        href={`/product/${item.product.slug}`}
+                        className="relative aspect-video w-24 rounded-md overflow-hidden bg-muted flex-shrink-0 hover:border-primaryColor hover:border transition-colors block"
+                      >
+                        {/* Loading Skeleton */}
+                        {loadingImages.has(String(item.product.id)) && (
+                          <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+                            <Loader2 className="h-5 w-5 text-gray-400 animate-spin" />
+                          </div>
+                        )}
+
                         <Image
                           src={
                             item.product.attachment?.url || "/placeholder.svg"
@@ -271,14 +295,23 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                           alt={item.product.name}
                           fill
                           className="object-cover"
+                          onLoad={() =>
+                            handleImageLoad(String(item.product.id))
+                          }
                         />
-                      </div>
+                      </Link>
+
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex-1">
-                            <h4 className="font-medium text-sm line-clamp-1">
-                              {item.product.name}
-                            </h4>
+                            <Link
+                              href={`/product/${item.product.slug}`}
+                              className="hover:text-primaryColor transition-colors"
+                            >
+                              <h4 className="font-medium text-sm line-clamp-1">
+                                {item.product.name}
+                              </h4>
+                            </Link>
                             <div className="flex flex-wrap items-center gap-2 mt-1">
                               <span className="text-sm text-muted-foreground">
                                 {formatCurrencyEnglish(unitPrice)} ×{" "}

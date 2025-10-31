@@ -6,6 +6,7 @@ import { formatCurrencyEnglish } from "@/lib/utils";
 import type { CartItem } from "@/utils/types";
 import { AlertCircle, Loader2, Minus, Plus, Tag, Trash } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -13,6 +14,7 @@ export function CartItemProduct({ item }: { item: CartItem }) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
   const [localQuantity, setLocalQuantity] = useState(item.quantity);
+  const [isImageLoading, setIsImageLoading] = useState(true);
   const { updateItemQuantity, removeItem, getDiscountedPrice } =
     useCartContext();
 
@@ -109,16 +111,31 @@ export function CartItemProduct({ item }: { item: CartItem }) {
     });
   };
 
+  const handleImageLoad = () => {
+    setIsImageLoading(false);
+  };
+
   return (
     <div className={`flex gap-3 ${isOutOfStock ? "opacity-60" : ""}`}>
-      {/* Product Image */}
-      <div className="relative aspect-[16/9] w-24 flex-shrink-0 overflow-hidden rounded-md border">
+      {/* Product Image with Link */}
+      <Link
+        href={`/product/${item.product.slug}`}
+        className="relative aspect-[16/9] w-24 flex-shrink-0 overflow-hidden rounded-md border hover:border-primaryColor transition-colors block"
+      >
+        {/* Loading Skeleton */}
+        {isImageLoading && (
+          <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+            <Loader2 className="h-5 w-5 text-gray-400 animate-spin" />
+          </div>
+        )}
+
         <Image
           src={item.product.attachment?.url || "/placeholder.svg"}
           alt={item.product.name}
           fill
           className={`object-cover ${isOutOfStock ? "grayscale" : ""}`}
           sizes="96px"
+          onLoad={handleImageLoad}
         />
         {isOutOfStock && (
           <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
@@ -127,7 +144,7 @@ export function CartItemProduct({ item }: { item: CartItem }) {
             </Badge>
           </div>
         )}
-      </div>
+      </Link>
 
       {/* Product Details */}
       <div className="flex flex-1 flex-col">
@@ -135,11 +152,16 @@ export function CartItemProduct({ item }: { item: CartItem }) {
         <div className="flex justify-between items-start">
           <div className="flex flex-col flex-1 min-w-0">
             <div className="flex items-center gap-1.5 mb-1">
-              <h3
-                className={`text-sm font-medium line-clamp-1 ${isOutOfStock ? "text-muted-foreground" : ""}`}
+              <Link
+                href={`/product/${item.product.slug}`}
+                className="hover:text-primaryColor transition-colors"
               >
-                {item.product.name}
-              </h3>
+                <h3
+                  className={`text-sm font-medium line-clamp-1 ${isOutOfStock ? "text-muted-foreground" : ""}`}
+                >
+                  {item.product.name}
+                </h3>
+              </Link>
               {hasActiveDiscount && !isOutOfStock && (
                 <Tag className="h-3 w-3 text-green-600 flex-shrink-0" />
               )}
