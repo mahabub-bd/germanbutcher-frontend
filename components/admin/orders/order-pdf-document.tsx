@@ -385,7 +385,10 @@ export const OrderPDFDocument = ({ order }: OrderPDFDocumentProps) => {
         {/* Header with Logo */}
         <View style={styles.header}>
           <View style={styles.logoSection}>
-            <Image style={styles.logo} src="/images/logo3.png" />
+            <Image
+              style={styles.logo}
+              src="https://test.germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75"
+            />
           </View>
           <View style={styles.invoiceHeader}>
             <Text style={styles.invoiceTitle}>INVOICE</Text>

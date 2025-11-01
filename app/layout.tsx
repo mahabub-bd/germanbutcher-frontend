@@ -32,7 +32,7 @@ const fontVariables = `${quicksand.variable} ${castorTwoW01.variable}`;
 
 export const metadata: Metadata = {
   title: {
-    default: "German Butcher - GB",
+    default: "German Butcher - Premium German Sausages & Meat Products",
     template: "%s | German Butcher",
   },
   description:
@@ -79,7 +79,7 @@ export const metadata: Metadata = {
     siteName: "German Butcher",
     images: [
       {
-        url: "https://www.germanbutcherbd.com/img/logo/logo-black.png",
+        url: "https://www.germanbutcherbd.comhttps://test.germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
         width: 1200,
         height: 630,
         alt: "German Butcher - Premium German Sausages & Meat Products",
@@ -94,14 +94,18 @@ export const metadata: Metadata = {
     title: "German Butcher - Premium German Sausages & Meat Products",
     description:
       "Pioneer of authentic German Sausages in Bangladesh since 1991. Premium quality gourmet sausages, cold cuts, ham, bacon and meat products.",
-    images: ["https://www.germanbutcherbd.com/img/logo/logo-black.png"],
+    images: [
+      "https://www.germanbutcherbd.comhttps://test.germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
+    ],
     creator: "@germanbutcherbd",
   },
 
   icons: {
-    icon: "/img/logo/logo-black.png",
-    shortcut: "/img/logo/logo-black.png",
-    apple: "/img/logo/logo-black.png",
+    icon: "https://test.germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
+    shortcut:
+      "https://test.germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
+    apple:
+      "https://test.germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
   },
 
   metadataBase: new URL("https://www.germanbutcherbd.com"),

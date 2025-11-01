@@ -15,11 +15,8 @@ interface ProductInfoProps {
 }
 
 export function ProductInfo({ product }: ProductInfoProps) {
-  // Check if discount is currently valid
   const isDiscountValid = () => {
-    if (!product.discountValue) {
-      return false;
-    }
+    if (!product.discountValue) return false;
 
     const now = new Date();
     const startDate = product.discountStartDate
@@ -29,14 +26,8 @@ export function ProductInfo({ product }: ProductInfoProps) {
       ? new Date(product.discountEndDate)
       : null;
 
-    // Check if current date is within discount period
-    if (startDate && now < startDate) {
-      return false; // Discount hasn't started yet
-    }
-
-    if (endDate && now > endDate) {
-      return false; // Discount has expired
-    }
+    if (startDate && now < startDate) return false;
+    if (endDate && now > endDate) return false;
 
     return true;
   };
@@ -45,10 +36,8 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
   const discountAmount = hasValidDiscount
     ? product.discountType === "fixed"
-      ? Number.parseFloat(String(product.discountValue ?? "0"))
-      : (product.sellingPrice *
-          Number.parseFloat(String(product.discountValue ?? "0"))) /
-        100
+      ? Number(product.discountValue ?? 0)
+      : (product.sellingPrice * Number(product.discountValue ?? 0)) / 100
     : 0;
 
   const finalPrice = product.sellingPrice - discountAmount;
@@ -57,33 +46,30 @@ export function ProductInfo({ product }: ProductInfoProps) {
       ? ((discountAmount / product.sellingPrice) * 100).toFixed(0)
       : "0";
 
-  // Stock status logic
   const stockQuantity = product.stock || 0;
   const isOutOfStock = stockQuantity === 0;
   const isLowStock = stockQuantity > 0 && stockQuantity <= 5;
 
   const getStockStatus = () => {
-    if (isOutOfStock) {
+    if (isOutOfStock)
       return {
         label: "Out of Stock",
-        color: "bg-red-100 text-red-800 border-red-200",
+        color: "bg-red-50 text-red-700 border-red-200",
         icon: XCircle,
-        textColor: "text-red-600",
+        dot: "bg-red-500",
       };
-    }
-    if (isLowStock) {
+    if (isLowStock)
       return {
-        label: `Only ${stockQuantity} left in stock`,
-        color: "bg-orange-100 text-orange-800 border-orange-200",
+        label: `Only ${stockQuantity} left`,
+        color: "bg-orange-50 text-orange-700 border-orange-200",
         icon: AlertTriangle,
-        textColor: "text-orange-600",
+        dot: "bg-orange-500",
       };
-    }
     return {
       label: "In Stock",
-      color: "bg-green-100 text-green-800 border-green-200",
+      color: "bg-green-50 text-green-700 border-green-200",
       icon: CheckCircle,
-      textColor: "text-green-600",
+      dot: "bg-green-500",
     };
   };
 
@@ -91,123 +77,93 @@ export function ProductInfo({ product }: ProductInfoProps) {
   const StockIcon = stockStatus.icon;
 
   return (
-    <div className="bg-white rounded-md md:p-6 p-4 shadow-sm border">
-      {/* Header Section with Brand and Category */}
-
-      <div className="flex flex-wrap items-center gap-2 mb-4 sm:gap-3 sm:mb-6">
+    <div className="bg-white rounded-lg border shadow-sm p-4 md:p-6 space-y-4">
+      {/* Brand & Category */}
+      <div className="flex flex-wrap items-center gap-2">
         <Link
           href={`/brands/${product.brand.slug}`}
-          className="flex items-center gap-1.5 bg-gradient-to-r from-red-50 to-pink-50 px-2.5 py-1.5 rounded-full border border-red-200 hover:from-red-100 hover:to-pink-100 transition-all duration-200 sm:gap-2 sm:px-4 sm:py-2"
+          className="flex items-center gap-1.5 border border-red-200 bg-red-50 text-primaryColor px-2.5 py-1 rounded-full text-xs font-medium hover:bg-red-100 transition"
         >
-          <Tag className="w-3 h-3 text-primaryColor sm:w-4 sm:h-4" />
-          <span className="text-xs font-medium text-primaryColor sm:text-sm">
-            Brand:
-          </span>
-          <span className="text-xs font-semibold text-primaryColor sm:text-sm">
-            {product.brand.name}
-          </span>
+          <Tag className="w-3.5 h-3.5" />
+          {product.brand.name}
         </Link>
 
         <Link
           href={`/categories/${product.category.slug}`}
-          className="flex items-center gap-1.5 bg-gradient-to-r from-gray-50 to-slate-50 px-2.5 py-1.5 rounded-full border border-gray-200 hover:from-gray-100 hover:to-slate-100 transition-all duration-200 sm:gap-2 sm:px-4 sm:py-2"
+          className="flex items-center gap-1.5 border border-gray-200 bg-gray-50 text-gray-700 px-2.5 py-1 rounded-full text-xs font-medium hover:bg-gray-100 transition"
         >
-          <Star className="w-3 h-3 text-gray-600 sm:w-4 sm:h-4" />
-          <span className="text-xs font-medium text-gray-700 sm:text-sm">
-            Category:
-          </span>
-          <span className="text-xs font-semibold text-gray-900 sm:text-sm">
-            {product.category.name}
-          </span>
+          <Star className="w-3.5 h-3.5" />
+          {product.category.name}
         </Link>
       </div>
 
-      {/* Product Title */}
-      <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+      {/* Title */}
+      <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 leading-snug">
         {product.name}
       </h1>
 
       {/* Description */}
-      <p className="text-gray-600 mb-6 text-lg leading-relaxed">
+      <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
         {product.description}
       </p>
 
-      {/* Stock Status Section */}
-      <div className="mb-6">
-        <div className="flex items-center gap-3 mb-4">
-          <div
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${stockStatus.color}`}
+      {/* Price + Discount */}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex items-baseline gap-2">
+          <span
+            className={`text-2xl sm:text-3xl font-bold ${
+              isOutOfStock ? "text-gray-400" : "text-primaryColor"
+            }`}
           >
-            <StockIcon className="w-4 h-4" />
-            <span className="font-medium text-sm">{stockStatus.label}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Pricing Section */}
-      <div className="mb-6">
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-baseline gap-2">
-            <span
-              className={`text-3xl font-bold ${isOutOfStock ? "text-gray-400" : "text-primaryColor"}`}
-            >
-              ৳{finalPrice.toFixed(2)}
+            ৳{finalPrice.toFixed(2)}
+          </span>
+          {discountAmount > 0 && (
+            <span className="text-gray-500 line-through text-lg">
+              ৳{product.sellingPrice.toFixed(2)}
             </span>
-            {discountAmount > 0 && (
-              <span className="text-xl text-gray-500 line-through">
-                ৳{product.sellingPrice.toFixed(2)}
-              </span>
-            )}
-          </div>
-
-          {discountAmount > 0 && !isOutOfStock && (
-            <div className="flex gap-2">
-              <Badge className="bg-primaryColor text-white hover:bg-primaryColor/90 px-3 py-1 text-sm font-semibold">
-                {discountPercentage}% OFF
-              </Badge>
-              <Badge className="bg-green-500 text-white hover:bg-green-600 px-3 py-1 text-sm font-semibold">
-                Save ৳{discountAmount.toFixed(2)}
-              </Badge>
-            </div>
           )}
         </div>
 
-        {/* Out of stock overlay on price */}
-        {isOutOfStock && (
-          <p className="text-sm text-gray-500 mt-2 italic">
-            Price shown for reference only
-          </p>
+        {discountAmount > 0 && !isOutOfStock && (
+          <div className="flex gap-2">
+            <Badge className="bg-primaryColor text-white text-xs font-semibold px-2.5 py-1">
+              {discountPercentage}% OFF
+            </Badge>
+            <Badge className="bg-green-500 text-white text-xs font-semibold px-2.5 py-1">
+              Save ৳{discountAmount.toFixed(2)}
+            </Badge>
+          </div>
         )}
       </div>
 
-      {/* Product Details */}
-      <div className="space-y-3">
+      {/* Stock Status */}
+      <div
+        className={`flex items-center gap-2 w-fit border ${stockStatus.color} px-3 py-1.5 rounded-md`}
+      >
+        <StockIcon className="w-4 h-4" />
+        <span className="text-sm font-medium">{stockStatus.label}</span>
+      </div>
+
+      {/* Details */}
+      <div className="space-y-2 pt-2 border-t">
         <div className="flex items-center gap-2 text-gray-700">
-          <Package className="w-5 h-5 text-gray-500" />
-          <span className="font-medium">Weight:</span>
-          <span className="font-semibold text-gray-900">
-            {product.weight} {product.unit.name}
+          <Package className="w-4 h-4 text-gray-500" />
+          <span className="text-sm">
+            <span className="font-medium">Weight:</span>{" "}
+            <span className="font-semibold text-gray-900">
+              {product.weight} {product.unit.name}
+            </span>
           </span>
         </div>
 
-        {/* Stock quantity as product detail - only show quantity for low stock */}
         <div className="flex items-center gap-2 text-gray-700">
-          <div
-            className={`w-3 h-3 rounded-full ${
-              isOutOfStock
-                ? "bg-red-400"
-                : isLowStock
-                  ? "bg-orange-400"
-                  : "bg-green-400"
-            }`}
-          />
-          <span className="font-medium">Stock Status:</span>
-          <span className={`font-semibold ${stockStatus.textColor}`}>
+          <div className={`w-2.5 h-2.5 rounded-full ${stockStatus.dot}`} />
+          <span className="text-sm font-medium">
             {isOutOfStock
               ? "Unavailable"
               : isLowStock
-                ? `Low Stock (${stockQuantity})`
-                : "Available"}
+              ? `Low Stock (${stockQuantity})`
+              : "Available"}
           </span>
         </div>
       </div>
