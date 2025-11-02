@@ -24,13 +24,13 @@ import { formatDateTime } from "@/lib/utils";
 import { fetchDataPagination } from "@/utils/api-utils";
 import type { ApiResponseusers, User } from "@/utils/types";
 import {
-  Filter,
   MoreHorizontal,
   Pencil,
   Search,
   UserCircle,
   XCircle,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -38,7 +38,7 @@ import { toast } from "sonner";
 import { LoadingIndicator } from "../loading-indicator";
 import { PageHeader } from "../page-header";
 
-interface UserListProps {
+interface CustomerListProps {
   initialPage?: number;
   initialLimit?: number;
   initialSearchParams?: { [key: string]: string | string[] | undefined };
@@ -48,7 +48,7 @@ export function CustomerList({
   initialPage = 1,
   initialLimit = 10,
   initialSearchParams = {},
-}: UserListProps) {
+}: CustomerListProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -58,12 +58,9 @@ export function CustomerList({
     return param ? param : initialSearchParams?.[key] || "";
   };
 
-  const [users, setUsers] = useState<User[]>([]);
+  const [customers, setCustomers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState(
     getInitialParam("search") as string
-  );
-  const [roleFilter, setRoleFilter] = useState(
-    getInitialParam("role") as string
   );
   const [isLoading, setIsLoading] = useState(true);
 
@@ -79,12 +76,11 @@ export function CustomerList({
     params.set("limit", limit.toString());
 
     if (searchQuery) params.set("search", searchQuery);
-    if (roleFilter && roleFilter !== "all") params.set("role", roleFilter);
 
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
-  }, [router, pathname, currentPage, limit, searchQuery, roleFilter]);
+  }, [router, pathname, currentPage, limit, searchQuery]);
 
-  const fetchUsers = useCallback(async () => {
+  const fetchCustomers = useCallback(async () => {
     setIsLoading(true);
     try {
       const params = new URLSearchParams();
@@ -92,32 +88,27 @@ export function CustomerList({
       params.append("limit", limit.toString());
 
       if (searchQuery) params.append("search", searchQuery);
-      if (roleFilter && roleFilter !== "all") params.append("role", roleFilter);
 
-      // Pass the params to the API call
       const response = await fetchDataPagination<ApiResponseusers>(
-        `users?${params.toString()}`
+        `users/customers?${params.toString()}`
       );
 
-      const allUsers = [...response.data.customers];
-
-      setUsers(allUsers);
+      setCustomers(response.data.customers);
       setTotalItems(response.data.pagination.total);
       setTotalPages(response.data.pagination.totalPages);
     } catch (error) {
-      console.error("Error fetching users:", error);
-      toast.error("Failed to load users. Please try again.");
-      setUsers([]);
+      console.error("Error fetching customers:", error);
+      toast.error("Failed to load customers. Please try again.");
+      setCustomers([]);
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, limit, searchQuery, roleFilter]);
+  }, [currentPage, limit, searchQuery]);
 
   // Initial load with URL params
   useEffect(() => {
     const pageFromUrl = searchParams?.get("page");
     const searchFromUrl = searchParams?.get("search");
-    const roleFromUrl = searchParams?.get("role");
 
     if (pageFromUrl) {
       setCurrentPage(parseInt(pageFromUrl, 10));
@@ -125,15 +116,12 @@ export function CustomerList({
     if (searchFromUrl) {
       setSearchQuery(searchFromUrl);
     }
-    if (roleFromUrl) {
-      setRoleFilter(roleFromUrl);
-    }
   }, [searchParams]);
 
   // Fetch data when dependencies change
   useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
+    fetchCustomers();
+  }, [fetchCustomers]);
 
   // Update URL when state changes
   useEffect(() => {
@@ -144,80 +132,55 @@ export function CustomerList({
     setCurrentPage(page);
   };
 
-  const clearFilters = () => {
-    setSearchQuery("");
-    setRoleFilter("");
-    setCurrentPage(1);
-  };
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1); // Reset to first page when searching
   };
 
+  const clearSearch = () => {
+    setSearchQuery("");
+    setCurrentPage(1);
+  };
+
   const renderEmptyState = () => (
     <div className="flex flex-col items-center justify-center p-8 text-center">
       <UserCircle className="h-10 w-10 text-muted-foreground mb-4" />
-      <h3 className="text-lg font-semibold">No users found</h3>
+      <h3 className="text-lg font-semibold">No customers found</h3>
       <p className="text-sm text-muted-foreground mt-2">
-        {searchQuery || roleFilter
-          ? "No users match your search criteria. Try different filters."
-          : "Get started by adding your first user."}
+        {searchQuery
+          ? "No customers match your search criteria. Try a different search term."
+          : "No customers have been registered yet."}
       </p>
 
-      {(searchQuery || roleFilter) && (
-        <Button variant="outline" className="mt-4" onClick={clearFilters}>
-          Clear Filters
+      {searchQuery && (
+        <Button variant="outline" className="mt-4" onClick={clearSearch}>
+          Clear Search
         </Button>
       )}
     </div>
   );
 
-  const renderActiveFilters = () => {
-    const hasFilters = searchQuery || roleFilter;
-
-    if (!hasFilters) return null;
+  const renderSearchFilter = () => {
+    if (!searchQuery) return null;
 
     return (
       <div className="flex flex-wrap gap-2 mt-4">
-        {searchQuery && (
-          <Badge
-            variant="outline"
-            className="flex items-center gap-1 px-3 py-1"
+        <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
+          Search: {searchQuery}
+          <button
+            onClick={clearSearch}
+            className="ml-1 hover:opacity-70"
+            aria-label="Clear search"
           >
-            Search: {searchQuery}
-            <button onClick={() => setSearchQuery("")} className="ml-1">
-              <XCircle className="h-3 w-3" />
-            </button>
-          </Badge>
-        )}
-
-        {roleFilter && roleFilter !== "all" && (
-          <Badge
-            variant="outline"
-            className="flex items-center gap-1 px-3 py-1"
-          >
-            Role: {roleFilter}
-            <button onClick={() => setRoleFilter("")} className="ml-1">
-              <XCircle className="h-3 w-3" />
-            </button>
-          </Badge>
-        )}
-
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={clearFilters}
-          className="h-7 text-xs"
-        >
-          Clear all
-        </Button>
+            <XCircle className="h-3 w-3" />
+          </button>
+        </Badge>
       </div>
     );
   };
 
   const renderTableView = () => (
-    <div className="md:p-6 p-2">
+    <div className="rounded-lg border">
       <Table>
         <TableHeader>
           <TableRow>
@@ -225,33 +188,57 @@ export function CustomerList({
             <TableHead>Email</TableHead>
             <TableHead className="hidden md:table-cell">Mobile</TableHead>
             <TableHead className="hidden md:table-cell">Status</TableHead>
-            <TableHead className="hidden md:table-cell">Role</TableHead>
-            <TableHead className="hidden md:table-cell">Last Login</TableHead>
+            <TableHead className="hidden md:table-cell">Joined</TableHead>
+            <TableHead className="hidden lg:table-cell">Last Login</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.map((user) => (
-            <TableRow key={user.id}>
-              <TableCell className="font-medium">{user.name}</TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell className="hidden md:table-cell">
-                {user.mobileNumber || "N/A"}
+          {customers.map((customer) => (
+            <TableRow key={customer.id}>
+              <TableCell className="font-medium">
+                <div className="flex items-center gap-2">
+                  {customer.profilePhoto ? (
+                    <Image
+                      src={customer.profilePhoto.url}
+                      alt={customer.name}
+                      className="h-8 w-8 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
+                      <span className="text-xs font-medium">
+                        {customer.name.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                  <span className="truncate max-w-[150px]">
+                    {customer.name}
+                  </span>
+                </div>
+              </TableCell>
+              <TableCell>
+                <span className="truncate max-w-[200px] block">
+                  {customer.email}
+                </span>
               </TableCell>
               <TableCell className="hidden md:table-cell">
-                <Badge variant={user.isVerified ? "default" : "secondary"}>
-                  {user.isVerified ? "Verified" : "Unverified"}
+                {customer.mobileNumber || "—"}
+              </TableCell>
+              <TableCell className="hidden md:table-cell">
+                <Badge
+                  variant={customer.isVerified ? "default" : "secondary"}
+                  className="capitalize"
+                >
+                  {customer.isVerified ? "Verified" : "Unverified"}
                 </Badge>
               </TableCell>
               <TableCell className="hidden md:table-cell">
-                <Badge variant="outline" className="capitalize">
-                  {user?.role?.rolename}
-                </Badge>
+                {formatDateTime(customer.createdAt)}
               </TableCell>
-              <TableCell className="hidden md:table-cell">
-                {user.lastLoginAt
-                  ? formatDateTime(user.lastLoginAt)
-                  : "Never logged in"}
+              <TableCell className="hidden lg:table-cell">
+                {customer.lastLoginAt
+                  ? formatDateTime(customer.lastLoginAt)
+                  : "Never"}
               </TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
@@ -263,8 +250,9 @@ export function CustomerList({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
-                      <Link href={`/admin/customer/${user?.id}/edit`}>
-                        <Pencil className="mr-2 h-4 w-4" /> Edit
+                      <Link href={`/admin/customer/${customer.id}/edit`}>
+                        <Pencil className="mr-2 h-4 w-4" />
+                        Edit Customer
                       </Link>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -278,137 +266,69 @@ export function CustomerList({
   );
 
   return (
-    <>
-      <div className="w-full md:p-6 p-2">
-        <PageHeader title="Customers" description="Manage your customers" />
+    <div className="w-full md:p-6 p-2">
+      <PageHeader
+        title="Customers"
+        description="View and manage registered customers"
+      />
 
-        <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row justify-between gap-4">
-            <div className="relative w-full sm:max-w-xs">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search users..."
-                className="pl-8"
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-            </div>
-
-            <div className="flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex items-center gap-2 px-3"
-                  >
-                    <Filter className="h-4 w-4" />
-                    <span>Filters</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="end"
-                  className="w-64 p-3 rounded-lg shadow-lg bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800"
-                  sideOffset={8}
-                >
-                  <div className="space-y-3">
-                    {/* Header */}
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-medium">Filters</h4>
-                      {roleFilter && roleFilter !== "all" && (
-                        <button
-                          onClick={clearFilters}
-                          className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
-                        >
-                          Clear all
-                        </button>
-                      )}
-                    </div>
-
-                    {/* Role Filter */}
-                    <div className="space-y-2">
-                      <label className="text-xs text-muted-foreground">
-                        Role
-                      </label>
-                      <div className="grid grid-cols-3 gap-2">
-                        <button
-                          onClick={() => {
-                            setRoleFilter("all");
-                            setCurrentPage(1);
-                          }}
-                          className={`text-xs py-1.5 px-2 rounded-md border ${
-                            roleFilter === "all" || !roleFilter
-                              ? "bg-blue-50 border-blue-200 dark:bg-blue-900/30 dark:border-blue-800 text-blue-600 dark:text-blue-400"
-                              : "bg-gray-50 dark:bg-neutral-800 border-gray-200 dark:border-neutral-700"
-                          }`}
-                        >
-                          All
-                        </button>
-                        <button
-                          onClick={() => {
-                            setRoleFilter("customer");
-                            setCurrentPage(1);
-                          }}
-                          className={`text-xs py-1.5 px-2 rounded-md border ${
-                            roleFilter === "customer"
-                              ? "bg-green-50 border-green-200 dark:bg-green-900/30 dark:border-green-800 text-green-600 dark:text-green-400"
-                              : "bg-gray-50 dark:bg-neutral-800 border-gray-200 dark:border-neutral-700"
-                          }`}
-                        >
-                          Customer
-                        </button>
-                        <button
-                          onClick={() => {
-                            setRoleFilter("admin");
-                            setCurrentPage(1);
-                          }}
-                          className={`text-xs py-1.5 px-2 rounded-md border ${
-                            roleFilter === "admin"
-                              ? "bg-purple-50 border-purple-200 dark:bg-purple-900/30 dark:border-purple-800 text-purple-600 dark:text-purple-400"
-                              : "bg-gray-50 dark:bg-neutral-800 border-gray-200 dark:border-neutral-700"
-                          }`}
-                        >
-                          Admin
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+      <div className="space-y-4">
+        {/* Search Bar */}
+        <div className="flex flex-col sm:flex-row justify-between gap-4">
+          <div className="relative w-full sm:max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search by name, email, or phone..."
+              className="pl-10 pr-4"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
           </div>
-
-          {renderActiveFilters()}
-
-          {isLoading ? (
-            <LoadingIndicator message="Loading users..." />
-          ) : users.length === 0 ? (
-            renderEmptyState()
-          ) : (
-            <div className="mt-6">{renderTableView()}</div>
-          )}
         </div>
 
-        {!isLoading && users.length > 0 && (
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
-            <div className="flex-1 min-w-0">
-              <p className="text-xs text-muted-foreground text-center md:text-left truncate">
-                {`Showing ${users.length} of ${totalItems} users`}
-              </p>
+        {/* Active Search Filter */}
+        {renderSearchFilter()}
+
+        {/* Content Area */}
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <LoadingIndicator message="Loading customers..." />
+          </div>
+        ) : customers.length === 0 ? (
+          renderEmptyState()
+        ) : (
+          <>
+            {/* Customer Count */}
+            <div className="text-sm text-muted-foreground">
+              Found {totalItems.toLocaleString()} customer
+              {totalItems !== 1 ? "s" : ""}
+              {searchQuery && ` matching "${searchQuery}"`}
             </div>
 
-            <div className="flex-1 w-full md:w-auto">
-              <PaginationComponent
-                currentPage={currentPage}
-                totalPages={totalPages}
-                baseUrl="#"
-                onPageChange={handlePageChange}
-              />
+            {/* Table */}
+            {renderTableView()}
+          </>
+        )}
+
+        {/* Pagination */}
+        {!isLoading && customers.length > 0 && totalPages > 1 && (
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
+            <div className="text-sm text-muted-foreground">
+              Showing {((currentPage - 1) * limit + 1).toLocaleString()} -{" "}
+              {Math.min(currentPage * limit, totalItems).toLocaleString()} of{" "}
+              {totalItems.toLocaleString()} customers
             </div>
+
+            <PaginationComponent
+              currentPage={currentPage}
+              totalPages={totalPages}
+              baseUrl="#"
+              onPageChange={handlePageChange}
+            />
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

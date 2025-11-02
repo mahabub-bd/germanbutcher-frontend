@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { fetchData, patchData, postData } from "@/utils/api-utils";
+import { fetchProtectedData, patchData, postData } from "@/utils/api-utils";
 import { userSchema } from "@/utils/form-validation";
 import { Role, User } from "@/utils/types";
 
@@ -53,7 +53,7 @@ export function UserForm({ user, mode, onSuccess }: UserFormProps) {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await fetchData<Role[]>("roles");
+        const response = await fetchProtectedData<Role[]>("roles");
         setRoles(response);
       } catch (error) {
         console.error("Error fetching units:", error);

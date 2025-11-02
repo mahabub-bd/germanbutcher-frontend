@@ -100,10 +100,10 @@ export function UserList({
       if (roleFilter && roleFilter !== "all") params.append("role", roleFilter);
 
       const response = await fetchDataPagination<ApiResponseusers>(
-        `users?${params.toString()}`
+        `users/users?${params.toString()}`
       );
 
-      const allUsers = [...response.data.others];
+      const allUsers = [...response.data.users];
 
       setUsers(allUsers);
 

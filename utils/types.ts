@@ -172,7 +172,7 @@ export interface ApiResponseusers {
   statusCode: number;
   data: {
     customers: User[];
-    others: User[];
+    users: User[];
     pagination: {
       total: number;
       page: number;

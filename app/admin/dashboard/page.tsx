@@ -37,11 +37,11 @@ export default async function DashboardPage() {
 
   const categories = await fetchData<Category[]>("categories");
   const brands = await fetchData<Brand[]>("brands");
-  const response = await fetchDataPagination<ApiResponseusers>("users");
+  const response =
+    await fetchDataPagination<ApiResponseusers>("users/customers");
   const orders = await fetchDataPagination<OrderResponse>(`orders`);
   const chartdata = await fetchProtectedData("orders/reports/monthly");
 
-  const customers = [...response.data.customers];
   const totalSales = (chartdata as { totalValue: number }[]).reduce(
     (sum, item) => sum + item.totalValue,
     0
@@ -75,7 +75,7 @@ export default async function DashboardPage() {
         />
         <StatsCard
           title="Customers"
-          value={customers?.length?.toString() || "0"}
+          value={response.data.pagination.total.toString()}
           description="+3.1% from last month"
           trend="up"
           icon={Users}
