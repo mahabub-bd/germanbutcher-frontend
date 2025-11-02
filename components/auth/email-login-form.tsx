@@ -42,9 +42,9 @@ export default function EmailLoginForm() {
     }
 
     // Password validation
-    if (password.length < 8) {
+    if (password.length < 6) {
       toast.error("Weak password", {
-        description: "Password should be at least 8 characters long",
+        description: "Password should be at 6 least  characters long",
       });
       setIsLoading(false);
       return;
