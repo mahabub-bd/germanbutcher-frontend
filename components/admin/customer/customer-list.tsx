@@ -30,7 +30,6 @@ import {
   UserCircle,
   XCircle,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -180,7 +179,7 @@ export function CustomerList({
   };
 
   const renderTableView = () => (
-    <div className="rounded-lg border">
+    <div className="rounded-sm border p-2 md:p-4 mt-4 overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>
@@ -198,22 +197,7 @@ export function CustomerList({
             <TableRow key={customer.id}>
               <TableCell className="font-medium">
                 <div className="flex items-center gap-2">
-                  {customer.profilePhoto ? (
-                    <Image
-                      src={customer.profilePhoto.url}
-                      alt={customer.name}
-                      className="h-8 w-8 rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
-                      <span className="text-xs font-medium">
-                        {customer.name.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                  )}
-                  <span className="truncate max-w-[150px]">
-                    {customer.name}
-                  </span>
+                  <span className="truncate">{customer.name}</span>
                 </div>
               </TableCell>
               <TableCell>
