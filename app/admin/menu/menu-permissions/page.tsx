@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { capitalizeFirstLetter } from "@/lib/utils";
-import { fetchData, fetchProtectedData, patchData } from "@/utils/api-utils";
+import { fetchProtectedData, patchData } from "@/utils/api-utils";
 import { MenuItem, Role } from "@/utils/types";
 import { ChevronDown, ChevronRight, Loader2, Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -113,8 +113,8 @@ export default function RoleMenuPermissions() {
     const fetchInitialData = async () => {
       try {
         const [rolesData, menuData] = await Promise.all([
-          fetchData("roles") as Promise<Role[]>,
-          fetchData("menu/tree") as Promise<MenuItem[]>,
+          fetchProtectedData("roles") as Promise<Role[]>,
+          fetchProtectedData("menu/tree") as Promise<MenuItem[]>,
         ]);
 
         if (rolesData) setRoles(rolesData);
