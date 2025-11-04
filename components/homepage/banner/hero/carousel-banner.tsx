@@ -203,7 +203,7 @@ export const CarouselBanner = ({
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-[450px] sm:h-[400px] max-h-[500px] 2xl:h-[500px] focus-within:outline-none"
+      className="relative w-full h-[350px] sm:h-[400px] max-h-[500px] 2xl:h-[500px] focus-within:outline-none"
       role="region"
       aria-label="Featured banners carousel"
       aria-live="polite"
