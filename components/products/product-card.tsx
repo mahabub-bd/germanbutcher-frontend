@@ -93,7 +93,7 @@ export default function ProductCard({
     >
       <Link href={`/product/${product?.slug}`} className="block">
         {/* Image Container */}
-        <div className="w-full aspect-[16/9] bg-gray-100 overflow-hidden relative mb-3">
+        <div className="w-full aspect-[3/2] bg-gray-100 overflow-hidden relative mb-3">
           {product?.attachment?.url && (
             <Image
               src={product.attachment.url}
