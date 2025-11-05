@@ -120,31 +120,30 @@ export default function ProductCard({
             </div>
           )}
           {/* Discount Badge */}
+
           {isDiscountActive &&
             product.discountType &&
             product.discountValue && (
               <div className="absolute top-[2px] right-[2px] z-10">
-                <div className="relative w-16 h-16 animate-[spin_3s_linear_infinite]">
+                <div className="relative w-18 h-18 animate-[spin_3s_linear_infinite]">
                   {/* Outer ring */}
                   <div className="absolute inset-0 rounded-full border-4 border-dashed border-primaryColor/30 animate-[spin_4s_linear_infinite_reverse]"></div>
 
                   {/* Main badge with 3D effect */}
-                  <div className="absolute inset-2 bg-gradient-to-br from-red-500 via-primaryColor to-orange-500 rounded-full shadow-[0_0_20px_rgba(239,68,68,0.5)] transform hover:scale-110 transition-transform duration-300">
+                  <div className="absolute inset-2 bg-gradient-to-br from-red-800 via-primaryColor to-orange-800 rounded-full shadow-[0_0_20px_rgba(239,68,68,0.5)] transform hover:scale-110 transition-transform duration-300">
                     {/* Inner shine effect */}
                     <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent rounded-full"></div>
                   </div>
 
                   {/* Content - counter-rotate to keep text upright */}
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-white animate-[spin_3s_linear_infinite_reverse]">
-                    <div className="text-[12px] leading-none font-black drop-shadow-lg">
+                    <div className="text-[13px] leading-none font-black drop-shadow-lg">
                       {product.discountType === DiscountType.PERCENTAGE
-                        ? `${product.discountValue % 1 === 0 ? product.discountValue : product.discountValue.toFixed(1)}%`
-                        : formatCurrencyEnglish(product.discountValue)}
+                        ? `${parseFloat(product.discountValue.toString())}%`
+                        : `৳${parseFloat(product.discountValue.toString())}`}
                     </div>
-                    <span className="text-[9px] uppercase tracking-wider font-bold mt-0.5">
-                      {product.discountType === DiscountType.PERCENTAGE
-                        ? "OFF"
-                        : "SAVE"}
+                    <span className="text-[13px] uppercase tracking-wider font-bold mt-0.5">
+                      OFF
                     </span>
                   </div>
                 </div>

@@ -39,7 +39,17 @@ export default function Home() {
           </ProductList>
         </div>
       </section>
-
+      <section className="lg:py-10 py-5 bg-gray-50">
+        <div className="container mx-auto ">
+          <ProductList
+            endpoint="products/discounted?page=1&limit=20"
+            isHomePage
+            href="products/special-offers"
+          >
+            <HeadingPrimary title="SPECIAL OFFERS" className="mb-10" />
+          </ProductList>
+        </div>
+      </section>
       {/* Popular Products Section */}
       <section className="md:py-10 py-5 ">
         <div className="container mx-auto ">
@@ -62,17 +72,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="lg:py-10 py-5 bg-gray-50">
-        <div className="container mx-auto ">
-          <ProductList
-            endpoint="products/discounted?page=1&limit=20"
-            isHomePage
-            href="products/special-offers"
-          >
-            <HeadingPrimary title="SPECIAL OFFERS" className="mb-10" />
-          </ProductList>
-        </div>
-      </section>
       <section className="md:py-10 lg:py-10 py-5  ">
         <SalesPartnersCompact>
           <HeadingPrimary title="Our Sales Partner" className="mb-10" />

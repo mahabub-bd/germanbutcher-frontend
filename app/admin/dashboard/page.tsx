@@ -22,6 +22,7 @@ import type {
 
 import CombinedOrdersSalesChart from "@/components/admin/dashboard/combined-order-saleschart";
 import { LowStockReport } from "@/components/admin/dashboard/low-stock-report";
+import { TopCustomersList } from "@/components/admin/dashboard/top-customer-list";
 import {
   Activity,
   DollarSign,
@@ -102,6 +103,7 @@ export default async function DashboardPage() {
       <CombinedOrdersSalesChart chartData={chartdata as OrderSummary[]} />
       <OrdersTable />
       <LowStockReport />
+      <TopCustomersList />
       {/* Additional Stats */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/40 dark:to-blue-900/20 border-none">
@@ -131,9 +133,6 @@ export default async function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-3xl font-bold">$45.82</p>
-                <p className="text-xs text-muted-foreground">
-                  +2.3% from last month
-                </p>
               </div>
               <div className="h-12 w-12 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
                 <DollarSign className="h-6 w-6 text-purple-700 dark:text-purple-400" />
@@ -151,9 +150,6 @@ export default async function DashboardPage() {
               <div>
                 <p className="text-3xl font-bold">
                   {getTopCategoryByProductCount(categories)}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  32% of total sales
                 </p>
               </div>
               <div className="h-12 w-12 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
