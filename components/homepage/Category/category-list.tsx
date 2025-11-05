@@ -30,9 +30,59 @@ function CategoryGridSkeleton() {
   );
 }
 
-// Separate component for categories to enable streaming
+// Type for attachment API response
+interface AttachmentData {
+  id: number;
+  fileName: string;
+  originalName: string;
+  mimeType: string;
+  size: number;
+  url: string;
+  key: string;
+  createdAt: string;
+  updatedAt: string;
+  gallery: null;
+}
+
+async function getFlashSaleCategory(): Promise<Category | null> {
+  try {
+    const attachmentData = await fetchData<AttachmentData>("attachment/1011");
+
+    return {
+      id: 2500,
+      name: "Flash Sale",
+      slug: "special-offers",
+      parentId: null,
+      order: 0,
+      description: "Special offers and flash sale products",
+      isMainCategory: true,
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      attachment: {
+        id: attachmentData?.id,
+        url: attachmentData?.url,
+        fileName: attachmentData?.fileName,
+        originalName: attachmentData?.originalName,
+        mimeType: attachmentData?.mimeType,
+        key: attachmentData?.key,
+        size: attachmentData?.size,
+        createdAt: attachmentData?.createdAt,
+        updatedAt: attachmentData?.updatedAt,
+      },
+    } as Category;
+  } catch (error) {
+    // Fallback if API fails
+    console.error("Failed to fetch flash sale attachment:", error);
+    return null;
+  }
+}
+
 async function CategoryGrid({ endpoint }: { endpoint: string }) {
-  const categories: Category[] = await fetchData(endpoint);
+  const [categories, flashSaleCategory] = await Promise.all([
+    fetchData<Category[]>(endpoint),
+    getFlashSaleCategory(),
+  ]);
 
   if (!categories?.length) {
     return (
@@ -42,9 +92,13 @@ async function CategoryGrid({ endpoint }: { endpoint: string }) {
     );
   }
 
+  const allCategories = flashSaleCategory
+    ? [flashSaleCategory, ...categories]
+    : categories;
+
   return (
     <div className="container mx-auto grid grid-cols-4 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-2 sm:gap-4 md:gap-6">
-      {categories.map((category: Category) => (
+      {allCategories.map((category: Category) => (
         <CategoryCard key={category?.id} category={category} />
       ))}
     </div>

@@ -7,14 +7,20 @@ interface CategoryCardProps {
 }
 
 export default function CategoryCard({ category }: CategoryCardProps) {
+  // Determine the href based on category
+  const href =
+    category.id === 2500
+      ? "/products/flash-sale"
+      : `/categories/${category.slug || category.id}`;
+
   return (
     <Link
-      href={`/categories/${category.slug || category.id}`}
+      href={href}
       className="group block rounded-lg overflow-hidden"
       prefetch={true}
     >
       <div className="flex w-full items-center justify-center">
-        <div className="relative md:w-[180px] md:h-[180px] w-[96px] h-[96px] rounded-full p-2 flex items-center justify-center   group-hover:border-primary transition-colors duration-200">
+        <div className="relative md:w-[180px] md:h-[180px] w-[96px] h-[96px] rounded-full p-2 flex items-center justify-center group-hover:border-primary transition-colors duration-200">
           <div className="relative w-full h-full rounded-full overflow-hidden bg-gray-100">
             <Image
               src={category?.attachment?.url || "/category-placeholder.svg"}
