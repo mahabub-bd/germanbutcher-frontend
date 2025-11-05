@@ -4,7 +4,7 @@ import { LoadingIndicator } from "@/components/admin/loading-indicator";
 import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import { formatCurrencyEnglish } from "@/lib/utils";
-import { fetchData } from "@/utils/api-utils";
+import { fetchProtectedData } from "@/utils/api-utils";
 import { Order } from "@/utils/types";
 import { ArrowLeft, Plus } from "lucide-react";
 import Link from "next/link";
@@ -22,7 +22,7 @@ export default function OrderPaymentsListPage() {
     const fetchOrderData = async () => {
       try {
         setLoading(true);
-        const response = await fetchData<Order>(`orders/${orderId}`);
+        const response = await fetchProtectedData<Order>(`orders/${orderId}`);
         setOrder(response);
       } catch (error) {
         console.error("Error fetching order data:", error);
@@ -41,7 +41,7 @@ export default function OrderPaymentsListPage() {
   if (!order) {
     return (
       <div className="flex justify-center items-center h-64">
-        <p>Order not found</p>
+        <p>Payment not found</p>
       </div>
     );
   }
