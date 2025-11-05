@@ -125,7 +125,7 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
         <div
           className={`relative flex-shrink-0 w-24 h-16 rounded-sm overflow-hidden cursor-pointer border-1 transition-all ${
             selectedImage === product?.attachment?.url
-              ? "border-primaryColor ring-1 ring-red-100"
+              ? "border-primaryColor  ring-red-100"
               : "border-gray-200 hover:border-gray-300"
           }`}
           onClick={() => handleImageChange(product?.attachment?.url)}

@@ -102,7 +102,8 @@ const productSchema = z
     isFeatured: z.boolean().default(false),
     brandId: z.number().min(1, "Brand is required"),
     galleryId: z.number().optional(),
-    categoryId: z.number().min(1, "Category is required"),
+    categoryId: z.coerce.number().min(1, "Category is required"),
+
     supplierId: z.number().min(1, "Supplier is required"),
     hasDiscount: z.boolean().default(false),
     discountType: z.nativeEnum(DiscountType).optional(),
