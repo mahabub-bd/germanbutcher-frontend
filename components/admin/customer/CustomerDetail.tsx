@@ -112,12 +112,17 @@ export function CustomerDetail() {
 
   const calculateOrderStats = () => {
     if (!customer?.orders) return { total: 0, totalSpent: 0 };
+
+    const totalSpent = customer.orders.reduce((sum, order) => {
+      const numericValue =
+        parseFloat(order.totalValue?.toString().replace(/[^\d.]/g, "")) || 0;
+
+      return sum + numericValue;
+    }, 0);
+
     return {
       total: customer.orders.length,
-      totalSpent: customer.orders.reduce(
-        (sum, order) => sum + order.totalValue,
-        0
-      ),
+      totalSpent,
     };
   };
 

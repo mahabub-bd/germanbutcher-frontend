@@ -527,9 +527,13 @@ export const OrderPDFDocument = ({ order }: OrderPDFDocumentProps) => {
             {order.items?.map((item: OrderItem, index: number) => {
               // Use stored prices from OrderItem
               const unitPrice =
-                item.unitPrice || item.product?.sellingPrice || 0;
-              const totalPrice = item.totalPrice || unitPrice * item.quantity;
-              const unitDiscount = item.unitDiscount || 0;
+                Number(item.unitPrice) ||
+                Number(item.product?.sellingPrice) ||
+                0;
+              const totalPrice =
+                Number(item.totalPrice) ||
+                unitPrice * (Number(item.quantity) || 0);
+              const unitDiscount = Number(item.unitDiscount) || 0;
               const hasDiscount = unitDiscount > 0;
               const originalPrice = unitPrice + unitDiscount;
 
