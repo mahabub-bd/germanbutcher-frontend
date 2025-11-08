@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
     lineHeight: 1.25,
     color: "#333333",
   },
-  // Header Section
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -44,6 +43,24 @@ const styles = StyleSheet.create({
     height: 60,
     marginRight: 10,
     objectFit: "contain",
+  },
+  companyInfo: {
+    flexDirection: "column",
+  },
+  companyName: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "#8B0000",
+    marginBottom: 2,
+  },
+  companyAddress: {
+    fontSize: 8,
+    color: "#374151",
+    marginTop: 2,
+  },
+  companyContact: {
+    fontSize: 8,
+    color: "#374151",
   },
   invoiceHeader: {
     alignItems: "flex-end",
@@ -69,6 +86,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: "#666666",
   },
+
   // Info Grid
   infoGrid: {
     flexDirection: "row",
@@ -386,6 +404,13 @@ export const OrderPDFDocument = ({ order }: OrderPDFDocumentProps) => {
         <View style={styles.header}>
           <View style={styles.logoSection}>
             <Image style={styles.logo} src="/images/logo3.png" />
+            <View style={styles.companyInfo}>
+              <Text style={styles.companyName}>German Butcher</Text>
+              <Text style={styles.companyAddress}>
+                House-56/B, Road-132, Gulshan-1, Dhaka
+              </Text>
+              <Text style={styles.companyContact}>Mobile: 01404-009000</Text>
+            </View>
           </View>
           <View style={styles.invoiceHeader}>
             <Text style={styles.invoiceTitle}>INVOICE</Text>
