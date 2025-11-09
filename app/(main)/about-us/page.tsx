@@ -173,6 +173,10 @@ const AboutUsComponent: React.FC = () => {
           <p className="text-lg opacity-90">
             Experience the authentic taste of Germany with German Butcher
           </p>
+          {/* Trade Licence */}
+          <div className="text-sm text-white/80 mt-4">
+            Trade Licence No: <span className="font-semibold">TRAD/DNCC/076380/2022</span>
+          </div>
         </div>
       </div>
     </div>

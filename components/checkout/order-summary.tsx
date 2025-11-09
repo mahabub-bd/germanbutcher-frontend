@@ -203,11 +203,11 @@ export function OrderSummary({
           </Link>
           <span>and</span>
           <Link
-            href="/privacy-policy"
+            href="/return-refund-policy"
             className="underline hover:text-primary transition-colors"
-            aria-label="Privacy Policy"
+            aria-label="Refund Policy"
           >
-            Privacy Policy
+            Refund Policy
           </Link>
         </p>
       </div>
