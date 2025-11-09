@@ -31,6 +31,7 @@ import {
   MapPin,
   Package,
   Pencil,
+  Printer,
   Tag,
   User,
 } from "lucide-react";
@@ -46,6 +47,7 @@ interface OrderViewProps {
 
 export default function OrderView({ order, onBack }: OrderViewProps) {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [isPrinting, setIsPrinting] = useState(false);
 
   const handleGeneratePDF = async () => {
     setIsGeneratingPDF(true);
@@ -64,6 +66,266 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
       // You might want to show a toast notification here
     } finally {
       setIsGeneratingPDF(false);
+    }
+  };
+
+  const handleThermalPrint = () => {
+    setIsPrinting(true);
+    try {
+      // Create a new window for printing
+      const printWindow = window.open("", "", "width=300,height=600");
+      if (!printWindow) {
+        throw new Error("Failed to open print window");
+      }
+
+      const orderSummary = calculateOrderSummary();
+
+      // Generate print content optimized for 80mm thermal printer
+      const printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Order #${order.orderNo}</title>
+          <style>
+            @media print {
+              @page {
+                size: 80mm auto;
+                margin: 0;
+              }
+              body {
+                margin: 0;
+                padding: 0;
+              }
+            }
+            
+            body {
+              font-family: 'Courier New', monospace;
+              font-size: 11px;
+              line-height: 1.4;
+              color: #000;
+              width: 80mm;
+              margin: 0 auto;
+              padding: 5mm;
+              background: white;
+            }
+            
+            .center {
+              text-align: center;
+            }
+            
+            .bold {
+              font-weight: bold;
+            }
+            
+            .large {
+              font-size: 14px;
+              font-weight: bold;
+            }
+            
+            .separator {
+              border-top: 1px dashed #000;
+              margin: 8px 0;
+            }
+            
+            .double-separator {
+              border-top: 2px solid #000;
+              margin: 8px 0;
+            }
+            
+            .row {
+              display: flex;
+              justify-content: space-between;
+              margin: 2px 0;
+            }
+            
+            .item-row {
+              margin: 4px 0;
+            }
+            
+            .item-name {
+              font-weight: bold;
+            }
+            
+            .item-details {
+              font-size: 10px;
+              color: #333;
+              margin-left: 8px;
+            }
+            
+            .total-row {
+              font-size: 13px;
+              font-weight: bold;
+              margin-top: 4px;
+            }
+            
+            .footer {
+              margin-top: 10px;
+              font-size: 10px;
+            }
+            
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+            
+            .no-print {
+              display: none;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="center large">GERMAN BUTCHER</div>
+          <div class="center">Order Receipt</div>
+          <div class="separator"></div>
+          
+          <div class="row">
+            <span>Order #:</span>
+            <span class="bold">${order.orderNo}</span>
+          </div>
+          <div class="row">
+            <span>Date:</span>
+            <span>${formatDateTime(order.createdAt)}</span>
+          </div>
+          <div class="row">
+            <span>Status:</span>
+            <span class="bold">${order.orderStatus.toUpperCase()}</span>
+          </div>
+          
+          <div class="double-separator"></div>
+          
+          <div class="bold">CUSTOMER DETAILS</div>
+          <div style="margin-top: 4px;">
+            <div>${order.user.name}</div>
+            <div>${order.user.email}</div>
+            <div>${order.user.mobileNumber}</div>
+          </div>
+          
+          <div class="double-separator"></div>
+          
+          <div class="bold">SHIPPING ADDRESS</div>
+          <div style="margin-top: 4px;">
+            <div>${order.address.address}</div>
+            <div>${order.address.area}, ${order.address.city}</div>
+            <div>${order.address.division}</div>
+          </div>
+          
+          <div class="double-separator"></div>
+          
+          <div class="bold">ORDER ITEMS</div>
+          ${order.items
+            .map((item: OrderItem) => {
+              const unitPrice =
+                Number(item.unitPrice) ||
+                Number(item.product.sellingPrice) ||
+                0;
+              const totalPrice =
+                Number(item.totalPrice) || unitPrice * item.quantity;
+              const unitDiscount = Number(item.unitDiscount) || 0;
+
+              return `
+              <div class="item-row">
+                <div class="item-name">${item.product.name}</div>
+                <div class="item-details">
+                  ${formatCurrencyEnglish(unitPrice)} × ${item.quantity} (${item.product.weight}${item.product.unit?.name || ""})
+                  ${unitDiscount > 0 ? `<br>Discount: -${formatCurrencyEnglish(unitDiscount * item.quantity)}` : ""}
+                </div>
+                <div class="row">
+                  <span></span>
+                  <span class="bold">${formatCurrencyEnglish(totalPrice)}</span>
+                </div>
+              </div>
+              `;
+            })
+            .join("")}
+          
+          <div class="double-separator"></div>
+          
+          <div class="row">
+            <span>Subtotal:</span>
+            <span>${formatCurrencyEnglish(orderSummary.originalSubtotal)}</span>
+          </div>
+          
+          ${
+            orderSummary.productDiscountTotal > 0
+              ? `
+          <div class="row">
+            <span>Product Discounts:</span>
+            <span>-${formatCurrencyEnglish(orderSummary.productDiscountTotal)}</span>
+          </div>
+          `
+              : ""
+          }
+          
+          ${
+            order.coupon && orderSummary.couponDiscount > 0
+              ? `
+          <div class="row">
+            <span>Coupon (${order.coupon.code}):</span>
+            <span>-${formatCurrencyEnglish(orderSummary.couponDiscount)}</span>
+          </div>
+          `
+              : ""
+          }
+          
+          <div class="row">
+            <span>Shipping (${order.shippingMethod.name}):</span>
+            <span>${formatCurrencyEnglish(orderSummary.shippingCost)}</span>
+          </div>
+          
+          <div class="double-separator"></div>
+          
+          <div class="row total-row">
+            <span>TOTAL:</span>
+            <span>${formatCurrencyEnglish(orderSummary.total)}</span>
+          </div>
+          
+          ${
+            order.paymentStatus === "pending"
+              ? `
+          <div class="row" style="color: #d00;">
+            <span>DUE AMOUNT:</span>
+            <span class="bold">${formatCurrencyEnglish(order.totalValue - order.paidAmount)}</span>
+          </div>
+          `
+              : ""
+          }
+          
+          <div class="row">
+            <span>Payment Status:</span>
+            <span class="bold">${order.paymentStatus.toUpperCase()}</span>
+          </div>
+          
+          <div class="double-separator"></div>
+          
+          <div class="center footer">
+            Thank you for your order!
+            <br>
+            For support: contact@germanbutcher.com
+          </div>
+          
+          <div class="center footer" style="margin-top: 15mm;">
+            ................................................
+          </div>
+        </body>
+        </html>
+      `;
+
+      printWindow.document.write(printContent);
+      printWindow.document.close();
+
+      // Wait for content to load, then print
+      printWindow.onload = () => {
+        setTimeout(() => {
+          printWindow.print();
+          printWindow.close();
+        }, 250);
+      };
+    } catch (error) {
+      console.error("Error printing:", error);
+      // You might want to show a toast notification here
+    } finally {
+      setIsPrinting(false);
     }
   };
 
@@ -210,6 +472,24 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
           <Button
             variant="outline"
             size="sm"
+            onClick={handleThermalPrint}
+            disabled={isPrinting}
+          >
+            {isPrinting ? (
+              <>
+                <Clock className="size-4 mr-2 animate-spin" />
+                Printing...
+              </>
+            ) : (
+              <>
+                <Printer className="size-4 mr-2" />
+                Print Receipt
+              </>
+            )}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
             onClick={handleGeneratePDF}
             disabled={isGeneratingPDF}
           >
@@ -290,7 +570,8 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                             <div className="flex flex-wrap items-center gap-2 mt-1">
                               <span className="text-sm text-muted-foreground">
                                 {formatCurrencyEnglish(unitPrice)} ×{" "}
-                                {item.quantity} {item.product.unit?.name}
+                                {item.quantity} - {item.product.weight}
+                                {item.product.unit?.name}
                               </span>
                               {unitDiscount > 0 && (
                                 <Badge variant="secondary" className="text-xs">

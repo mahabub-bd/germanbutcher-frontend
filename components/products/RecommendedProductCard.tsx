@@ -57,7 +57,7 @@ export default async function RecommendedProductCard({
               product.discountValue && (
                 <Badge className="absolute top-2 left-2 bg-red-700 text-white hover:bg-orange-600 text-[10px] sm:text-xs">
                   {product.discountType === DiscountType.PERCENTAGE
-                    ? `${product.discountValue}% Off`
+                    ? `${Math.round(product.discountValue)}% Off`
                     : `Save ${formatCurrencyEnglish(product.discountValue)}`}
                 </Badge>
               )}
