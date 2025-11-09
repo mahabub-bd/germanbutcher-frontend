@@ -542,13 +542,15 @@ export const OrderPDFDocument = ({ order }: OrderPDFDocumentProps) => {
                   <View style={[styles.tableCell, styles.productCell]}>
                     <Text style={styles.productName}>
                       {item.product?.name || "N/A"}
-                      {item.product?.weight && (
-                        <Text style={styles.productSku}>
-                          {" "}
-                          {item.product.weight} {item.product.unit?.name || ""}
-                        </Text>
-                      )}
                     </Text>
+                    {item.product?.weight && (
+                      <Text style={styles.productSku}>
+                        {Number(item.product.weight) % 1 === 0
+                          ? Math.floor(Number(item.product.weight))
+                          : item.product.weight}{" "}
+                        {item.product.unit?.name?.toLowerCase() || ""}
+                      </Text>
+                    )}
 
                     <Text style={styles.productSku}>
                       SKU: {item.product?.productSku || "N/A"}
