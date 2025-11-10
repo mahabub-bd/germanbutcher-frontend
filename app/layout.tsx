@@ -125,7 +125,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "5TIMzRI4DGfgTxaMGSbVmI4e7MgP4-google-verification-code",
+    google: "5TIMzRI4DGfgTxaMGSbVmI4e7MgP4",
   },
   category: "food",
 };
