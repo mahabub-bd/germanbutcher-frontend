@@ -393,6 +393,7 @@ export interface Coupon {
   value: number;
   maxDiscountAmount?: number | null;
   maxUsage: number;
+  minOrderAmount: number;
   timesUsed: number;
   validFrom: Date;
   validUntil: Date;
