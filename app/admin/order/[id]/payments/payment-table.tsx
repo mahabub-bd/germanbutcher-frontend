@@ -25,6 +25,7 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
       <TableCell>{formatDateTime(payment.paymentDate)}</TableCell>
       <TableCell>{payment.paymentMethod?.name || "N/A"}</TableCell>
       <TableCell>{payment.sslPaymentId || "-"}</TableCell>
+      <TableCell>{payment.note || "-"}</TableCell>
       <TableCell>{payment.createdBy?.name || "System"}</TableCell>
       <TableCell>
         <StatusBadge status="completed" />
@@ -76,6 +77,7 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
           <TableHead>Date</TableHead>
           <TableHead>Method</TableHead>
           <TableHead>Reference</TableHead>
+          <TableHead>Note</TableHead>
           <TableHead>Updated By</TableHead>
           <TableHead>Status</TableHead>
         </TableRow>

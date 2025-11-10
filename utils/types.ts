@@ -489,6 +489,7 @@ export interface OrderPayment {
   order: Order;
   paymentMethod: PaymentMethod;
   createdBy: User;
+  note?: string;
   updatedBy: User;
 }
 export interface OrderSummary {
