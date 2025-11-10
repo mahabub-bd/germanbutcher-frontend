@@ -141,7 +141,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={fontVariables}>
-      <GoogleTagManager gtmId="G-JP7KEDH4NK" />
+      <GoogleTagManager gtmId="GTM-5H5N8NBL" />
         <GoogleAnalytics gaId="G-JP7KEDH4NK" />
       <head>
         {/* Preload the local font for better performance */}
