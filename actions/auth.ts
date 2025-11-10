@@ -50,7 +50,7 @@ export async function setUserCookies(userData: any) {
         mobileNumber: userData.mobileNumber || "",
         roles: userData.roles || "",
         isAdmin: Boolean(
-          userData.roles === "admin" || userData.roles === "superadmin"
+          userData.roles === "admin" || userData.roles === "superadmin" || userData.roles === "modaretor"
         ),
         createdAt: userData?.createdAt,
       };

@@ -1,4 +1,4 @@
-type UserRole = "superadmin" | "admin" | "user";
+type UserRole = "superadmin" | "admin" | "modaretor" | "user";
 
 export type PaginatedResponse<T> = {
   message: string;

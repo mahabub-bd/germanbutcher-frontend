@@ -44,7 +44,7 @@ export function CustomerForm({ user, mode, onSuccess }: UserFormProps) {
     defaultValues: {
       name: user?.name || "",
       email: user?.email || "",
-      password: "",
+
       mobileNumber: user?.mobileNumber || "+880",
       roleId: user?.role?.id.toString(),
       isVerified: user?.isVerified || false,
@@ -69,15 +69,10 @@ export function CustomerForm({ user, mode, onSuccess }: UserFormProps) {
     try {
       if (mode === "create") {
         await postData("users", values);
-        toast.success("User created successfully");
       } else if (mode === "edit" && user) {
         const payload = { ...values };
-        if (!payload.password) {
-          delete payload.password;
-        }
 
         await patchData(`users/${user.id}`, payload);
-        toast.success("User updated successfully");
       }
       onSuccess();
     } catch (error) {
@@ -136,29 +131,6 @@ export function CustomerForm({ user, mode, onSuccess }: UserFormProps) {
 
             <FormField
               control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormLabel>
-                    {mode === "create"
-                      ? "Password"
-                      : "New Password (leave blank to keep current)"}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Enter password"
-                      {...field}
-                      className="w-full"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name="mobileNumber"
               render={({ field }) => (
                 <FormItem className="space-y-2">
@@ -169,17 +141,13 @@ export function CustomerForm({ user, mode, onSuccess }: UserFormProps) {
                       {...field}
                       className="w-full"
                       onChange={(e) => {
-                        // Ensure the input starts with +880
-                        if (!e.target.value.startsWith("+880")) {
-                          if (e.target.value === "") {
-                            field.onChange("+880");
-                          } else if (!e.target.value.startsWith("+")) {
-                            field.onChange(`+880${e.target.value}`);
-                          } else {
-                            field.onChange("+880");
-                          }
+                        const input = e.target.value.replace(/[^0-9+]/g, "");
+                        if (!input.startsWith("+880")) {
+                          field.onChange(
+                            `+880${input.replace(/^\+?880?/, "")}`
+                          );
                         } else {
-                          field.onChange(e.target.value);
+                          field.onChange(input);
                         }
                       }}
                     />
@@ -198,7 +166,7 @@ export function CustomerForm({ user, mode, onSuccess }: UserFormProps) {
                   <Select
                     value={field.value}
                     onValueChange={field.onChange}
-                    disabled={true}
+                    disabled={mode === "edit"}
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">

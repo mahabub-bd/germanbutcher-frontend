@@ -22,22 +22,28 @@ export async function proxy(req: any) {
   try {
     const user = await getUser();
 
+    // If not logged in → redirect to login
     if (!user) {
-      const loginUrl = new URL("/auth/sign-in", req.url);
-
-      return NextResponse.redirect(loginUrl);
+      return NextResponse.redirect(new URL("/auth/sign-in", req.url));
     }
 
-    if (isAdminProtected && !user.isAdmin) {
+    // Check admin / moderator access
+    const userRole =
+      typeof user.roles === "string"
+        ? user.roles.toLowerCase()
+        : user.roles?.rolename?.toLowerCase();
+
+    const isAdminOrModerator =
+      user.isAdmin || ["admin", "superadmin", "moderator"].includes(userRole);
+
+    if (isAdminProtected && !isAdminOrModerator) {
       return NextResponse.redirect(new URL("/user", req.url));
     }
 
     return NextResponse.next();
   } catch (error) {
     console.error("Middleware error:", error);
-
-    const loginUrl = new URL("/auth/sign-in", req.url);
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.redirect(new URL("/auth/sign-in", req.url));
   }
 }
 

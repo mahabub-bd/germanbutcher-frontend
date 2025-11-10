@@ -236,13 +236,13 @@ export function CustomerList({
                     <DropdownMenuItem asChild>
                       <Link href={`/admin/customer/${customer.id}/view`}>
                         <UserCircle className="mr-2 h-4 w-4" />
-                        View Details
+                        View
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href={`/admin/customer/${customer.id}/edit`}>
                         <Pencil className="mr-2 h-4 w-4" />
-                        Edit Customer
+                        Edit
                       </Link>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
