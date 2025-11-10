@@ -5,6 +5,7 @@ import { CartProvider } from "@/providers/cart-provider";
 import { SearchProvider } from "@/providers/search-provider";
 import { fetchProtectedData } from "@/utils/api-utils";
 import type { Cart } from "@/utils/types";
+import { GoogleTagManager } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Quicksand } from "next/font/google";
 import localFont from "next/font/local";
@@ -101,11 +102,11 @@ export const metadata: Metadata = {
   },
 
   icons: {
-    icon: "https://test.germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
+    icon: "https://germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
     shortcut:
-      "https://test.germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
+      "https://germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
     apple:
-      "https://test.germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
+      "https://germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
   },
 
   metadataBase: new URL("https://www.germanbutcherbd.com"),
@@ -124,7 +125,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
+    google: "5TIMzRI4DGfgTxaMGSbVmI4e7MgP4-google-verification-code",
   },
   category: "food",
 };
@@ -139,6 +140,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={fontVariables}>
+      <GoogleTagManager gtmId="G-JP7KEDH4NK" />
       <head>
         {/* Preload the local font for better performance */}
         <link
