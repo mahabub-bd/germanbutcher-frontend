@@ -12,7 +12,7 @@ const SocialLinks = () => {
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className={`p-2 sm:p-3 ${bg} rounded-full cursor-pointer 
+          className={`p-1 sm:p-3 ${bg} rounded-full cursor-pointer 
                      transition-all duration-300 hover:scale-110 shadow-lg
                      focus:outline-none focus:ring-2 focus:ring-white/50`}
           aria-label={`Follow us on ${name}`}
@@ -125,7 +125,7 @@ export default function Footer() {
 
       {/* Content */}
       <div className="container mx-auto relative z-10 py-8  px-4 sm:px-4 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8  lg:gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8  lg:gap-8">
           {/* Logo Section - Mobile: full width, Desktop: 20% */}
           <div
             className="
@@ -138,7 +138,7 @@ export default function Footer() {
   "
           >
             {/* Logo Container */}
-            <div className="p-4 sm:p-2">
+            <div className="p-2 sm:p-2">
               <Image
                 src={GermanbutcherLogo || "/placeholder.svg"}
                 alt="German Butcher Logo"
@@ -156,7 +156,7 @@ export default function Footer() {
           {/* Menu Section - Mobile: full width, Desktop: 50% */}
           <div className="col-span-1 lg:col-span-6 order-3 lg:order-2">
             {/* Menu Grid - 2 columns on mobile, 4 on desktop */}
-            <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
               <MenuSection
                 title={footerMenuData.company.title}
                 links={footerMenuData.company.links}

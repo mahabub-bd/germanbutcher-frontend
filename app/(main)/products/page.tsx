@@ -46,7 +46,7 @@ export default async function ProductsPage({
   const { categories, brands } = await fetchInitialData();
 
   const filterParams = {
-    limit: (await searchParams).limit || "16",
+    limit: (await searchParams).limit || "24",
     page: (await searchParams).page || "1",
     category: (await searchParams).category,
     brand: (await searchParams).brand,

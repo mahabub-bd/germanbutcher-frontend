@@ -470,7 +470,7 @@ export const footerMenuData = {
     title: "Policy",
     links: [
       { text: "Terms and Conditions", href: "/terms-and-conditions" },
-      { text: "Return and Refund Policy", href: "/return-refund-policy" },
+      { text: "Return and Refund", href: "/return-refund-policy" },
       { text: "Privacy Policy", href: "/privacy-policy" },
     ],
   },
