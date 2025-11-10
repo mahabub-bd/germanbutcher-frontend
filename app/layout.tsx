@@ -6,6 +6,7 @@ import { SearchProvider } from "@/providers/search-provider";
 import { fetchProtectedData } from "@/utils/api-utils";
 import type { Cart } from "@/utils/types";
 import { GoogleTagManager } from "@next/third-parties/google";
+import { GoogleAnalytics } from '@next/third-parties/google'
 import type { Metadata } from "next";
 import { Quicksand } from "next/font/google";
 import localFont from "next/font/local";
@@ -141,6 +142,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={fontVariables}>
       <GoogleTagManager gtmId="G-JP7KEDH4NK" />
+        <GoogleAnalytics gaId="G-JP7KEDH4NK" />
       <head>
         {/* Preload the local font for better performance */}
         <link
