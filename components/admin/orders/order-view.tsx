@@ -204,7 +204,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
       ? `
       <div class="small" style="margin-top: 3px;">
         <strong>Shipping Address:</strong><br>
-        ${order.address.area}, ${order.address.city}, ${order.address.division}
+      ${order.address.address},  ${order.address.area}, ${order.address.city}, 
       </div>
       `
       : ""
@@ -233,13 +233,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
             <span class="item-qty">${item.quantity} × ${weight} ${unitName}</span>
             <span class="item-price">${formatCurrencyEnglish(totalPrice)}</span>
           </div>
-          ${
-            unitDiscount > 0
-              ? `<div class="small" style="text-align:right;">Discount: -${formatCurrencyEnglish(
-                  unitDiscount * item.quantity
-                )}</div>`
-              : ""
-          }
+        
         </div>
       `;
     })
