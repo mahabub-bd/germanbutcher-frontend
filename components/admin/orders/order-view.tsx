@@ -379,34 +379,29 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
     return statusIndex <= currentIndex;
   };
 
-  // Generate the timeline statuses
   const timelineStatuses = generateOrderTimeline();
 
   const calculateOrderSummary = () => {
-    // Calculate subtotal from stored item prices
     const itemsSubtotal = order.items.reduce((sum, item) => {
-      // Use stored totalPrice if available, otherwise fallback to calculation
       const itemTotal =
         Number(item.totalPrice) ||
         (Number(item.unitPrice) || 0) * item.quantity;
       return sum + itemTotal;
     }, 0);
 
-    // Calculate product discount total from stored unitDiscount
     const productDiscountTotal = order.items.reduce((sum, item) => {
       const discountTotal = (item.unitDiscount || 0) * item.quantity;
+      console.log(discountTotal);
+
       return sum + Number(discountTotal);
     }, 0);
 
-    // Original subtotal (before product discounts)
     const originalSubtotal = itemsSubtotal + productDiscountTotal;
 
-    // Coupon discount is total discount minus product discounts
     const couponDiscount = Number(order.totalDiscount) - productDiscountTotal;
 
     const shippingCost = Number(order.shippingMethod.cost);
 
-    // Total should match order.totalValue
     const total = Number(order.totalValue);
 
     return {

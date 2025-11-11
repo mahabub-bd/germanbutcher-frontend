@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     borderBottom: 2,
-    borderColor: "#8B0000", // brand red
+    borderColor: "#8B0000",
     paddingBottom: 10,
     marginBottom: 10,
   },
@@ -195,8 +195,20 @@ const styles = StyleSheet.create({
   },
 });
 
+const formatCurrency = (num: number) =>
+  num?.toLocaleString("en-BD", {
+    style: "currency",
+    currency: "BDT",
+    minimumFractionDigits: 2,
+  });
+
 export function PaymentReportPDF({ payments, orderId }: Props) {
-  const total = payments.reduce((sum, p) => sum + parseFloat(p.amount), 0);
+  const totalAmount = payments.reduce(
+    (sum, p) => sum + parseFloat(p.amount || "0"),
+    0
+  );
+  const uniqueMethods = [...new Set(payments.map((p) => p.paymentMethod.name))]
+    .length;
 
   return (
     <Document>
@@ -216,7 +228,7 @@ export function PaymentReportPDF({ payments, orderId }: Props) {
               </Text>
             </View>
           </View>
-          <Text style={styles.reportTitle}>Order Payment Report</Text>
+          <Text style={styles.reportTitle}>Payment Report</Text>
         </View>
 
         {/* Info Section */}
@@ -260,7 +272,7 @@ export function PaymentReportPDF({ payments, orderId }: Props) {
             <Text style={[styles.cell, { flex: 1.5 }]}>{p.paymentNumber}</Text>
             <Text style={[styles.cell, { flex: 1 }]}>{p.paymentDate}</Text>
             <Text style={[styles.cell, { flex: 1 }]}>
-              {parseFloat(p.amount)}
+              {formatCurrency(parseFloat(p.amount))}
             </Text>
             <Text style={[styles.cell, { flex: 1 }]}>
               {p.paymentMethod.name}
@@ -277,13 +289,13 @@ export function PaymentReportPDF({ payments, orderId }: Props) {
           </View>
           <View style={styles.summaryBox}>
             <Text style={styles.summaryLabel}>Total Amount</Text>
-            <Text style={styles.summaryValue}>{total}</Text>
+            <Text style={styles.summaryValue}>
+              {formatCurrency(totalAmount)}
+            </Text>
           </View>
           <View style={styles.summaryBox}>
-            <Text style={styles.summaryLabel}>Methods Used</Text>
-            <Text style={styles.summaryValue}>
-              {[...new Set(payments.map((p) => p.paymentMethod.name))].length}
-            </Text>
+            <Text style={styles.summaryLabel}>Payment Methods</Text>
+            <Text style={styles.summaryValue}>{uniqueMethods}</Text>
           </View>
         </View>
 
