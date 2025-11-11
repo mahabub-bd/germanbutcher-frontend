@@ -18,8 +18,38 @@ export function formatCurrencyEnglish(amount: number): string {
     .replace("BDT", "৳ ");
 }
 
-export const formatDateTime = (isoString: string | Date) => {
-  const date = new Date(isoString);
+export const formatDateTime = (input: string | Date) => {
+  if (!input) return "-";
+
+  // If it's already a Date, use it directly
+  if (input instanceof Date) {
+    return input.toLocaleString("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "Asia/Dhaka",
+    });
+  }
+
+  const str = String(input).trim();
+
+  // 🧠 Detect plain YYYY-MM-DD (no time component)
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+    const [y, m, d] = str.split("-").map(Number);
+    // Create a *local* date — no UTC shift
+    const localDate = new Date(y, m - 1, d);
+
+    return localDate.toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  }
+
+  const date = new Date(str);
   return date.toLocaleString("en-US", {
     day: "2-digit",
     month: "short",
@@ -27,7 +57,7 @@ export const formatDateTime = (isoString: string | Date) => {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
-    timeZone: "Asia/Dhaka", // Correct IANA timezone for Bangladesh GMT+6
+    timeZone: "Asia/Dhaka",
   });
 };
 
@@ -92,10 +122,9 @@ export function formatWeight(weight: number, unit: string): string {
   return `${formattedWeight} ${displayUnit}`;
 }
 
-
 export function formatSlugToTitle(slug: string): string {
   return slug
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ")
+    .join(" ");
 }
