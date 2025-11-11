@@ -5,8 +5,7 @@ import { CartProvider } from "@/providers/cart-provider";
 import { SearchProvider } from "@/providers/search-provider";
 import { fetchProtectedData } from "@/utils/api-utils";
 import type { Cart } from "@/utils/types";
-import { GoogleTagManager } from "@next/third-parties/google";
-import { GoogleAnalytics } from '@next/third-parties/google'
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Quicksand } from "next/font/google";
 import localFont from "next/font/local";
@@ -81,7 +80,7 @@ export const metadata: Metadata = {
     siteName: "German Butcher",
     images: [
       {
-        url: "https://www.germanbutcherbd.comhttps://test.germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
+        url: "https://germanbutcherbd.com/images/logo3.png",
         width: 1200,
         height: 630,
         alt: "German Butcher - Premium German Sausages & Meat Products",
@@ -96,18 +95,14 @@ export const metadata: Metadata = {
     title: "German Butcher - Premium German Sausages & Meat Products",
     description:
       "Pioneer of authentic German Sausages in Bangladesh since 1991. Premium quality gourmet sausages, cold cuts, ham, bacon and meat products.",
-    images: [
-      "https://www.germanbutcherbd.comhttps://test.germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
-    ],
+    images: ["https://germanbutcherbd.com/images/logo3.png"],
     creator: "@germanbutcherbd",
   },
 
   icons: {
-    icon: "https://germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
-    shortcut:
-      "https://germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
-    apple:
-      "https://germanbutcherbd.com/_next/image?url=%…t%2Fstatic%2Fmedia%2Flogo.54b71ef5.webp&w=96&q=75.png",
+    icon: "https://germanbutcherbd.com/images/logo3.png",
+    shortcut: "https://germanbutcherbd.com/images/logo3.png",
+    apple: "https://germanbutcherbd.com/images/logo3.png",
   },
 
   metadataBase: new URL("https://www.germanbutcherbd.com"),
@@ -142,7 +137,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={fontVariables}>
       <GoogleTagManager gtmId="GTM-5H5N8NBL" />
-        <GoogleAnalytics gaId="G-JP7KEDH4NK" />
+      <GoogleAnalytics gaId="G-JP7KEDH4NK" />
       <head>
         {/* Preload the local font for better performance */}
         <link
