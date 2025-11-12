@@ -4,7 +4,7 @@ import { CustomerForm } from "@/components/admin/customer/customer-form";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 
-import { fetchData } from "@/utils/api-utils";
+import { fetchProtectedData } from "@/utils/api-utils";
 import type { User } from "@/utils/types";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -23,7 +23,7 @@ export default function EditUserPage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userData = await fetchData<User>(`users/${userId}`);
+        const userData = await fetchProtectedData<User>(`users/${userId}`);
         setUser(userData);
       } catch (error) {
         console.error("Error fetching user:", error);
