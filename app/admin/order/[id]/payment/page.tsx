@@ -106,7 +106,7 @@ export default function AddOrderPaymentPage() {
         notes: data.notes,
       };
 
-      await postData(`orders/${orderId}/payments`, paymentData);
+      await postData(`orders/payments`, paymentData);
 
       toast.success("Payment has been recorded successfully");
       router.push(`/admin/orders`);
