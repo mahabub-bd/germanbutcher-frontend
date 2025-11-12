@@ -92,10 +92,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
         size: 80mm auto;
         margin: 0;
       }
-      body {
-        margin: 0;
-        padding: 0;
-      }
+      body { margin: 0; padding: 0; }
     }
 
     body {
@@ -112,6 +109,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
     .center { text-align: center; }
     .bold { font-weight: bold; }
     .large { font-size: 14px; font-weight: bold; }
+    .small { font-size: 10px; color: #333; }
 
     img.logo {
       width: 50px;
@@ -137,23 +135,29 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
     }
 
     .item-row {
-      margin: 5px 0;
+      margin: 4px 0;
+    }
+
+    .item-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .item-name {
+      flex: 1;
       font-weight: bold;
+      text-transform: capitalize;
     }
 
-    .item-details {
-      font-size: 10px;
-      color: #333;
-      margin-left: 5px;
+    .item-qty {
+      flex: 0 0 30%;
+      text-align: right;
     }
 
-    .total-row {
-      font-size: 13px;
-      font-weight: bold;
-      margin-top: 5px;
+    .item-price {
+      flex: 0 0 25%;
+      text-align: right;
     }
 
     .footer {
@@ -170,9 +174,13 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
 </head>
 <body>
 
+  <!-- Header -->
   <div class="center">
     <img class="logo" src="/images/logo3.png" alt="Logo" />
     <div class="large">GERMAN BUTCHER</div>
+    <div class="small">House-56/B, Road-132, Gulshan-1, Dhaka</div>
+    <div class="small">Mobile: 01404-009000 | support@germanbutcher.com</div>
+    <div class="separator"></div>
     <div>Invoice</div>
   </div>
 
@@ -180,45 +188,60 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
 
   <div class="row"><span>Order #:</span><span class="bold">${order.orderNo}</span></div>
   <div class="row"><span>Date:</span><span>${formatDateTime(order.createdAt)}</span></div>
- 
 
   <div class="separator"></div>
 
+  <!-- Customer Info -->
   <div class="bold">CUSTOMER DETAILS</div>
   <div style="margin-top: 4px;">
-    <div>${order.user.name}</div>
-    <div>${order.user.email}</div>
-    <div>${order.user.mobileNumber}</div>
+  <div><strong>Name :</strong> ${order.user.name || ""}</div>
+  <div><strong>Email :</strong> ${order.user.email || "N/A"}</div>
+  <div><strong>Mobile Number :</strong> ${order.user.mobileNumber || "N/A"}</div>
   </div>
+
+  ${
+    order.address
+      ? `
+      <div class="small" style="margin-top: 3px;">
+        <strong>Shipping Address:</strong><br>
+      ${order.address.address},  ${order.address.area}, ${order.address.city}, 
+      </div>
+      `
+      : ""
+  }
 
   <div class="separator"></div>
 
+  <!-- Order Items -->
   <div class="bold">ORDER ITEMS</div>
+
   ${order.items
     .map((item: OrderItem) => {
       const unitPrice =
         Number(item.unitPrice) || Number(item.product.sellingPrice) || 0;
       const totalPrice = Number(item.totalPrice) || unitPrice * item.quantity;
       const unitDiscount = Number(item.unitDiscount) || 0;
+      const weight =
+        item.product.weight &&
+        Number(item.product.weight).toString().replace(/\.0+$/, "");
+      const unitName = item.product.unit?.name?.toLowerCase() || "";
 
       return `
-      <div class="item-row">
-        <div class="item-name">${item.product.name}</div>
-        <div class="item-details">
-          ${formatCurrencyEnglish(unitPrice)} × ${item.quantity} (${item.product.weight}${item.product.unit?.name || ""})
-          ${unitDiscount > 0 ? `<br>Discount: -${formatCurrencyEnglish(unitDiscount * item.quantity)}` : ""}
+        <div class="item-row">
+          <div class="item-line">
+            <span class="item-name">${item.product.name}</span>
+            <span class="item-qty">${item.quantity} × ${weight} ${unitName}</span>
+            <span class="item-price">${formatCurrencyEnglish(totalPrice)}</span>
+          </div>
+        
         </div>
-        <div class="row">
-          <span></span>
-          <span class="bold">${formatCurrencyEnglish(totalPrice)}</span>
-        </div>
-      </div>
       `;
     })
     .join("")}
 
   <div class="separator"></div>
 
+  <!-- Summary -->
   <div class="row"><span>Subtotal:</span><span>${formatCurrencyEnglish(orderSummary.originalSubtotal)}</span></div>
 
   ${
@@ -237,25 +260,26 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
 
   <div class="separator"></div>
 
-  <div class="row total-row"><span>TOTAL:</span><span>${formatCurrencyEnglish(orderSummary.total)}</span></div>
+  <div class="row bold" style="font-size:13px;"><span>TOTAL:</span><span>${formatCurrencyEnglish(orderSummary.total)}</span></div>
 
   ${
     order.paymentStatus === "pending"
-      ? `<div class="row" style="color: #d00;"><span>DUE AMOUNT:</span><span class="bold">${formatCurrencyEnglish(order.totalValue - order.paidAmount)}</span></div>`
+      ? `<div class="row" style="color:#d00;"><span>DUE:</span><span class="bold">${formatCurrencyEnglish(order.totalValue - order.paidAmount)}</span></div>`
       : ""
   }
 
-  <div class="row"><span>Payment Status:</span><span class="bold">${order.paymentStatus.toUpperCase()}</span></div>
+  <div class="row"><span>Payment:</span><span class="bold">${order.paymentStatus.toUpperCase()}</span></div>
 
   <div class="separator"></div>
 
+  <!-- Footer -->
   <div class="footer">
     Thank you for your order!<br>
-    For support: support@germanbutcher.com
+    Visit again at <strong>germanbutcherbd.com</strong>
   </div>
 
-  <div class="footer" style="margin-top: 12mm;">
-    ................................................<br>
+  <div class="footer" style="margin-top: 10mm;">
+    ...............................................<br>
     <span>Customer Signature</span>
   </div>
 
@@ -355,34 +379,29 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
     return statusIndex <= currentIndex;
   };
 
-  // Generate the timeline statuses
   const timelineStatuses = generateOrderTimeline();
 
   const calculateOrderSummary = () => {
-    // Calculate subtotal from stored item prices
     const itemsSubtotal = order.items.reduce((sum, item) => {
-      // Use stored totalPrice if available, otherwise fallback to calculation
       const itemTotal =
         Number(item.totalPrice) ||
         (Number(item.unitPrice) || 0) * item.quantity;
       return sum + itemTotal;
     }, 0);
 
-    // Calculate product discount total from stored unitDiscount
     const productDiscountTotal = order.items.reduce((sum, item) => {
       const discountTotal = (item.unitDiscount || 0) * item.quantity;
+      console.log(discountTotal);
+
       return sum + Number(discountTotal);
     }, 0);
 
-    // Original subtotal (before product discounts)
     const originalSubtotal = itemsSubtotal + productDiscountTotal;
 
-    // Coupon discount is total discount minus product discounts
     const couponDiscount = Number(order.totalDiscount) - productDiscountTotal;
 
     const shippingCost = Number(order.shippingMethod.cost);
 
-    // Total should match order.totalValue
     const total = Number(order.totalValue);
 
     return {
@@ -522,8 +541,9 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                             <div className="flex flex-wrap items-center gap-2 mt-1">
                               <span className="text-sm text-muted-foreground">
                                 {formatCurrencyEnglish(unitPrice)} ×{" "}
-                                {item.quantity} - {item.product.weight}
-                                {item.product.unit?.name}
+                                {item.quantity} -{" "}
+                                {parseInt(String(item.product.weight || 0))}{" "}
+                                {item.product.unit?.name?.toLowerCase()}
                               </span>
                               {unitDiscount > 0 && (
                                 <Badge variant="secondary" className="text-xs">

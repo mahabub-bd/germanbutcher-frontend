@@ -152,6 +152,7 @@ export function CouponList() {
             <TableHead>Code</TableHead>
             <TableHead>Discount</TableHead>
             <TableHead>Usage</TableHead>
+            <TableHead>Min. Order</TableHead>
             <TableHead>Valid Period</TableHead>
             <TableHead>Max Discount</TableHead>
             <TableHead className="hidden md:table-cell">Status</TableHead>
@@ -190,6 +191,11 @@ export function CouponList() {
                 <TableCell>
                   <span className={isExpired ? "text-muted-foreground" : ""}>
                     {coupon.timesUsed} / {coupon.maxUsage || "∞"}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <span className={isExpired ? "text-muted-foreground" : ""}>
+                    {coupon?.minOrderAmount || "No minimum"}
                   </span>
                 </TableCell>
                 <TableCell>

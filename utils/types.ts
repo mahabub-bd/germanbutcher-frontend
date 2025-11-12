@@ -1,4 +1,4 @@
-type UserRole = "superadmin" | "admin" | "user";
+type UserRole = "superadmin" | "admin" | "modaretor" | "user";
 
 export type PaginatedResponse<T> = {
   message: string;
@@ -393,6 +393,7 @@ export interface Coupon {
   value: number;
   maxDiscountAmount?: number | null;
   maxUsage: number;
+  minOrderAmount: number;
   timesUsed: number;
   validFrom: Date;
   validUntil: Date;
@@ -488,6 +489,7 @@ export interface OrderPayment {
   order: Order;
   paymentMethod: PaymentMethod;
   createdBy: User;
+  note?: string;
   updatedBy: User;
 }
 export interface OrderSummary {

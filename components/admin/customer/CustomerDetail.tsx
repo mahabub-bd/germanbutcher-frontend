@@ -19,7 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/utils";
-import { fetchData, fetchProtectedData } from "@/utils/api-utils";
+import { fetchProtectedData } from "@/utils/api-utils";
 import { Address, Order } from "@/utils/types";
 import {
   ArrowLeft,
@@ -73,7 +73,9 @@ export function CustomerDetail() {
     const fetchCustomerDetail = async () => {
       setIsLoading(true);
       try {
-        const response = await fetchProtectedData<CustomerData>(`users/${customerId}`);
+        const response = await fetchProtectedData<CustomerData>(
+          `users/${customerId}`
+        );
         setCustomer(response);
       } catch (error) {
         console.error("Error fetching customer details:", error);
@@ -390,7 +392,7 @@ export function CustomerDetail() {
                             {order.items.map((item) => (
                               <TableRow key={item.id}>
                                 <TableCell className="text-xs py-2">
-                                  #{item.productId}
+                                  #{item.product.name}
                                 </TableCell>
                                 <TableCell className="text-xs py-2">
                                   {item.quantity}

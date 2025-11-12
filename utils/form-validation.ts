@@ -192,7 +192,7 @@ const couponSchema = z.object({
   code: z.string().min(3, "Code must be at least 3 characters"),
   discountType: z.enum(["percentage", "fixed"]),
   value: z.coerce
-    .number() // Convert string input to number
+    .number()
     .min(0.01, "Value must be greater than 0")
     .refine((val) => val >= 0, "Value cannot be negative"),
   maxDiscountAmount: z.coerce
@@ -200,10 +200,12 @@ const couponSchema = z.object({
     .min(0, "Maximum discount amount cannot be negative")
     .optional()
     .nullable(),
-  maxUsage: z.coerce
-    .number() // Also fix maxUsage
-    .min(1, "Max usage must be at least 1")
-    .optional(),
+  minOrderAmount: z.coerce
+    .number()
+    .min(0, "Minimum order amount cannot be negative")
+    .optional()
+    .nullable(),
+  maxUsage: z.coerce.number().min(1, "Max usage must be at least 1").optional(),
   validFrom: z.date({ message: "Start date is required" }),
   validUntil: z.date({ message: "End date is required" }),
   isActive: z.boolean(),

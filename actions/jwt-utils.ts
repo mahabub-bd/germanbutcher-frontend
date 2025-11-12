@@ -35,6 +35,7 @@ export function getUserFromToken(token: string) {
     isAdmin:
       decoded.roles?.rolename === "admin" ||
       decoded.roles?.rolename === "superadmin" ||
+      decoded.roles?.rolename === "modaretor" ||
       false,
     exp: decoded.exp,
     createdAt: decoded?.createdAt,
