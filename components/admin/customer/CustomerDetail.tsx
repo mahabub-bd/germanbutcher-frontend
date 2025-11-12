@@ -19,7 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/utils";
-import { fetchData } from "@/utils/api-utils";
+import { fetchData, fetchProtectedData } from "@/utils/api-utils";
 import { Address, Order } from "@/utils/types";
 import {
   ArrowLeft,
@@ -73,7 +73,7 @@ export function CustomerDetail() {
     const fetchCustomerDetail = async () => {
       setIsLoading(true);
       try {
-        const response = await fetchData<CustomerData>(`users/${customerId}`);
+        const response = await fetchProtectedData<CustomerData>(`users/${customerId}`);
         setCustomer(response);
       } catch (error) {
         console.error("Error fetching customer details:", error);
