@@ -418,33 +418,43 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
 
   return (
     <div className="container mx-auto py-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        {/* Left Section */}
         <div className="flex items-center gap-3">
           {onBack && (
-            <Button variant="ghost" size="icon" onClick={onBack}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onBack}
+              className="sm:hidden"
+            >
               <ArrowLeft className="size-4" />
             </Button>
           )}
+
           <div>
-            <h1 className="text-2xl font-bold">Order Details</h1>
+            <h1 className="text-xl sm:text-2xl font-bold">Order Details</h1>
             <p className="text-sm text-muted-foreground">
               Order #{order.orderNo}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+
+        {/* Buttons — ALWAYS IN ONE LINE */}
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
           <Link href={`/admin/order/${order.id}/edit`}>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="whitespace-nowrap">
               <Pencil className="size-4 mr-2" />
-              Edit Order
+              Edit
             </Button>
           </Link>
+
           <Button
             variant="outline"
             size="sm"
             onClick={handleThermalPrint}
             disabled={isPrinting}
+            className="whitespace-nowrap"
           >
             {isPrinting ? (
               <>
@@ -454,15 +464,17 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
             ) : (
               <>
                 <Printer className="size-4 mr-2" />
-                Print Receipt
+                Print
               </>
             )}
           </Button>
+
           <Button
             variant="outline"
             size="sm"
             onClick={handleGeneratePDF}
             disabled={isGeneratingPDF}
+            className="whitespace-nowrap"
           >
             {isGeneratingPDF ? (
               <>
@@ -472,7 +484,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
             ) : (
               <>
                 <Download className="size-4 mr-2" />
-                Download Invoice
+                Download
               </>
             )}
           </Button>

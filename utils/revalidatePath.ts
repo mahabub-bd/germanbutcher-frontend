@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export const serverRevalidate = async (path: string): Promise<void> => {
   try {
@@ -10,3 +10,7 @@ export const serverRevalidate = async (path: string): Promise<void> => {
     throw new Error(`Failed to revalidate path: ${path}`);
   }
 };
+
+export async function refreshDashboard() {
+  revalidateTag("dashboard", "max");
+}

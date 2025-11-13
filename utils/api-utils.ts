@@ -40,7 +40,6 @@ export async function fetchData<T>(endpoint: string): Promise<T> {
   }
 }
 
-// For protected endpoints that require authentication
 export async function fetchProtectedData<T>(endpoint: string): Promise<T> {
   const url = `${apiUrl}/${endpoint}`;
   const token = await getToken();
@@ -51,6 +50,8 @@ export async function fetchProtectedData<T>(endpoint: string): Promise<T> {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
+      cache: "no-store",
+      next: { tags: ["dashboard"] },
     });
 
     if (!response.ok) {
@@ -90,6 +91,8 @@ export async function fetchDataPagination<T>(endpoint: string): Promise<T> {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
+      cache: "no-store",
+      next: { tags: ["dashboard"] },
     });
 
     if (!response.ok) {

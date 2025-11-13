@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import OrdersTable from "@/components/admin/dashboard/orders-table";
 import { StatsCard } from "@/components/admin/dashboard/stats-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,6 +25,7 @@ import type {
 import CombinedOrdersSalesChart from "@/components/admin/dashboard/combined-order-saleschart";
 import { LowStockReport } from "@/components/admin/dashboard/low-stock-report";
 import { TopCustomersList } from "@/components/admin/dashboard/top-customer-list";
+import TopSaleProductsList from "@/components/admin/dashboard/top-sale-product-list";
 import {
   Activity,
   DollarSign,
@@ -32,7 +35,6 @@ import {
   Tag,
   Users,
 } from "lucide-react";
-import TopSaleProductsList from "@/components/admin/dashboard/top-sale-product-list";
 
 export default async function DashboardPage() {
   const products = await fetchData<Product[]>("products?limit=300");
@@ -105,7 +107,7 @@ export default async function DashboardPage() {
       <OrdersTable />
       <LowStockReport />
       <TopCustomersList />
-      <TopSaleProductsList/>
+      <TopSaleProductsList />
       {/* Additional Stats */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/40 dark:to-blue-900/20 border-none">

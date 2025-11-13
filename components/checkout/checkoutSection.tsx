@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useCartContext } from "@/contexts/cart-context";
 import { fetchData } from "@/utils/api-utils";
 import { clearLocalCoupon } from "@/utils/cart-storage";
-import { serverRevalidate } from "@/utils/revalidatePath";
+import { refreshDashboard, serverRevalidate } from "@/utils/revalidatePath";
 import type {
   Address,
   CartItem,
@@ -252,7 +252,7 @@ export default function CheckoutPage({ user }: { user?: UserType }) {
       await clearCart();
       serverRevalidate("/");
       serverRevalidate("/checkout");
-      serverRevalidate("/admin/dashboard");
+      await refreshDashboard();
       toast.success("Order placed successfully!");
       router.push(`/order-confirmation/${response.data.id}`);
     } catch (error) {
