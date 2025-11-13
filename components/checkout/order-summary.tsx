@@ -14,7 +14,6 @@ import {
   FileText,
   Loader2,
   Receipt,
-  ShieldCheck,
   ShoppingBag,
   ShoppingCart,
   Tag,
@@ -169,7 +168,7 @@ export function OrderSummary({
         </div>
       )}
 
-      <div className=" text-sm grid md:grid-cols-3 grid-cols-2 gap-4">
+      <div className=" text-sm grid md:grid-cols-2 grid-cols-2 gap-4">
         {selectedShippingMethod && (
           <div className="flex items-center gap-3 text-muted-foreground">
             <Truck className="h-4 w-4 flex-shrink-0" />
@@ -183,11 +182,6 @@ export function OrderSummary({
             <span>{paymentMethodName || "Credit Card"}</span>
           </div>
         )}
-
-        <div className="flex items-center gap-3 text-muted-foreground">
-          <ShieldCheck className="h-4 w-4 flex-shrink-0" />
-          <span>Secure checkout</span>
-        </div>
       </div>
 
       <div className="border-t pt-6 mt-6">

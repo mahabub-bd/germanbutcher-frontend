@@ -18,56 +18,54 @@ export function ShippingMethodSelector({
   onSelectMethod,
 }: ShippingMethodSelectorProps) {
   return (
-    <div className="space-y-4 md:space-y-5 bg-white rounded-lg border p-4 md:p-6">
-      <div className="flex items-center gap-2 border-b pb-3 md:pb-4">
-        <Truck className="h-4 w-4 md:h-5 md:w-5 text-primary" />
-        <div>
-          <h2 className="text-base md:text-lg font-semibold">
-            Shipping Method
-          </h2>
-          <p className="text-xs md:text-sm text-muted-foreground">
-            How would you like to receive your order?
-          </p>
-        </div>
+    <div className="space-y-4 rounded-lg border bg-white p-4 md:p-5">
+      {/* Header */}
+      <div className="flex items-center gap-2">
+        <Truck className="h-5 w-5 text-primary" />
+        <h2 className="text-lg font-semibold">Shipping Method</h2>
       </div>
 
-      <div>
-        <RadioGroup
-          value={selectedMethod}
-          onValueChange={onSelectMethod}
-          className="grid grid-cols-2 gap-4"
-        >
-          {shippingMethods.map((method) => (
+      {/* Radio Options */}
+      <RadioGroup
+        value={selectedMethod}
+        onValueChange={onSelectMethod}
+        className="grid grid-cols-1 md:grid-cols-2 gap-3"
+      >
+        {shippingMethods.map((method) => {
+          const isSelected = selectedMethod === method.id.toString();
+          return (
             <div
               key={method.id}
               className={cn(
-                "flex items-center justify-between rounded-lg border p-3 md:p-4",
-                selectedMethod === method.id.toString() &&
-                  "border-primary bg-primary/5"
+                "flex items-center justify-between rounded-md border p-3 transition-all",
+                "hover:bg-gray-50 cursor-pointer",
+                isSelected && "border-primary bg-primary/5"
               )}
+              onClick={() => onSelectMethod(method.id.toString())}
             >
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center gap-3">
                 <RadioGroupItem
                   value={method.id.toString()}
                   id={`shipping-${method.id}`}
                 />
                 <Label
                   htmlFor={`shipping-${method.id}`}
-                  className="flex cursor-pointer flex-col"
+                  className="cursor-pointer"
                 >
-                  <span className="font-medium text-sm">{method.name}</span>
-                  <span className="text-xs md:text-sm text-muted-foreground">
+                  <p className="font-medium text-sm">{method.name}</p>
+                  <p className="text-xs text-muted-foreground">
                     {method.deliveryTime}
-                  </span>
+                  </p>
                 </Label>
               </div>
+
               <span className="font-medium text-sm md:text-base">
-                {formatCurrencyEnglish(Number.parseFloat(method.cost))}
+                {formatCurrencyEnglish(Number(method.cost))}
               </span>
             </div>
-          ))}
-        </RadioGroup>
-      </div>
+          );
+        })}
+      </RadioGroup>
     </div>
   );
 }

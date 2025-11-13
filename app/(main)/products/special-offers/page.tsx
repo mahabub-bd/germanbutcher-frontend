@@ -4,7 +4,7 @@ import ProductList from "@/components/products/product-list";
 export default function SpecialOfferPage() {
   return (
     <div className="container mx-auto ">
-      <ProductList endpoint="products/discounted?page=1&limit=20">
+      <ProductList endpoint="products/discounted?page=1&limit=100">
         <HeadingPrimary
           title="SPECIAL OFFERS"
           subtitle="Limited-time deals just for you"

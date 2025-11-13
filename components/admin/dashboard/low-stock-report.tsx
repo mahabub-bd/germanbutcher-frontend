@@ -69,7 +69,6 @@ export function LowStockReport({
       const params = new URLSearchParams();
       params.append("page", currentPage.toString());
       params.append("limit", limit.toString());
-      params.append("stockLessThan", "5"); // Filter for products with stock < 5
 
       if (searchQuery) params.append("search", searchQuery);
 
@@ -79,7 +78,6 @@ export function LowStockReport({
         totalPages: number;
       }>(`products?${params.toString()}`);
 
-      // Client-side filter as backup if API doesn't support stockLessThan
       const lowStockProducts = response.data.filter(
         (product) => (product.stock || 0) < 5
       );
@@ -113,12 +111,10 @@ export function LowStockReport({
     }
   }, [searchParams]);
 
-  // Fetch data when dependencies change
   useEffect(() => {
     fetchLowStockProducts();
   }, [fetchLowStockProducts]);
 
-  // Update URL when state changes
   useEffect(() => {
     updateUrl();
   }, [updateUrl]);

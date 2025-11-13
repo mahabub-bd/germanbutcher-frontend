@@ -21,7 +21,7 @@ export default function ProductList({
       {children}
 
       <Suspense fallback={<ProductHomepageSkeleton />}>
-        <ProductGrid endpoint={endpoint} />
+        <ProductGrid endpoint={endpoint} isHomePage={isHomePage} />
       </Suspense>
 
       {isHomePage && (

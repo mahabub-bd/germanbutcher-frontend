@@ -30,61 +30,65 @@ export function PaymentMethodSelector({
   onSelectMethod,
 }: PaymentMethodSelectorProps) {
   return (
-    <div className="bg-white rounded-lg border p-4 md:p-6 space-y-4">
-      <div className="flex items-center gap-2 border-b pb-3">
+    <div className="space-y-4 rounded-lg border bg-white p-4 md:p-5">
+      {/* Header */}
+      <div className="flex items-center gap-2">
         <CreditCard className="h-5 w-5 text-primary" />
-        <div>
-          <h2 className="text-lg font-semibold">Payment Method</h2>
-          <p className="text-sm text-muted-foreground">
-            How would you like to pay?
-          </p>
-        </div>
+        <h2 className="text-lg font-semibold">Payment Method</h2>
       </div>
 
+      {/* Payment Options */}
       <RadioGroup
         value={selectedMethod}
         onValueChange={onSelectMethod}
-        className="grid grid-cols-2  gap-3 mt-4"
+        className="grid grid-cols-1 md:grid-cols-2 gap-3"
       >
         {paymentMethods.map((method) => {
           const imageSrc = PAYMENT_METHOD_IMAGES[method.name];
+          const isSelected = selectedMethod === method.code;
 
           return (
             <div
               key={method.id}
               className={cn(
-                "flex items-center justify-between rounded-lg border p-4",
-                selectedMethod === method.code && "border-primary bg-primary/1"
+                "flex items-center justify-between rounded-md border p-3 transition-all cursor-pointer",
+                "hover:bg-gray-50",
+                isSelected && "border-primary bg-primary/5"
               )}
+              onClick={() => onSelectMethod(method.code)}
             >
-              <div className="flex items-center space-x-4">
+              {/* Left Side: Radio + Method Name */}
+              <div className="flex items-start gap-3">
                 <RadioGroupItem
                   value={method.code}
                   id={`payment-${method.id}`}
                 />
+
                 <Label
                   htmlFor={`payment-${method.id}`}
-                  className="flex flex-col cursor-pointer"
+                  className="cursor-pointer flex flex-col"
                 >
-                  <div className="flex items-center gap-2">
-                    {imageSrc ? (
-                      <Image
-                        src={imageSrc}
-                        width={1600}
-                        height={800}
-                        className="w-30 h-auto"
-                        alt={method.name}
-                      />
-                    ) : (
-                      <span className="font-medium">{method.name}</span>
-                    )}
-                  </div>
+                  <span className="font-medium text-sm">{method.name}</span>
+                  {!method.isActive && (
+                    <Badge
+                      variant="outline"
+                      className="bg-yellow-50 text-xs mt-1"
+                    >
+                      Inactive
+                    </Badge>
+                  )}
                 </Label>
               </div>
-              {!method.isActive && (
-                <Badge variant="outline" className="bg-yellow-50 text-xs">
-                  Inactive
-                </Badge>
+
+              {/* Right Side: Image */}
+              {imageSrc && (
+                <Image
+                  src={imageSrc}
+                  alt={method.name}
+                  width={200}
+                  height={200}
+                  className="w-14 md:w-16 h-auto object-contain"
+                />
               )}
             </div>
           );

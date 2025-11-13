@@ -4,8 +4,10 @@ import ProductCard from "./product-card";
 
 export default async function ProductHomepageGrid({
   endpoint,
+  isHomePage,
 }: {
   endpoint: string;
+  isHomePage: boolean;
 }) {
   const products: Product[] = await fetchData(endpoint);
 
@@ -17,14 +19,18 @@ export default async function ProductHomepageGrid({
     );
   }
 
+  const visibleProducts = isHomePage ? products.slice(0, 8) : products;
+  const extraProducts = isHomePage ? products.slice(8, 10) : [];
+
   return (
     <div className="grid grid-cols-1 md:px-0 px-8 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-2 md:gap-5">
-      {products.slice(0, 8).map((product: Product) => (
+      {visibleProducts.map((product: Product) => (
         <ProductCard key={product.id} product={product} />
       ))}
-      {products.slice(8, 10).map((product: Product) => (
-        <ProductCard 
-          key={product.id} 
+
+      {extraProducts.map((product: Product) => (
+        <ProductCard
+          key={product.id}
           product={product}
           className="hidden 2xl:block"
         />
