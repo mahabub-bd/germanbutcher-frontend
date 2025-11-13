@@ -141,6 +141,7 @@ export default function CheckoutPage({ user }: { user?: UserType }) {
     setShowOtpModal(false);
     toast.success("Phone number verified successfully");
     serverRevalidate("/");
+
     serverRevalidate("/checkout");
     router.refresh();
   };
@@ -251,6 +252,7 @@ export default function CheckoutPage({ user }: { user?: UserType }) {
       await clearCart();
       serverRevalidate("/");
       serverRevalidate("/checkout");
+      serverRevalidate("/admin/dashboard");
       toast.success("Order placed successfully!");
       router.push(`/order-confirmation/${response.data.id}`);
     } catch (error) {
