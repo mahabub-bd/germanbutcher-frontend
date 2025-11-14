@@ -56,6 +56,7 @@ interface OrderItem {
   totalPrice: number;
 }
 interface Order {
+  id: number;
   orderNo: string;
   orderStatus: string;
   paymentStatus: string;
@@ -239,9 +240,9 @@ export default function OrderReportList({
                 </TableCell>
               </TableRow>
             ) : (
-              orders.map((o, i) => (
+              orders.map((o) => (
                 <TableRow key={o.orderNo}>
-                  <TableCell>{i + 1}</TableCell>
+                  <TableCell>{o.id}</TableCell>
                   <TableCell>{o.orderNo}</TableCell>
                   <TableCell>{o.orderStatus}</TableCell>
                   <TableCell>{o.paymentStatus}</TableCell>
@@ -250,7 +251,7 @@ export default function OrderReportList({
                   <TableCell>{formatCurrencyEnglish(o.paidAmount)}</TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="sm" asChild>
-                      <Link href={`/admin/orders/${o.orderNo}`}>
+                      <Link href={`/admin/order/${o.id}/view`}>
                         <Eye className="h-4 w-4" />
                       </Link>
                     </Button>

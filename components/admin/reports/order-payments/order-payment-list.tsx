@@ -45,6 +45,7 @@ interface PaymentMethod {
 }
 interface OrderSummary {
   orderNo: string;
+  id: number;
   orderStatus: string;
   paymentStatus: string;
   totalValue: string;
@@ -250,9 +251,9 @@ export default function OrderPaymentList({
                 </TableCell>
               </TableRow>
             ) : (
-              payments.map((p, idx) => (
+              payments.map((p) => (
                 <TableRow key={p.id}>
-                  <TableCell>{idx + 1}</TableCell>
+                  <TableCell>{p.id}</TableCell>
                   <TableCell>{p.paymentNumber}</TableCell>
                   <TableCell>{p.paymentDate}</TableCell>
                   <TableCell>
@@ -267,7 +268,7 @@ export default function OrderPaymentList({
                   </TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="sm" asChild>
-                      <Link href={`/admin/order/${p.id}/payments`}>
+                      <Link href={`/admin/order/${p.order.id}/payments`}>
                         <Eye className="h-3.5 w-3.5" />
                       </Link>
                     </Button>
