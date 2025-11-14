@@ -9,10 +9,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatCurrencyEnglish, formatDateTime } from "@/lib/utils";
+import {
+  formatCurrencyEnglish,
+  formatDateTime,
+  getStatusBadgeColor,
+} from "@/lib/utils";
 import { fetchDataPagination } from "@/utils/api-utils";
 import { type Order, type PaginatedResponse } from "@/utils/types";
 
+import { Badge } from "@/components/ui/badge";
 import { Edit, Eye } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -105,20 +110,14 @@ export default function OrdersTable() {
                   {formatCurrencyEnglish(order?.totalValue)}
                 </TableCell>
                 <TableCell>
-                  <span
-                    className={`inline-flex items-center gap-1 font-semibold capitalize ${
-                      order.orderStatus === "pending"
-                        ? "text-yellow-500"
-                        : order.orderStatus === "shipped"
-                          ? "text-blue-500"
-                          : order.orderStatus === "delivered"
-                            ? "text-green-600"
-                            : "text-red-500"
-                    }`}
+                  <Badge
+                    variant="secondary"
+                    className={getStatusBadgeColor(order.orderStatus)}
                   >
                     {order.orderStatus}
-                  </span>
+                  </Badge>
                 </TableCell>
+
                 <TableCell>
                   <div className="flex gap-2">
                     <Button variant="ghost" className="h-8 w-8 p-0">
