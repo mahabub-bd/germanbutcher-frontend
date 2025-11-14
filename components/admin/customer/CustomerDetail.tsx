@@ -149,12 +149,6 @@ export function CustomerDetail() {
               Back Customer List
             </Link>
           </Button>
-          {customer.isVerified && (
-            <Badge variant="default" className="gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5" />
-              Verified Customer
-            </Badge>
-          )}
         </div>
 
         {/* Stats Overview Cards */}
