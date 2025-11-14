@@ -215,14 +215,14 @@ export default function OrderReportList({
       </div>
 
       {/* Table */}
-      <div className="rounded-lg border overflow-x-auto">
+      <div className="rounded-lg border overflow-x-auto capitalize">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>#</TableHead>
               <TableHead>Order No</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Payment</TableHead>
+              <TableHead>Order Status</TableHead>
+              <TableHead>Payment Status</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Total</TableHead>
               <TableHead>Paid</TableHead>
