@@ -35,6 +35,32 @@ export interface User {
   otpExpiresAt: string;
   profilePhoto?: Attachment;
   isAdmin: boolean;
+  orders?: Order[];
+  addresses?: Address;
+}
+
+export interface CustomerData {
+  id: number;
+  name: string;
+  email: string;
+  mobileNumber: string;
+  isVerified: boolean;
+  lastLoginAt: string;
+  createdAt: string;
+  updatedAt: string;
+  role: {
+    id: number;
+    rolename: string;
+    description: string;
+    isActive: boolean;
+  };
+  addresses: Address[];
+  profilePhoto?: {
+    id: number;
+    fileName: string;
+    url: string;
+  };
+  orders: Order[];
 }
 export interface Brand {
   id: number;
