@@ -66,9 +66,36 @@ const getStatusDotColor = (status: string) => {
       return "bg-gray-500";
   }
 };
+const getPaymentMethodColor = (method: string) => {
+  if (!method) return "bg-gray-100 text-gray-800";
+
+  switch (method.toLowerCase()) {
+    case "cash on delivery":
+    case "cod":
+      return "bg-gray-100 text-gray-800";
+
+    case "sslcommerz":
+    case "ssl_commarz":
+    case "ssl commerz":
+      return "bg-blue-100 text-blue-800";
+
+    case "bkash":
+      return "bg-pink-100 text-pink-800";
+
+    case "nagad":
+      return "bg-orange-100 text-orange-800";
+
+    case "rocket":
+      return "bg-purple-100 text-purple-800";
+
+    default:
+      return "bg-gray-100 text-gray-800";
+  }
+};
 
 export {
   getOrderStatusColor,
+  getPaymentMethodColor,
   getPaymentStatusColor,
   getStatusDotColor,
   getStatusIcon,

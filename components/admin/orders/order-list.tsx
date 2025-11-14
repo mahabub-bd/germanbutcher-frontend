@@ -43,6 +43,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { getPaymentMethodColor } from "@/utils/order-helper";
 
 interface OrderListProps {
   initialPage: number;
@@ -297,10 +298,14 @@ export function OrderList({
                     </Badge>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    <Badge variant="outline" className="capitalize">
+                    <Badge
+                      variant="outline"
+                      className={`capitalize ${getPaymentMethodColor(order.paymentMethod?.name)}`}
+                    >
                       {order.paymentMethod?.name || "N/A"}
                     </Badge>
                   </TableCell>
+
                   <TableCell className="hidden md:table-cell text-right font-medium">
                     {formatCurrencyEnglish(order.totalValue || 0)}
                   </TableCell>
