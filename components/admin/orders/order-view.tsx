@@ -806,7 +806,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                 )}
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">
-                    Shipping
+                    Shipping ({order.shippingMethod?.name || "Standard"}):
                   </span>
                   <span className="text-sm">
                     {formatCurrencyEnglish(orderSummary.shippingCost)}
