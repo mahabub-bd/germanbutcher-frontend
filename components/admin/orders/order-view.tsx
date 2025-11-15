@@ -32,7 +32,6 @@ import {
   Package,
   Pencil,
   Printer,
-  Tag,
   User,
 } from "lucide-react";
 import Image from "next/image";
@@ -798,7 +797,6 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                 {order.coupon && orderSummary.couponDiscount > 0 && (
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground flex items-center">
-                      <Tag className="size-3 mr-1" />
                       Coupon Discount ({order.coupon.code})
                     </span>
                     <span className="text-sm text-green-600">
