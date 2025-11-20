@@ -442,7 +442,7 @@ export const contactInfo = [
   {
     icon: MapPin,
     label: "Visit Us",
-    value: "House 56/B, Rd 132, Gulshan-1, Dhaka 1212",
+    value: "House 56/B, Road 132, Gulshan 1, Dhaka",
     href: "https://maps.app.goo.gl/rP9kUCDczKa94otX7",
   },
 ];
