@@ -1,5 +1,6 @@
 "use client";
 
+import { PaginationComponent } from "@/components/common/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,8 +12,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import { PaginationComponent } from "@/components/common/pagination";
 import { formatCurrencyEnglish } from "@/lib/utils";
 import { fetchDataPagination } from "@/utils/api-utils";
 import type { Product } from "@/utils/types";
@@ -53,13 +52,13 @@ export function LowStockReport({
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [limit] = useState(initialLimit);
   const [totalPages, setTotalPages] = useState(1);
+  const [threshold, setThreshold] = useState<number>(5);
 
   const updateUrl = useCallback(() => {
     const params = new URLSearchParams();
     params.set("page", currentPage.toString());
     params.set("limit", limit.toString());
     if (searchQuery) params.set("search", searchQuery);
-
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   }, [router, pathname, currentPage, limit, searchQuery]);
 
@@ -69,24 +68,20 @@ export function LowStockReport({
       const params = new URLSearchParams();
       params.append("page", currentPage.toString());
       params.append("limit", limit.toString());
-
       if (searchQuery) params.append("search", searchQuery);
 
+      // 🔥 Call new backend API
       const response = await fetchDataPagination<{
         data: Product[];
         total: number;
         totalPages: number;
-      }>(`products?${params.toString()}`);
+        threshold?: number;
+      }>(`products/reports/low-stock?${params.toString()}`);
 
-      const lowStockProducts = response.data.filter(
-        (product) => (product.stock || 0) < 5
-      );
-
-      setProducts(lowStockProducts);
-      setTotalItems(lowStockProducts.length > 0 ? response.total : 0);
-      setTotalPages(
-        response.totalPages || Math.ceil(lowStockProducts.length / limit)
-      );
+      setProducts(response.data);
+      setTotalItems(response.total);
+      setTotalPages(response.totalPages || 1);
+      setThreshold(response.threshold ?? 5);
     } catch (error) {
       console.error("Error fetching low stock products:", error);
       toast.error("Failed to load low stock report. Please try again.");
@@ -98,17 +93,11 @@ export function LowStockReport({
     }
   }, [currentPage, limit, searchQuery]);
 
-  // Initial load with URL params
   useEffect(() => {
     const pageFromUrl = searchParams?.get("page");
     const searchFromUrl = searchParams?.get("search");
-
-    if (pageFromUrl) {
-      setCurrentPage(parseInt(pageFromUrl, 10));
-    }
-    if (searchFromUrl) {
-      setSearchQuery(searchFromUrl);
-    }
+    if (pageFromUrl) setCurrentPage(parseInt(pageFromUrl, 10));
+    if (searchFromUrl) setSearchQuery(searchFromUrl);
   }, [searchParams]);
 
   useEffect(() => {
@@ -119,9 +108,7 @@ export function LowStockReport({
     updateUrl();
   }, [updateUrl]);
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+  const handlePageChange = (page: number) => setCurrentPage(page);
 
   const clearFilters = () => {
     setSearchQuery("");
@@ -134,38 +121,32 @@ export function LowStockReport({
   };
 
   const getStockStatusBadge = (stock: number) => {
-    if (stock === 0) {
+    if (stock === 0)
       return (
         <Badge variant="destructive" className="gap-1">
-          <AlertTriangle className="h-3 w-3" />
-          Out of Stock
+          <AlertTriangle className="h-3 w-3" /> Out of Stock
         </Badge>
       );
-    } else if (stock <= 2) {
+    if (stock <= 2)
       return (
         <Badge variant="destructive" className="gap-1">
-          <AlertTriangle className="h-3 w-3" />
-          Critical ({stock})
+          <AlertTriangle className="h-3 w-3" /> Critical ({stock})
         </Badge>
       );
-    } else if (stock < 5) {
+    if (stock < threshold)
       return (
         <Badge
           variant="secondary"
           className="gap-1 text-orange-600 bg-orange-50"
         >
-          <AlertTriangle className="h-3 w-3" />
-          Low ({stock})
+          <AlertTriangle className="h-3 w-3" /> Low ({stock})
         </Badge>
       );
-    }
     return null;
   };
 
-  const renderActiveFilters = () => {
-    if (!searchQuery) return null;
-
-    return (
+  const renderActiveFilters = () =>
+    searchQuery && (
       <div className="flex flex-wrap gap-2 mt-4">
         <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
           Search: {searchQuery}
@@ -183,7 +164,6 @@ export function LowStockReport({
         </Button>
       </div>
     );
-  };
 
   const renderTableView = () => (
     <div className="rounded-lg border bg-white dark:bg-gray-950 p-6">
@@ -207,12 +187,7 @@ export function LowStockReport({
             {isLoading ? (
               <TableRow>
                 <TableCell colSpan={8} className="text-center py-8">
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
-                    <span className="text-sm text-muted-foreground">
-                      Loading...
-                    </span>
-                  </div>
+                  <LoadingIndicator message="Loading..." />
                 </TableCell>
               </TableRow>
             ) : products.length === 0 ? (
@@ -220,16 +195,12 @@ export function LowStockReport({
                 <TableCell colSpan={8} className="text-center py-12">
                   <div className="flex flex-col items-center gap-3">
                     <Package className="h-12 w-12 text-green-500" />
-                    <div className="space-y-1">
-                      <h3 className="font-semibold">
-                        Great! No Low Stock Items
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {searchQuery
-                          ? "No products matching your search have low stock."
-                          : "All products are well-stocked. Your inventory levels are healthy!"}
-                      </p>
-                    </div>
+                    <h3 className="font-semibold">Great! No Low Stock Items</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {searchQuery
+                        ? "No products matching your search have low stock."
+                        : "All products are well-stocked. Your inventory levels are healthy!"}
+                    </p>
                     {searchQuery && (
                       <Button
                         variant="outline"
@@ -244,63 +215,46 @@ export function LowStockReport({
               </TableRow>
             ) : (
               products.map((product) => {
-                const restockQuantity = Math.max(20 - (product.stock || 0), 0);
+                const restockQuantity = Math.max(
+                  (threshold ?? 10) - (product.stock || 0),
+                  0
+                );
                 const restockValue = restockQuantity * product.purchasePrice;
 
                 return (
                   <TableRow
                     key={product.id}
-                    className={`hover:bg-muted/50 ${product.stock === 0 ? "bg-red-50 dark:bg-red-950/20" : ""}`}
+                    className={`hover:bg-muted/50 ${
+                      product.stock === 0 ? "bg-red-50 dark:bg-red-950/20" : ""
+                    }`}
                   >
                     <TableCell>
                       <ProductImage product={product} height={50} width={50} />
                     </TableCell>
                     <TableCell className="font-medium">
-                      <div className="max-w-xs">
-                        <p className="font-medium line-clamp-2">
-                          {product.name}
-                        </p>
-                        <div className="flex items-center gap-2 mt-1 md:hidden">
-                          <Badge variant="outline" className="text-xs">
-                            {product.category?.name || "N/A"}
-                          </Badge>
-                          <Badge variant="outline" className="text-xs">
-                            {product.brand?.name || "N/A"}
-                          </Badge>
-                        </div>
-                      </div>
+                      {product.name}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant="outline">
                         {product.category?.name || "N/A"}
                       </Badge>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant="outline">
                         {product.brand?.name || "N/A"}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-center">
-                      <span
-                        className={`font-mono font-medium text-lg ${
-                          product.stock === 0
-                            ? "text-red-600"
-                            : product.stock <= 2
-                              ? "text-red-500"
-                              : "text-orange-600"
-                        }`}
-                      >
-                        {product.stock || 0}
-                      </span>
+                      {product.stock || 0}
                     </TableCell>
                     <TableCell className="text-center">
                       {getStockStatusBadge(product.stock || 0)}
                     </TableCell>
-                    <TableCell className="text-right font-medium hidden lg:table-cell">
+                    <TableCell className="text-right hidden lg:table-cell">
                       {formatCurrencyEnglish(product.sellingPrice)}
                     </TableCell>
                     <TableCell className="text-right">
-                      <div className="text-sm">
+                      <div>
                         <div className="font-medium text-blue-600">
                           {formatCurrencyEnglish(restockValue)}
                         </div>
@@ -316,20 +270,15 @@ export function LowStockReport({
           </TableBody>
         </Table>
       </div>
-
-      {/* Pagination Section */}
       {!isLoading && products.length > 0 && (
-        <div className="flex justify-between items-center gap-4 p-4 border-t">
+        <div className="flex justify-between items-center p-4 border-t">
           <div className="text-sm text-muted-foreground">
             Showing {Math.min((currentPage - 1) * limit + 1, totalItems)} to{" "}
-            {Math.min(currentPage * limit, totalItems)} of {totalItems} low
-            stock products
+            {Math.min(currentPage * limit, totalItems)} of {totalItems} products
           </div>
-
           <PaginationComponent
             currentPage={currentPage}
             totalPages={totalPages}
-            baseUrl="#"
             onPageChange={handlePageChange}
           />
         </div>
@@ -337,99 +286,98 @@ export function LowStockReport({
     </div>
   );
 
-  // Calculate summary statistics
+  // Summary
   const outOfStockCount = products.filter((p) => (p.stock || 0) === 0).length;
   const criticalStockCount = products.filter(
     (p) => (p.stock || 0) > 0 && (p.stock || 0) <= 2
   ).length;
   const lowStockCount = products.filter(
-    (p) => (p.stock || 0) > 2 && (p.stock || 0) < 5
+    (p) => (p.stock || 0) > 2 && (p.stock || 0) < threshold
   ).length;
-  const totalRestockValue = products.reduce((sum, product) => {
-    const restockQuantity = Math.max(20 - (product.stock || 0), 0);
-    return sum + restockQuantity * product.purchasePrice;
+  const totalRestockValue = products.reduce((sum, p) => {
+    const q = Math.max((threshold ?? 10) - (p.stock || 0), 0);
+    return sum + q * p.purchasePrice;
   }, 0);
 
   return (
     <div className="w-full md:p-6 p-4">
       <PageHeader
         title="Low Stock Report"
-        description="Products with stock levels below 5 units"
+        description={`Products with stock below ${threshold} units`}
       />
 
-      {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-red-50 dark:bg-red-950/20 p-4 rounded-lg border border-red-200 dark:border-red-800">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-red-600" />
-            <span className="text-sm font-medium text-red-700 dark:text-red-400">
-              Out of Stock
-            </span>
-          </div>
-          <div className="text-2xl font-bold text-red-600 mt-1">
-            {outOfStockCount}
-          </div>
-        </div>
-
-        <div className="bg-orange-50 dark:bg-orange-950/20 p-4 rounded-lg border border-orange-200 dark:border-orange-800">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-orange-600" />
-            <span className="text-sm font-medium text-orange-700 dark:text-orange-400">
-              Critical (≤2)
-            </span>
-          </div>
-          <div className="text-2xl font-bold text-orange-600 mt-1">
-            {criticalStockCount}
-          </div>
-        </div>
-
-        <div className="bg-yellow-50 dark:bg-yellow-950/20 p-4 rounded-lg border border-yellow-200 dark:border-yellow-800">
-          <div className="flex items-center gap-2">
-            <Package className="h-4 w-4 text-yellow-600" />
-            <span className="text-sm font-medium text-yellow-700 dark:text-yellow-400">
-              Low (3-4)
-            </span>
-          </div>
-          <div className="text-2xl font-bold text-yellow-600 mt-1">
-            {lowStockCount}
-          </div>
-        </div>
-
-        <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
-          <div className="flex items-center gap-2">
-            <Package className="h-4 w-4 text-blue-600" />
-            <span className="text-sm font-medium text-blue-700 dark:text-blue-400">
-              Restock Value
-            </span>
-          </div>
-          <div className="text-lg font-bold text-blue-600 mt-1">
-            {formatCurrencyEnglish(totalRestockValue)}
-          </div>
-        </div>
+        <SummaryCard
+          count={outOfStockCount}
+          label="Out of Stock"
+          color="red"
+          icon={AlertTriangle}
+        />
+        <SummaryCard
+          count={criticalStockCount}
+          label="Critical (≤2)"
+          color="orange"
+          icon={AlertTriangle}
+        />
+        <SummaryCard
+          count={lowStockCount}
+          label={`Low (3-${threshold - 1})`}
+          color="yellow"
+          icon={Package}
+        />
+        <SummaryCard
+          count={formatCurrencyEnglish(totalRestockValue)}
+          label="Restock Value"
+          color="blue"
+          icon={Package}
+          isCurrency
+        />
       </div>
 
-      <div className="space-y-4">
-        <div className="flex flex-col sm:flex-row justify-between gap-4">
-          <div className="relative w-full sm:max-w-xs">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search low stock products..."
-              className="pl-8"
-              value={searchQuery}
-              onChange={handleSearchChange}
-            />
-          </div>
-        </div>
-
-        {renderActiveFilters()}
-
-        {isLoading ? (
-          <LoadingIndicator message="Loading low stock report..." />
-        ) : (
-          <div className="space-y-4">{renderTableView()}</div>
-        )}
+      <div className="relative w-full sm:max-w-xs mb-4">
+        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Input
+          type="search"
+          placeholder="Search..."
+          value={searchQuery}
+          className="pl-8"
+          onChange={handleSearchChange}
+        />
       </div>
+
+      {renderActiveFilters()}
+      {isLoading ? (
+        <LoadingIndicator message="Loading low stock report..." />
+      ) : (
+        renderTableView()
+      )}
     </div>
   );
 }
+
+// Summary Card Component
+const SummaryCard = ({
+  count,
+  label,
+  color,
+  icon: Icon,
+  isCurrency,
+}: {
+  count: any;
+  label: string;
+  color: string;
+  icon: any;
+  isCurrency?: boolean;
+}) => (
+  <div
+    className={`bg-${color}-50 dark:bg-${color}-950/20 p-4 rounded-lg border`}
+  >
+    <div className="flex items-center gap-2">
+      <Icon className={`h-4 w-4 text-${color}-600`} />
+      <span className={`text-sm font-medium text-${color}-700`}>{label}</span>
+    </div>
+    <div className={`text-2xl font-bold text-${color}-600 mt-1`}>
+      {isCurrency ? count : count}
+    </div>
+  </div>
+);

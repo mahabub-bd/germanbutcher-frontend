@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import OrdersTable from "@/components/admin/dashboard/orders-table";
-import { StatsCard } from "@/components/admin/dashboard/stats-card";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   formatCurrencyEnglish,
@@ -23,20 +23,22 @@ import type {
 } from "@/utils/types";
 
 import CombinedOrdersSalesChart from "@/components/admin/dashboard/combined-order-saleschart";
-import { LowStockReport } from "@/components/admin/dashboard/low-stock-report";
+import StatsCard from "@/components/admin/dashboard/stats-card";
+import { StockReportTabs } from "@/components/admin/dashboard/StockReportTabs";
 import { TopCustomersList } from "@/components/admin/dashboard/top-customer-list";
 import TopSaleProductsList from "@/components/admin/dashboard/top-sale-product-list";
 import {
   Activity,
+  Award,
+  Calendar,
   DollarSign,
-  Layers,
+  FolderTree,
   Package,
-  ShoppingCart,
-  Tag,
+  TrendingDown,
+  TrendingUp,
   Users,
   XCircle,
 } from "lucide-react";
-
 export default async function DashboardPage() {
   const products = await fetchData<Product[]>("products?limit=300");
 
@@ -74,112 +76,80 @@ export default async function DashboardPage() {
   };
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6 2xl:grid-cols-8">
+        {/* Total Sales - Green (Success/Money) */}
         <StatsCard
           title="Total Sales"
           value={formatCurrencyEnglish(totalSales)}
-          description="+20.1% from last month"
-          trend="up"
-          icon={DollarSign}
-          colorScheme="green"
-        />
-        <StatsCard
-          title="Total Orders"
-          value={String(totalOrders)}
-          description="+12.2% from last month"
-          trend="up"
-          icon={ShoppingCart}
-          colorScheme="purple"
-        />
-        <StatsCard
-          title="Total Cancel Orders"
-          value={String(totalCancelOrders)}
-          description="All time cancelled orders"
-          trend="down"
-          icon={XCircle}
-          colorScheme="amber"
-        />
-        <StatsCard
-          title="Total Cancel Value"
-          value={formatCurrencyEnglish(totalCancelValue)}
-          description="All time cancelled value"
-          trend="down"
-          icon={DollarSign}
-          colorScheme="amber"
+          count={String(totalOrders)}
+          icon={TrendingUp}
+          bgColor="green"
         />
 
+        {/* Total Cancel - Red/Amber (Warning/Loss) */}
+        <StatsCard
+          title="Total Cancel"
+          value={formatCurrencyEnglish(totalCancelValue)}
+          count={String(totalCancelOrders)}
+          icon={XCircle}
+          bgColor="amber"
+        />
+
+        {/* Sales Last Month - Blue (Recent/Time-based) */}
+        <StatsCard
+          title="Sales (Last Month)"
+          value={formatCurrencyEnglish(lastMonthData.totalValue)}
+          count={String(lastMonthData.orderCount)}
+          icon={Calendar}
+          bgColor="blue"
+        />
+
+        {/* Cancel Last Month - Pink (Alert/Attention) */}
+        <StatsCard
+          title="Cancel (Last Month)"
+          value={formatCurrencyEnglish(lastMonthData.cancelValue || 0)}
+          count={String(lastMonthData.cancelOrderCount || "No")}
+          icon={TrendingDown}
+          bgColor="pink"
+        />
+
+        {/* Products - Indigo (Inventory/Items) */}
+        <StatsCard
+          title="Products"
+          value={products?.length?.toString() || "0"}
+          icon={Package}
+          bgColor="indigo"
+        />
+
+        {/* Customers - Blue (People/Users) */}
+        <StatsCard
+          title="Customers"
+          value={response.data.pagination.total.toString()}
+          icon={Users}
+          bgColor="blue"
+        />
+        {/* Categories - Purple (Taxonomy/Organization) */}
         <StatsCard
           title="Categories"
           value={categories?.length?.toString() || "0"}
           description={`${getTopCategoryByProductCount(categories)} is top`}
-          trend="neutral"
-          icon={Layers}
-          colorScheme="indigo"
+          icon={FolderTree}
+          bgColor="purple"
         />
+
+        {/* Brands - Violet (Brand/Premium) */}
         <StatsCard
           title="Brands"
           value={brands?.length?.toString() || "0"}
           description={`${getTopBrandByProductCount(brands)} is top`}
-          trend="neutral"
-          icon={Tag}
-          colorScheme="violet"
-        />
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
-        <StatsCard
-          title="Last Month Sales"
-          value={formatCurrencyEnglish(lastMonthData.totalValue)}
-          description={`${lastMonthData.month || "N/A"} ${lastMonthData.year || ""}`}
-          trend="neutral"
-          icon={DollarSign}
-          colorScheme="green"
-        />
-        <StatsCard
-          title="Last Month Orders"
-          value={String(lastMonthData.orderCount)}
-          description={`${lastMonthData.month || "N/A"} ${lastMonthData.year || ""}`}
-          trend="neutral"
-          icon={ShoppingCart}
-          colorScheme="purple"
-        />
-        <StatsCard
-          title="Last Month Cancel Orders"
-          value={String(lastMonthData.cancelOrderCount || 0)}
-          description={`${lastMonthData.month || "N/A"} ${lastMonthData.year || ""}`}
-          trend="down"
-          icon={XCircle}
-          colorScheme="pink"
-        />
-        <StatsCard
-          title="Last Month Cancel Value"
-          value={formatCurrencyEnglish(lastMonthData.cancelValue || 0)}
-          description={`${lastMonthData.month || "N/A"} ${lastMonthData.year || ""}`}
-          trend="down"
-          icon={DollarSign}
-          colorScheme="pink"
-        />
-        <StatsCard
-          title="Products"
-          value={products?.length?.toString() || "0"}
-          description="+5.4% from last month"
-          trend="up"
-          icon={Package}
-          colorScheme="amber"
-        />
-        <StatsCard
-          title="Customers"
-          value={response.data.pagination.total.toString()}
-          description="+3.1% from last month"
-          trend="up"
-          icon={Users}
-          colorScheme="blue"
+          icon={Award}
+          bgColor="violet"
         />
       </div>
 
       <CombinedOrdersSalesChart chartData={chartdata as OrderSummary[]} />
       <OrdersTable />
-      <LowStockReport />
+      <StockReportTabs />
       <TopCustomersList />
       <TopSaleProductsList />
       {/* Additional Stats */}
