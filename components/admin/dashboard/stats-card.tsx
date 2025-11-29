@@ -20,7 +20,7 @@ export function Badge({ children, color = "default" }: BadgeProps) {
   return (
     <div
       className={cn(
-        "flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium",
+        "flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] xs:text-[11px] sm:text-[12px] font-medium whitespace-nowrap",
         colorClasses[color]
       )}
     >
@@ -95,50 +95,49 @@ export default function StatsCard({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800",
-        "p-3 sm:p-4",
+        "relative overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800",
+        "p-3 sm:p-4", // ⬆ slightly larger padding
         "bg-gradient-to-br",
         bgColorClasses[bgColor],
         "transition duration-200 hover:shadow-sm",
+        "flex flex-col w-full max-w-full min-h-[85px]", // ⬆ increased height (was 70px)
         className
       )}
     >
-      {/* Faint Icon Background */}
-      <div className="absolute -top-2 -right-2 opacity-[0.04] dark:opacity-[0.08]">
+      {/* Faint Background Icon */}
+      <div className="absolute -top-1 -right-1 opacity-[0.04] dark:opacity-[0.08]">
         <Icon className="w-12 h-12 sm:w-16 sm:h-16 text-gray-800 dark:text-white" />
       </div>
 
-      <div className="flex items-start justify-between">
-        {/* Main Icon */}
+      <div className="flex items-center">
         <div
           className={cn(
-            "flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg shrink-0",
+            "flex items-center justify-center shrink-0",
+            "w-7 h-7 sm:w-9 sm:h-9 rounded-md", // ⬆ slightly increased icon box
             iconBgClasses[bgColor]
           )}
         >
           <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-800 dark:text-white/90" />
         </div>
+
+        {/* Content */}
+        <div className="ml-2 space-y-0.5">
+          <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 leading-none">
+            {title}
+          </p>
+
+          {/* 👇 Combined value and count */}
+          <p className="mt-2 text-base sm:text-lg font-semibold text-gray-900 dark:text-white leading-tight">
+            {count !== undefined ? `${value} / ${count}` : value}
+          </p>
+        </div>
       </div>
 
-      {/* Content */}
-      <div className="mt-2 sm:mt-3 space-y-0.5 sm:space-y-1">
-        <p className="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400">{title}</p>
-        <p className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white leading-tight">
-          {value}
+      {description && (
+        <p className="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 mt-1 leading-tight">
+          {description}
         </p>
-
-        {count !== undefined && (
-          <p className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
-            {count}
-          </p>
-        )}
-
-        {description && (
-          <p className="text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400">
-            {description}
-          </p>
-        )}
-      </div>
+      )}
     </div>
   );
 }

@@ -20,7 +20,7 @@ function Badge({ children, color = "default" }: BadgeProps) {
   return (
     <div
       className={cn(
-        "flex items-center gap-1 rounded-full px-2 py-0.5 text-[12px] font-medium",
+        "flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] sm:text-[12px] font-medium whitespace-nowrap",
         colorClasses[color]
       )}
     >
@@ -57,22 +57,31 @@ export function StatusCard({
         "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-lg transition border",
         "bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700",
         "hover:bg-gray-100 dark:hover:bg-gray-700",
-        "hover:shadow-sm"
+        "hover:shadow-sm",
+        "w-full"
       )}
     >
+      {/* Left Section */}
       <div className="flex items-center gap-3">
-        <Icon className={cn("w-5 h-5", color)} />
-        <h4 className="text-base font-medium text-gray-800 dark:text-gray-200">
+        <Icon className={cn("w-5 h-5 shrink-0", color)} />
+        <h4 className="text-sm sm:text-base font-medium text-gray-800 dark:text-gray-200 truncate">
           {title}
         </h4>
       </div>
 
+      {/* Right Section */}
       <div className="flex items-center gap-2 sm:ml-auto">
-        <span className="text-xl font-semibold text-gray-900 dark:text-white">
+        <span className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white whitespace-nowrap">
           {value}
         </span>
 
-        {badge && <Badge color={badge.color}>{badge.text}</Badge>}
+        {badge && (
+          <Badge color={badge.color}>
+            {/* Add icon inside badge if needed */}
+            {badge.icon && <badge.icon className="w-3 h-3 mr-1" />}
+            {badge.text}
+          </Badge>
+        )}
       </div>
     </a>
   );
