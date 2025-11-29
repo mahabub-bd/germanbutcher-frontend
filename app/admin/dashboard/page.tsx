@@ -34,6 +34,7 @@ import {
   ShoppingCart,
   Tag,
   Users,
+  XCircle,
 } from "lucide-react";
 
 export default async function DashboardPage() {
@@ -50,6 +51,27 @@ export default async function DashboardPage() {
     (sum, item) => sum + item.totalValue,
     0
   );
+  const totalOrders = (chartdata as { orderCount: number }[]).reduce(
+    (sum, item) => sum + item.orderCount,
+    0
+  );
+
+  // Calculate total cancel statistics
+  const totalCancelOrders = (
+    chartdata as { cancelOrderCount?: number }[]
+  ).reduce((sum, item) => sum + (item.cancelOrderCount || 0), 0);
+  const totalCancelValue = (chartdata as { cancelValue?: number }[]).reduce(
+    (sum, item) => sum + (item.cancelValue || 0),
+    0
+  );
+
+  // Get last month's data (most recent month in the array)
+  const lastMonthData = (chartdata as OrderSummary[])[0] || {
+    totalValue: 0,
+    orderCount: 0,
+    cancelOrderCount: 0,
+    cancelValue: 0,
+  };
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
@@ -63,11 +85,79 @@ export default async function DashboardPage() {
         />
         <StatsCard
           title="Total Orders"
-          value={orders.total.toString()}
+          value={String(totalOrders)}
           description="+12.2% from last month"
           trend="up"
           icon={ShoppingCart}
           colorScheme="purple"
+        />
+        <StatsCard
+          title="Total Cancel Orders"
+          value={String(totalCancelOrders)}
+          description="All time cancelled orders"
+          trend="down"
+          icon={XCircle}
+          colorScheme="amber"
+        />
+        <StatsCard
+          title="Total Cancel Value"
+          value={formatCurrencyEnglish(totalCancelValue)}
+          description="All time cancelled value"
+          trend="down"
+          icon={DollarSign}
+          colorScheme="amber"
+        />
+
+        <StatsCard
+          title="Categories"
+          value={categories?.length?.toString() || "0"}
+          description={`${getTopCategoryByProductCount(categories)} is top`}
+          trend="neutral"
+          icon={Layers}
+          colorScheme="indigo"
+        />
+        <StatsCard
+          title="Brands"
+          value={brands?.length?.toString() || "0"}
+          description={`${getTopBrandByProductCount(brands)} is top`}
+          trend="neutral"
+          icon={Tag}
+          colorScheme="violet"
+        />
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
+        <StatsCard
+          title="Last Month Sales"
+          value={formatCurrencyEnglish(lastMonthData.totalValue)}
+          description={`${lastMonthData.month || "N/A"} ${lastMonthData.year || ""}`}
+          trend="neutral"
+          icon={DollarSign}
+          colorScheme="green"
+        />
+        <StatsCard
+          title="Last Month Orders"
+          value={String(lastMonthData.orderCount)}
+          description={`${lastMonthData.month || "N/A"} ${lastMonthData.year || ""}`}
+          trend="neutral"
+          icon={ShoppingCart}
+          colorScheme="purple"
+        />
+        <StatsCard
+          title="Last Month Cancel Orders"
+          value={String(lastMonthData.cancelOrderCount || 0)}
+          description={`${lastMonthData.month || "N/A"} ${lastMonthData.year || ""}`}
+          trend="down"
+          icon={XCircle}
+          colorScheme="pink"
+        />
+        <StatsCard
+          title="Last Month Cancel Value"
+          value={formatCurrencyEnglish(lastMonthData.cancelValue || 0)}
+          description={`${lastMonthData.month || "N/A"} ${lastMonthData.year || ""}`}
+          trend="down"
+          icon={DollarSign}
+          colorScheme="pink"
         />
         <StatsCard
           title="Products"
@@ -84,22 +174,6 @@ export default async function DashboardPage() {
           trend="up"
           icon={Users}
           colorScheme="blue"
-        />
-        <StatsCard
-          title="Categories"
-          value={categories?.length?.toString() || "0"}
-          description={`${getTopCategoryByProductCount(categories)} is top`}
-          trend="neutral"
-          icon={Layers}
-          colorScheme="indigo"
-        />
-        <StatsCard
-          title="Brands"
-          value={brands?.length?.toString() || "0"}
-          description={`${getTopBrandByProductCount(brands)} is top`}
-          trend="neutral"
-          icon={Tag}
-          colorScheme="violet"
         />
       </div>
 

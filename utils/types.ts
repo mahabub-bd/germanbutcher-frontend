@@ -523,6 +523,8 @@ export interface OrderSummary {
   month: string;
   orderCount: number;
   totalValue: number;
+  cancelOrderCount?: number;
+  cancelValue?: number;
 }
 
 export interface Subscriber {
