@@ -54,7 +54,7 @@ export function StatusCard({
     <a
       href={href}
       className={cn(
-        "flex items-center justify-between gap-3 p-4 rounded-lg transition border",
+        "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-lg transition border",
         "bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700",
         "hover:bg-gray-100 dark:hover:bg-gray-700",
         "hover:shadow-sm"
@@ -67,7 +67,7 @@ export function StatusCard({
         </h4>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 sm:ml-auto">
         <span className="text-xl font-semibold text-gray-900 dark:text-white">
           {value}
         </span>

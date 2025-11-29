@@ -33,7 +33,7 @@ export function OrderStatsGrid({ data }: OrderStatsGridProps) {
   };
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-6">
       {/* All Orders */}
       <StatusCard
         title="All Orders"

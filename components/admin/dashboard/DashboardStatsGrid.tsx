@@ -54,7 +54,7 @@ export default function DashboardStatsGrid({
   };
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6 2xl:grid-cols-8">
+    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8">
       {/* Total Sales - Green (Success/Money) */}
       <StatsCard
         title="Total Sales"

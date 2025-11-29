@@ -95,7 +95,8 @@ export default function StatsCard({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 p-4",
+        "relative overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800",
+        "p-3 sm:p-4",
         "bg-gradient-to-br",
         bgColorClasses[bgColor],
         "transition duration-200 hover:shadow-sm",
@@ -104,36 +105,36 @@ export default function StatsCard({
     >
       {/* Faint Icon Background */}
       <div className="absolute -top-2 -right-2 opacity-[0.04] dark:opacity-[0.08]">
-        <Icon className="w-16 h-16 text-gray-800 dark:text-white" />
+        <Icon className="w-12 h-12 sm:w-16 sm:h-16 text-gray-800 dark:text-white" />
       </div>
 
       <div className="flex items-start justify-between">
         {/* Main Icon */}
         <div
           className={cn(
-            "flex items-center justify-center w-10 h-10 rounded-lg shrink-0",
+            "flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg shrink-0",
             iconBgClasses[bgColor]
           )}
         >
-          <Icon className="w-5 h-5 text-gray-800 dark:text-white/90" />
+          <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-800 dark:text-white/90" />
         </div>
       </div>
 
       {/* Content */}
-      <div className="mt-3 space-y-1">
-        <p className="text-xs text-gray-600 dark:text-gray-400">{title}</p>
-        <p className="text-xl font-semibold text-gray-900 dark:text-white leading-tight">
+      <div className="mt-2 sm:mt-3 space-y-0.5 sm:space-y-1">
+        <p className="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400">{title}</p>
+        <p className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white leading-tight">
           {value}
         </p>
 
         {count !== undefined && (
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <p className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
             {count}
           </p>
         )}
 
         {description && (
-          <p className="text-[11px] text-gray-500 dark:text-gray-400">
+          <p className="text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400">
             {description}
           </p>
         )}
