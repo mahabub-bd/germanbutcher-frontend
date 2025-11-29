@@ -1,10 +1,9 @@
 export const dynamic = "force-dynamic";
 
 import CombinedOrdersSalesChart from "@/components/admin/dashboard/combined-order-saleschart";
-import DashboardStatsGrid from "@/components/admin/dashboard/DashboardStatsGrid";
+import DashboardClient from "@/components/admin/dashboard/DashboardClient";
 
 import OrdersTable from "@/components/admin/dashboard/orders-table";
-import { OrderStatsGrid } from "@/components/admin/dashboard/OrderStatsGrid";
 import { StockReportTabs } from "@/components/admin/dashboard/StockReportTabs";
 import { TopCustomersList } from "@/components/admin/dashboard/top-customer-list";
 import TopSaleProductsList from "@/components/admin/dashboard/top-sale-product-list";
@@ -44,14 +43,14 @@ export default async function DashboardPage() {
   }>("orders/reports/statistics");
   return (
     <div className="space-y-6">
-      <DashboardStatsGrid
-        chartData={chartdata as OrderSummary[]}
+      <DashboardClient
+        initialChartData={chartdata as OrderSummary[]}
+        initialStatsData={statsData}
         productsCount={products?.length || 0}
         customersCount={response.data.pagination.total}
         categories={categories}
         brands={brands}
       />
-      <OrderStatsGrid data={statsData} />
       <CombinedOrdersSalesChart chartData={chartdata as OrderSummary[]} />
       <OrdersTable />
       <StockReportTabs />
