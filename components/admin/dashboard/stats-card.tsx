@@ -100,7 +100,7 @@ export default function StatsCard({
         "bg-gradient-to-br",
         bgColorClasses[bgColor],
         "transition duration-200 hover:shadow-sm",
-        "flex flex-col w-full max-w-full min-h-[85px]", // ⬆ increased height (was 70px)
+        "flex flex-col w-full max-w-full min-h-[90px]", // ⬆ increased height (was 70px)
         className
       )}
     >
@@ -110,31 +110,21 @@ export default function StatsCard({
       </div>
 
       <div className="flex items-center">
-        <div
-          className={cn(
-            "flex items-center justify-center shrink-0",
-            "w-7 h-7 sm:w-9 sm:h-9 rounded-md", // ⬆ slightly increased icon box
-            iconBgClasses[bgColor]
-          )}
-        >
-          <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-800 dark:text-white/90" />
-        </div>
-
         {/* Content */}
         <div className="ml-2 space-y-0.5">
-          <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 leading-none">
+          <p className="text-sm  font-bold text-gray-900 dark:text-white leading-tight">
             {title}
           </p>
 
           {/* 👇 Combined value and count */}
-          <p className="mt-2 text-base sm:text-lg font-semibold text-gray-900 dark:text-white leading-tight">
+          <p className="mt-2 text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-400 leading-none">
             {count !== undefined ? `${value} / ${count}` : value}
           </p>
         </div>
       </div>
 
       {description && (
-        <p className="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 mt-1 leading-tight">
+        <p className=" sm:text-xs text-gray-800 dark:text-gray-400 mt-1 leading-tight">
           {description}
         </p>
       )}
