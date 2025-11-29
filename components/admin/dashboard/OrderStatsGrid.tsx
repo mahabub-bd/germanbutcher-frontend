@@ -1,9 +1,7 @@
-import { formatCurrencyEnglish } from "@/lib/utils";
 import {
   Ban,
   CheckCircle2,
   Clock,
-  DollarSign,
   ListChecks,
   Loader2,
   Truck,
@@ -77,11 +75,6 @@ export function OrderStatsGrid({ data }: OrderStatsGridProps) {
         icon={CheckCircle2}
         color="text-green-500"
         href={getOrderUrl("delivered")}
-        badge={{
-          icon: DollarSign,
-          text: formatCurrencyEnglish(data.deliveredValue),
-          color: "success",
-        }}
       />
 
       {/* Cancelled */}
@@ -91,11 +84,6 @@ export function OrderStatsGrid({ data }: OrderStatsGridProps) {
         icon={Ban}
         color="text-red-500"
         href={getOrderUrl("cancelled")}
-        badge={{
-          icon: DollarSign,
-          text: formatCurrencyEnglish(data.cancelledValue),
-          color: "danger",
-        }}
       />
     </div>
   );
