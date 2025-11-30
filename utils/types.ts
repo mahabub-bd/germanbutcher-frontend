@@ -432,6 +432,7 @@ export interface ShippingMethod {
   id: number;
   name: string;
   cost: string;
+  isActive: boolean;
   deliveryTime: string;
   description: string;
   createdAt: string;

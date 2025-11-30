@@ -95,7 +95,7 @@ export default function TopSaleProductsList() {
   }
 
   return (
-    <div className="w-full md:p-6 p-2">
+    <div className="w-full  p-2">
       <PageHeader
         title="Top Selling Products"
         description="Products sorted by sales count"

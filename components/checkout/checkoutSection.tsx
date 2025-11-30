@@ -91,7 +91,9 @@ export default function CheckoutPage({ user }: { user?: UserType }) {
     const fetchMethods = async () => {
       try {
         const [shippingResponse, paymentResponse] = await Promise.all([
-          fetchData("shipping-methods") as Promise<ShippingMethod[]>,
+          fetchData("shipping-methods?isActive=true") as Promise<
+            ShippingMethod[]
+          >,
           fetchData("order-payment-methods") as Promise<PaymentMethod[]>,
         ]);
 

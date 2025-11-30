@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { patchData, postData } from "@/utils/api-utils";
 import type { ShippingMethod } from "@/utils/types";
@@ -23,6 +24,7 @@ import * as z from "zod";
 const shippingMethodSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
   cost: z.string().min(1, "Cost is required"),
+  isActive: z.boolean(),
   deliveryTime: z.string().min(1, "Delivery time is required"),
   description: z.string().min(1, "Description is required"),
 });
@@ -45,6 +47,7 @@ export function ShippingMethodForm({
     defaultValues: {
       name: shippingMethod?.name || "",
       cost: shippingMethod?.cost || "",
+      isActive: shippingMethod?.isActive ?? true,
       deliveryTime: shippingMethod?.deliveryTime || "",
       description: shippingMethod?.description || "",
     },
@@ -147,6 +150,23 @@ export function ShippingMethodForm({
                   />
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="isActive"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 space-y-0">
+                <div className="space-y-0.5">
+                  <FormLabel>Active Status</FormLabel>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
               </FormItem>
             )}
           />

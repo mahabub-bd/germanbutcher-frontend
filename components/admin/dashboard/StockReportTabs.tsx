@@ -8,7 +8,7 @@ import { OutOfStockReport } from "./OutOfStockReport";
 
 export function StockReportTabs() {
   return (
-    <div className="w-full md:p-6 p-4">
+    <div className="w-full">
       <PageHeader
         title="Stock Reports"
         description="View inventory stock status"

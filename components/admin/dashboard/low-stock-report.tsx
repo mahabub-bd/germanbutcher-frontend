@@ -300,7 +300,7 @@ export function LowStockReport({
   }, 0);
 
   return (
-    <div className="w-full md:p-6 p-4">
+    <div className="w-full">
       <PageHeader
         title="Low Stock Report"
         description={`Products with stock below ${threshold} units`}

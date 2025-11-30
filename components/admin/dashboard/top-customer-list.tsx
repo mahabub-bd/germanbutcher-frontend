@@ -123,7 +123,7 @@ export function TopCustomersList() {
   }
 
   return (
-    <div className="w-full md:p-6 p-2">
+    <div className="w-full p-2">
       <PageHeader
         title="Top Customers"
         description="Best customers by orders and spending"

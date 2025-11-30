@@ -18,6 +18,7 @@ import { formatCurrencyEnglish, formatDateTime } from "@/lib/utils";
 
 import { deleteData, fetchData } from "@/utils/api-utils";
 
+import { Badge } from "@/components/ui/badge";
 import { ShippingMethod } from "@/utils/types";
 import { MoreHorizontal, Pencil, Plus, Trash2, Truck } from "lucide-react";
 import Link from "next/link";
@@ -97,6 +98,7 @@ export function ShippingMethodList() {
             <TableHead>Delivery Time</TableHead>
             <TableHead className="hidden md:table-cell">Description</TableHead>
             <TableHead className="hidden md:table-cell">Created</TableHead>
+            <TableHead>Status</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -113,6 +115,11 @@ export function ShippingMethodList() {
               </TableCell>
               <TableCell className="hidden md:table-cell">
                 {formatDateTime(method.createdAt)}
+              </TableCell>
+              <TableCell className="hidden md:table-cell">
+                <Badge variant={method.isActive ? "default" : "secondary"}>
+                  {method.isActive ? "Active" : "Inactive"}
+                </Badge>
               </TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
