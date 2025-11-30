@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
+import Link from "next/link";
 
 interface BadgeProps {
   children: React.ReactNode;
@@ -51,7 +52,7 @@ export function StatusCard({
   badge,
 }: StatusCardProps) {
   return (
-    <a
+    <Link
       href={href}
       className={cn(
         "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-lg transition border",
@@ -83,6 +84,6 @@ export function StatusCard({
           </Badge>
         )}
       </div>
-    </a>
+    </Link>
   );
 }

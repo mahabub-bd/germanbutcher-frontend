@@ -111,7 +111,7 @@ export default function StatsCard({
 
       <div className="flex items-center">
         {/* Content */}
-        <div className="ml-2 space-y-0.5">
+        <div className=" space-y-0.5">
           <p className="text-sm  font-bold text-gray-900 dark:text-white leading-tight">
             {title}
           </p>
