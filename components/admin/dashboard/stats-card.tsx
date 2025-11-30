@@ -100,7 +100,7 @@ export default function StatsCard({
         "bg-gradient-to-br",
         bgColorClasses[bgColor],
         "transition duration-200 hover:shadow-sm",
-        "flex flex-col w-full max-w-full min-h-[90px]", // ⬆ increased height (was 70px)
+        "flex flex-col w-full max-w-full min-h-[80px]", // ⬆ increased height (was 70px)
         className
       )}
     >
@@ -111,13 +111,13 @@ export default function StatsCard({
 
       <div className="flex items-center">
         {/* Content */}
-        <div className="ml-2 space-y-0.5">
-          <p className="text-sm  font-bold text-gray-900 dark:text-white leading-tight">
+        <div className=" space-y-0.5">
+          <p className="text-sm  font-semibold text-primaryColor dark:text-white leading-tight">
             {title}
           </p>
 
           {/* 👇 Combined value and count */}
-          <p className="mt-2 text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-400 leading-none">
+          <p className="mt-2 text-lg  font-bold text-gray-800 dark:text-gray-400 leading-none">
             {count !== undefined ? `${value} / ${count}` : value}
           </p>
         </div>

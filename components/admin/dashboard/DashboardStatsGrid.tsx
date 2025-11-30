@@ -54,12 +54,13 @@ export default function DashboardStatsGrid({
   };
 
   return (
-    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-8">
+    <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-8">
       {/* Total Sales - Green (Success/Money) */}
       <StatsCard
         title="Total Sales"
         value={formatCurrencyEnglish(totalSales)}
         count={String(totalOrders)}
+        description="All time revenue"
         icon={TrendingUp}
         bgColor="green"
       />
@@ -69,6 +70,7 @@ export default function DashboardStatsGrid({
         title="Total Cancel"
         value={formatCurrencyEnglish(totalCancelValue)}
         count={String(totalCancelOrders)}
+        description="Cancelled orders value"
         icon={XCircle}
         bgColor="amber"
       />
@@ -78,6 +80,7 @@ export default function DashboardStatsGrid({
         title="Sales (Last Month)"
         value={formatCurrencyEnglish(lastMonthData.totalValue)}
         count={String(lastMonthData.orderCount)}
+        description="Last month performance"
         icon={Calendar}
         bgColor="blue"
       />
@@ -87,6 +90,7 @@ export default function DashboardStatsGrid({
         title="Cancel (Last Month)"
         value={formatCurrencyEnglish(lastMonthData.cancelValue || 0)}
         count={String(lastMonthData.cancelOrderCount || "No")}
+        description="Last month cancellations"
         icon={TrendingDown}
         bgColor="pink"
       />
@@ -95,6 +99,7 @@ export default function DashboardStatsGrid({
       <StatsCard
         title="Products"
         value={productsCount.toString()}
+        description="Total inventory items"
         icon={Package}
         bgColor="indigo"
       />
@@ -103,6 +108,7 @@ export default function DashboardStatsGrid({
       <StatsCard
         title="Customers"
         value={customersCount.toString()}
+        description="Registered users"
         icon={Users}
         bgColor="blue"
       />
