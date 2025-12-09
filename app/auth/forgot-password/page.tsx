@@ -123,8 +123,8 @@ export default function ForgotPasswordPage() {
         {step === 1
           ? "Enter your phone number to receive a reset code"
           : step === 2
-          ? "Enter the verification code and your new password"
-          : "Your password has been reset successfully"}
+            ? "Enter the verification code and your new password"
+            : "Your password has been reset successfully"}
       </p>
 
       {step === 3 ? (
@@ -234,7 +234,11 @@ export default function ForgotPasswordPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
+              <Button
+                type="submit"
+                className="w-full bg-primaryColor"
+                disabled={isSubmitting}
+              >
                 {isSubmitting ? "Sending..." : "Send OTP"}
               </Button>
             </form>
