@@ -43,7 +43,16 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
       const storedCoupon = getCouponFromLocalStorage();
 
       if (storedCart) {
-        setLocalCart(storedCart);
+        // Check if cart is older than 1 hour, refresh product data
+        const cartAge = Date.now() - storedCart.lastUpdated;
+        const oneHour = 60 * 60 * 1000;
+
+        if (cartAge > oneHour && storedCart.items.length > 0) {
+          // Refresh product data for items in cart
+          refreshCartProductData(storedCart);
+        } else {
+          setLocalCart(storedCart);
+        }
       } else {
         setLocalCart({ items: [], lastUpdated: Date.now() });
       }
@@ -393,6 +402,61 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
         : product.sellingPrice * (1 - product.discountValue / 100);
     }
     return product.sellingPrice;
+  };
+
+  const refreshCartProductData = async (storedCart: LocalCart) => {
+    try {
+      // Fetch current product data for all items in cart
+      const updatedItems = await Promise.all(
+        storedCart.items.map(async (item) => {
+          try {
+            // Fetch current product data from API
+            const response = await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/products/${item.productId}`
+            );
+            if (response.ok) {
+              const currentProduct = await response.json();
+              return {
+                ...item,
+                product: currentProduct.data || currentProduct,
+              };
+            }
+          } catch (error) {
+            console.error(
+              `Error refreshing product ${item.productId}:`,
+              error
+            );
+          }
+          return item;
+        })
+      );
+
+      const updatedCart = {
+        ...storedCart,
+        items: updatedItems,
+        lastUpdated: Date.now(),
+      };
+
+      setLocalCart(updatedCart);
+      saveCartToLocalStorage(updatedCart);
+
+      // Notify user about price updates
+      const priceChanges = updatedItems.filter((item, index) => {
+        const oldPrice = getDiscountedPrice(storedCart.items[index].product);
+        const newPrice = getDiscountedPrice(item.product);
+        return oldPrice !== newPrice;
+      });
+
+      if (priceChanges.length > 0) {
+        toast.info("Cart prices updated", {
+          description: `${priceChanges.length} item(s) price has been updated`,
+        });
+      }
+    } catch (error) {
+      console.error("Error refreshing cart product data:", error);
+      // If refresh fails, use stored cart
+      setLocalCart(storedCart);
+    }
   };
 
   return {

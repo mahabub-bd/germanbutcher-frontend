@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import type { Brand, Category, OrderSummary } from "@/utils/types";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import DashboardStatsGrid from "./DashboardStatsGrid";
 import { OrderStatsGrid } from "./OrderStatsGrid";
-import type { Brand, Category, OrderSummary } from "@/utils/types";
 
 interface DashboardClientProps {
   initialChartData: OrderSummary[];

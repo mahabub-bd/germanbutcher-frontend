@@ -111,20 +111,20 @@ export default function StatsCard({
 
       <div className="flex items-center">
         {/* Content */}
-        <div className=" space-y-0.5">
-          <p className="text-sm  font-semibold text-primaryColor dark:text-white leading-tight">
+        <div className="space-y-1">
+          <p className="text-xs sm:text-sm lg:text-base font-semibold text-primaryColor dark:text-white leading-tight">
             {title}
           </p>
 
           {/* 👇 Combined value and count */}
-          <p className="mt-2 text-lg  font-bold text-gray-800 dark:text-gray-400 leading-none">
+          <p className="mt-1 text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-gray-400 leading-none">
             {count !== undefined ? `${value} / ${count}` : value}
           </p>
         </div>
       </div>
 
       {description && (
-        <p className=" sm:text-xs text-gray-800 dark:text-gray-400 mt-1 leading-tight">
+        <p className="text-[9px] sm:text-[10px] lg:text-xs text-gray-800 dark:text-gray-400 mt-1 leading-tight">
           {description}
         </p>
       )}
