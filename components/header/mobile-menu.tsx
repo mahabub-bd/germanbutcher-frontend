@@ -75,18 +75,18 @@ export function MobileMenu({ user }: { user: User }) {
 
           {/* Tab Navigation */}
           <div className="border-b border-gray-100">
-            <div className="flex">
+            <div className="flex gap-1">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 py-4 px-6 text-sm font-medium transition-colors relative ${
+                  className={`flex-1 py-3 px-3 text-sm font-medium transition-colors relative ${
                     activeTab === tab.id
                       ? "text-primaryColor bg-primaryColor/5"
                       : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                   }`}
                 >
-                  <div className="flex items-center justify-center gap-2">
+                  <div className="flex items-center justify-center gap-1.5">
                     <span className="truncate">{tab.label}</span>
                     {tab.count && (
                       <span className="bg-gray-200 text-gray-700 text-xs px-2 py-0.5 rounded-full">

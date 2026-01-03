@@ -84,16 +84,16 @@ function CategoryItem({
   return (
     <Link
       href={`/categories/${category.slug || category.id}`}
-      className="group flex flex-col items-center p-2   hover:shadow-primaryColor/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primaryColor/20 focus:border-primaryColor/30 transform hover:-translate-y-1"
+      className="group flex flex-col items-center p-2 focus:outline-none focus:ring-2 focus:ring-primaryColor/20 rounded-lg"
       onClick={onClick}
     >
-      <div className="w-24 h-24 relative rounded-lg overflow-hidden  transition-shadow duration-300">
+      <div className="w-24 h-24 relative rounded-lg overflow-hidden">
         {category.attachment?.url ? (
           <Image
             src={category.attachment.url || "/placeholder.svg"}
             alt={`${category.name} category`}
             fill
-            className="object-cover group-hover:scale-110 transition-transform duration-300"
+            className="object-cover"
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-primaryColor/10 to-primaryColor/20 flex items-center justify-center">
@@ -104,12 +104,9 @@ function CategoryItem({
         )}
       </div>
 
-      <h3 className="text-gray-900  mt-1 h-10 font-medium text-sm text-center leading-tight group-hover:text-primaryColor transition-colors duration-200">
+      <h3 className="text-gray-900 mt-1 h-10 font-medium text-sm text-center leading-tight group-hover:text-primaryColor transition-colors duration-200">
         {category.name}
       </h3>
-
-      {/* Subtle shine effect */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
     </Link>
   );
 }
@@ -177,8 +174,8 @@ export function CategoryLinks({ onCategoryClick }: CategoryLinksProps) {
             key={category.id}
             className="animate-in fade-in slide-in-from-bottom-4"
             style={{
-              animationDelay: `${index * 50}ms`,
-              animationDuration: "300ms",
+              animationDelay: `${index * 20}ms`,
+              animationDuration: "200ms",
               animationFillMode: "both",
             }}
           >
