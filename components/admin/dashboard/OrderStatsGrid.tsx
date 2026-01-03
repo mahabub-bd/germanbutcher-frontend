@@ -40,7 +40,14 @@ export function OrderStatsGrid({ data }: OrderStatsGridProps) {
         color="text-sky-500"
         href={getOrderUrl()}
       />
-
+      {/* Delivered */}
+      <StatusCard
+        title="Delivered"
+        value={data.delivered}
+        icon={CheckCircle2}
+        color="text-green-500"
+        href={getOrderUrl("delivered")}
+      />
       {/* Pending */}
       <StatusCard
         title="Pending"
@@ -66,15 +73,6 @@ export function OrderStatsGrid({ data }: OrderStatsGridProps) {
         icon={Truck}
         color="text-purple-500"
         href={getOrderUrl("shipped")}
-      />
-
-      {/* Delivered */}
-      <StatusCard
-        title="Delivered"
-        value={data.delivered}
-        icon={CheckCircle2}
-        color="text-green-500"
-        href={getOrderUrl("delivered")}
       />
 
       {/* Cancelled */}

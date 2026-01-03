@@ -1,6 +1,6 @@
 import StatsCard from "@/components/admin/dashboard/stats-card";
 import { formatCurrencyEnglish } from "@/lib/utils";
-import type { Brand, Category, OrderSummary } from "@/utils/types";
+import type { OrderSummary } from "@/utils/types";
 import {
   Calendar,
   Package,
@@ -14,50 +14,112 @@ interface DashboardStatsGridProps {
   chartData: OrderSummary[];
   productsCount: number;
   customersCount: number;
-  categories: Category[];
-  brands: Brand[];
 }
+
+/**
+ * Month → index map
+ */
+const MONTH_INDEX: Record<string, number> = {
+  January: 0,
+  February: 1,
+  March: 2,
+  April: 3,
+  May: 4,
+  June: 5,
+  July: 6,
+  August: 7,
+  September: 8,
+  October: 9,
+  November: 10,
+  December: 11,
+};
+
+const EMPTY_MONTH: OrderSummary = {
+  year: 0,
+  month: "",
+  totalValue: 0,
+  orderCount: 0,
+  cancelOrderCount: 0,
+  cancelValue: 0,
+};
+
+/**
+ * Helpers
+ */
+const formatMonthLabel = (month: string, year: number) =>
+  month && year ? `${month} ${year}` : "N/A";
+
+const calculateGrowth = (current: number, previous: number) => {
+  if (!previous) return 0;
+  return ((current - previous) / previous) * 100;
+};
 
 export default function DashboardStatsGrid({
   chartData,
   productsCount,
   customersCount,
-  categories,
-  brands,
 }: DashboardStatsGridProps) {
-  // Calculate total sales and orders
+  /**
+   * Sort by date
+   */
+  const sortedData = [...chartData].sort((a, b) => {
+    const aDate = new Date(a.year, MONTH_INDEX[a.month]);
+    const bDate = new Date(b.year, MONTH_INDEX[b.month]);
+    return aDate.getTime() - bDate.getTime();
+  });
+
+  const currentMonthData = sortedData.at(-1) ?? EMPTY_MONTH;
+  const lastMonthData = sortedData.at(-2) ?? EMPTY_MONTH;
+
+  /**
+   * Dynamic labels
+   */
+  const currentMonthLabel = formatMonthLabel(
+    currentMonthData.month,
+    currentMonthData.year
+  );
+
+  const lastMonthLabel = formatMonthLabel(
+    lastMonthData.month,
+    lastMonthData.year
+  );
+
+  /**
+   * Aggregates
+   */
   const totalSales = chartData.reduce((sum, item) => sum + item.totalValue, 0);
+
   const totalOrders = chartData.reduce((sum, item) => sum + item.orderCount, 0);
 
-  // Calculate total cancel statistics
   const totalCancelOrders = chartData.reduce(
-    (sum, item) => sum + (item.cancelOrderCount || 0),
+    (sum, item) => sum + (item.cancelOrderCount ?? 0),
     0
   );
+
   const totalCancelValue = chartData.reduce(
-    (sum, item) => sum + (item.cancelValue || 0),
+    (sum, item) => sum + (item.cancelValue ?? 0),
     0
   );
 
-  // Get current month's data (most recent month in the array)
-  const currentMonthData = chartData[1] || {
-    totalValue: 0,
-    orderCount: 0,
-    cancelOrderCount: 0,
-    cancelValue: 0,
-  };
+  /**
+   * MoM Growth
+   */
+  const salesGrowth = calculateGrowth(
+    currentMonthData.totalValue,
+    lastMonthData.totalValue
+  );
 
-  // Get last month's data (second most recent month in the array)
-  const lastMonthData = chartData[0] || {
-    totalValue: 0,
-    orderCount: 0,
-    cancelOrderCount: 0,
-    cancelValue: 0,
-  };
+  const cancelGrowth = calculateGrowth(
+    currentMonthData.cancelValue ?? 0,
+    lastMonthData.cancelValue ?? 0
+  );
+
+  const isSalesUp = salesGrowth >= 0;
+  const isCancelUp = cancelGrowth >= 0;
 
   return (
-    <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4">
-      {/* Total Sales - Green (Success/Money) */}
+    <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Total Sales */}
       <StatsCard
         title="Total Sales"
         value={formatCurrencyEnglish(totalSales)}
@@ -67,7 +129,7 @@ export default function DashboardStatsGrid({
         bgColor="green"
       />
 
-      {/* Total Cancel - Red/Amber (Warning/Loss) */}
+      {/* Total Cancel */}
       <StatsCard
         title="Total Cancel"
         value={formatCurrencyEnglish(totalCancelValue)}
@@ -77,29 +139,33 @@ export default function DashboardStatsGrid({
         bgColor="amber"
       />
 
-      {/* Sales Current Month - Green (Current/Active) */}
+      {/* Sales - Current Month */}
       <StatsCard
-        title="Sales (This Month)"
+        title={`Sales (${currentMonthLabel})`}
         value={formatCurrencyEnglish(currentMonthData.totalValue)}
         count={String(currentMonthData.orderCount)}
-        description="This month's revenue"
-        icon={TrendingUp}
-        bgColor="green"
+        description={` ${isSalesUp ? "▲" : "▼"} ${Math.abs(salesGrowth).toFixed(
+          2
+        )}%`}
+        icon={isSalesUp ? TrendingUp : TrendingDown}
+        bgColor={isSalesUp ? "green" : "red"}
       />
 
-      {/* Cancel Current Month - Orange (Current Alert) */}
+      {/* Cancel - Current Month */}
       <StatsCard
-        title="Cancel (This Month)"
-        value={formatCurrencyEnglish(currentMonthData.cancelValue || 0)}
-        count={String(currentMonthData.cancelOrderCount || "0")}
-        description="This month's cancellations"
-        icon={XCircle}
-        bgColor="orange"
+        title={`Cancel (${currentMonthLabel})`}
+        value={formatCurrencyEnglish(currentMonthData.cancelValue ?? 0)}
+        count={String(currentMonthData.cancelOrderCount ?? 0)}
+        description={` ${isCancelUp ? "▲" : "▼"} ${Math.abs(
+          cancelGrowth
+        ).toFixed(2)}%`}
+        icon={isCancelUp ? TrendingUp : TrendingDown}
+        bgColor={isCancelUp ? "orange" : "pink"}
       />
 
-      {/* Sales Last Month - Blue (Recent/Time-based) */}
+      {/* Sales - Last Month */}
       <StatsCard
-        title="Sales (Last Month)"
+        title={`Sales (${lastMonthLabel})`}
         value={formatCurrencyEnglish(lastMonthData.totalValue)}
         count={String(lastMonthData.orderCount)}
         description="Previous month revenue"
@@ -107,17 +173,17 @@ export default function DashboardStatsGrid({
         bgColor="blue"
       />
 
-      {/* Cancel Last Month - Pink (Alert/Attention) */}
+      {/* Cancel - Last Month */}
       <StatsCard
-        title="Cancel (Last Month)"
-        value={formatCurrencyEnglish(lastMonthData.cancelValue || 0)}
-        count={String(lastMonthData.cancelOrderCount || "0")}
+        title={`Cancel (${lastMonthLabel})`}
+        value={formatCurrencyEnglish(lastMonthData.cancelValue ?? 0)}
+        count={String(lastMonthData.cancelOrderCount ?? 0)}
         description="Previous month cancellations"
         icon={TrendingDown}
         bgColor="pink"
       />
 
-      {/* Products - Indigo (Inventory/Items) */}
+      {/* Products */}
       <StatsCard
         title="Products"
         value={productsCount.toString()}
@@ -126,7 +192,7 @@ export default function DashboardStatsGrid({
         bgColor="indigo"
       />
 
-      {/* Customers - Blue (People/Users) */}
+      {/* Customers */}
       <StatsCard
         title="Customers"
         value={customersCount.toString()}

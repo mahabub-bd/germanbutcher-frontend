@@ -1,33 +1,7 @@
+import { Badge } from "@/components/ui/badge";
+import MiniSparkline from "@/components/ui/mini-sparkline";
 import { cn } from "@/lib/utils";
 import type React from "react";
-
-interface BadgeProps {
-  children: React.ReactNode;
-  color?: "success" | "warning" | "danger" | "info" | "default";
-}
-
-export function Badge({ children, color = "default" }: BadgeProps) {
-  const colorClasses = {
-    success:
-      "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
-    warning:
-      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400",
-    danger: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
-    info: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
-    default: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400",
-  };
-
-  return (
-    <div
-      className={cn(
-        "flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] xs:text-[11px] sm:text-[12px] font-medium whitespace-nowrap",
-        colorClasses[color]
-      )}
-    >
-      {children}
-    </div>
-  );
-}
 
 interface StatCardProps {
   icon: React.ComponentType<{ className?: string }>;
@@ -35,11 +9,15 @@ interface StatCardProps {
   value: string | number;
   count?: string;
   description?: string;
+
   badge?: {
     icon?: React.ComponentType<{ className?: string }>;
     text: string;
     color?: "success" | "warning" | "danger" | "info" | "default";
   };
+
+  sparklineData?: number[];
+
   bgColor?:
     | "blue"
     | "green"
@@ -49,7 +27,9 @@ interface StatCardProps {
     | "indigo"
     | "violet"
     | "amber"
+    | "red"
     | "default";
+
   className?: string;
 }
 
@@ -59,10 +39,12 @@ export default function StatsCard({
   value,
   count,
   description,
+  badge,
+  sparklineData,
   bgColor = "default",
   className,
 }: StatCardProps) {
-  const bgColorClasses = {
+  const bgColorClasses: Record<string, string> = {
     blue: "from-blue-50 to-blue-100 dark:from-blue-950/15 dark:to-blue-900/5",
     green:
       "from-green-50 to-green-100 dark:from-green-950/15 dark:to-green-900/5",
@@ -77,54 +59,58 @@ export default function StatsCard({
       "from-violet-50 to-violet-100 dark:from-violet-950/15 dark:to-violet-900/5",
     amber:
       "from-amber-50 to-amber-100 dark:from-amber-950/15 dark:to-amber-900/5",
+    red: "from-red-50 to-red-100 dark:from-red-950/15 dark:to-red-900/5",
     default: "bg-white dark:bg-white/[0.03]",
   };
 
-  const iconBgClasses = {
-    blue: "bg-blue-100 dark:bg-blue-900/30",
-    green: "bg-green-100 dark:bg-green-900/30",
-    purple: "bg-purple-100 dark:bg-purple-900/30",
-    orange: "bg-orange-100 dark:bg-orange-900/30",
-    pink: "bg-pink-100 dark:bg-pink-900/30",
-    indigo: "bg-indigo-100 dark:bg-indigo-900/30",
-    violet: "bg-violet-100 dark:bg-violet-900/30",
-    amber: "bg-amber-100 dark:bg-amber-900/30",
-    default: "bg-gray-100 dark:bg-gray-800/30",
-  };
+  const sparklineColor =
+    bgColor === "red" ? "#ef4444" : bgColor === "amber" ? "#f59e0b" : "#22c55e";
 
   return (
     <div
       className={cn(
         "relative overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800",
-        "p-3 sm:p-4", // ⬆ slightly larger padding
-        "bg-gradient-to-br",
+        "p-3 sm:p-4 bg-gradient-to-br transition hover:shadow-sm",
+        "flex flex-col w-full min-h-[100px]",
         bgColorClasses[bgColor],
-        "transition duration-200 hover:shadow-sm",
-        "flex flex-col w-full max-w-full min-h-[80px]", // ⬆ increased height (was 70px)
         className
       )}
     >
-      {/* Faint Background Icon */}
-      <div className="absolute -top-1 -right-1 opacity-[0.04] dark:opacity-[0.08]">
-        <Icon className="w-12 h-12 sm:w-16 sm:h-16 text-gray-800 dark:text-white" />
+      {/* Background Icon */}
+      <div className="absolute -top-2 -right-2 opacity-[0.05] dark:opacity-[0.08]">
+        <Icon className="w-16 h-16 text-gray-900 dark:text-white" />
       </div>
 
-      <div className="flex items-center">
-        {/* Content */}
-        <div className="space-y-1">
-          <p className="text-xs sm:text-sm lg:text-base font-semibold text-primaryColor dark:text-white leading-tight">
+      {/* Header */}
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <p className="text-xs sm:text-sm font-semibold text-primaryColor dark:text-white">
             {title}
           </p>
 
-          {/* 👇 Combined value and count */}
-          <p className="mt-1 text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-gray-400 leading-none">
+          <p className="mt-1 text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-gray-300 leading-none">
             {count !== undefined ? `${value} / ${count}` : value}
           </p>
         </div>
+
+        {badge && (
+          <Badge color={badge.color}>
+            {badge.icon && <badge.icon className="w-3 h-3" />}
+            {badge.text}
+          </Badge>
+        )}
       </div>
 
+      {/* Sparkline */}
+      {sparklineData && (
+        <div className="mt-2">
+          <MiniSparkline data={sparklineData} stroke={sparklineColor} />
+        </div>
+      )}
+
+      {/* Description */}
       {description && (
-        <p className="text-[9px] sm:text-[10px] lg:text-xs text-gray-800 dark:text-gray-400 mt-1 leading-tight">
+        <p className="mt-1 text-[10px] sm:text-xs text-gray-700 dark:text-gray-400">
           {description}
         </p>
       )}

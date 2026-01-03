@@ -1,8 +1,4 @@
-"use client";
-
 import type { Brand, Category, OrderSummary } from "@/utils/types";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import DashboardStatsGrid from "./DashboardStatsGrid";
 import { OrderStatsGrid } from "./OrderStatsGrid";
 
@@ -32,28 +28,13 @@ export default function DashboardClient({
   initialStatsData,
   productsCount,
   customersCount,
-  categories,
-  brands,
 }: DashboardClientProps) {
-  const router = useRouter();
-
-  useEffect(() => {
-    // Auto-refresh every 10 seconds
-    const interval = setInterval(() => {
-      router.refresh();
-    }, 10000);
-
-    return () => clearInterval(interval);
-  }, [router]);
-
   return (
     <>
       <DashboardStatsGrid
         chartData={initialChartData}
         productsCount={productsCount}
         customersCount={customersCount}
-        categories={categories}
-        brands={brands}
       />
       <OrderStatsGrid data={initialStatsData} />
     </>
