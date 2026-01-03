@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import { Bell, ChevronDown, LogOut, Search, User } from "lucide-react";
+import { Bell, ChevronDown, Home, LogOut, Search, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -69,6 +69,17 @@ export function AdminHeader({
   };
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-6">
+      <Button
+        variant="ghost"
+        size="icon"
+        asChild
+        className="hover:bg-primary/10"
+        title="Go to home page"
+      >
+        <Link href="/">
+          <Home className="h-5 w-5" />
+        </Link>
+      </Button>
       <div className="flex flex-1 items-center gap-4">
         <Breadcrumb>
           <BreadcrumbList>

@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { authResponse, UserTypes } from "@/utils/types";
-import { Loader2, LogOut, User } from "lucide-react";
+import { LayoutDashboard, Loader2, LogOut, Shield, User, UserCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
@@ -61,9 +61,14 @@ const UserProfileSection: React.FC<{
       </div>
 
       <div className="flex-1 min-w-0">
-        <h4 className="font-semibold text-gray-900 truncate text-sm">
-          {user.name || "Anonymous User"}
-        </h4>
+        <div className="flex items-center gap-2">
+          <h4 className="font-semibold text-gray-900 truncate text-sm">
+            {user.name || "Anonymous User"}
+          </h4>
+          {user.isAdmin && (
+            <Shield className="h-3.5 w-3.5 text-amber-500 flex-shrink-0" />
+          )}
+        </div>
         {user.email && (
           <p className="text-xs text-gray-600 truncate">{user.email}</p>
         )}
@@ -155,6 +160,28 @@ const MobileAuth: React.FC<MobileAuthProps> = ({
   return (
     <div className={cn("space-y-3", className)}>
       <UserProfileSection user={user} isLoading={isLoggingOut} />
+
+      <div className="space-y-2">
+        <Link
+          href={`/user/${user.id}/profile`}
+          onClick={onClose}
+          className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
+        >
+          <UserCircle className="h-4 w-4 text-gray-600" />
+          <span className="text-sm font-medium text-gray-900">Profile</span>
+        </Link>
+
+        <Link
+          href={user.isAdmin ? "/admin/dashboard" : "/user/dashboard"}
+          onClick={onClose}
+          className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
+        >
+          <LayoutDashboard className="h-4 w-4 text-gray-600" />
+          <span className="text-sm font-medium text-gray-900">
+            {user.isAdmin ? "Admin Dashboard" : "Dashboard"}
+          </span>
+        </Link>
+      </div>
 
       <div className="pt-2 border-t border-gray-100">
         <Button

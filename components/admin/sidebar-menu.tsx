@@ -20,6 +20,7 @@ import type { authResponse, MenuItem } from "@/utils/types";
 import {
   ChevronDown,
   ChevronLeft,
+  Home,
   LogOut,
   Menu,
   Package,
@@ -169,6 +170,18 @@ export function SidebarMenu({ className, user }: SidebarProps) {
         onClick={() => setMobileOpen(!mobileOpen)}
       >
         {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+      </Button>
+
+      <Button
+        variant="ghost"
+        size="icon"
+        asChild
+        className="fixed right-4 top-4 z-50 md:hidden h-9 w-9 rounded-full hover:bg-primary/10"
+        title="Go to home page"
+      >
+        <Link href="/">
+          <Home className="h-5 w-5" />
+        </Link>
       </Button>
 
       <div className="flex h-16 items-center justify-center md:hidden fixed top-0 left-0 right-0 bg-background z-40">
