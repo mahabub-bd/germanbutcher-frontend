@@ -166,7 +166,7 @@ export function LowStockReport({
     );
 
   const renderTableView = () => (
-    <div className="rounded-lg border bg-white dark:bg-gray-950 p-6">
+    <div className="rounded-lg border bg-white dark:bg-gray-950 md:p-4 p-2">
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
@@ -370,7 +370,7 @@ const SummaryCard = ({
   isCurrency?: boolean;
 }) => (
   <div
-    className={`bg-${color}-50 dark:bg-${color}-950/20 p-4 rounded-lg border`}
+    className={`bg-${color}-50 dark:bg-${color}-950/20 md:p-4 p-2 rounded-lg border`}
   >
     <div className="flex items-center gap-2">
       <Icon className={`h-4 w-4 text-${color}-600`} />

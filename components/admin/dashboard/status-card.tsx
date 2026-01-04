@@ -55,7 +55,7 @@ export function StatusCard({
     <Link
       href={href}
       className={cn(
-        "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-lg transition border",
+        "flex  items-center justify-between gap-3 p-4 rounded-lg transition border",
         "bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700",
         "hover:bg-gray-100 dark:hover:bg-gray-700",
         "hover:shadow-sm",

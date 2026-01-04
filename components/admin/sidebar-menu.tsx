@@ -20,14 +20,11 @@ import type { authResponse, MenuItem } from "@/utils/types";
 import {
   ChevronDown,
   ChevronLeft,
-  Home,
   LogOut,
-  Menu,
   Package,
   Settings,
   User,
   UserCircle,
-  X,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -49,21 +46,27 @@ interface UserTypes {
 interface SidebarProps {
   className?: string;
   user: UserTypes;
+  mobileOpen?: boolean;
+  setMobileOpen?: (open: boolean) => void;
 }
 
-export function SidebarMenu({ className, user }: SidebarProps) {
+export function SidebarMenu({ className, user, mobileOpen = false, setMobileOpen }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
 
   const [collapsed, setCollapsed] = useState(false);
   const [menuData, setMenuData] = useState<MenuItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [openSubMenus, setOpenSubMenus] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const fetchMenuData = async () => {
+      if (!user?.id) {
+        setIsLoading(false);
+        return;
+      }
+
       setIsLoading(true);
       try {
         const endpoint = `menu-permissions/accessible-menus/${user?.id}`;
@@ -101,12 +104,15 @@ export function SidebarMenu({ className, user }: SidebarProps) {
   };
 
   useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
+    if (setMobileOpen) {
+      setMobileOpen(false);
+    }
+  }, [pathname, setMobileOpen]);
 
   const sidebarTitle = user?.isAdmin ? "German Butcher" : "My Account";
 
-  const getInitials = (name: string): string => {
+  const getInitials = (name?: string): string => {
+    if (!name) return "U";
     return name
       .split(" ")
       .map((n) => n[0]?.toUpperCase() ?? "")
@@ -159,38 +165,14 @@ export function SidebarMenu({ className, user }: SidebarProps) {
       {mobileOpen && (
         <div
           className="fixed inset-0 z-30  bg-background/80 backdrop-blur-sm md:hidden"
-          onClick={() => setMobileOpen(false)}
+          onClick={() => setMobileOpen && setMobileOpen(false)}
         />
       )}
 
-      <Button
-        variant="ghost"
-        size="icon"
-        className="fixed left-4 top-4 z-50 md:hidden h-9 w-9 rounded-full"
-        onClick={() => setMobileOpen(!mobileOpen)}
-      >
-        {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-      </Button>
-
-      <Button
-        variant="ghost"
-        size="icon"
-        asChild
-        className="fixed right-4 top-4 z-50 md:hidden h-9 w-9 rounded-full hover:bg-primary/10"
-        title="Go to home page"
-      >
-        <Link href="/">
-          <Home className="h-5 w-5" />
-        </Link>
-      </Button>
-
-      <div className="flex h-16 items-center justify-center md:hidden fixed top-0 left-0 right-0 bg-background z-40">
-        <span className="font-semibold">{sidebarTitle}</span>
-      </div>
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-30 pt-4  flex flex-col border-r transition-all duration-300 ease-in-out ",
+          "fixed inset-y-0 left-0 z-35 pt-4  flex flex-col border-r bg-background transition-all duration-300 ease-in-out ",
 
           collapsed ? "w-[70px]" : "w-[250px]",
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
@@ -413,20 +395,20 @@ export function SidebarMenu({ className, user }: SidebarProps) {
                     {user?.profilePhoto?.url && (
                       <AvatarImage
                         src={user?.profilePhoto?.url || "/placeholder.svg"}
-                        alt={user.name || "User avatar"}
+                        alt={user?.name || "User avatar"}
                         referrerPolicy="no-referrer"
                       />
                     )}
                     <AvatarFallback className="text-xs font-medium">
-                      {user.name ? getInitials(user.name) : "US"}
+                      {user?.name ? getInitials(user.name) : "US"}
                     </AvatarFallback>
                   </Avatar>
                   {!collapsed && (
                     <div className="flex flex-col items-start">
                       <span className="text-sm font-medium truncate">
-                        {user.name || "User"}
+                        {user?.name || "User"}
                       </span>
-                      {user.email && (
+                      {user?.email && (
                         <span className="text-xs text-muted-foreground truncate">
                           {user.email}
                         </span>
@@ -445,9 +427,9 @@ export function SidebarMenu({ className, user }: SidebarProps) {
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">
-                    {user.name || "User"}
+                    {user?.name || "User"}
                   </p>
-                  {user.email && (
+                  {user?.email && (
                     <p className="text-xs leading-none text-muted-foreground">
                       {user.email}
                     </p>

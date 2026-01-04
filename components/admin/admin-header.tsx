@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 
-import { Bell, ChevronDown, Home, LogOut, Search, User } from "lucide-react";
+import { ChevronDown, Home, LogOut, Menu, User } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -18,7 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+import { GermanbutcherLogo } from "@/public/images";
 import { authResponse } from "@/utils/types";
 
 import { toast } from "sonner";
@@ -33,8 +34,10 @@ import {
 
 export function AdminHeader({
   user,
+  onMenuClick,
 }: {
   user: { name?: string; email?: string; image?: string };
+  onMenuClick?: () => void;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -68,19 +71,58 @@ export function AdminHeader({
     }
   };
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-6">
+    <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b md:bg-background bg-primaryColor md:shadow-none shadow-lg px-6">
+      {/* Mobile layout: Hamburger - Logo - Home */}
+      <div className="md:hidden flex w-full items-center justify-between">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="hover:bg-white/10 text-white hover:text-white"
+          title="Menu"
+          onClick={onMenuClick}
+        >
+          <Menu className="size-6" />
+        </Button>
+        <Link
+          href="/"
+          className="flex items-center"
+          aria-label="Go to homepage"
+        >
+          <Image
+            src={GermanbutcherLogo}
+            alt="German Butcher logo"
+            width={48}
+            height={48}
+            className="max-w-full max-h-full object-contain"
+            priority
+          />
+        </Link>
+        <Button
+          variant="ghost"
+          size="icon"
+          asChild
+          className="hover:bg-white/10 text-white hover:text-white"
+          title="Go to home page"
+        >
+          <Link href="/">
+            <Home className="size-6" />
+          </Link>
+        </Button>
+      </div>
+
+      {/* Desktop layout: Home button and breadcrumb */}
       <Button
         variant="ghost"
         size="icon"
         asChild
-        className="hover:bg-primary/10"
+        className="hidden md:flex hover:bg-primary/10"
         title="Go to home page"
       >
         <Link href="/">
           <Home className="h-5 w-5" />
         </Link>
       </Button>
-      <div className="flex flex-1 items-center gap-4">
+      <div className="hidden md:flex flex-1 items-center gap-4">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -110,23 +152,7 @@ export function AdminHeader({
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <div className="flex items-center gap-4">
-        <form className="hidden md:block">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search..."
-              className="w-64 bg-background pl-8"
-            />
-          </div>
-        </form>
-        <Button variant="outline" size="icon" className="relative">
-          <Bell className="h-4 w-4" />
-          <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
-            3
-          </span>
-        </Button>
+      <div className="hidden md:flex items-center gap-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2">

@@ -96,10 +96,10 @@ export default function CombinedOrdersSalesChart({
           </TabsList>
 
           <TabsContent value="combined" className="mt-0">
-            <ResponsiveContainer width="100%" height={350}>
+            <ResponsiveContainer width="100%" height={350} className="md:h-[400px]">
               <BarChart
                 data={chartData}
-                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                margin={{ top: 20, right: 0, left: 0, bottom: 5 }}
               >
                 <CartesianGrid
                   strokeDasharray="3 3"
@@ -156,10 +156,10 @@ export default function CombinedOrdersSalesChart({
           </TabsContent>
 
           <TabsContent value="orders" className="mt-0">
-            <ResponsiveContainer width="100%" height={350}>
+            <ResponsiveContainer width="100%" height={350} className="md:h-[400px]">
               <BarChart
                 data={chartData}
-                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                margin={{ top: 20, right: 0, left: 0, bottom: 5 }}
               >
                 <CartesianGrid
                   strokeDasharray="3 3"
@@ -209,10 +209,10 @@ export default function CombinedOrdersSalesChart({
           </TabsContent>
 
           <TabsContent value="sales" className="mt-0">
-            <ResponsiveContainer width="100%" height={350}>
+            <ResponsiveContainer width="100%" height={350} className="md:h-[400px]">
               <BarChart
                 data={chartData}
-                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                margin={{ top: 20, right: 0, left: 0, bottom: 5 }}
               >
                 <CartesianGrid
                   strokeDasharray="3 3"
