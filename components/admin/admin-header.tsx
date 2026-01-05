@@ -19,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { NotificationBell } from "@/components/notification-bell";
 import { GermanbutcherLogo } from "@/public/images";
 import { authResponse } from "@/utils/types";
 
@@ -72,7 +73,7 @@ export function AdminHeader({
   };
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b md:bg-background bg-primaryColor md:shadow-none shadow-lg px-6">
-      {/* Mobile layout: Hamburger - Logo - Home */}
+      {/* Mobile layout: Hamburger - Logo - Notification - Home */}
       <div className="md:hidden flex w-full items-center justify-between">
         <Button
           variant="ghost"
@@ -97,17 +98,22 @@ export function AdminHeader({
             priority
           />
         </Link>
-        <Button
-          variant="ghost"
-          size="icon"
-          asChild
-          className="hover:bg-white/10 text-white hover:text-white"
-          title="Go to home page"
-        >
-          <Link href="/">
-            <Home className="size-6" />
-          </Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <div className="text-white [&_button]:text-white [&_button:hover]:text-white [&_button:hover]:bg-white/10">
+            <NotificationBell />
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            asChild
+            className="hover:bg-white/10 text-white hover:text-white"
+            title="Go to home page"
+          >
+            <Link href="/">
+              <Home className="size-6" />
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Desktop layout: Home button and breadcrumb */}
@@ -153,6 +159,9 @@ export function AdminHeader({
         </Breadcrumb>
       </div>
       <div className="hidden md:flex items-center gap-4">
+        {/* Notification Bell */}
+        <NotificationBell />
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2">
@@ -167,10 +176,10 @@ export function AdminHeader({
               </Avatar>
               <div className="hidden flex-col items-start md:flex">
                 <span className="text-sm font-medium">
-                  {user?.name || "Admin User"}
+                  {user?.name}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  {user?.email || "admin@example.com"}
+                  {user?.email}
                 </span>
               </div>
               <ChevronDown className="h-4 w-4 text-muted-foreground" />

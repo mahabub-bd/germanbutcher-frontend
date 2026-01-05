@@ -665,3 +665,46 @@ export enum OrderStatus {
   DELIVERED = "delivered",
   CANCELLED = "cancelled",
 }
+
+// WebSocket Notification Types
+export interface NotificationData {
+  orderId: string;
+  orderNo: string;
+  userId: string;
+  orderStatus?: OrderStatus | string;
+  paymentStatus?: PaymentStatus | string;
+  totalValue?: number;
+  items?: any[];
+  user?: {
+    id: number;
+    name: string;
+    email: string;
+    mobileNumber: string;
+  };
+  address?: any;
+  createdAt?: Date;
+  updatedAt?: Date;
+  title?: string;
+  message?: string;
+  // Broadcast notification fields
+  type?: "offer" | "maintenance" | "announcement";
+  severity?: "info" | "warning" | "critical";
+  discount?: string;
+  offerId?: string;
+  scheduledTime?: string;
+  duration?: string;
+}
+
+export interface Notification {
+  event: 'newOrder' | 'orderConfirmation' | 'orderStatusUpdate' | 'paymentStatusUpdate' | 'notification' | 'broadcast';
+  data: NotificationData;
+  timestamp: Date;
+}
+
+export interface NotificationContextType {
+  socket: any | null;
+  notifications: Notification[];
+  isConnected: boolean;
+  clearNotifications: () => void;
+  removeNotification: (index: number) => void;
+}

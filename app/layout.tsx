@@ -3,6 +3,7 @@ import { SearchModal } from "@/components/homepage/search/search-modal";
 import { Toaster } from "@/components/ui/sonner";
 import { CartProvider } from "@/providers/cart-provider";
 import { SearchProvider } from "@/providers/search-provider";
+import { NotificationProvider } from "@/providers/notification-provider";
 import { fetchProtectedData } from "@/utils/api-utils";
 import type { Cart } from "@/utils/types";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
@@ -151,12 +152,14 @@ export default async function RootLayout({
       <body className={fontVariables}>
         <Toaster richColors />
 
-        <CartProvider serverCart={cart ?? undefined} isLoggedIn={!!user}>
-          <SearchProvider>
-            {children}
-            <SearchModal />
-          </SearchProvider>
-        </CartProvider>
+        <NotificationProvider>
+          <CartProvider serverCart={cart ?? undefined} isLoggedIn={!!user}>
+            <SearchProvider>
+              {children}
+              <SearchModal />
+            </SearchProvider>
+          </CartProvider>
+        </NotificationProvider>
       </body>
     </html>
   );
