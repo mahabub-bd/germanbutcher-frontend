@@ -220,7 +220,7 @@ export function SendMaintenanceNotification() {
           </div>
 
           <div className="grid grid-cols-4 gap-2">
-            <div className="space-y-1">
+            <div className="space-y-1 w-full">
               <Label htmlFor="severity" className="text-xs">
                 Severity
               </Label>
@@ -228,7 +228,7 @@ export function SendMaintenanceNotification() {
                 value={severity}
                 onValueChange={(value: any) => setSeverity(value)}
               >
-                <SelectTrigger className="h-8 text-xs">
+                <SelectTrigger className="h-8 text-xs w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -245,7 +245,7 @@ export function SendMaintenanceNotification() {
               </Select>
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1 w-full">
               <Label className="text-xs">Scheduled Date</Label>
               <Popover>
                 <PopoverTrigger asChild>
@@ -271,7 +271,7 @@ export function SendMaintenanceNotification() {
               </Popover>
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1 w-full">
               <Label htmlFor="time" className="text-xs">
                 Time
               </Label>
@@ -281,7 +281,7 @@ export function SendMaintenanceNotification() {
                 placeholder="Select time"
               />
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1 w-full">
               <Label htmlFor="duration" className="text-xs">
                 Duration
               </Label>

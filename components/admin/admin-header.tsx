@@ -10,6 +10,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { logout } from "@/actions/auth";
+import { NotificationBell } from "@/components/notification-bell";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -19,7 +20,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { NotificationBell } from "@/components/notification-bell";
 import { GermanbutcherLogo } from "@/public/images";
 import { authResponse } from "@/utils/types";
 
@@ -92,8 +92,8 @@ export function AdminHeader({
           <Image
             src={GermanbutcherLogo}
             alt="German Butcher logo"
-            width={48}
-            height={48}
+            width={60}
+            height={60}
             className="max-w-full max-h-full object-contain"
             priority
           />
@@ -116,18 +116,22 @@ export function AdminHeader({
         </div>
       </div>
 
-      {/* Desktop layout: Home button and breadcrumb */}
-      <Button
-        variant="ghost"
-        size="icon"
-        asChild
-        className="hidden md:flex hover:bg-primary/10"
-        title="Go to home page"
+      {/* Desktop layout: Home button, logo and breadcrumb */}
+
+      <Link
+        href="/"
+        className="hidden md:flex items-center"
+        aria-label="Go to homepage"
       >
-        <Link href="/">
-          <Home className="h-5 w-5" />
-        </Link>
-      </Button>
+        <Image
+          src={GermanbutcherLogo}
+          alt="German Butcher logo"
+          width={60}
+          height={60}
+          className="object-contain"
+          priority
+        />
+      </Link>
       <div className="hidden md:flex flex-1 items-center gap-4">
         <Breadcrumb>
           <BreadcrumbList>
@@ -175,9 +179,7 @@ export function AdminHeader({
                 </AvatarFallback>
               </Avatar>
               <div className="hidden flex-col items-start md:flex">
-                <span className="text-sm font-medium">
-                  {user?.name}
-                </span>
+                <span className="text-sm font-medium">{user?.name}</span>
                 <span className="text-xs text-muted-foreground">
                   {user?.email}
                 </span>

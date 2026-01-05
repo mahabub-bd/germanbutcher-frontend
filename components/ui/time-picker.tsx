@@ -54,7 +54,7 @@ export function TimePicker({
           variant="outline"
           disabled={disabled}
           className={cn(
-            "justify-start text-left font-normal h-8 text-xs",
+            "w-full justify-start text-left font-normal h-8 text-xs",
             !value && "text-muted-foreground",
             className
           )}
@@ -70,7 +70,7 @@ export function TimePicker({
             <div className="px-3 py-2 text-xs font-semibold text-center border-b">
               Hour
             </div>
-            <div className="max-h-[200px] overflow-y-auto">
+            <div className="max-h-[200px] overflow-y-auto w-40">
               {Array.from({ length: 24 }, (_, i) => i).map((hour) => (
                 <button
                   key={hour}
@@ -94,7 +94,7 @@ export function TimePicker({
             <div className="px-3 py-2 text-xs font-semibold text-center border-b">
               Minute
             </div>
-            <div className="max-h-[200px] overflow-y-auto">
+            <div className="max-h-[200px] overflow-y-auto w-40">
               {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
                 <button
                   key={minute}

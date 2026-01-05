@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { NotificationContext } from "@/contexts/notification-context";
 import { Notification, OrderStatus } from "@/utils/types";
 import { getUser } from "@/actions/auth";
+import { playNotificationSound } from "@/lib/notification-sound";
 
 interface NotificationProviderProps {
   children: React.ReactNode;
@@ -85,6 +86,7 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
         newSocket.on("newOrder", (data: Notification) => {
           console.log("New order received:", data);
           setNotifications((prev) => [data, ...prev]);
+          playNotificationSound();
 
           toast.success("New Order Received!", {
             description: `Order ${data.data.orderNo} - ${data.data.user?.name || "Customer"}`,

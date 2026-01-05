@@ -14,7 +14,6 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
-import { GermanbutcherLogo } from "@/public/images";
 import { fetchProtectedData } from "@/utils/api-utils";
 import type { authResponse, MenuItem } from "@/utils/types";
 import {
@@ -26,7 +25,6 @@ import {
   User,
   UserCircle,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -50,7 +48,12 @@ interface SidebarProps {
   setMobileOpen?: (open: boolean) => void;
 }
 
-export function SidebarMenu({ className, user, mobileOpen = false, setMobileOpen }: SidebarProps) {
+export function SidebarMenu({
+  className,
+  user,
+  mobileOpen = false,
+  setMobileOpen,
+}: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -169,10 +172,9 @@ export function SidebarMenu({ className, user, mobileOpen = false, setMobileOpen
         />
       )}
 
-
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-35 pt-4  flex flex-col border-r bg-background transition-all duration-300 ease-in-out ",
+          "fixed inset-y-0 left-0 z-35 pt-6  flex flex-col border-r bg-background transition-all duration-300 ease-in-out ",
 
           collapsed ? "w-[70px]" : "w-[250px]",
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
@@ -196,14 +198,6 @@ export function SidebarMenu({ className, user, mobileOpen = false, setMobileOpen
               </div>
             ) : (
               <div className="flex items-center gap-2 py-2">
-                <Image
-                  src={GermanbutcherLogo}
-                  alt="Logo"
-                  width={40}
-                  height={40}
-                  className="h-auto w-auto"
-                />
-
                 <span className="font-medium">{sidebarTitle}</span>
               </div>
             )}

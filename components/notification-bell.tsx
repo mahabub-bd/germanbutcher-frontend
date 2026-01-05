@@ -1,16 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { useNotification } from "@/hooks/use-notification";
-import { Bell } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { NotificationPanel } from "@/components/notification-panel";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { NotificationPanel } from "@/components/notification-panel";
+import { useNotification } from "@/hooks/use-notification";
+import { cn } from "@/lib/utils";
+import { Bell } from "lucide-react";
+import { useState } from "react";
 
 export function NotificationBell() {
   const { notifications } = useNotification();
@@ -24,14 +25,23 @@ export function NotificationBell() {
           {notifications.length > 0 && (
             <Badge
               variant="destructive"
-              className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
+              className="absolute -top-1 -right-1 h-4 min-w-4 flex items-center justify-center p-0 text-[10px] rounded-full"
             >
               {notifications.length > 9 ? "9+" : notifications.length}
             </Badge>
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[420px] p-0" align="end">
+      <PopoverContent
+        className={cn(
+          "w-[calc(100vw-2rem)] p-0",
+          "md:w-[520px]",
+          "max-h-[80vh]",
+          "overflow-hidden"
+        )}
+        align="center"
+        side="bottom"
+      >
         <NotificationPanel />
       </PopoverContent>
     </Popover>

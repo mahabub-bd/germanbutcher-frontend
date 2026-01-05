@@ -390,8 +390,6 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
 
     const productDiscountTotal = order.items.reduce((sum, item) => {
       const discountTotal = (item.unitDiscount || 0) * item.quantity;
-      console.log(discountTotal);
-
       return sum + Number(discountTotal);
     }, 0);
 
