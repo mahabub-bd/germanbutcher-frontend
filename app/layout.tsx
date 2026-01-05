@@ -23,7 +23,7 @@ const quicksand = Quicksand({
 
 // Local Font - CastorTwoW01
 const castorTwoW01 = localFont({
-  src: "../public/font/CastorTwoW01-Regular.woff2",
+  src: "../public/font/CastorTwoW01-Regular.woff",
   variable: "--font-castor",
   display: "swap",
   weight: "400",
@@ -145,7 +145,7 @@ export default async function RootLayout({
           rel="preload"
           href="/font/CastorTwoW01-Regular.woff"
           as="font"
-          type="font/woff2"
+          type="font/woff"
           crossOrigin="anonymous"
         />
       </head>

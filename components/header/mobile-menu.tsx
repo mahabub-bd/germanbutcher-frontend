@@ -67,7 +67,6 @@ export function MobileMenu({ user }: { user: User }) {
                   width={48}
                   height={48}
                   className="max-w-full max-h-full object-contain"
-                  priority
                 />
               </Link>
             </div>

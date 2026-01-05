@@ -28,7 +28,6 @@ export async function MobileHeader() {
               width={60}
               height={60}
               className="max-w-full max-h-full object-contain"
-              priority
             />
           </Link>
         </div>
