@@ -26,6 +26,7 @@ import {
   getStatusBadgeColor,
 } from "@/lib/utils";
 import { fetchDataPagination } from "@/utils/api-utils";
+import { getPaymentMethodColor } from "@/utils/order-helper";
 import type { Order } from "@/utils/types";
 import {
   DollarSign,
@@ -43,7 +44,6 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { getPaymentMethodColor } from "@/utils/order-helper";
 
 interface OrderListProps {
   initialPage: number;
@@ -77,6 +77,7 @@ export function OrderList({
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [limit] = useState(initialLimit);
   const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   const updateUrl = useCallback(() => {
     const params = new URLSearchParams();
@@ -93,6 +94,7 @@ export function OrderList({
 
   const fetchOrders = useCallback(async () => {
     try {
+      setIsLoading(true);
       const params = new URLSearchParams();
       params.append("page", currentPage.toString());
       params.append("limit", limit.toString());
@@ -113,6 +115,8 @@ export function OrderList({
       console.error("Error fetching orders:", error);
       toast.error("Failed to load orders. Please try again.");
       setOrders([]);
+    } finally {
+      setIsLoading(false);
     }
   }, [currentPage, limit, searchQuery, statusFilter]);
 
@@ -123,7 +127,7 @@ export function OrderList({
     const statusFromUrl = searchParams?.get("orderStatus");
 
     if (pageFromUrl) {
-      setCurrentPage(parseInt(pageFromUrl, 10));
+      setCurrentPage(parseInt(pageFromUrl, 12));
     }
     if (searchFromUrl) {
       setSearchQuery(searchFromUrl);
@@ -235,7 +239,42 @@ export function OrderList({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {orders.length === 0 ? (
+            {isLoading ? (
+              [...Array(5)].map((_, i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <div className="h-4 w-20 bg-gray-200 rounded animate-pulse" />
+                  </TableCell>
+                  <TableCell>
+                    <div className="space-y-2">
+                      <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
+                      <div className="h-3 w-24 bg-gray-200 rounded animate-pulse md:hidden" />
+                    </div>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <div className="h-4 w-28 bg-gray-200 rounded animate-pulse" />
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <div className="h-6 w-20 bg-gray-200 rounded-full animate-pulse" />
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <div className="h-6 w-20 bg-gray-200 rounded-full animate-pulse" />
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <div className="h-6 w-16 bg-gray-200 rounded-full animate-pulse" />
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell text-right">
+                    <div className="h-4 w-20 bg-gray-200 rounded animate-pulse ml-auto" />
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell text-right">
+                    <div className="h-4 w-20 bg-gray-200 rounded animate-pulse ml-auto" />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="h-8 w-8 bg-gray-200 rounded animate-pulse ml-auto" />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : orders.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={9} className="text-center py-12">
                   <div className="flex flex-col items-center gap-3">
@@ -372,7 +411,7 @@ export function OrderList({
       </div>
 
       {/* Pagination Section */}
-      {orders.length > 0 && (
+      {!isLoading && orders.length > 0 && (
         <div className="flex flex-row justify-between items-center p-4 border-t">
           <div className="text-sm text-muted-foreground whitespace-nowrap">
             Showing {Math.min((currentPage - 1) * limit + 1, totalItems)} to{" "}
@@ -384,6 +423,17 @@ export function OrderList({
             baseUrl="#"
             onPageChange={handlePageChange}
           />
+        </div>
+      )}
+
+      {/* Loading Pagination Skeleton */}
+      {isLoading && (
+        <div className="flex flex-row justify-between items-center p-4 border-t">
+          <div className="h-5 w-48 bg-gray-200 rounded animate-pulse" />
+          <div className="flex gap-2">
+            <div className="h-9 w-20 bg-gray-200 rounded animate-pulse" />
+            <div className="h-9 w-20 bg-gray-200 rounded animate-pulse" />
+          </div>
         </div>
       )}
     </div>
