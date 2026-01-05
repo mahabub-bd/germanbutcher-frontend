@@ -44,9 +44,6 @@ export function SendOfferNotification() {
       return;
     }
 
-    // Debug: Log the socket query to verify userId
-    console.log("Socket query params:", (socket as any).io?.opts?.query);
-
     setIsLoading(true);
 
     // Set up one-time listeners for this broadcast

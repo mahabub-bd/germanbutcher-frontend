@@ -142,8 +142,6 @@ export function ProductList({
       if (featuredFilter && featuredFilter !== "all")
         params.append("featured", featuredFilter);
 
-      console.log("API URL:", `products?${params.toString()}`);
-
       const response = await fetchDataPagination<{
         data: Product[];
         total: number;

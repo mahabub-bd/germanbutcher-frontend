@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { getUser } from "@/actions/auth";
+import { NotificationContext } from "@/contexts/notification-context";
+import { playNotificationSound } from "@/lib/notification-sound";
+import { Notification, OrderStatus } from "@/utils/types";
+import { useCallback, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { toast } from "sonner";
-import { NotificationContext } from "@/contexts/notification-context";
-import { Notification, OrderStatus } from "@/utils/types";
-import { getUser } from "@/actions/auth";
-import { playNotificationSound } from "@/lib/notification-sound";
 
 interface NotificationProviderProps {
   children: React.ReactNode;
@@ -29,15 +29,8 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
         return;
       }
 
-      console.log("[NotificationProvider] Connecting with user:", {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-        roles: user.roles,
-      });
-
-      const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || "https://api.germanbutcherbd.com";
+      const socketUrl =
+        process.env.NEXT_PUBLIC_SOCKET_URL || "https://api.germanbutcherbd.com";
 
       // Connect to WebSocket
       newSocket = io(`${socketUrl}/notifications`, {
@@ -55,12 +48,18 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
 
       // Connection handlers
       newSocket.on("connect", () => {
-        console.log("✅ [WebSocket] Connected to notification server", newSocket?.id);
+        console.log(
+          "✅ [WebSocket] Connected to notification server",
+          newSocket?.id
+        );
         setIsConnected(true);
       });
 
       newSocket.on("disconnect", (reason) => {
-        console.log("❌ [WebSocket] Disconnected from notification server:", reason);
+        console.log(
+          "❌ [WebSocket] Disconnected from notification server:",
+          reason
+        );
         setIsConnected(false);
       });
 
@@ -71,7 +70,7 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
 
       // Log all outgoing messages
       const originalEmit = newSocket.emit.bind(newSocket);
-      newSocket.emit = function(event: string, ...args: any[]) {
+      newSocket.emit = function (event: string, ...args: any[]) {
         console.log("📤 [WebSocket] Sending:", event, args);
         return originalEmit(event, ...args);
       };
@@ -119,7 +118,9 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
           [OrderStatus.CANCELLED]: "has been cancelled",
         };
 
-        const statusMessage = statusMessages[data.data.orderStatus as OrderStatus] || `status updated to ${data.data.orderStatus}`;
+        const statusMessage =
+          statusMessages[data.data.orderStatus as OrderStatus] ||
+          `status updated to ${data.data.orderStatus}`;
 
         toast.info("Order Status Update", {
           description: `Order ${data.data.orderNo} ${statusMessage}`,
@@ -157,7 +158,12 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
         // Handle different broadcast types
         if (data.data.type === "maintenance") {
           const severity = data.data.severity || "info";
-          const toastType = severity === "critical" ? "error" : severity === "warning" ? "warning" : "info";
+          const toastType =
+            severity === "critical"
+              ? "error"
+              : severity === "warning"
+                ? "warning"
+                : "info";
 
           toast[toastType](data.data.title || "System Maintenance", {
             description: data.data.message,
