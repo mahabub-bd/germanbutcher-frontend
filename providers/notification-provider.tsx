@@ -16,8 +16,15 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isConnected, setIsConnected] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     let newSocket: Socket | null = null;
 
     const initializeSocket = async () => {
@@ -189,7 +196,7 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
         newSocket.close();
       }
     };
-  }, []);
+  }, [isMounted]);
 
   const clearNotifications = useCallback(() => {
     setNotifications([]);

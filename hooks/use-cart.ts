@@ -32,9 +32,14 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [appliedCoupon, setAppliedCoupon] = useState<LocalCoupon | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    if (isInitialized) return;
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isInitialized || !isMounted) return;
 
     if (isLoggedIn && serverCart) {
       setLocalCart(null);
@@ -63,7 +68,7 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
     }
 
     setIsInitialized(true);
-  }, [isLoggedIn, serverCart, isInitialized]);
+  }, [isLoggedIn, serverCart, isInitialized, isMounted]);
 
   useEffect(() => {
     if (!isLoggedIn && localCart) {
