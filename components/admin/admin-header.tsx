@@ -72,7 +72,7 @@ export function AdminHeader({
     }
   };
   return (
-    <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b md:bg-background bg-primaryColor md:shadow-none shadow-lg px-6">
+    <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-primaryColor shadow-lg px-6">
       {/* Mobile layout: Hamburger - Logo - Notification - Home */}
       <div className="md:hidden flex w-full items-center justify-between">
         <Button
@@ -134,9 +134,9 @@ export function AdminHeader({
       </Link>
       <div className="hidden md:flex flex-1 items-center gap-4">
         <Breadcrumb>
-          <BreadcrumbList>
+          <BreadcrumbList className="text-white text-base [&_a]:text-white [&_a:hover]:text-white/80 [&_span]:text-white">
             <BreadcrumbItem>
-              <BreadcrumbLink href="/admin">Admin</BreadcrumbLink>
+              <BreadcrumbLink href="/admin" className="text-base">Admin</BreadcrumbLink>
             </BreadcrumbItem>
             {pathSegments.slice(1).map((segment, index) => {
               const isLast = index === pathSegments.slice(1).length - 1;
@@ -164,27 +164,29 @@ export function AdminHeader({
       </div>
       <div className="hidden md:flex items-center gap-4">
         {/* Notification Bell */}
-        <NotificationBell />
+        <div className="text-white [&_button]:text-white [&_button:hover]:text-white [&_button:hover]:bg-white/10">
+          <NotificationBell />
+        </div>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="flex items-center gap-2">
-              <Avatar className="h-8 w-8">
+            <Button variant="ghost" className="flex items-center gap-2 text-white hover:bg-white/10 hover:text-white rounded-lg px-3 py-2">
+              <Avatar className="h-8 w-8 ring-2 ring-white/20">
                 <AvatarImage
                   src={user?.image || ""}
                   alt={user?.name || "User"}
                 />
-                <AvatarFallback>
+                <AvatarFallback className="bg-gradient-to-br from-primaryColor to-secondaryColor text-white font-semibold">
                   {user?.name?.charAt(0) || <User className="h-4 w-4" />}
                 </AvatarFallback>
               </Avatar>
               <div className="hidden flex-col items-start md:flex">
-                <span className="text-sm font-medium">{user?.name}</span>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-sm font-medium text-white">{user?.name}</span>
+                <span className="text-xs text-white/80">
                   {user?.email}
                 </span>
               </div>
-              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              <ChevronDown className="h-4 w-4 text-white" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">

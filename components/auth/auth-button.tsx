@@ -268,8 +268,8 @@ const AuthBtn: React.FC<AuthBtnProps> = ({
           variant="ghost"
           size="sm"
           className={cn(
-            "relative rounded-full border p-0 hover:bg-muted/50 transition-all duration-200",
-            "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+            "relative rounded-full border border-primaryColor/20 p-0 hover:bg-primaryColor/5 transition-all duration-200",
+            "focus-visible:ring-2 focus-visible:ring-primaryColor focus-visible:ring-offset-2",
             "text-primaryColor disabled:opacity-50",
             buttonSize,
             className
