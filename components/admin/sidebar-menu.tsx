@@ -140,7 +140,7 @@ export function SidebarMenu({
 
   // Generate skeleton menu items for loading state
   const renderSkeletonMenu = () => {
-    return Array(6)
+    return Array(20)
       .fill(0)
       .map((_, index) => (
         <div key={index} className="px-2 py-1">
@@ -174,8 +174,7 @@ export function SidebarMenu({
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-35 pt-4  flex flex-col border-r bg-gradient-to-b from-white via-orange-50/30 to-red-50/40 transition-all duration-300 ease-in-out ",
-
+          "fixed inset-y-0 left-0 z-40 pt-4 flex flex-col border-r bg-gradient-to-b from-white via-orange-50/30 to-red-50/40 transition-all duration-300 ease-in-out",
           collapsed ? "w-[70px]" : "w-[250px]",
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
           className
@@ -369,25 +368,15 @@ export function SidebarMenu({
           </div>
         </div>
 
-        <div className="border-t border-primaryColor/20 p-4 md:hidden flex md:items-center md:justify-between">
+        <div className="border-t border-primaryColor/20 p-2 md:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className={cn(
-                  "w-full justify-start hover:bg-primaryColor/10 text-gray-700 hover:text-primaryColor",
-                  collapsed && "justify-center px-0"
-                )}
+                className="w-full h-auto py-2 px-2 justify-start hover:bg-primaryColor/10 text-gray-700 hover:text-primaryColor"
               >
-                <div
-                  className={cn(
-                    "flex items-center",
-                    collapsed ? "justify-center" : ""
-                  )}
-                >
-                  <Avatar
-                    className={cn("h-8 w-8", collapsed ? "mr-0" : "mr-2")}
-                  >
+                <div className="flex items-center gap-2 w-full min-w-0">
+                  <Avatar className="h-7 w-7 shrink-0">
                     {user?.profilePhoto?.url && (
                       <AvatarImage
                         src={user?.profilePhoto?.url || "/placeholder.svg"}
@@ -399,18 +388,17 @@ export function SidebarMenu({
                       {user?.name ? getInitials(user.name) : "US"}
                     </AvatarFallback>
                   </Avatar>
-                  {!collapsed && (
-                    <div className="flex flex-col items-start">
-                      <span className="text-sm font-medium text-gray-700 truncate">
-                        {user?.name || "User"}
+                  <div className="flex flex-col items-start min-w-0 flex-1">
+                    <span className="text-xs font-medium text-gray-700 truncate max-w-full">
+                      {user?.name || "User"}
+                    </span>
+                    {user?.email && (
+                      <span className="text-[10px] text-gray-500 truncate max-w-full">
+                        {user.email}
                       </span>
-                      {user?.email && (
-                        <span className="text-xs text-gray-500 truncate">
-                          {user.email}
-                        </span>
-                      )}
-                    </div>
-                  )}
+                    )}
+                  </div>
+                  <ChevronDown className="h-3 w-3 shrink-0 text-gray-500" />
                 </div>
               </Button>
             </DropdownMenuTrigger>
