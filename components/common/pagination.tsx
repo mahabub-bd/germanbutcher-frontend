@@ -11,7 +11,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 interface PaginationComponentProps {
   currentPage: number;
@@ -28,8 +28,22 @@ export function PaginationComponent({
   paginationUrls,
   onPageChange,
 }: PaginationComponentProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const visiblePages = useMemo(() => {
-    const siblingsCount = 1;
+    // Reduce siblings on mobile devices
+    const siblingsCount = isMobile ? 0 : 1;
 
     const pages = new Set<number>();
 
@@ -47,7 +61,7 @@ export function PaginationComponent({
     }
 
     return Array.from(pages).sort((a, b) => a - b);
-  }, [currentPage, totalPages]);
+  }, [currentPage, totalPages, isMobile]);
 
   const getPageUrl = (page: number): string => {
     if (paginationUrls && paginationUrls[page]) {
@@ -65,7 +79,7 @@ export function PaginationComponent({
 
   return (
     <Pagination className="justify-center md:justify-end">
-      <PaginationContent className="flex-wrap">
+      <PaginationContent className="flex-wrap gap-1">
         {/* Previous Button */}
         <PaginationItem>
           <PaginationPrevious
@@ -74,8 +88,8 @@ export function PaginationComponent({
             tabIndex={currentPage <= 1 ? -1 : undefined}
             className={
               currentPage <= 1
-                ? 'pointer-events-none opacity-50 cursor-pointer'
-                : undefined
+                ? 'pointer-events-none opacity-50 cursor-pointer h-8 w-8 p-0 md:h-10 md:w-auto md:px-4 md:py-2'
+                : 'h-8 w-8 p-0 md:h-10 md:w-auto md:px-4 md:py-2'
             }
             onClick={(e) => currentPage > 1 && handleClick(currentPage - 1, e)}
           />
@@ -89,7 +103,7 @@ export function PaginationComponent({
             <div key={page} className="flex items-center cursor-pointer">
               {needsEllipsisBefore && (
                 <PaginationItem>
-                  <PaginationEllipsis />
+                  <PaginationEllipsis className="h-8 w-8 md:h-10 md:w-10" />
                 </PaginationItem>
               )}
               <PaginationItem>
@@ -97,6 +111,7 @@ export function PaginationComponent({
                   href={getPageUrl(page)}
                   isActive={page === currentPage}
                   onClick={(e) => handleClick(page, e)}
+                  className="h-8 w-8 p-0 md:h-10 md:w-10"
                 >
                   {page}
                 </PaginationLink>
@@ -117,8 +132,8 @@ export function PaginationComponent({
             tabIndex={currentPage >= totalPages ? -1 : undefined}
             className={
               currentPage >= totalPages
-                ? 'pointer-events-none opacity-50 cursor-pointer'
-                : undefined
+                ? 'pointer-events-none opacity-50 cursor-pointer h-8 w-8 p-0 md:h-10 md:w-auto md:px-4 md:py-2'
+                : 'h-8 w-8 p-0 md:h-10 md:w-auto md:px-4 md:py-2'
             }
             onClick={(e) =>
               currentPage < totalPages && handleClick(currentPage + 1, e)

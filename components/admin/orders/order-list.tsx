@@ -413,7 +413,7 @@ export function OrderList({
       {/* Pagination Section */}
       {!isLoading && orders.length > 0 && (
         <div className="flex flex-row justify-between items-center p-4 border-t">
-          <div className="text-sm text-muted-foreground whitespace-nowrap">
+          <div className="text-sm text-muted-foreground whitespace-nowrap hidden md:flex">
             Showing {Math.min((currentPage - 1) * limit + 1, totalItems)} to{" "}
             {Math.min(currentPage * limit, totalItems)} of {totalItems} orders
           </div>

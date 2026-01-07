@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import { ChevronDown, Home, LogOut, Menu, User } from "lucide-react";
+import { ChevronDown, LogOut, Menu, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -102,17 +102,6 @@ export function AdminHeader({
           <div className="text-white [&_button]:text-white [&_button:hover]:text-white [&_button:hover]:bg-white/10">
             <NotificationBell />
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            asChild
-            className="hover:bg-white/10 text-white hover:text-white"
-            title="Go to home page"
-          >
-            <Link href="/">
-              <Home className="size-6" />
-            </Link>
-          </Button>
         </div>
       </div>
 
@@ -136,7 +125,9 @@ export function AdminHeader({
         <Breadcrumb>
           <BreadcrumbList className="text-white text-base [&_a]:text-white [&_a:hover]:text-white/80 [&_span]:text-white">
             <BreadcrumbItem>
-              <BreadcrumbLink href="/admin" className="text-base">Admin</BreadcrumbLink>
+              <BreadcrumbLink href="/admin" className="text-base">
+                Admin
+              </BreadcrumbLink>
             </BreadcrumbItem>
             {pathSegments.slice(1).map((segment, index) => {
               const isLast = index === pathSegments.slice(1).length - 1;
@@ -170,7 +161,10 @@ export function AdminHeader({
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="flex items-center gap-2 text-white hover:bg-white/10 hover:text-white rounded-lg px-3 py-2">
+            <Button
+              variant="ghost"
+              className="flex items-center gap-2 text-white hover:bg-white/10 hover:text-white rounded-lg px-3 py-2"
+            >
               <Avatar className="h-8 w-8 ring-2 ring-white/20">
                 <AvatarImage
                   src={user?.image || ""}
@@ -181,10 +175,10 @@ export function AdminHeader({
                 </AvatarFallback>
               </Avatar>
               <div className="hidden flex-col items-start md:flex">
-                <span className="text-sm font-medium text-white">{user?.name}</span>
-                <span className="text-xs text-white/80">
-                  {user?.email}
+                <span className="text-sm font-medium text-white">
+                  {user?.name}
                 </span>
+                <span className="text-xs text-white/80">{user?.email}</span>
               </div>
               <ChevronDown className="h-4 w-4 text-white" />
             </Button>
