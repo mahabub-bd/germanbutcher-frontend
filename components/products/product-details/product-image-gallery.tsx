@@ -81,7 +81,7 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
           src={selectedImage || "/placeholder.svg"}
           alt={product.name}
           fill
-          className="object-cover transition-transform duration-300 aspect-video"
+          className="object-cover transition-transform duration-300 aspect-[3/2]"
           onLoad={handleMainImageLoad}
         />
 
@@ -163,7 +163,7 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
               src={image.url || "/placeholder.svg"}
               alt={image.fileName}
               fill
-              className="object-cover"
+              className="object-cover aspect-[3/2]"
               onLoad={() => handleThumbnailLoad(image.url)}
             />
           </div>
