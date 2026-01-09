@@ -62,7 +62,7 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
     <div className="sticky top-16">
       <div
         ref={imageRef}
-        className="relative w-full aspect-video bg-white rounded-sm overflow-hidden shadow-md border cursor-zoom-in"
+        className="relative w-full aspect-[3/2] bg-white rounded-sm overflow-hidden shadow-md border cursor-zoom-in"
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
