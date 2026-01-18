@@ -39,10 +39,10 @@ const Copyright = () => {
             </div>
             <Link
               target="_blank"
-              href="https://www.techqul.com"
+              href="https://mahabub.me"
               className="text-gray-400 text-xs md:text-sm"
             >
-              Designed & Developed with ❤️ by Techqul
+              Designed & Developed with ❤️ by Mahabub Hossain
             </Link>
           </div>
         </div>
