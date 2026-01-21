@@ -49,18 +49,27 @@ interface TopCustomer {
   statistics: CustomerStatistics;
 }
 
+type TimeFilter =
+  | "this_month"
+  | "last_3_months"
+  | "last_6_months"
+  | "last_year"
+  | "this_year"
+  | "all_time";
+
 export function TopCustomersList() {
   const [customers, setCustomers] = useState<TopCustomer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [limit, setLimit] = useState<number>(10);
   const [sortBy, setSortBy] = useState<"orders" | "spending">("orders");
+  const [timeFilter, setTimeFilter] = useState<TimeFilter>("all_time");
 
   useEffect(() => {
     const fetchTopCustomers = async () => {
       setLoading(true);
       try {
         const response = await fetchProtectedData(
-          `users/customers/top?limit=${limit}&sortBy=${sortBy}`
+          `users/customers/top?limit=${limit}&sortBy=${sortBy}&timeFilter=${timeFilter}`
         );
 
         setCustomers(response as TopCustomer[]);
@@ -74,7 +83,7 @@ export function TopCustomersList() {
     };
 
     fetchTopCustomers();
-  }, [limit, sortBy]);
+  }, [limit, sortBy, timeFilter]);
 
   const getRankBadge = (index: number) => {
     if (index === 0)
@@ -157,6 +166,23 @@ export function TopCustomersList() {
             <SelectContent>
               <SelectItem value="orders">By Orders</SelectItem>
               <SelectItem value="spending">By Spending</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={timeFilter}
+            onValueChange={(value: TimeFilter) => setTimeFilter(value)}
+          >
+            <SelectTrigger className="w-[140px] h-9">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="this_month">This Month</SelectItem>
+              <SelectItem value="last_3_months">Last 3 Months</SelectItem>
+              <SelectItem value="last_6_months">Last 6 Months</SelectItem>
+              <SelectItem value="last_year">Last Year</SelectItem>
+              <SelectItem value="this_year">This Year</SelectItem>
+              <SelectItem value="all_time">All Time</SelectItem>
             </SelectContent>
           </Select>
         </div>
