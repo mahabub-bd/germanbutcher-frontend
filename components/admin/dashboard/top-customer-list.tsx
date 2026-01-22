@@ -145,7 +145,7 @@ export function TopCustomersList() {
             value={limit.toString()}
             onValueChange={(value) => setLimit(parseInt(value))}
           >
-            <SelectTrigger className="w-[90px] h-9">
+            <SelectTrigger className="w-[150px] h-9">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -160,7 +160,7 @@ export function TopCustomersList() {
             value={sortBy}
             onValueChange={(value: "orders" | "spending") => setSortBy(value)}
           >
-            <SelectTrigger className="w-[120px] h-9">
+            <SelectTrigger className="w-[150px] h-9">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -173,7 +173,7 @@ export function TopCustomersList() {
             value={timeFilter}
             onValueChange={(value: TimeFilter) => setTimeFilter(value)}
           >
-            <SelectTrigger className="w-[140px] h-9">
+            <SelectTrigger className="w-[150px] h-9">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

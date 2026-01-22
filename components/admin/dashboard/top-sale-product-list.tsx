@@ -108,7 +108,7 @@ export default function TopSaleProductsList() {
             value={limit.toString()}
             onValueChange={(v) => setLimit(parseInt(v))}
           >
-            <SelectTrigger className="w-[110px] h-9">
+            <SelectTrigger className="w-[150px] h-9">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
