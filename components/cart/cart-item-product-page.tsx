@@ -120,41 +120,43 @@ export function CartItemProductPage({ item }: { item: CartItem }) {
 
   return (
     <div
-      className={`flex items-start gap-4 border-b pb-6 ${isOutOfStock ? "opacity-60" : ""}`}
+      className={`grid grid-cols-1 md:grid-cols-12 gap-3 items-center border-b py-3 ${isOutOfStock ? "opacity-60" : ""}`}
     >
-      {/* Product Image with Link */}
-      <Link
-        href={`/product/${item.product.slug}`}
-        className="aspect-[16/9] w-32 flex-shrink-0 overflow-hidden rounded-md border bg-muted relative hover:border-primaryColor transition-colors block"
-      >
-        {/* Loading Skeleton */}
-        {isImageLoading && (
-          <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
-            <Loader2 className="h-6 w-6 text-gray-400 animate-spin" />
-          </div>
-        )}
+      {/* Product Image */}
+      <div className="md:col-span-2">
+        <Link
+          href={`/product/${item.product.slug}`}
+          className="aspect-[3/2] w-full overflow-hidden rounded border bg-muted relative hover:border-primaryColor transition-colors block"
+        >
+          {isImageLoading && (
+            <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+              <Loader2 className="h-6 w-6 text-gray-400 animate-spin" />
+            </div>
+          )}
+          <Image
+            src={item.product.attachment?.url || "/placeholder.svg"}
+            alt={item.product.name}
+            fill
+            className={`object-cover ${isOutOfStock ? "grayscale" : ""}`}
+            sizes="(max-width: 768px) 100vw, 16vw"
+            onLoad={handleImageLoad}
+          />
+          {isOutOfStock && (
+            <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+              <Badge variant="destructive" className="text-[10px] px-1.5 py-0">
+                Out of Stock
+              </Badge>
+            </div>
+          )}
+        </Link>
+      </div>
 
-        <Image
-          src={item.product.attachment?.url || "/placeholder.svg"}
-          alt={item.product.name}
-          fill
-          className={`object-cover ${isOutOfStock ? "grayscale" : ""}`}
-          sizes="128px"
-          onLoad={handleImageLoad}
-        />
-        {isOutOfStock && (
-          <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-            <Badge variant="destructive" className="text-xs">
-              Out of Stock
-            </Badge>
-          </div>
-        )}
-      </Link>
-
-      <div className="flex-1 space-y-2">
-        <div className="flex items-start justify-between">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
+      {/* Product Details */}
+      <div className="md:col-span-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+          {/* Product Name & Info */}
+          <div className="md:col-span-5 space-y-1">
+            <div className="flex items-center gap-1.5 flex-wrap">
               <Link
                 href={`/product/${item.product.slug}`}
                 className="hover:text-primaryColor transition-colors"
@@ -166,78 +168,77 @@ export function CartItemProductPage({ item }: { item: CartItem }) {
                 </h3>
               </Link>
               {isOutOfStock && (
-                <Badge variant="destructive" className="text-xs hidden md:flex">
+                <Badge variant="destructive" className="text-[10px] px-1.5 py-0">
                   Out of Stock
                 </Badge>
               )}
               {isLowStock && !isOutOfStock && (
                 <Badge
                   variant="outline"
-                  className="text-xs hidden md:flex text-orange-600 border-orange-600"
+                  className="text-[10px] px-1.5 py-0 text-orange-600 border-orange-600"
                 >
                   Low Stock ({item.product.stock} left)
                 </Badge>
               )}
             </div>
 
-            {/* Stock Warning */}
+            <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+              {item.product.weight && (
+                <span>Weight: {Number(item.product.weight).toFixed(0)}{item.product.unit?.name || 'gm'}</span>
+              )}
+              {!isOutOfStock && (
+                <span>Stock: {item.product.stock}</span>
+              )}
+            </div>
+
             {hasInsufficientStock && !isOutOfStock && (
-              <div className="flex items-center gap-1 text-red-600 text-xs">
-                <AlertCircle className="h-3 w-3" />
+              <div className="flex items-center gap-1 text-red-600 text-[11px]">
+                <AlertCircle className="h-2.5 w-2.5" />
                 <span>Only {item.product.stock} items available</span>
               </div>
             )}
 
-            {/* Out of Stock Message */}
             {isOutOfStock && (
-              <div className="flex items-center gap-1 text-red-600 text-sm">
-                <AlertCircle className="h-4 w-4" />
+              <div className="flex items-center gap-1 text-red-600 text-xs">
+                <AlertCircle className="h-3 w-3" />
                 <span>Out of stock</span>
               </div>
             )}
+          </div>
 
-            <div className="flex items-center gap-2">
+          {/* Price */}
+          <div className="md:col-span-2">
+            <div className="flex flex-col">
               {originalPriceDisplay}
               <span
-                className={`text-sm font-medium ${isOutOfStock ? "text-muted-foreground" : ""}`}
+                className={`font-medium text-sm ${isOutOfStock ? "text-muted-foreground" : ""}`}
               >
                 {formatCurrencyEnglish(discountedPrice)}
               </span>
               {hasActiveDiscount && !isOutOfStock && (
-                <span className="text-xs text-green-600">
-                  (Save {formatCurrencyEnglish(discountAmount)})
+                <span className="text-[11px] text-green-600">
+                  Save {formatCurrencyEnglish(discountAmount)}
                 </span>
               )}
             </div>
           </div>
-          <div className="text-right">
-            <p
-              className={`font-medium ${isOutOfStock ? "text-muted-foreground" : ""}`}
-            >
-              {formatCurrencyEnglish(discountedPrice * localQuantity)}
-            </p>
-            {isOutOfStock && (
-              <p className="text-xs text-red-600 mt-1">Unavailable</p>
-            )}
-          </div>
-        </div>
 
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
+          {/* Quantity */}
+          <div className="md:col-span-3">
+            <div className="flex items-center gap-1.5">
               <Button
                 variant="outline"
                 size="icon"
-                className="h-8 w-8"
+                className="h-7 w-7"
                 onClick={handleDecrement}
                 disabled={isUpdating || localQuantity === 1 || isOutOfStock}
               >
                 <Minus className="h-3 w-3" />
                 <span className="sr-only">Decrease quantity</span>
               </Button>
-              <span className="w-6 text-center">
+              <span className="w-8 text-center text-sm font-medium">
                 {isUpdating ? (
-                  <Loader2 className="h-4 w-4 mx-auto animate-spin" />
+                  <Loader2 className="h-3 w-3 mx-auto animate-spin" />
                 ) : (
                   localQuantity
                 )}
@@ -245,7 +246,7 @@ export function CartItemProductPage({ item }: { item: CartItem }) {
               <Button
                 variant="outline"
                 size="icon"
-                className="h-8 w-8"
+                className="h-7 w-7"
                 onClick={handleIncrement}
                 disabled={
                   isUpdating ||
@@ -257,27 +258,29 @@ export function CartItemProductPage({ item }: { item: CartItem }) {
                 <span className="sr-only">Increase quantity</span>
               </Button>
             </div>
-
-            {/* Stock info display */}
-            {!isOutOfStock && (
-              <span className="text-xs text-muted-foreground">
-                {item.product.stock} in stock
-              </span>
-            )}
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* Subtotal & Actions */}
+          <div className="md:col-span-2 flex items-center justify-between gap-3">
+            <p
+              className={`font-medium text-sm ${isOutOfStock ? "text-muted-foreground" : ""}`}
+            >
+              {formatCurrencyEnglish(discountedPrice * localQuantity)}
+            </p>
+            {isOutOfStock && (
+              <p className="text-[11px] text-red-600">Unavailable</p>
+            )}
             <Button
               variant="ghost"
               size="icon"
               onClick={handleRemove}
               disabled={isRemoving}
-              className="h-8 w-8 text-muted-foreground hover:text-destructive disabled:opacity-50"
+              className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10 disabled:opacity-50 flex-shrink-0"
             >
               {isRemoving ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className="h-3 w-3 animate-spin" />
               ) : (
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className="h-3 w-3" />
               )}
               <span className="sr-only">Remove item</span>
             </Button>

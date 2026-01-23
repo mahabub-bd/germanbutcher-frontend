@@ -141,7 +141,7 @@ export function OrderSummary({
           <Button
             onClick={onSubmit}
             size="lg"
-            className="w-full bg-primaryColor hover:bg-primaryColor/90 transition-colors"
+            className="w-full bg-primaryColor hover:bg-primaryColor/90 transition-colors cursor-pointer"
             disabled={isSubmitting}
             aria-busy={isSubmitting}
           >

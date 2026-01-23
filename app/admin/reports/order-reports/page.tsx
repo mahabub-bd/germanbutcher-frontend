@@ -20,13 +20,26 @@ export default async function OrderReportPage({ searchParams }: Props) {
     typeof resolvedParams.toDate === "string"
       ? resolvedParams.toDate
       : undefined;
+  const preset =
+    typeof resolvedParams.preset === "string"
+      ? resolvedParams.preset
+      : "this_month";
+  const orderStatus =
+    typeof resolvedParams.orderStatus === "string"
+      ? resolvedParams.orderStatus
+      : undefined;
 
   let reportData: any = null;
 
   try {
     const queryParams = new URLSearchParams();
-    if (fromDate) queryParams.append("fromDate", fromDate);
-    if (toDate) queryParams.append("toDate", toDate);
+    if (preset) {
+      queryParams.append("preset", preset);
+    } else {
+      if (fromDate) queryParams.append("fromDate", fromDate);
+      if (toDate) queryParams.append("toDate", toDate);
+    }
+    if (orderStatus) queryParams.append("orderStatus", orderStatus);
 
     const endpoint = `orders/reports/date-range${
       queryParams.toString() ? `?${queryParams.toString()}` : ""
@@ -51,6 +64,8 @@ export default async function OrderReportPage({ searchParams }: Props) {
         orders={orders}
         fromDate={fromDate}
         toDate={toDate}
+        preset={preset}
+        orderStatus={orderStatus}
         totalOrders={totalOrders}
         totalValue={totalValue}
         totalDiscount={totalDiscount}

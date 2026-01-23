@@ -1,5 +1,6 @@
 "use client";
 
+import { DateRangePreset, OrderStatus } from "@/common/enums";
 import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
@@ -25,12 +26,15 @@ import {
   format,
   startOfMonth,
   startOfWeek,
+  subMonths,
+  subWeeks,
+  subYears,
 } from "date-fns";
 import { Eye } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { PaymentReportPDF } from "./PaymentReportPDF";
 
 const PDFDownloadLink = dynamic(
@@ -72,13 +76,17 @@ export default function OrderPaymentList({
   payments,
   fromDate,
   toDate,
+  preset,
+  orderStatus,
 }: {
   payments: PaymentRecord[];
   fromDate?: string;
   toDate?: string;
+  preset?: string;
+  orderStatus?: string;
 }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const [mounted, setMounted] = useState(false);
 
   const [startDate, setStartDate] = useState<Date | undefined>(
     fromDate ? new Date(fromDate) : undefined
@@ -86,17 +94,22 @@ export default function OrderPaymentList({
   const [endDate, setEndDate] = useState<Date | undefined>(
     toDate ? new Date(toDate) : undefined
   );
-  const [quickRange, setQuickRange] = useState<string>("");
+  const [quickRange, setQuickRange] = useState<string>(preset || "");
+  const [selectedOrderStatus, setSelectedOrderStatus] = useState<string>(
+    orderStatus || "all"
+  );
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // --- handle filter ---
   const handleFilter = () => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams();
     if (startDate) params.set("fromDate", format(startDate, "yyyy-MM-dd"));
-    else params.delete("fromDate");
-
     if (endDate) params.set("toDate", format(endDate, "yyyy-MM-dd"));
-    else params.delete("toDate");
-
+    if (selectedOrderStatus && selectedOrderStatus !== "all")
+      params.set("orderStatus", selectedOrderStatus);
     router.push(`?${params.toString()}`);
   };
 
@@ -108,45 +121,65 @@ export default function OrderPaymentList({
     let to: Date | undefined;
 
     switch (value) {
-      case "today":
+      case DateRangePreset.TODAY:
         from = today;
         to = today;
         break;
-      case "thisWeek":
-        from = startOfWeek(today, { weekStartsOn: 6 }); // week starts on Saturday
+      case DateRangePreset.THIS_WEEK:
+        from = startOfWeek(today, { weekStartsOn: 6 });
         to = endOfWeek(today, { weekStartsOn: 6 });
         break;
-      case "thisMonth":
+      case DateRangePreset.LAST_WEEK:
+        from = subWeeks(startOfWeek(today, { weekStartsOn: 6 }), 1);
+        to = subWeeks(endOfWeek(today, { weekStartsOn: 6 }), 1);
+        break;
+      case DateRangePreset.THIS_MONTH:
         from = startOfMonth(today);
         to = endOfMonth(today);
         break;
-      case "lastMonth":
-        const prevMonth = new Date(
-          today.getFullYear(),
-          today.getMonth() - 1,
-          1
-        );
-        from = startOfMonth(prevMonth);
-        to = endOfMonth(prevMonth);
+      case DateRangePreset.LAST_MONTH:
+        const lastMonth = subMonths(today, 1);
+        from = startOfMonth(lastMonth);
+        to = endOfMonth(lastMonth);
         break;
-      case "allTime":
-        from = undefined;
-        to = undefined;
+      case DateRangePreset.LAST_3_MONTHS:
+        from = subMonths(today, 3);
+        to = today;
+        break;
+      case DateRangePreset.LAST_6_MONTHS:
+        from = subMonths(today, 6);
+        to = today;
+        break;
+      case DateRangePreset.LAST_YEAR:
+        from = subYears(today, 1);
+        to = today;
+        break;
+      case DateRangePreset.THIS_YEAR:
+        from = new Date(today.getFullYear(), 0, 1);
+        to = today;
         break;
       default:
-        return;
+        from = undefined;
+        to = undefined;
     }
 
     setStartDate(from);
     setEndDate(to);
 
-    const params = new URLSearchParams(searchParams.toString());
-    if (from) params.set("fromDate", format(from, "yyyy-MM-dd"));
-    else params.delete("fromDate");
+    const params = new URLSearchParams();
+    if (value) params.set("preset", value);
+    if (selectedOrderStatus && selectedOrderStatus !== "all")
+      params.set("orderStatus", selectedOrderStatus);
+    router.push(`?${params.toString()}`);
+  };
 
-    if (to) params.set("toDate", format(to, "yyyy-MM-dd"));
-    else params.delete("toDate");
-
+  const handleOrderStatusChange = (value: string) => {
+    setSelectedOrderStatus(value);
+    const params = new URLSearchParams();
+    if (quickRange) params.set("preset", quickRange);
+    if (startDate) params.set("fromDate", format(startDate, "yyyy-MM-dd"));
+    if (endDate) params.set("toDate", format(endDate, "yyyy-MM-dd"));
+    if (value && value !== "all") params.set("orderStatus", value);
     router.push(`?${params.toString()}`);
   };
 
@@ -155,6 +188,7 @@ export default function OrderPaymentList({
     setStartDate(undefined);
     setEndDate(undefined);
     setQuickRange("");
+    setSelectedOrderStatus("all");
     router.push("?");
   };
 
@@ -170,15 +204,48 @@ export default function OrderPaymentList({
         <div className="flex flex-wrap items-center gap-2">
           {/* Quick Range Dropdown */}
           <Select value={quickRange} onValueChange={handleQuickRange}>
-            <SelectTrigger className="w-[160px]">
+            <SelectTrigger className="w-[200px]">
               <SelectValue placeholder="Quick Range" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="today">Today</SelectItem>
-              <SelectItem value="thisWeek">This Week</SelectItem>
-              <SelectItem value="thisMonth">This Month</SelectItem>
-              <SelectItem value="lastMonth">Last Month</SelectItem>
-              <SelectItem value="allTime">All Time</SelectItem>
+              <SelectItem value={DateRangePreset.TODAY}>Today</SelectItem>
+              <SelectItem value={DateRangePreset.THIS_WEEK}>This Week</SelectItem>
+              <SelectItem value={DateRangePreset.LAST_WEEK}>Last Week</SelectItem>
+              <SelectItem value={DateRangePreset.THIS_MONTH}>This Month</SelectItem>
+              <SelectItem value={DateRangePreset.LAST_MONTH}>Last Month</SelectItem>
+              <SelectItem value={DateRangePreset.LAST_3_MONTHS}>
+                Last 3 Months
+              </SelectItem>
+              <SelectItem value={DateRangePreset.LAST_6_MONTHS}>
+                Last 6 Months
+              </SelectItem>
+              <SelectItem value={DateRangePreset.LAST_YEAR}>Last Year</SelectItem>
+              <SelectItem value={DateRangePreset.THIS_YEAR}>This Year</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* Order Status Dropdown */}
+          <Select
+            value={selectedOrderStatus || "all"}
+            onValueChange={handleOrderStatusChange}
+          >
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Order Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value={OrderStatus.PENDING}>Pending</SelectItem>
+              <SelectItem value={OrderStatus.PROCESSING}>
+                Processing
+              </SelectItem>
+              <SelectItem value={OrderStatus.SHIPPED}>Shipped</SelectItem>
+              <SelectItem value={OrderStatus.DELIVERED}>
+                Delivered
+              </SelectItem>
+              <SelectItem value={OrderStatus.CANCELLED}>
+                Cancelled
+              </SelectItem>
+              <SelectItem value={OrderStatus.RETURNED}>Returned</SelectItem>
             </SelectContent>
           </Select>
 
@@ -187,33 +254,33 @@ export default function OrderPaymentList({
             value={startDate}
             onChange={(date) => setStartDate(date)}
             placeholder="From Date"
-            className="w-[260px]"
+            className="w-[200px]"
           />
           <DatePicker
             value={endDate}
             onChange={(date) => setEndDate(date)}
             placeholder="To Date"
-            className="w-[260px]"
+            className="w-[200px]"
           />
 
           <Button onClick={handleFilter} variant="default">
             Filter
           </Button>
-          {(startDate || endDate) && (
+          {(startDate || endDate || selectedOrderStatus !== "all") && (
             <Button onClick={handleClear} variant="outline">
               Clear
             </Button>
           )}
         </div>
 
-        {payments.length > 0 && (
+        {payments.length > 0 && mounted && (
           <PDFDownloadLink
             document={<PaymentReportPDF payments={payments} />}
             fileName={`order-payments-${new Date().toISOString().split("T")[0]}.pdf`}
           >
-            {({ loading }) => (
-              <Button variant="secondary">
-                {loading ? "Generating PDF..." : "Download PDF"}
+            {({ loading, error }) => (
+              <Button variant="secondary" disabled={!!error}>
+                {error ? "PDF Error" : loading ? "Generating PDF..." : "Download PDF"}
               </Button>
             )}
           </PDFDownloadLink>
@@ -225,7 +292,6 @@ export default function OrderPaymentList({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[60px] text-xs">#</TableHead>
               <TableHead className="text-xs">Payment No</TableHead>
               <TableHead className="text-xs">Date</TableHead>
               <TableHead className="text-xs">Amount</TableHead>
@@ -244,7 +310,7 @@ export default function OrderPaymentList({
             {payments.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={8}
+                  colSpan={7}
                   className="text-center py-8 text-muted-foreground"
                 >
                   No payments found
@@ -253,7 +319,6 @@ export default function OrderPaymentList({
             ) : (
               payments.map((p) => (
                 <TableRow key={p.id}>
-                  <TableCell>{p.id}</TableCell>
                   <TableCell>{p.paymentNumber}</TableCell>
                   <TableCell>{p.paymentDate}</TableCell>
                   <TableCell>

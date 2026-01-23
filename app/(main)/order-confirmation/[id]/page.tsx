@@ -510,7 +510,7 @@ export default async function OrderConfirmationPage({
               )}
               {isCashOnDelivery(order.paymentMethod.name) &&
                 order.paymentStatus.toLowerCase() === "pending" && (
-                  <div className="text-center text-sm text-muted-foreground bg-amber-50 p-3 rounded border">
+                  <div className="text-center text-sm text-muted-foreground bg-amber-50 p-3 mt-2 rounded border">
                     <Clock className="inline-block w-4 h-4 mr-1" />
                     Payment will be collected when your order is delivered
                   </div>
