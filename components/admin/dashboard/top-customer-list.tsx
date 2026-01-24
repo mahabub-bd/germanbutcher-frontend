@@ -203,7 +203,7 @@ export function TopCustomersList() {
       </div>
 
       {/* Compact Table */}
-      <div className="rounded-lg border overflow-x-auto">
+      <div className="rounded-lg border overflow-x-auto md:p-6 p-2">
         <Table>
           <TableHeader>
             <TableRow>

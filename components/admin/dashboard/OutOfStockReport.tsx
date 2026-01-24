@@ -58,7 +58,7 @@ export function OutOfStockReport() {
       {isLoading ? (
         <LoadingIndicator message="Loading out of stock report..." />
       ) : (
-        <div className="rounded-lg border bg-white dark:bg-gray-950  md:p-4 p-2">
+        <div className="rounded-lg border bg-white dark:bg-gray-950  md:p-6 p-2">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
@@ -116,7 +116,7 @@ export function OutOfStockReport() {
             </Table>
           </div>
 
-          <div className="flex justify-between items-center mt-4 p-4 border-t">
+          <div className="flex justify-between items-center mt-4 md: p-2 border-t">
             <span className="text-sm text-muted-foreground">
               Showing {Math.min((currentPage - 1) * limit + 1, totalItems)} to{" "}
               {Math.min(currentPage * limit, totalItems)} of {totalItems} items
