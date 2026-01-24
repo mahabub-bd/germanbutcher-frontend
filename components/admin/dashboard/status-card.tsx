@@ -36,6 +36,7 @@ interface StatusCardProps {
   icon: LucideIcon;
   href?: string;
   color?: string;
+  gradient?: string;
   badge?: {
     icon?: LucideIcon;
     text: string;
@@ -49,36 +50,38 @@ export function StatusCard({
   icon: Icon,
   href = "#",
   color = "text-gray-700 dark:text-gray-300",
+  gradient,
   badge,
 }: StatusCardProps) {
   return (
     <Link
       href={href}
       className={cn(
-        "flex  items-center justify-between gap-3 p-4 rounded-lg transition border",
-        "bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700",
-        "hover:bg-gray-100 dark:hover:bg-gray-700",
-        "hover:shadow-sm",
-        "w-full"
+        "flex items-center justify-between gap-3 p-4 rounded-lg transition border relative overflow-hidden",
+        "border-gray-200 dark:border-gray-700",
+        "hover:shadow-sm hover:scale-[1.02]",
+        "w-full",
+        gradient || "bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700"
       )}
     >
       {/* Left Section */}
-      <div className="flex items-center gap-3">
-        <Icon className={cn("w-5 h-5 shrink-0", color)} />
+      <div className="flex items-center gap-3 relative z-10">
+        <div className={cn("p-1.5 rounded-md bg-white/50 dark:bg-black/20", color.replace("text-", "bg-").replace("500", "500/10"))}>
+          <Icon className={cn("w-5 h-5 shrink-0", color)} />
+        </div>
         <h4 className="text-sm sm:text-base font-medium text-gray-800 dark:text-gray-200 truncate">
           {title}
         </h4>
       </div>
 
       {/* Right Section */}
-      <div className="flex items-center gap-2 sm:ml-auto">
-        <span className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white whitespace-nowrap">
+      <div className="flex items-center gap-2 sm:ml-auto relative z-10">
+        <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white whitespace-nowrap drop-shadow-sm">
           {value}
         </span>
 
         {badge && (
           <Badge color={badge.color}>
-            {/* Add icon inside badge if needed */}
             {badge.icon && <badge.icon className="w-3 h-3 mr-1" />}
             {badge.text}
           </Badge>

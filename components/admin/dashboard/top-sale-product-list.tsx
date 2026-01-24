@@ -64,7 +64,7 @@ interface BestsellerProduct {
 export default function TopSaleProductsList() {
   const [products, setProducts] = useState<BestsellerProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const [limit, setLimit] = useState<number>(20);
+  const [limit, setLimit] = useState<number>(10);
 
   useEffect(() => {
     const fetchProducts = async () => {
