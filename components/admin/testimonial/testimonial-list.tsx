@@ -1,5 +1,6 @@
 "use client";
 
+import { StatusCard } from "@/components/admin/dashboard/status-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,34 +37,6 @@ import { toast } from "sonner";
 import DeleteConfirmationDialog from "../delete-confirmation-dialog";
 import { LoadingIndicator } from "../loading-indicator";
 import { PageHeader } from "../page-header";
-
-import { ElementType } from "react";
-
-type SummaryCardProps = {
-  icon: ElementType;
-  value: string | number;
-  label: string;
-  color: string;
-};
-
-export function SummaryCard({
-  icon: Icon,
-  value,
-  label,
-  color,
-}: SummaryCardProps) {
-  return (
-    <div className="bg-white dark:bg-card border rounded-xl shadow-sm p-5 flex flex-col gap-2">
-      <div className="flex items-center gap-2">
-        <Icon className={`h-4 w-4 ${color}`} />
-        <span className="text-xs font-semibold text-muted-foreground">
-          {label}
-        </span>
-      </div>
-      <div className={`text-2xl font-bold ${color}`}>{value}</div>
-    </div>
-  );
-}
 
 export function TestimonialList() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
@@ -258,30 +231,38 @@ export function TestimonialList() {
 
         {/* Summary Cards */}
         {testimonials.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 my-6">
-            <SummaryCard
-              icon={MessageSquare}
-              label="Total"
+          <div className="mb-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+            <StatusCard
+              title="Total"
               value={testimonials.length}
-              color="text-blue-600"
+              icon={MessageSquare}
+              href="#"
+              color="text-blue-600 dark:text-blue-400"
+              gradient="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
             />
-            <SummaryCard
-              icon={Eye}
-              label="Published"
+            <StatusCard
+              title="Published"
               value={publishedCount}
-              color="text-green-600"
+              icon={Eye}
+              href="#"
+              color="text-green-600 dark:text-green-400"
+              gradient="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20"
             />
-            <SummaryCard
-              icon={EyeOff}
-              label="Drafts"
+            <StatusCard
+              title="Drafts"
               value={draftCount}
-              color="text-orange-600"
+              icon={EyeOff}
+              href="#"
+              color="text-orange-600 dark:text-orange-400"
+              gradient="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20"
             />
-            <SummaryCard
-              icon={Star}
-              label="Avg Rating"
+            <StatusCard
+              title="Avg Rating"
               value={averageRating}
-              color="text-yellow-600"
+              icon={Star}
+              href="#"
+              color="text-yellow-600 dark:text-yellow-400"
+              gradient="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20"
             />
           </div>
         )}

@@ -1,11 +1,6 @@
 "use client";
 
-import { Eye } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-
+import { StatusCard } from "@/components/admin/dashboard/status-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +20,11 @@ import {
 } from "@/components/ui/table";
 import { formatCurrencyEnglish } from "@/lib/utils";
 import { fetchProtectedData } from "@/utils/api-utils";
+import { BarChart3, DollarSign, Eye, Package, ShoppingCart } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { LoadingIndicator } from "../loading-indicator";
 import { PageHeader } from "../page-header";
 
@@ -229,40 +229,48 @@ export default function TopSaleProductsList() {
         </Table>
       </div>
 
-      {/* Footer summary */}
+      {/* Summary Cards */}
       {products.length > 0 && (
-        <div className="mt-3 p-3 bg-muted rounded-lg text-xs">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
-            <div>
-              <p className="text-muted-foreground">Products</p>
-              <p className="text-lg font-bold">{products.length}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Total Sold</p>
-              <p className="text-lg font-bold">
-                {products.reduce((a, b) => a + b.saleCount, 0)}
-              </p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Avg Price</p>
-              <p className="text-lg font-bold">
-                {formatCurrencyEnglish(
-                  Math.round(
-                    products.reduce((s, p) => s + p.sellingPrice, 0) /
-                      products.length || 0
-                  )
-                )}
-              </p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Avg Stock</p>
-              <p className="text-lg font-bold">
-                {Math.round(
-                  products.reduce((s, p) => s + p.stock, 0) / products.length
-                )}
-              </p>
-            </div>
-          </div>
+        <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
+          <StatusCard
+            title="Products"
+            value={products.length}
+            icon={Package}
+            href="#"
+            color="text-blue-600 dark:text-blue-400"
+            gradient="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
+          />
+          <StatusCard
+            title="Total Sold"
+            value={products.reduce((a, b) => a + b.saleCount, 0)}
+            icon={ShoppingCart}
+            href="#"
+            color="text-green-600 dark:text-green-400"
+            gradient="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20"
+          />
+          <StatusCard
+            title="Avg Price"
+            value={formatCurrencyEnglish(
+              Math.round(
+                products.reduce((s, p) => s + p.sellingPrice, 0) /
+                  products.length || 0
+              )
+            )}
+            icon={DollarSign}
+            href="#"
+            color="text-purple-600 dark:text-purple-400"
+            gradient="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20"
+          />
+          <StatusCard
+            title="Avg Stock"
+            value={Math.round(
+              products.reduce((s, p) => s + p.stock, 0) / products.length
+            )}
+            icon={BarChart3}
+            href="#"
+            color="text-orange-600 dark:text-orange-400"
+            gradient="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20"
+          />
         </div>
       )}
     </div>

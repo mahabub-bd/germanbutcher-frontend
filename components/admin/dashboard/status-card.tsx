@@ -57,26 +57,26 @@ export function StatusCard({
     <Link
       href={href}
       className={cn(
-        "flex items-center justify-between gap-3 p-4 rounded-lg transition border relative overflow-hidden",
+        "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg transition border relative overflow-hidden",
         "border-gray-200 dark:border-gray-700",
-        "hover:shadow-sm hover:scale-[1.02]",
+        "hover:shadow-sm active:scale-[0.98] sm:hover:scale-[1.02]",
         "w-full",
         gradient || "bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700"
       )}
     >
       {/* Left Section */}
-      <div className="flex items-center gap-3 relative z-10">
-        <div className={cn("p-1.5 rounded-md bg-white/50 dark:bg-black/20", color.replace("text-", "bg-").replace("500", "500/10"))}>
-          <Icon className={cn("w-5 h-5 shrink-0", color)} />
+      <div className="flex items-center gap-2 sm:gap-3 relative z-10 w-full sm:w-auto">
+        <div className="p-1.5 rounded-md bg-white/50 dark:bg-black/20 shrink-0">
+          <Icon className={cn("w-4 h-4 sm:w-5 sm:h-5 shrink-0", color)} />
         </div>
-        <h4 className="text-sm sm:text-base font-medium text-gray-800 dark:text-gray-200 truncate">
+        <h4 className="text-xs sm:text-sm md:text-base font-medium text-gray-800 dark:text-gray-200 truncate">
           {title}
         </h4>
       </div>
 
       {/* Right Section */}
-      <div className="flex items-center gap-2 sm:ml-auto relative z-10">
-        <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white whitespace-nowrap drop-shadow-sm">
+      <div className="flex items-center justify-between sm:justify-end gap-2 relative z-10 w-full sm:w-auto">
+        <span className="text-base sm:text-lg md:text-xl font-bold text-gray-900 dark:text-white whitespace-nowrap drop-shadow-sm">
           {value}
         </span>
 

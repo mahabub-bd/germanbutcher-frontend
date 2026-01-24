@@ -1,5 +1,6 @@
 "use client";
 
+import { StatusCard } from "@/components/admin/dashboard/status-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +20,7 @@ import {
 } from "@/components/ui/table";
 import { formatCurrencyEnglish } from "@/lib/utils";
 import { fetchProtectedData } from "@/utils/api-utils";
-import { Award, Eye, TrendingUp, Users } from "lucide-react";
+import { Award, Eye, ShoppingCart, TrendingUp, Users, Wallet } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -312,35 +313,47 @@ export function TopCustomersList() {
         </Table>
       </div>
 
-      {/* Compact Summary Footer */}
+      {/* Summary Cards */}
       {customers.length > 0 && (
-        <div className="mt-3 p-3 bg-muted rounded-lg">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center text-xs">
-            <div>
-              <p className="text-muted-foreground">Customers</p>
-              <p className="text-lg font-bold">{customers.length}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Orders</p>
-              <p className="text-lg font-bold">{totalStats.totalOrders}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Revenue</p>
-              <p className="text-lg font-bold">
-                {formatCurrencyEnglish(totalStats.totalSpent)}
-              </p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Avg/Customer</p>
-              <p className="text-lg font-bold">
-                {customers.length > 0
-                  ? formatCurrencyEnglish(
-                      totalStats.totalSpent / customers.length
-                    )
-                  : "৳0"}
-              </p>
-            </div>
-          </div>
+        <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
+          <StatusCard
+            title="Customers"
+            value={customers.length}
+            icon={Users}
+            href="#"
+            color="text-blue-600 dark:text-blue-400"
+            gradient="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
+          />
+          <StatusCard
+            title="Total Orders"
+            value={totalStats.totalOrders}
+            icon={ShoppingCart}
+            href="#"
+            color="text-green-600 dark:text-green-400"
+            gradient="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20"
+          />
+          <StatusCard
+            title="Total Revenue"
+            value={formatCurrencyEnglish(totalStats.totalSpent)}
+            icon={Wallet}
+            href="#"
+            color="text-purple-600 dark:text-purple-400"
+            gradient="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20"
+          />
+          <StatusCard
+            title="Avg Per Customer"
+            value={
+              customers.length > 0
+                ? formatCurrencyEnglish(
+                    totalStats.totalSpent / customers.length
+                  )
+                : "৳0"
+            }
+            icon={TrendingUp}
+            href="#"
+            color="text-orange-600 dark:text-orange-400"
+            gradient="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20"
+          />
         </div>
       )}
     </div>

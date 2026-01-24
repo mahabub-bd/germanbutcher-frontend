@@ -2,6 +2,7 @@
 
 import { DateRangePreset, OrderStatus } from "@/common/enums";
 import { PageHeader } from "@/components/admin/page-header";
+import { StatusCard } from "@/components/admin/dashboard/status-card";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
 import {
@@ -30,7 +31,7 @@ import {
   subWeeks,
   subYears,
 } from "date-fns";
-import { Eye } from "lucide-react";
+import { CreditCard, DollarSign, CheckCircle, Eye, Layers } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -287,8 +288,51 @@ export default function OrderPaymentList({
         )}
       </div>
 
+      {/* Summary */}
+      {payments.length > 0 && (
+        <div className="mb-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+          <StatusCard
+            title="Payments"
+            value={payments.length}
+            icon={CreditCard}
+            href="#"
+            color="text-blue-600 dark:text-blue-400"
+            gradient="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
+          />
+          <StatusCard
+            title="Total Amount"
+            value={formatCurrencyEnglish(
+              payments.reduce((sum, p) => sum + parseFloat(p.amount), 0)
+            )}
+            icon={DollarSign}
+            href="#"
+            color="text-green-600 dark:text-green-400"
+            gradient="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20"
+          />
+          <StatusCard
+            title="Completed Orders"
+            value={
+              payments.filter((p) => p.order.paymentStatus === "completed")
+                .length
+            }
+            icon={CheckCircle}
+            href="#"
+            color="text-purple-600 dark:text-purple-400"
+            gradient="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20"
+          />
+          <StatusCard
+            title="Methods Used"
+            value={[...new Set(payments.map((p) => p.paymentMethod.name))].length}
+            icon={Layers}
+            href="#"
+            color="text-orange-600 dark:text-orange-400"
+            gradient="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20"
+          />
+        </div>
+      )}
+
       {/* Table */}
-      <div className="rounded-lg border overflow-x-auto">
+      <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -344,41 +388,6 @@ export default function OrderPaymentList({
           </TableBody>
         </Table>
       </div>
-
-      {/* Summary */}
-      {payments.length > 0 && (
-        <div className="mt-3 p-3 bg-muted rounded-lg text-xs">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
-            <div>
-              <p className="text-muted-foreground">Payments</p>
-              <p className="text-lg font-bold">{payments.length}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Total Amount</p>
-              <p className="text-lg font-bold">
-                {formatCurrencyEnglish(
-                  payments.reduce((sum, p) => sum + parseFloat(p.amount), 0)
-                )}
-              </p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Completed Orders</p>
-              <p className="text-lg font-bold">
-                {
-                  payments.filter((p) => p.order.paymentStatus === "completed")
-                    .length
-                }
-              </p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Methods Used</p>
-              <p className="text-lg font-bold">
-                {[...new Set(payments.map((p) => p.paymentMethod.name))].length}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

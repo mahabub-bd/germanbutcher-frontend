@@ -1,5 +1,6 @@
 "use client";
 
+import { StatusCard } from "@/components/admin/dashboard/status-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,12 +23,14 @@ import { deleteData, fetchProtectedData } from "@/utils/api-utils";
 import { Coupon } from "@/utils/types";
 import {
   AlertTriangle,
+  CheckCircle,
   Clock,
   MoreHorizontal,
   Pencil,
   Plus,
   Tag,
   Trash2,
+  XCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -282,44 +285,40 @@ export function CouponList() {
         />
 
         {/* Summary Cards */}
-        {coupons.length > 0 && (expiredCount > 0 || expiringSoonCount > 0) && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-card border rounded-lg p-4">
-              <div className="flex items-center gap-2">
-                <Tag className="h-4 w-4 text-green-600" />
-                <span className="text-sm font-medium">Active Coupons</span>
-              </div>
-              <div className="text-2xl font-bold text-green-600">
-                {
-                  coupons.filter((c) => !isCouponExpired(c) && c.isActive)
-                    .length
-                }
-              </div>
-            </div>
-
-            {expiringSoonCount > 0 && (
-              <div className="bg-card border rounded-lg p-4">
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-orange-600" />
-                  <span className="text-sm font-medium">Expiring Soon</span>
-                </div>
-                <div className="text-2xl font-bold text-orange-600">
-                  {expiringSoonCount}
-                </div>
-              </div>
-            )}
-
-            {expiredCount > 0 && (
-              <div className="bg-card border rounded-lg p-4">
-                <div className="flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4 text-red-600" />
-                  <span className="text-sm font-medium">Expired</span>
-                </div>
-                <div className="text-2xl font-bold text-red-600">
-                  {expiredCount}
-                </div>
-              </div>
-            )}
+        {coupons.length > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            <StatusCard
+              title="Total Coupons"
+              value={coupons.length}
+              icon={Tag}
+              href="#"
+              color="text-blue-600 dark:text-blue-400"
+              gradient="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
+            />
+            <StatusCard
+              title="Active"
+              value={coupons.filter((c) => !isCouponExpired(c) && c.isActive).length}
+              icon={CheckCircle}
+              href="#"
+              color="text-green-600 dark:text-green-400"
+              gradient="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20"
+            />
+            <StatusCard
+              title="Expiring Soon"
+              value={expiringSoonCount}
+              icon={Clock}
+              href="#"
+              color="text-orange-600 dark:text-orange-400"
+              gradient="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20"
+            />
+            <StatusCard
+              title="Expired"
+              value={expiredCount}
+              icon={XCircle}
+              href="#"
+              color="text-red-600 dark:text-red-400"
+              gradient="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20"
+            />
           </div>
         )}
 

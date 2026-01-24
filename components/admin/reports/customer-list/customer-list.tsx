@@ -2,6 +2,7 @@
 
 import { DateRangePreset } from "@/common/enums";
 import { PageHeader } from "@/components/admin/page-header";
+import { StatusCard } from "@/components/admin/dashboard/status-card";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
 import {
@@ -30,6 +31,7 @@ import {
   subWeeks,
   subYears,
 } from "date-fns";
+import { Users, ShoppingCart, DollarSign, TrendingUp } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -249,39 +251,50 @@ export default function CustomerListReport({
 
       {/* Summary */}
       {summary && (
-        <div className="mb-4 p-4 bg-muted rounded-lg">
-          <h3 className="font-semibold text-sm mb-3">Report Summary</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
-            <div>
-              <p className="text-xs text-muted-foreground">Total Customers</p>
-              <p className="text-lg font-bold">{summary.totalCustomers}</p>
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground">Total Orders</p>
-              <p className="text-lg font-bold">{summary.totalOrders}</p>
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground">Total Order Value</p>
-              <p className="text-lg font-bold">
-                {formatCurrencyEnglish(summary.totalOrderValue)}
-              </p>
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground">Avg Per Customer</p>
-              <p className="text-lg font-bold">
-                {summary.totalCustomers > 0
-                  ? formatCurrencyEnglish(
-                      summary.totalOrderValue / summary.totalCustomers
-                    )
-                  : "৳0"}
-              </p>
-            </div>
-          </div>
+        <div className="mb-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+          <StatusCard
+            title="Total Customers"
+            value={summary.totalCustomers}
+            icon={Users}
+            href="#"
+            color="text-blue-600 dark:text-blue-400"
+            gradient="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
+          />
+          <StatusCard
+            title="Total Orders"
+            value={summary.totalOrders}
+            icon={ShoppingCart}
+            href="#"
+            color="text-green-600 dark:text-green-400"
+            gradient="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20"
+          />
+          <StatusCard
+            title="Total Order Value"
+            value={formatCurrencyEnglish(summary.totalOrderValue)}
+            icon={DollarSign}
+            href="#"
+            color="text-purple-600 dark:text-purple-400"
+            gradient="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20"
+          />
+          <StatusCard
+            title="Avg Per Customer"
+            value={
+              summary.totalCustomers > 0
+                ? formatCurrencyEnglish(
+                    summary.totalOrderValue / summary.totalCustomers
+                  )
+                : "৳0"
+            }
+            icon={TrendingUp}
+            href="#"
+            color="text-orange-600 dark:text-orange-400"
+            gradient="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20"
+          />
         </div>
       )}
 
       {/* Table */}
-      <div className="rounded-lg border overflow-x-auto">
+      <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>

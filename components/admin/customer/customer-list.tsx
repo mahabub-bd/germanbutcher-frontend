@@ -3,6 +3,7 @@
 import type React from "react";
 
 import { PaginationComponent } from "@/components/common/pagination";
+import { StatusCard } from "@/components/admin/dashboard/status-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,11 +25,14 @@ import { formatDateTime } from "@/lib/utils";
 import { fetchDataPagination } from "@/utils/api-utils";
 import type { ApiResponseusers, User } from "@/utils/types";
 import {
+  CheckCircle,
   MoreHorizontal,
   Pencil,
   Search,
   UserCircle,
+  Users,
   XCircle,
+  XCircle as XCircleIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -289,6 +293,42 @@ export function CustomerList({
           renderEmptyState()
         ) : (
           <>
+            {/* Summary Cards */}
+            <div className="mb-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+              <StatusCard
+                title="Total Customers"
+                value={totalItems}
+                icon={Users}
+                href="#"
+                color="text-blue-600 dark:text-blue-400"
+                gradient="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
+              />
+              <StatusCard
+                title="Verified"
+                value={customers.filter((c) => c.isVerified).length}
+                icon={CheckCircle}
+                href="#"
+                color="text-green-600 dark:text-green-400"
+                gradient="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20"
+              />
+              <StatusCard
+                title="Unverified"
+                value={customers.filter((c) => !c.isVerified).length}
+                icon={XCircle}
+                href="#"
+                color="text-orange-600 dark:text-orange-400"
+                gradient="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20"
+              />
+              <StatusCard
+                title="Showing"
+                value={customers.length}
+                icon={UserCircle}
+                href="#"
+                color="text-purple-600 dark:text-purple-400"
+                gradient="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20"
+              />
+            </div>
+
             {/* Customer Count */}
             <div className="text-sm text-muted-foreground">
               Found {totalItems.toLocaleString()} customer
