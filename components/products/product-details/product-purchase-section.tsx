@@ -34,6 +34,8 @@ export function ProductPurchaseSection({
   product,
   user,
 }: ProductPurchaseSectionProps) {
+
+  
   const { addItem, updateItemQuantity, cart } = useCartContext();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -54,12 +56,24 @@ export function ProductPurchaseSection({
     }
   }, [isInCart, cartQuantity]);
 
-  const discountAmount =
-    product.discountType === "fixed"
+  // Check if discount is currently valid
+  const isDiscountValid = () => {
+    if (!product.discountValue || !product.discountStartDate || !product.discountEndDate) {
+      return false;
+    }
+    const now = new Date();
+    const startDate = new Date(product.discountStartDate);
+    const endDate = new Date(product.discountEndDate);
+    return now >= startDate && now <= endDate;
+  };
+
+  const discountAmount = isDiscountValid()
+    ? product.discountType === "fixed"
       ? Number.parseFloat(String(product.discountValue ?? "0"))
       : (product.sellingPrice *
           Number.parseFloat(String(product.discountValue ?? "0"))) /
-        100;
+        100
+    : 0;
 
   const finalPrice = product.sellingPrice - discountAmount;
 
