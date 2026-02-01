@@ -14,7 +14,7 @@ export default async function ProductHomepageGrid({
   try {
     products = await fetchData(endpoint);
   } catch (error) {
-    console.error(`Error fetching products from ${endpoint}:`, error);
+    // Silently return null for missing similar products
     return null;
   }
 
