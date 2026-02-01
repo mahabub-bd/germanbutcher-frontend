@@ -15,6 +15,10 @@ interface ProductDetailsProps {
 
 export default async function ProductDetails({ product }: ProductDetailsProps) {
   const user = await getUser();
+
+  // Don't render similar products if product doesn't exist or has no ID
+  const showRelatedProducts = product && product.id;
+
   return (
     <div className="min-h-screen bg-gray-50">
       <ProductBreadcrumb product={product} />
@@ -34,9 +38,11 @@ export default async function ProductDetails({ product }: ProductDetailsProps) {
             <ProductDetailsCard product={product} />
           </div>
         </div>
-        <ProductList endpoint={`products/${product.id}/similar`}>
-          <HeadingPrimary title="Related Products" className="mb-8" />
-        </ProductList>
+        {showRelatedProducts && (
+          <ProductList endpoint={`products/${product.id}/similar`}>
+            <HeadingPrimary title="Related Products" className="mb-8" />
+          </ProductList>
+        )}
       </div>
     </div>
   );

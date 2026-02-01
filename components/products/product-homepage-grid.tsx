@@ -9,14 +9,17 @@ export default async function ProductHomepageGrid({
   endpoint: string;
   isHomePage: boolean;
 }) {
-  const products: Product[] = await fetchData(endpoint);
+  let products: Product[] = [];
+
+  try {
+    products = await fetchData(endpoint);
+  } catch (error) {
+    console.error(`Error fetching products from ${endpoint}:`, error);
+    return null;
+  }
 
   if (!products?.length) {
-    return (
-      <div className="text-center py-8">
-        <p className="text-gray-500">No products found</p>
-      </div>
-    );
+    return null;
   }
 
   const visibleProducts = isHomePage ? products.slice(0, 8) : products;

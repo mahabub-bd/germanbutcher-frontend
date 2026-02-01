@@ -21,6 +21,7 @@ export default function ProductList({
       {children}
 
       <Suspense fallback={<ProductHomepageSkeleton />}>
+        {/* ProductGrid returns null when there's an error or no products */}
         <ProductGrid endpoint={endpoint} isHomePage={isHomePage} />
       </Suspense>
 

@@ -3,6 +3,14 @@ import { formatCurrencyEnglish } from "@/lib/utils";
 import { fetchData } from "@/utils/api-utils";
 import { Product } from "@/utils/types";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+
+// Validate slug - reject file extensions (images, etc.)
+function isValidSlug(slug: string): boolean {
+  const invalidExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico', '.bmp', '.pdf', '.txt'];
+  const lowerSlug = slug.toLowerCase();
+  return !invalidExtensions.some(ext => lowerSlug.endsWith(ext));
+}
 
 // Generate metadata for the page
 export async function generateMetadata({
@@ -12,9 +20,19 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   try {
     const { slug } = await params;
+
+    // Validate slug before making API call
+    if (!isValidSlug(slug)) {
+      return {
+        title: "Invalid Product URL",
+        description: "The requested product URL is not valid.",
+        robots: { index: false, follow: false },
+      };
+    }
+
     const product: Product = await fetchData(`products/slug/${slug}`);
 
-    if (!product) {
+    if (!product || !product.id) {
       return {
         title: "Product Not Found",
         description: "The requested product could not be found.",
@@ -192,7 +210,22 @@ export default async function ProductDetailsPage({
 }) {
   const { slug } = await params;
 
-  const product: Product = await fetchData(`products/slug/${slug}`);
+  // Validate slug before fetching data
+  if (!isValidSlug(slug)) {
+    notFound();
+  }
+
+  let product: Product;
+  try {
+    product = await fetchData(`products/slug/${slug}`);
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    notFound();
+  }
+
+  if (!product || !product.id) {
+    notFound();
+  }
 
   return <ProductDetails product={product} />;
 }
