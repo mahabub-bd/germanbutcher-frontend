@@ -80,20 +80,25 @@ export default function CombinedOrdersSalesChart({
 
   return (
     <Card className={`w-full `}>
-      <CardHeader>
-        <CardTitle>Orders & Sales Overview</CardTitle>
-        <CardDescription>
-          {totalOrders.toLocaleString()} orders with{" "}
-          {formatCurrencyEnglish(totalSales)} in sales
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="combined" className="w-full">
-          <TabsList className="mb-4">
-            <TabsTrigger value="combined">Combined View</TabsTrigger>
-            <TabsTrigger value="orders">Orders</TabsTrigger>
-            <TabsTrigger value="sales">Sales</TabsTrigger>
-          </TabsList>
+      <Tabs defaultValue="combined" className="w-full">
+        <CardHeader>
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1">
+              <CardTitle className="text-xl font-bold">Orders & Sales Overview</CardTitle>
+              <CardDescription>
+                {totalOrders.toLocaleString()} orders with{" "}
+                {formatCurrencyEnglish(totalSales)} in sales
+              </CardDescription>
+            </div>
+            <TabsList>
+              <TabsTrigger value="combined">Combined View</TabsTrigger>
+              <TabsTrigger value="orders">Orders</TabsTrigger>
+              <TabsTrigger value="sales">Sales</TabsTrigger>
+            </TabsList>
+          </div>
+        </CardHeader>
+
+        <CardContent>
 
           <TabsContent value="combined" className="mt-0">
             <ResponsiveContainer
@@ -277,8 +282,8 @@ export default function CombinedOrdersSalesChart({
               </BarChart>
             </ResponsiveContainer>
           </TabsContent>
-        </Tabs>
-      </CardContent>
+        </CardContent>
+      </Tabs>
     </Card>
   );
 }

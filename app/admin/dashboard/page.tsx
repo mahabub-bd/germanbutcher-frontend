@@ -3,6 +3,10 @@ export const dynamic = "force-dynamic";
 import CombinedOrdersSalesChart from "@/components/admin/dashboard/combined-order-saleschart";
 import DashboardClient from "@/components/admin/dashboard/DashboardClient";
 
+import Last30DaysDeliveredChart, {
+  type Last30DaysData,
+} from "@/components/admin/dashboard/last-30-days-delivered-chart";
+
 import OrdersTable from "@/components/admin/dashboard/orders-table";
 import { StockReportTabs } from "@/components/admin/dashboard/StockReportTabs";
 import { TopCustomersList } from "@/components/admin/dashboard/top-customer-list";
@@ -28,6 +32,9 @@ export default async function DashboardPage() {
   const response =
     await fetchDataPagination<ApiResponseusers>("users/customers");
   const chartdata = await fetchProtectedData("orders/reports/monthly");
+  const last30DaysData = await fetchProtectedData<Last30DaysData[]>(
+    "orders/reports/last-30-days-delivered"
+  );
   const statsData = await fetchProtectedData<{
     totalOrders: number;
     pending: number;
@@ -52,6 +59,7 @@ export default async function DashboardPage() {
         brands={brands}
       />
       <CombinedOrdersSalesChart chartData={chartdata as OrderSummary[]} />
+      <Last30DaysDeliveredChart chartData={last30DaysData || []} />
       <OrdersTable />
       <StockReportTabs />
       <TopCustomersList />

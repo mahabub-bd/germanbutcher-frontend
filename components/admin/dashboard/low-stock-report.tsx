@@ -21,7 +21,6 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ProductImage } from "../image-wrapper";
 import { LoadingIndicator } from "../loading-indicator";
-import { PageHeader } from "../page-header";
 
 interface LowStockReportProps {
   initialPage?: number;
@@ -31,7 +30,7 @@ interface LowStockReportProps {
 
 export function LowStockReport({
   initialPage = 1,
-  initialLimit = 20,
+  initialLimit = 10,
   initialSearchParams = {},
 }: LowStockReportProps) {
   const router = useRouter();
@@ -286,54 +285,8 @@ export function LowStockReport({
     </div>
   );
 
-  // Summary
-  const outOfStockCount = products.filter((p) => (p.stock || 0) === 0).length;
-  const criticalStockCount = products.filter(
-    (p) => (p.stock || 0) > 0 && (p.stock || 0) <= 2
-  ).length;
-  const lowStockCount = products.filter(
-    (p) => (p.stock || 0) > 2 && (p.stock || 0) < threshold
-  ).length;
-  const totalRestockValue = products.reduce((sum, p) => {
-    const q = Math.max((threshold ?? 10) - (p.stock || 0), 0);
-    return sum + q * p.purchasePrice;
-  }, 0);
-
   return (
     <div className="w-full">
-      <PageHeader
-        title="Low Stock Report"
-        description={`Products with stock below ${threshold} units`}
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <SummaryCard
-          count={outOfStockCount}
-          label="Out of Stock"
-          color="red"
-          icon={AlertTriangle}
-        />
-        <SummaryCard
-          count={criticalStockCount}
-          label="Critical (≤2)"
-          color="orange"
-          icon={AlertTriangle}
-        />
-        <SummaryCard
-          count={lowStockCount}
-          label={`Low (3-${threshold - 1})`}
-          color="yellow"
-          icon={Package}
-        />
-        <SummaryCard
-          count={formatCurrencyEnglish(totalRestockValue)}
-          label="Restock Value"
-          color="blue"
-          icon={Package}
-          isCurrency
-        />
-      </div>
-
       <div className="relative w-full sm:max-w-xs mb-4">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
@@ -354,30 +307,3 @@ export function LowStockReport({
     </div>
   );
 }
-
-// Summary Card Component
-const SummaryCard = ({
-  count,
-  label,
-  color,
-  icon: Icon,
-  isCurrency,
-}: {
-  count: any;
-  label: string;
-  color: string;
-  icon: any;
-  isCurrency?: boolean;
-}) => (
-  <div
-    className={`bg-${color}-50 dark:bg-${color}-950/20 md:p-4 p-2 rounded-lg border`}
-  >
-    <div className="flex items-center gap-2">
-      <Icon className={`h-4 w-4 text-${color}-600`} />
-      <span className={`text-sm font-medium text-${color}-700`}>{label}</span>
-    </div>
-    <div className={`text-2xl font-bold text-${color}-600 mt-1`}>
-      {isCurrency ? count : count}
-    </div>
-  </div>
-);

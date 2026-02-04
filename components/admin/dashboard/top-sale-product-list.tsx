@@ -1,6 +1,12 @@
 "use client";
 
-import { StatusCard } from "@/components/admin/dashboard/status-card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,13 +26,12 @@ import {
 } from "@/components/ui/table";
 import { formatCurrencyEnglish } from "@/lib/utils";
 import { fetchProtectedData } from "@/utils/api-utils";
-import { BarChart3, DollarSign, Eye, Package, ShoppingCart } from "lucide-react";
+import { Eye, Package } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { LoadingIndicator } from "../loading-indicator";
-import { PageHeader } from "../page-header";
 
 interface ProductUnit {
   id: number;
@@ -88,191 +93,146 @@ export default function TopSaleProductsList() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-[200px]">
-        <LoadingIndicator message="Loading top selling products..." />
-      </div>
+      <Card className="w-full">
+        <div className="flex justify-center items-center min-h-[200px]">
+          <LoadingIndicator message="Loading top selling products..." />
+        </div>
+      </Card>
     );
   }
 
   return (
-    <div className="w-full  p-2">
-      <PageHeader
-        title="Top Selling Products"
-        description="Products sorted by sales count"
-      />
+    <Card className="w-full">
+      <CardHeader>
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1">
+            <CardTitle className="text-xl font-bold">Top Selling Products</CardTitle>
+            <CardDescription>Products sorted by sales count</CardDescription>
+          </div>
 
-      {/* Controls */}
-      <div className="flex items-center justify-between gap-3 mb-4">
-        <div className="flex items-center gap-3">
-          <Select
-            value={limit.toString()}
-            onValueChange={(v) => setLimit(parseInt(v))}
-          >
-            <SelectTrigger className="w-[150px] h-9">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="5">Top 5</SelectItem>
-              <SelectItem value="10">Top 10</SelectItem>
-              <SelectItem value="20">Top 20</SelectItem>
-              <SelectItem value="50">Top 50</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex items-center gap-3">
+            <Select
+              value={limit.toString()}
+              onValueChange={(v) => setLimit(parseInt(v))}
+            >
+              <SelectTrigger className="w-[130px] h-9">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="5">Top 5</SelectItem>
+                <SelectItem value="10">Top 10</SelectItem>
+                <SelectItem value="20">Top 20</SelectItem>
+                <SelectItem value="50">Top 50</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
+      </CardHeader>
 
-        <div className="text-xs text-muted-foreground">
-          Showing <span className="font-medium">{products.length}</span>{" "}
-          products
-        </div>
-      </div>
-
-      {/* Table */}
-      <div className="rounded-lg border overflow-x-auto md:p-6 p-2">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[60px] text-xs">#</TableHead>
-              <TableHead className="text-xs">Product</TableHead>
-              <TableHead className="hidden md:table-cell text-xs">
-                Category
-              </TableHead>
-              <TableHead className="text-center text-xs">Sold</TableHead>
-              <TableHead className="text-right text-xs">Price</TableHead>
-              <TableHead className="text-right text-xs">Stock</TableHead>
-              <TableHead className="text-right text-xs w-[60px]">
-                View
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-
-          <TableBody>
-            {products.length === 0 ? (
+      <CardContent>
+        <div className="rounded-lg border overflow-x-auto">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell
-                  colSpan={7}
-                  className="text-center py-8 text-muted-foreground"
-                >
-                  <p className="font-medium">No products found</p>
-                </TableCell>
+                <TableHead className="w-[60px] text-xs">#</TableHead>
+                <TableHead className="text-xs">Product</TableHead>
+                <TableHead className="hidden md:table-cell text-xs">
+                  Category
+                </TableHead>
+                <TableHead className="text-center text-xs">Sold</TableHead>
+                <TableHead className="text-right text-xs">Price</TableHead>
+                <TableHead className="text-right text-xs">Stock</TableHead>
+                <TableHead className="text-right text-xs w-[60px]">
+                  View
+                </TableHead>
               </TableRow>
-            ) : (
-              products.map((p, idx) => (
-                <TableRow key={p.id}>
-                  <TableCell className="py-2">{idx + 1}</TableCell>
+            </TableHeader>
 
-                  <TableCell className="py-2">
-                    <div className="flex items-center gap-3">
-                      <div className="relative w-12 h-12 rounded overflow-hidden bg-muted">
-                        {p.attachment?.url ? (
-                          <Image
-                            src={p.attachment.url}
-                            alt={p.name}
-                            fill
-                            sizes="48px"
-                            style={{ objectFit: "cover" }}
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-xs">
-                            No image
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex flex-col min-w-0">
-                        <span className="font-medium text-sm truncate">
-                          {p.name}
-                        </span>
-                        <div className="text-xs text-muted-foreground truncate max-w-[220px]">
-                          <span>{p.brand?.name ?? ""}</span>
-                          {p.isFeatured && (
-                            <Badge className="ml-2">Featured</Badge>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </TableCell>
-
-                  <TableCell className="hidden md:table-cell py-2">
-                    <span className="text-xs">{p.category?.name ?? "—"}</span>
-                  </TableCell>
-
-                  <TableCell className="text-center py-2">
-                    <span className="font-bold">{p.saleCount}</span>
-                  </TableCell>
-
-                  <TableCell className="text-right py-2">
-                    <span className="font-bold text-sm">
-                      {formatCurrencyEnglish(p.sellingPrice)}
-                    </span>
-                  </TableCell>
-
-                  <TableCell className="text-right py-2">
-                    <span className="text-xs">{p.stock}</span>
-                  </TableCell>
-
-                  <TableCell className="text-right py-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 w-7 p-0"
-                      asChild
-                    >
-                      <Link href={`/product/${p.slug}`}>
-                        <Eye className="h-3.5 w-3.5" />
-                      </Link>
-                    </Button>
+            <TableBody>
+              {products.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={7}
+                    className="text-center py-8 text-muted-foreground"
+                  >
+                    <Package className="h-10 w-10 mx-auto mb-2 opacity-50" />
+                    <p className="font-medium">No products found</p>
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              ) : (
+                products.map((p, idx) => (
+                  <TableRow key={p.id}>
+                    <TableCell className="py-2">{idx + 1}</TableCell>
 
-      {/* Summary Cards */}
-      {products.length > 0 && (
-        <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
-          <StatusCard
-            title="Products"
-            value={products.length}
-            icon={Package}
-            href="#"
-            color="text-blue-600 dark:text-blue-400"
-            gradient="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
-          />
-          <StatusCard
-            title="Total Sold"
-            value={products.reduce((a, b) => a + b.saleCount, 0)}
-            icon={ShoppingCart}
-            href="#"
-            color="text-green-600 dark:text-green-400"
-            gradient="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20"
-          />
-          <StatusCard
-            title="Avg Price"
-            value={formatCurrencyEnglish(
-              Math.round(
-                products.reduce((s, p) => s + p.sellingPrice, 0) /
-                  products.length || 0
-              )
-            )}
-            icon={DollarSign}
-            href="#"
-            color="text-purple-600 dark:text-purple-400"
-            gradient="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20"
-          />
-          <StatusCard
-            title="Avg Stock"
-            value={Math.round(
-              products.reduce((s, p) => s + p.stock, 0) / products.length
-            )}
-            icon={BarChart3}
-            href="#"
-            color="text-orange-600 dark:text-orange-400"
-            gradient="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20"
-          />
+                    <TableCell className="py-2">
+                      <div className="flex items-center gap-3">
+                        <div className="relative w-12 h-12 rounded overflow-hidden bg-muted">
+                          {p.attachment?.url ? (
+                            <Image
+                              src={p.attachment.url}
+                              alt={p.name}
+                              fill
+                              sizes="48px"
+                              style={{ objectFit: "cover" }}
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-xs">
+                              No image
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="flex flex-col min-w-0">
+                          <span className="font-medium text-sm truncate">
+                            {p.name}
+                          </span>
+                          <div className="text-xs text-muted-foreground truncate max-w-[220px]">
+                            <span>{p.brand?.name ?? ""}</span>
+                            {p.isFeatured && (
+                              <Badge className="ml-2">Featured</Badge>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </TableCell>
+
+                    <TableCell className="hidden md:table-cell py-2">
+                      <span className="text-xs">{p.category?.name ?? "—"}</span>
+                    </TableCell>
+
+                    <TableCell className="text-center py-2">
+                      <span className="font-bold">{p.saleCount}</span>
+                    </TableCell>
+
+                    <TableCell className="text-right py-2">
+                      <span className="font-bold text-sm">
+                        {formatCurrencyEnglish(p.sellingPrice)}
+                      </span>
+                    </TableCell>
+
+                    <TableCell className="text-right py-2">
+                      <span className="text-xs">{p.stock}</span>
+                    </TableCell>
+
+                    <TableCell className="text-right py-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 w-7 p-0"
+                        asChild
+                      >
+                        <Link href={`/product/${p.slug}`}>
+                          <Eye className="h-3.5 w-3.5" />
+                        </Link>
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
         </div>
-      )}
-    </div>
+      </CardContent>
+    </Card>
   );
 }

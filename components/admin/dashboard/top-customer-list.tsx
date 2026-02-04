@@ -1,6 +1,12 @@
 "use client";
 
-import { StatusCard } from "@/components/admin/dashboard/status-card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,12 +26,11 @@ import {
 } from "@/components/ui/table";
 import { formatCurrencyEnglish } from "@/lib/utils";
 import { fetchProtectedData } from "@/utils/api-utils";
-import { Award, Eye, ShoppingCart, TrendingUp, Users, Wallet } from "lucide-react";
+import { Award, Eye, Users } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { LoadingIndicator } from "../loading-indicator";
-import { PageHeader } from "../page-header";
 
 interface CustomerStatistics {
   totalOrders: number;
@@ -112,250 +117,184 @@ export function TopCustomersList() {
     );
   };
 
-  const calculateTotalStats = () => {
-    return customers.reduce(
-      (acc, customer) => ({
-        totalOrders: acc.totalOrders + customer.statistics.totalOrders,
-        totalSpent: acc.totalSpent + customer.statistics.totalSpent,
-      }),
-      { totalOrders: 0, totalSpent: 0 }
-    );
-  };
-
-  const totalStats = calculateTotalStats();
-
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <LoadingIndicator message="Loading top customers..." />
-      </div>
+      <Card className="w-full">
+        <div className="flex justify-center items-center min-h-[200px]">
+          <LoadingIndicator message="Loading top customers..." />
+        </div>
+      </Card>
     );
   }
 
   return (
-    <div className="w-full p-2">
-      <PageHeader
-        title="Top Customers"
-        description="Best customers by orders and spending"
-      />
-
-      {/* Compact Filter Controls */}
-      <div className="flex flex-wrap gap-3 mb-4 items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Select
-            value={limit.toString()}
-            onValueChange={(value) => setLimit(parseInt(value))}
-          >
-            <SelectTrigger className="w-[150px] h-9">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="5">Top 5</SelectItem>
-              <SelectItem value="10">Top 10</SelectItem>
-              <SelectItem value="20">Top 20</SelectItem>
-              <SelectItem value="50">Top 50</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select
-            value={sortBy}
-            onValueChange={(value: "orders" | "spending") => setSortBy(value)}
-          >
-            <SelectTrigger className="w-[150px] h-9">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="orders">By Orders</SelectItem>
-              <SelectItem value="spending">By Spending</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select
-            value={timeFilter}
-            onValueChange={(value: TimeFilter) => setTimeFilter(value)}
-          >
-            <SelectTrigger className="w-[150px] h-9">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="this_month">This Month</SelectItem>
-              <SelectItem value="last_3_months">Last 3 Months</SelectItem>
-              <SelectItem value="last_6_months">Last 6 Months</SelectItem>
-              <SelectItem value="last_year">Last Year</SelectItem>
-              <SelectItem value="this_year">This Year</SelectItem>
-              <SelectItem value="all_time">All Time</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Compact Summary */}
-        <div className="flex gap-3 text-xs">
-          <div className="flex items-center gap-1">
-            <Users className="h-3 w-3 text-muted-foreground" />
-            <span className="font-medium">{customers.length}</span>
+    <Card className="w-full">
+      <CardHeader>
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1">
+            <CardTitle className="text-xl font-bold">Top Customers</CardTitle>
+            <CardDescription>Best customers by orders and spending</CardDescription>
           </div>
-          <div className="flex items-center gap-1">
-            <TrendingUp className="h-3 w-3 text-muted-foreground" />
-            <span className="font-medium">
-              {formatCurrencyEnglish(totalStats.totalSpent)}
-            </span>
+
+          <div className="flex items-center gap-3">
+            <Select
+              value={limit.toString()}
+              onValueChange={(value) => setLimit(parseInt(value))}
+            >
+              <SelectTrigger className="w-[130px] h-9">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="5">Top 5</SelectItem>
+                <SelectItem value="10">Top 10</SelectItem>
+                <SelectItem value="20">Top 20</SelectItem>
+                <SelectItem value="50">Top 50</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select
+              value={sortBy}
+              onValueChange={(value: "orders" | "spending") => setSortBy(value)}
+            >
+              <SelectTrigger className="w-[130px] h-9">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="orders">By Orders</SelectItem>
+                <SelectItem value="spending">By Spending</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select
+              value={timeFilter}
+              onValueChange={(value: TimeFilter) => setTimeFilter(value)}
+            >
+              <SelectTrigger className="w-[140px] h-9">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="this_month">This Month</SelectItem>
+                <SelectItem value="last_3_months">Last 3 Months</SelectItem>
+                <SelectItem value="last_6_months">Last 6 Months</SelectItem>
+                <SelectItem value="last_year">Last Year</SelectItem>
+                <SelectItem value="this_year">This Year</SelectItem>
+                <SelectItem value="all_time">All Time</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
-      </div>
+      </CardHeader>
 
-      {/* Compact Table */}
-      <div className="rounded-lg border overflow-x-auto md:p-6 p-2">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[60px] text-xs h-10">Rank</TableHead>
-              <TableHead className="text-xs h-10">Customer</TableHead>
-              <TableHead className="hidden md:table-cell text-xs h-10">
-                Contact
-              </TableHead>
-              <TableHead className="text-center text-xs h-10">Orders</TableHead>
-              <TableHead className="text-right text-xs h-10">Spent</TableHead>
-              <TableHead className="text-right text-xs h-10 hidden lg:table-cell">
-                Avg
-              </TableHead>
-              <TableHead className="text-right text-xs h-10 w-[60px]">
-                View
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {customers.length === 0 ? (
+      <CardContent>
+        <div className="rounded-lg border overflow-x-auto">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell
-                  colSpan={7}
-                  className="text-center py-8 text-muted-foreground"
-                >
-                  <Users className="h-10 w-10 mx-auto mb-2 opacity-50" />
-                  <p className="font-medium">No customers found</p>
-                </TableCell>
+                <TableHead className="w-[60px] text-xs h-10">Rank</TableHead>
+                <TableHead className="text-xs h-10">Customer</TableHead>
+                <TableHead className="hidden md:table-cell text-xs h-10">
+                  Contact
+                </TableHead>
+                <TableHead className="text-center text-xs h-10">Orders</TableHead>
+                <TableHead className="text-right text-xs h-10">Spent</TableHead>
+                <TableHead className="text-right text-xs h-10 hidden lg:table-cell">
+                  Avg
+                </TableHead>
+                <TableHead className="text-right text-xs h-10 w-[60px]">
+                  View
+                </TableHead>
               </TableRow>
-            ) : (
-              customers.map((customer, index) => (
-                <TableRow key={customer.id}>
-                  {/* Rank */}
-                  <TableCell className="py-2">{getRankBadge(index)}</TableCell>
-
-                  {/* Customer */}
-                  <TableCell className="py-2">
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-1">
-                        <span className="font-medium text-sm truncate max-w-[150px]">
-                          {customer.name}
-                        </span>
-                        {customer.isVerified && (
-                          <Badge variant="default" className="text-xs h-4 px-1">
-                            ✓
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                  </TableCell>
-
-                  {/* Contact */}
-                  <TableCell className="hidden md:table-cell py-2">
-                    <span className="text-xs">{customer.mobileNumber}</span>
-                  </TableCell>
-
-                  {/* Orders */}
-                  <TableCell className="text-center py-2">
-                    <div className="flex flex-col items-center">
-                      <span className="font-bold">
-                        {customer.statistics.totalOrders}
-                      </span>
-                      {customer.statistics.pendingOrders > 0 && (
-                        <span className="text-xs text-yellow-600">
-                          {customer.statistics.pendingOrders}p
-                        </span>
-                      )}
-                    </div>
-                  </TableCell>
-
-                  {/* Total Spent */}
-                  <TableCell className="text-right py-2">
-                    <span className="font-bold text-sm">
-                      {formatCurrencyEnglish(customer.statistics.totalSpent)}
-                    </span>
-                  </TableCell>
-
-                  {/* Average */}
-                  <TableCell className="text-right py-2 hidden lg:table-cell">
-                    <span className="text-xs text-muted-foreground">
-                      {customer.statistics.totalOrders > 0
-                        ? formatCurrencyEnglish(
-                            customer.statistics.averageOrderValue
-                          )
-                        : "—"}
-                    </span>
-                  </TableCell>
-
-                  {/* Actions */}
-                  <TableCell className="text-right py-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 w-7 p-0"
-                      asChild
-                    >
-                      <Link href={`/admin/customer/${customer.id}/view`}>
-                        <Eye className="h-3.5 w-3.5" />
-                      </Link>
-                    </Button>
+            </TableHeader>
+            <TableBody>
+              {customers.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={7}
+                    className="text-center py-8 text-muted-foreground"
+                  >
+                    <Users className="h-10 w-10 mx-auto mb-2 opacity-50" />
+                    <p className="font-medium">No customers found</p>
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              ) : (
+                customers.map((customer, index) => (
+                  <TableRow key={customer.id}>
+                    {/* Rank */}
+                    <TableCell className="py-2">{getRankBadge(index)}</TableCell>
 
-      {/* Summary Cards */}
-      {customers.length > 0 && (
-        <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
-          <StatusCard
-            title="Customers"
-            value={customers.length}
-            icon={Users}
-            href="#"
-            color="text-blue-600 dark:text-blue-400"
-            gradient="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
-          />
-          <StatusCard
-            title="Total Orders"
-            value={totalStats.totalOrders}
-            icon={ShoppingCart}
-            href="#"
-            color="text-green-600 dark:text-green-400"
-            gradient="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20"
-          />
-          <StatusCard
-            title="Total Revenue"
-            value={formatCurrencyEnglish(totalStats.totalSpent)}
-            icon={Wallet}
-            href="#"
-            color="text-purple-600 dark:text-purple-400"
-            gradient="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20"
-          />
-          <StatusCard
-            title="Avg Per Customer"
-            value={
-              customers.length > 0
-                ? formatCurrencyEnglish(
-                    totalStats.totalSpent / customers.length
-                  )
-                : "৳0"
-            }
-            icon={TrendingUp}
-            href="#"
-            color="text-orange-600 dark:text-orange-400"
-            gradient="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20"
-          />
+                    {/* Customer */}
+                    <TableCell className="py-2">
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-1">
+                          <span className="font-medium text-sm truncate max-w-[150px]">
+                            {customer.name}
+                          </span>
+                          {customer.isVerified && (
+                            <Badge variant="default" className="text-xs h-4 px-1">
+                              ✓
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    </TableCell>
+
+                    {/* Contact */}
+                    <TableCell className="hidden md:table-cell py-2">
+                      <span className="text-xs">{customer.mobileNumber}</span>
+                    </TableCell>
+
+                    {/* Orders */}
+                    <TableCell className="text-center py-2">
+                      <div className="flex flex-col items-center">
+                        <span className="font-bold">
+                          {customer.statistics.totalOrders}
+                        </span>
+                        {customer.statistics.pendingOrders > 0 && (
+                          <span className="text-xs text-yellow-600">
+                            {customer.statistics.pendingOrders}p
+                          </span>
+                        )}
+                      </div>
+                    </TableCell>
+
+                    {/* Total Spent */}
+                    <TableCell className="text-right py-2">
+                      <span className="font-bold text-sm">
+                        {formatCurrencyEnglish(customer.statistics.totalSpent)}
+                      </span>
+                    </TableCell>
+
+                    {/* Average */}
+                    <TableCell className="text-right py-2 hidden lg:table-cell">
+                      <span className="text-xs text-muted-foreground">
+                        {customer.statistics.totalOrders > 0
+                          ? formatCurrencyEnglish(
+                              customer.statistics.averageOrderValue
+                            )
+                          : "—"}
+                      </span>
+                    </TableCell>
+
+                    {/* Actions */}
+                    <TableCell className="text-right py-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 w-7 p-0"
+                        asChild
+                      >
+                        <Link href={`/admin/customer/${customer.id}/view`}>
+                          <Eye className="h-3.5 w-3.5" />
+                        </Link>
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
         </div>
-      )}
-    </div>
+      </CardContent>
+    </Card>
   );
 }
