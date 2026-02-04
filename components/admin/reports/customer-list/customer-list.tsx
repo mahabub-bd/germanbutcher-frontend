@@ -1,8 +1,8 @@
 "use client";
 
 import { DateRangePreset } from "@/common/enums";
-import { PageHeader } from "@/components/admin/page-header";
 import { StatusCard } from "@/components/admin/dashboard/status-card";
+import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
 import {
@@ -31,7 +31,7 @@ import {
   subWeeks,
   subYears,
 } from "date-fns";
-import { Users, ShoppingCart, DollarSign, TrendingUp } from "lucide-react";
+import { DollarSign, ShoppingCart, TrendingUp, Users } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

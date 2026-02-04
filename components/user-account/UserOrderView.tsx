@@ -32,6 +32,7 @@ import {
   MapPin,
   Package,
   Tag,
+  Truck,
   User,
 } from "lucide-react";
 import Image from "next/image";
@@ -525,6 +526,31 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
               </div>
             </div>
           </div>
+
+          {/* Delivery Man Information */}
+          {order.deliveryMan && (
+            <div className="border rounded-lg p-4 bg-background">
+              <div className="pb-3">
+                <h3 className="text-base font-medium flex items-center">
+                  <Truck className="size-5 mr-2 text-muted-foreground" />
+                  Delivery Man
+                </h3>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <p className="font-medium text-sm text-muted-foreground">
+                    Name: {order.deliveryMan.name}
+                  </p>
+                </div>
+                <div>
+                  <p className="font-medium text-sm text-muted-foreground">
+                    Mobile: {order.deliveryMan.mobileNumber}
+                  </p>
+                </div>
+               
+              </div>
+            </div>
+          )}
 
           {/* Order Summary */}
           <div className="border rounded-lg p-4 bg-background">

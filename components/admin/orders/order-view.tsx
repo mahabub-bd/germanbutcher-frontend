@@ -1,6 +1,7 @@
 "use client";
 
 import { PaymentsTable } from "@/app/admin/order/[id]/payments/payment-table";
+import { AssignDeliveryMan } from "@/components/admin/delivery-man/assign-delivery-man";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ import { OrderStatus, type Order, type OrderItem } from "@/utils/types";
 import { pdf } from "@react-pdf/renderer";
 import {
   ArrowLeft,
+  CheckCircle2,
   Clock,
   CreditCard,
   Download,
@@ -32,6 +34,7 @@ import {
   Package,
   Pencil,
   Printer,
+  Truck,
   User,
 } from "lucide-react";
 import Image from "next/image";
@@ -47,6 +50,7 @@ interface OrderViewProps {
 export default function OrderView({ order, onBack }: OrderViewProps) {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [isPrinting, setIsPrinting] = useState(false);
+  const [currentOrder, setCurrentOrder] = useState<Order>(order);
 
   const handleGeneratePDF = async () => {
     setIsGeneratingPDF(true);
@@ -471,7 +475,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
             size="sm"
             onClick={handleGeneratePDF}
             disabled={isGeneratingPDF}
-            className="whitespace-nowrap"
+            className="whitespace-nowrap cursor-pointer"
           >
             {isGeneratingPDF ? (
               <>
@@ -722,6 +726,59 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
                   <span className="text-sm text-muted-foreground">Phone</span>
                   <span className="text-sm">{order.user.mobileNumber}</span>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Delivery Man Assignment */}
+          <div className="border rounded-lg p-4 bg-background">
+            <div className="pb-3">
+              <h3 className="text-base font-medium flex items-center">
+                <Truck className="size-5 mr-2" />
+                Delivery Man
+              </h3>
+            </div>
+            <div className="space-y-3">
+              {currentOrder.deliveryMan ? (
+                <div className="relative overflow-hidden rounded-lg border-2 border-green-500/20 bg-gradient-to-r from-green-50 to-indigo-50 p-4 dark:from-green-950/20 dark:to-indigo-950/20">
+                  <div className="absolute top-0 right-0 h-16 w-16 bg-gradient-to-bl from-green-500/10 to-transparent" />
+                  <div className="relative flex items-start justify-between">
+                    <div className="flex items-start gap-3">
+                     
+                      <div>
+                        <p className="font-semibold text-sm">
+                          {currentOrder.deliveryMan.name} -{currentOrder.deliveryMan.mobileNumber}
+                        </p>
+                       
+                       
+                      </div>
+                    </div>
+                    <Badge
+                      variant="default"
+                      className="gap-1  shadow-sm"
+                    >
+                      <CheckCircle2 className="h-3 w-3" />
+                      Assigned
+                    </Badge>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-6 rounded-lg border-2 border-dashed border-muted-foreground/30 bg-muted/30">
+                  <Truck className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">
+                    No delivery man assigned to this order
+                  </p>
+                </div>
+              )}
+              <div className="flex justify-start">
+                <AssignDeliveryMan
+                  orderId={order.id}
+                  deliveryMan={currentOrder.deliveryMan}
+                  orderStatus={order.orderStatus}
+                  onAssignmentChange={(deliveryMan) => {
+                    setCurrentOrder({ ...currentOrder, deliveryMan });
+                  }}
+                />
               </div>
             </div>
           </div>

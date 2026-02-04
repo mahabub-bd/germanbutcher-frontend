@@ -301,11 +301,24 @@ const testimonialSchema = z.object({
     .optional()
     .or(z.literal("")),
 });
+
+const deliveryManSchema = z.object({
+  name: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters" })
+    .max(100, { message: "Name must be less than 100 characters" }),
+  mobileNumber: z
+    .string()
+    .min(10, { message: "Please enter a valid mobile number" })
+    .startsWith("+880", { message: "Mobile number must start with +880" }),
+  isActive: z.boolean().default(true),
+});
 export {
   addressSchema,
   bannerSchema,
   brandSchema,
   couponSchema,
+  deliveryManSchema,
   discountFormSchema,
   loginSchema,
   menuSchema,

@@ -501,6 +501,7 @@ export interface Order {
   payments?: OrderPayment[];
   statusTracks: StatusTrack[];
   coupon: Coupon | null;
+  deliveryMan?: DeliveryMan | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -707,4 +708,34 @@ export interface NotificationContextType {
   isConnected: boolean;
   clearNotifications: () => void;
   removeNotification: (index: number) => void;
+}
+
+// Delivery Man Types
+export interface DeliveryMan {
+  id: number;
+  name: string;
+  mobileNumber: string;
+  isActive: boolean;
+  totalDeliveries: number;
+  totalEarnings: number;
+  createdAt: string;
+  updatedAt: string;
+  orders?: Order[];
+}
+
+export interface DeliveryManResponse {
+  message: string;
+  statusCode: number;
+  data: DeliveryMan[];
+  meta?: {
+    total: number;
+    page: number;
+    limit: number;
+  };
+}
+
+export interface DeliveryManDetailResponse {
+  message: string;
+  statusCode: number;
+  data: DeliveryMan;
 }

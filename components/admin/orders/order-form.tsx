@@ -1,12 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2, Loader2, User, XCircle } from "lucide-react";
+import { CheckCircle2, Loader2, Truck, User, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+
+import { AssignDeliveryMan } from "@/components/admin/delivery-man/assign-delivery-man";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -59,6 +61,7 @@ interface OrderFormProps {
 
 export function OrderForm({ order }: OrderFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentOrder, setCurrentOrder] = useState<Order>(order);
   const router = useRouter();
 
   const defaultValues: OrderUpdateValues = {
@@ -229,7 +232,7 @@ export function OrderForm({ order }: OrderFormProps) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <div className="p-6 space-y-6 mx-auto w-full">
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* ✅ Update Order Status Section */}
             <Section title="Update Order Status">
               <div className="grid grid-cols-1 gap-6">
@@ -394,6 +397,65 @@ export function OrderForm({ order }: OrderFormProps) {
               </div>
             </Section>
           </div>
+
+          {/* Delivery Man Assignment Section */}
+          <Section title="Delivery Man Assignment">
+            <div className="space-y-3">
+              {currentOrder.deliveryMan ? (
+                <div className="relative overflow-hidden rounded-lg border-2 border-blue-500/20 bg-gradient-to-r from-blue-50 to-indigo-50 p-4 dark:from-blue-950/20 dark:to-indigo-950/20">
+                  <div className="absolute top-0 right-0 h-16 w-16 bg-gradient-to-bl from-blue-500/10 to-transparent" />
+                  <div className="relative flex items-start justify-between">
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 p-2.5 shadow-lg">
+                        <User className="h-4 w-4 text-white" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm text-blue-900 dark:text-blue-100">
+                          {currentOrder.deliveryMan.name}
+                        </p>
+                        <p className="text-xs text-blue-700 dark:text-blue-300 mt-0.5">
+                          {currentOrder.deliveryMan.mobileNumber}
+                        </p>
+                        <div className="flex items-center gap-3 mt-2 text-xs text-blue-600 dark:text-blue-400">
+                          <span className="flex items-center gap-1">
+                            <Truck className="h-3 w-3" />
+                            {currentOrder.deliveryMan.totalDeliveries} deliveries
+                          </span>
+                          <span className="flex items-center gap-1">
+                            ৳{Number(currentOrder.deliveryMan.totalEarnings).toFixed(0)} total
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <Badge
+                      variant="default"
+                      className="gap-1 bg-blue-600 hover:bg-blue-700 shadow-sm"
+                    >
+                      <CheckCircle2 className="h-3 w-3" />
+                      Assigned
+                    </Badge>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-6 rounded-lg border-2 border-dashed border-muted-foreground/30 bg-muted/30">
+                  <Truck className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">
+                    No delivery man assigned to this order
+                  </p>
+                </div>
+              )}
+              <div className="flex justify-start">
+                <AssignDeliveryMan
+                  orderId={order.id}
+                  deliveryMan={currentOrder.deliveryMan}
+                  orderStatus={order.orderStatus}
+                  onAssignmentChange={(deliveryMan) => {
+                    setCurrentOrder({ ...currentOrder, deliveryMan });
+                  }}
+                />
+              </div>
+            </div>
+          </Section>
 
           {/* ✅ Existing sections below untouched */}
           {/* Payment Information, Order Information, Order Items, etc. */}
