@@ -33,8 +33,6 @@ import { formatCurrencyEnglish } from "@/lib/utils";
 import { deleteData, fetchData, fetchDataPagination } from "@/utils/api-utils";
 import type { Brand, Category, Product } from "@/utils/types";
 import {
-  AlertCircle,
-  DollarSign,
   Eye,
   Filter,
   MoreHorizontal,
@@ -43,7 +41,7 @@ import {
   Plus,
   Search,
   Trash2,
-  XCircle,
+  XCircle
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -618,7 +616,7 @@ export function ProductList({
           ) : (
             <>
               {/* Summary Cards */}
-              <div className="mb-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="mb-4 grid grid-cols-2 md:grid-cols-3 gap-3">
                 <StatusCard
                   title="Total Products"
                   value={totalItems}
@@ -643,16 +641,7 @@ export function ProductList({
                   color="text-orange-600 dark:text-orange-400"
                   gradient="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20"
                 />
-                <StatusCard
-                  title="Total Value"
-                  value={formatCurrencyEnglish(
-                    products.reduce((sum, p) => sum + p.sellingPrice * p.stock, 0)
-                  )}
-                  icon={DollarSign}
-                  href="#"
-                  color="text-purple-600 dark:text-purple-400"
-                  gradient="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20"
-                />
+              
               </div>
               <div className="mt-6">{renderTableView()}</div>
             </>

@@ -1,8 +1,8 @@
 "use client";
 
 import { DateRangePreset, OrderStatus } from "@/common/enums";
-import { PageHeader } from "@/components/admin/page-header";
 import { StatusCard } from "@/components/admin/dashboard/status-card";
+import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
 import {
@@ -31,7 +31,7 @@ import {
   subWeeks,
   subYears,
 } from "date-fns";
-import { CreditCard, DollarSign, CheckCircle, Eye, Layers } from "lucide-react";
+import { CheckCircle, CreditCard, DollarSign, Eye, Layers } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -290,7 +290,7 @@ export default function OrderPaymentList({
 
       {/* Summary */}
       {payments.length > 0 && (
-        <div className="mb-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="mb-4 grid grid-cols-2 2xl:grid-cols-4 gap-3">
           <StatusCard
             title="Payments"
             value={payments.length}

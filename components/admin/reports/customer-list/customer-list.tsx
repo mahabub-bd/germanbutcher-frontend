@@ -251,7 +251,7 @@ export default function CustomerListReport({
 
       {/* Summary */}
       {summary && (
-        <div className="mb-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="mb-4 grid grid-cols-2 2xl:grid-cols-4 gap-3">
           <StatusCard
             title="Total Customers"
             value={summary.totalCustomers}

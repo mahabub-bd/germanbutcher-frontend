@@ -78,7 +78,7 @@ export default function MonthlyOrderReportList({ monthlyData }: Props) {
 
       {/* Summary */}
       {monthlyData.length > 0 && (
-        <div className="mb-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="mb-4 grid grid-cols-2 2xl:grid-cols-4 gap-3">
           
           <StatusCard
             title="Total Orders"
