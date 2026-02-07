@@ -35,6 +35,7 @@ export default function DashboardClient({
         chartData={initialChartData}
         productsCount={productsCount}
         customersCount={customersCount}
+        statsData={initialStatsData}
       />
       <OrderStatsGrid data={initialStatsData} />
     </>

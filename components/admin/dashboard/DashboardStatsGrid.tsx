@@ -1,205 +1,225 @@
+"use client";
+
 import StatsCard from "@/components/admin/dashboard/stats-card";
+import { useDashboardMetrics } from "@/hooks/use-dashboard-metrics";
 import { formatCurrencyEnglish } from "@/lib/utils";
-import type { OrderSummary } from "@/utils/types";
-import {
-  Calendar,
-  Package,
-  TrendingDown,
-  TrendingUp,
-  Users,
-  XCircle,
-} from "lucide-react";
+import { Calendar, Package, TrendingDown, TrendingUp, Users, XCircle } from "lucide-react";
+import { PiePanel } from "./pie-panel";
 
 interface DashboardStatsGridProps {
-  chartData: OrderSummary[];
+  chartData: any[];
   productsCount: number;
   customersCount: number;
+  statsData?: {
+    totalOrders: number;
+    pending: number;
+    processing: number;
+    shipped: number;
+    delivered: number;
+    cancelled: number;
+    pendingValue: number;
+    processingValue: number;
+    shippedValue: number;
+    deliveredValue: number;
+    cancelledValue: number;
+  };
 }
-
-/**
- * Month → index map
- */
-const MONTH_INDEX: Record<string, number> = {
-  January: 0,
-  February: 1,
-  March: 2,
-  April: 3,
-  May: 4,
-  June: 5,
-  July: 6,
-  August: 7,
-  September: 8,
-  October: 9,
-  November: 10,
-  December: 11,
-};
-
-const EMPTY_MONTH: OrderSummary = {
-  year: 0,
-  month: "",
-  totalValue: 0,
-  orderCount: 0,
-  cancelOrderCount: 0,
-  cancelValue: 0,
-};
-
-/**
- * Helpers
- */
-const formatMonthLabel = (month: string, year: number) =>
-  month && year ? `${month} ${year}` : "N/A";
-
-const calculateGrowth = (current: number, previous: number) => {
-  if (!previous) return 0;
-  return ((current - previous) / previous) * 100;
-};
 
 export default function DashboardStatsGrid({
   chartData,
   productsCount,
   customersCount,
+  statsData,
 }: DashboardStatsGridProps) {
-  /**
-   * Sort by date
-   */
-  const sortedData = [...chartData].sort((a, b) => {
-    const aDate = new Date(a.year, MONTH_INDEX[a.month]);
-    const bDate = new Date(b.year, MONTH_INDEX[b.month]);
-    return aDate.getTime() - bDate.getTime();
-  });
-
-  const currentMonthData = sortedData.at(-1) ?? EMPTY_MONTH;
-  const lastMonthData = sortedData.at(-2) ?? EMPTY_MONTH;
+  const { current, previous, totals, salesGrowth, cancelGrowth } = useDashboardMetrics(chartData);
 
   /**
    * Dynamic labels
    */
-  const currentMonthLabel = formatMonthLabel(
-    currentMonthData.month,
-    currentMonthData.year
-  );
-
-  const lastMonthLabel = formatMonthLabel(
-    lastMonthData.month,
-    lastMonthData.year
-  );
-
-  /**
-   * Aggregates
-   */
-  const totalSales = chartData.reduce((sum, item) => sum + item.totalValue, 0);
-
-  const totalOrders = chartData.reduce((sum, item) => sum + item.orderCount, 0);
-
-  const totalCancelOrders = chartData.reduce(
-    (sum, item) => sum + (item.cancelOrderCount ?? 0),
-    0
-  );
-
-  const totalCancelValue = chartData.reduce(
-    (sum, item) => sum + (item.cancelValue ?? 0),
-    0
-  );
-
-  /**
-   * MoM Growth
-   */
-  const salesGrowth = calculateGrowth(
-    currentMonthData.totalValue,
-    lastMonthData.totalValue
-  );
-
-  const cancelGrowth = calculateGrowth(
-    currentMonthData.cancelValue ?? 0,
-    lastMonthData.cancelValue ?? 0
-  );
+  const currentMonthLabel = current.month && current.year ? `${current.month} ${current.year}` : "N/A";
+  const lastMonthLabel = previous.month && previous.year ? `${previous.month} ${previous.year}` : "N/A";
 
   const isSalesUp = salesGrowth >= 0;
   const isCancelUp = cancelGrowth >= 0;
 
+  /**
+   * Calculate percentages for pie charts
+   */
+  const currentMonthTotal = current.orderCount + (current.cancelOrderCount ?? 0);
+  const currentMonthData = [
+    {
+      name: "Completed",
+      value: current.orderCount,
+      color: "#10b981",
+      percentage: currentMonthTotal > 0 ? (current.orderCount / currentMonthTotal) * 100 : 0,
+    },
+    {
+      name: "Cancelled",
+      value: current.cancelOrderCount ?? 0,
+      color: "#ef4444",
+      percentage: currentMonthTotal > 0 ? ((current.cancelOrderCount ?? 0) / currentMonthTotal) * 100 : 0,
+    },
+  ];
+
+  const totalRevenueAll = totals.sales + totals.cancelValue;
+  const totalRevenueData = [
+    {
+      name: "Total Sales",
+      value: totals.sales,
+      color: "#10b981",
+      percentage: totalRevenueAll > 0 ? (totals.sales / totalRevenueAll) * 100 : 0,
+    },
+    {
+      name: "Total Cancelled",
+      value: totals.cancelValue,
+      color: "#ef4444",
+      percentage: totalRevenueAll > 0 ? (totals.cancelValue / totalRevenueAll) * 100 : 0,
+    },
+  ];
+
   return (
-    <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
-      {/* Total Sales */}
-      <StatsCard
-        title="Total Sales"
-        value={formatCurrencyEnglish(totalSales)}
-        count={String(totalOrders)}
-        description="All-time revenue"
-        icon={TrendingUp}
-        bgColor="green"
-      />
+    <div className="space-y-4">
+      {/* KPI Grid */}
+      <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Total Sales */}
+        <StatsCard
+          title="Total Sales"
+          value={formatCurrencyEnglish(totals.sales)}
+          count={String(totals.orders)}
+          description="All-time revenue"
+          icon={TrendingUp}
+          bgColor="green"
+        />
 
-      {/* Total Cancel */}
-      <StatsCard
-        title="Total Cancel"
-        value={formatCurrencyEnglish(totalCancelValue)}
-        count={String(totalCancelOrders)}
-        description="All-time cancellations"
-        icon={XCircle}
-        bgColor="amber"
-      />
+        {/* Total Cancel */}
+        <StatsCard
+          title="Total Cancel"
+          value={formatCurrencyEnglish(totals.cancelValue)}
+          count={String(totals.cancelOrders)}
+          description="All-time cancellations"
+          icon={XCircle}
+          bgColor="amber"
+        />
 
-      {/* Sales - Current Month */}
-      <StatsCard
-        title={`Sales (${currentMonthLabel})`}
-        value={formatCurrencyEnglish(currentMonthData.totalValue)}
-        count={String(currentMonthData.orderCount)}
-        description={` ${isSalesUp ? "▲" : "▼"} ${Math.abs(salesGrowth).toFixed(
-          2
-        )}%`}
-        icon={isSalesUp ? TrendingUp : TrendingDown}
-        bgColor={isSalesUp ? "green" : "red"}
-      />
+        {/* Sales - Current Month */}
+        <StatsCard
+          title={`Sales (${currentMonthLabel})`}
+          value={formatCurrencyEnglish(current.totalValue)}
+          count={String(current.orderCount)}
+          description={` ${isSalesUp ? "▲" : "▼"} ${Math.abs(salesGrowth).toFixed(2)}%`}
+          icon={isSalesUp ? TrendingUp : TrendingDown}
+          bgColor={isSalesUp ? "green" : "red"}
+        />
 
-      {/* Cancel - Current Month */}
-      <StatsCard
-        title={`Cancel (${currentMonthLabel})`}
-        value={formatCurrencyEnglish(currentMonthData.cancelValue ?? 0)}
-        count={String(currentMonthData.cancelOrderCount ?? 0)}
-        description={` ${isCancelUp ? "▲" : "▼"} ${Math.abs(
-          cancelGrowth
-        ).toFixed(2)}%`}
-        icon={isCancelUp ? TrendingUp : TrendingDown}
-        bgColor={isCancelUp ? "orange" : "pink"}
-      />
+        {/* Cancel - Current Month */}
+        <StatsCard
+          title={`Cancel (${currentMonthLabel})`}
+          value={formatCurrencyEnglish(current.cancelValue ?? 0)}
+          count={String(current.cancelOrderCount ?? 0)}
+          description={` ${isCancelUp ? "▲" : "▼"} ${Math.abs(cancelGrowth).toFixed(2)}%`}
+          icon={isCancelUp ? TrendingUp : TrendingDown}
+          bgColor={isCancelUp ? "orange" : "pink"}
+        />
 
-      {/* Sales - Last Month */}
-      <StatsCard
-        title={`Sales (${lastMonthLabel})`}
-        value={formatCurrencyEnglish(lastMonthData.totalValue)}
-        count={String(lastMonthData.orderCount)}
-        description="Previous month revenue"
-        icon={Calendar}
-        bgColor="blue"
-      />
+        {/* Sales - Last Month */}
+        <StatsCard
+          title={`Sales (${lastMonthLabel})`}
+          value={formatCurrencyEnglish(previous.totalValue)}
+          count={String(previous.orderCount)}
+          description="Previous month revenue"
+          icon={Calendar}
+          bgColor="blue"
+        />
 
-      {/* Cancel - Last Month */}
-      <StatsCard
-        title={`Cancel (${lastMonthLabel})`}
-        value={formatCurrencyEnglish(lastMonthData.cancelValue ?? 0)}
-        count={String(lastMonthData.cancelOrderCount ?? 0)}
-        description="Previous month cancellations"
-        icon={TrendingDown}
-        bgColor="pink"
-      />
+        {/* Cancel - Last Month */}
+        <StatsCard
+          title={`Cancel (${lastMonthLabel})`}
+          value={formatCurrencyEnglish(previous.cancelValue ?? 0)}
+          count={String(previous.cancelOrderCount ?? 0)}
+          description="Previous month cancellations"
+          icon={TrendingDown}
+          bgColor="pink"
+        />
 
-      {/* Products */}
-      <StatsCard
-        title="Products"
-        value={productsCount.toString()}
-        description="Total inventory count"
-        icon={Package}
-        bgColor="indigo"
-      />
+        {/* Products */}
+        <StatsCard
+          title="Products"
+          value={productsCount.toString()}
+          description="Total inventory count"
+          icon={Package}
+          bgColor="indigo"
+        />
 
-      {/* Customers */}
-      <StatsCard
-        title="Customers"
-        value={customersCount.toString()}
-        description="Total registered users"
-        icon={Users}
-        bgColor="blue"
-      />
+        {/* Customers */}
+        <StatsCard
+          title="Customers"
+          value={customersCount.toString()}
+          description="Total registered users"
+          icon={Users}
+          bgColor="blue"
+        />
+      </div>
+
+      {/* Pie Charts Section - 3 total in one row */}
+      <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
+        {/* Current Month Orders - Pie Chart */}
+        <PiePanel
+          title={`Order Status - ${currentMonthLabel}`}
+          subtitle="Orders vs Cancelled"
+          data={currentMonthData}
+          size="sm"
+        />
+
+        {/* Revenue Overview - Pie Chart */}
+        <PiePanel
+          title="Revenue Overview"
+          subtitle="Sales vs Cancelled (All-time)"
+          data={totalRevenueData}
+          size="sm"
+        />
+
+        {/* Order Distribution by Quantity - Donut Chart - All 5 Statuses */}
+        {statsData && (
+          <PiePanel
+            title="Order Distribution"
+            subtitle="Orders by Status (All-time)"
+            data={[
+              {
+                name: "Delivered",
+                value: statsData.delivered,
+                color: "#10b981",
+                percentage: (statsData.delivered / statsData.totalOrders) * 100,
+              },
+              {
+                name: "Processing",
+                value: statsData.processing,
+                color: "#3b82f6",
+                percentage: (statsData.processing / statsData.totalOrders) * 100,
+              },
+              {
+                name: "Shipped",
+                value: statsData.shipped,
+                color: "#a855f7",
+                percentage: (statsData.shipped / statsData.totalOrders) * 100,
+              },
+              {
+                name: "Pending",
+                value: statsData.pending,
+                color: "#eab308",
+                percentage: (statsData.pending / statsData.totalOrders) * 100,
+              },
+              {
+                name: "Cancelled",
+                value: statsData.cancelled,
+                color: "#ef4444",
+                percentage: (statsData.cancelled / statsData.totalOrders) * 100,
+              },
+            ]}
+            size="sm"
+            donut={true}
+          />
+        )}
+      </div>
     </div>
   );
 }
