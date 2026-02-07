@@ -64,13 +64,13 @@ export default function DashboardStatsGrid({
   const totalRevenueAll = totals.sales + totals.cancelValue;
   const totalRevenueData = [
     {
-      name: "Total Sales",
+      name: "Sales",
       value: totals.sales,
       color: "#10b981",
       percentage: totalRevenueAll > 0 ? (totals.sales / totalRevenueAll) * 100 : 0,
     },
     {
-      name: "Total Cancelled",
+      name: "Cancelled",
       value: totals.cancelValue,
       color: "#ef4444",
       percentage: totalRevenueAll > 0 ? (totals.cancelValue / totalRevenueAll) * 100 : 0,

@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -10,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatCurrencyEnglish } from "@/lib/utils";
+import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,

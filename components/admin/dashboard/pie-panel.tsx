@@ -1,11 +1,11 @@
 import { formatCurrencyEnglish } from "@/lib/utils";
 import {
-    Cell,
-    Legend,
-    Pie,
-    PieChart,
-    ResponsiveContainer,
-    Tooltip,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
 } from "recharts";
 
 interface PieDataItem {

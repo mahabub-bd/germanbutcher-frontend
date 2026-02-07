@@ -5,6 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -15,7 +22,7 @@ import {
 import { formatCurrencyEnglish } from "@/lib/utils";
 import { fetchDataPagination } from "@/utils/api-utils";
 import type { Product } from "@/utils/types";
-import { AlertTriangle, Package, Search, XCircle } from "lucide-react";
+import { AlertTriangle, Package, Search, SlidersHorizontal, XCircle } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -51,15 +58,18 @@ export function LowStockReport({
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [limit] = useState(initialLimit);
   const [totalPages, setTotalPages] = useState(1);
-  const [threshold, setThreshold] = useState<number>(5);
+  const [threshold, setThreshold] = useState<number>(
+    () => parseInt(getInitialParam("threshold") as string) || 10
+  );
 
   const updateUrl = useCallback(() => {
     const params = new URLSearchParams();
     params.set("page", currentPage.toString());
     params.set("limit", limit.toString());
+    params.set("threshold", threshold.toString());
     if (searchQuery) params.set("search", searchQuery);
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
-  }, [router, pathname, currentPage, limit, searchQuery]);
+  }, [router, pathname, currentPage, limit, searchQuery, threshold]);
 
   const fetchLowStockProducts = useCallback(async () => {
     setIsLoading(true);
@@ -67,6 +77,7 @@ export function LowStockReport({
       const params = new URLSearchParams();
       params.append("page", currentPage.toString());
       params.append("limit", limit.toString());
+      params.append("threshold", threshold.toString());
       if (searchQuery) params.append("search", searchQuery);
 
       // 🔥 Call new backend API
@@ -80,7 +91,6 @@ export function LowStockReport({
       setProducts(response.data);
       setTotalItems(response.total);
       setTotalPages(response.totalPages || 1);
-      setThreshold(response.threshold ?? 5);
     } catch (error) {
       console.error("Error fetching low stock products:", error);
       toast.error("Failed to load low stock report. Please try again.");
@@ -90,13 +100,15 @@ export function LowStockReport({
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, limit, searchQuery]);
+  }, [currentPage, limit, searchQuery, threshold]);
 
   useEffect(() => {
     const pageFromUrl = searchParams?.get("page");
     const searchFromUrl = searchParams?.get("search");
+    const thresholdFromUrl = searchParams?.get("threshold");
     if (pageFromUrl) setCurrentPage(parseInt(pageFromUrl, 10));
     if (searchFromUrl) setSearchQuery(searchFromUrl);
+    if (thresholdFromUrl) setThreshold(parseInt(thresholdFromUrl, 10));
   }, [searchParams]);
 
   useEffect(() => {
@@ -116,6 +128,12 @@ export function LowStockReport({
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleThresholdChange = (value: string) => {
+    const newThreshold = parseInt(value, 10);
+    setThreshold(newThreshold);
     setCurrentPage(1);
   };
 
@@ -145,21 +163,34 @@ export function LowStockReport({
   };
 
   const renderActiveFilters = () =>
-    searchQuery && (
+    (searchQuery || threshold !== 10) && (
       <div className="flex flex-wrap gap-2 mt-4">
-        <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
-          Search: {searchQuery}
-          <button onClick={() => setSearchQuery("")} className="ml-1">
-            <XCircle className="h-3 w-3" />
-          </button>
-        </Badge>
+        {searchQuery && (
+          <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
+            Search: {searchQuery}
+            <button onClick={() => setSearchQuery("")} className="ml-1">
+              <XCircle className="h-3 w-3" />
+            </button>
+          </Badge>
+        )}
+        {threshold !== 10 && (
+          <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
+            Threshold: {threshold}
+            <button
+              onClick={() => setThreshold(10)}
+              className="ml-1"
+            >
+              <XCircle className="h-3 w-3" />
+            </button>
+          </Badge>
+        )}
         <Button
           variant="ghost"
           size="sm"
           onClick={clearFilters}
           className="h-7 text-xs"
         >
-          Clear search
+          Clear filters
         </Button>
       </div>
     );
@@ -287,15 +318,33 @@ export function LowStockReport({
 
   return (
     <div className="w-full">
-      <div className="relative w-full sm:max-w-xs mb-4">
-        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input
-          type="search"
-          placeholder="Search..."
-          value={searchQuery}
-          className="pl-8"
-          onChange={handleSearchChange}
-        />
+      <div className="flex flex-col sm:flex-row gap-4 mb-4">
+        <div className="relative w-full sm:max-w-xs">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search products..."
+            value={searchQuery}
+            className="pl-8"
+            onChange={handleSearchChange}
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
+          <Select value={threshold.toString()} onValueChange={handleThresholdChange}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Threshold" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="5">5 units</SelectItem>
+              <SelectItem value="10">10 units</SelectItem>
+              <SelectItem value="15">15 units</SelectItem>
+              <SelectItem value="20">20 units</SelectItem>
+              <SelectItem value="25">25 units</SelectItem>
+              <SelectItem value="50">50 units</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {renderActiveFilters()}
