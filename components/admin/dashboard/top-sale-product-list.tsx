@@ -1,5 +1,7 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,8 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -69,7 +69,7 @@ interface BestsellerProduct {
 export default function TopSaleProductsList() {
   const [products, setProducts] = useState<BestsellerProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const [limit, setLimit] = useState<number>(10);
+  const [limit, setLimit] = useState<number>(5);
 
   useEffect(() => {
     const fetchProducts = async () => {

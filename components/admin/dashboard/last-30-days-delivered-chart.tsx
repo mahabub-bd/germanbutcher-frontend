@@ -11,8 +11,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatCurrencyEnglish } from "@/lib/utils";
 import {
-  Area,
-  AreaChart,
   Bar,
   BarChart,
   CartesianGrid,
@@ -160,7 +158,7 @@ export default function Last30DaysDeliveredChart({
 
   return (
     <Card className="w-full border-2 shadow-lg overflow-hidden">
-      <Tabs defaultValue="area" className="w-full">
+      <Tabs defaultValue="trend" className="w-full">
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div className="flex-1">
@@ -170,9 +168,6 @@ export default function Last30DaysDeliveredChart({
               </CardDescription>
             </div>
             <TabsList className="bg-gray-100 dark:bg-gray-800 w-full sm:w-auto overflow-x-auto">
-              <TabsTrigger value="area" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 text-xs sm:text-sm flex-1 sm:flex-initial">
-                Area
-              </TabsTrigger>
               <TabsTrigger value="trend" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 text-xs sm:text-sm flex-1 sm:flex-initial">
                 Trend
               </TabsTrigger>
@@ -188,23 +183,23 @@ export default function Last30DaysDeliveredChart({
 
         <CardContent>
 
-          <TabsContent value="area" className="mt-0">
+          <TabsContent value="trend" className="mt-0">
             <ResponsiveContainer
               width="100%"
               height={280}
               className="sm:h-[320px] md:h-[350px] lg:h-[400px]"
             >
-              <AreaChart
+              <LineChart
                 data={formattedData}
                 margin={{ top: windowSize.width < 640 ? 10 : 20, right: windowSize.width < 640 ? 5 : 10, left: 0, bottom: 5 }}
               >
                 <defs>
-                  <linearGradient id="colorOrders" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={ORDERS_COLOR} stopOpacity={0.3}/>
+                  <linearGradient id="trendOrders" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={ORDERS_COLOR} stopOpacity={0.2}/>
                     <stop offset="95%" stopColor={ORDERS_COLOR} stopOpacity={0}/>
                   </linearGradient>
-                  <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={SALES_COLOR} stopOpacity={0.3}/>
+                  <linearGradient id="trendSales" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={SALES_COLOR} stopOpacity={0.2}/>
                     <stop offset="95%" stopColor={SALES_COLOR} stopOpacity={0}/>
                   </linearGradient>
                 </defs>
@@ -237,71 +232,6 @@ export default function Last30DaysDeliveredChart({
                 />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend verticalAlign="top" height={windowSize.width < 640 ? 28 : 36} iconType="circle" iconSize={windowSize.width < 640 ? 8 : 10} wrapperStyle={{ fontSize: windowSize.width < 640 ? '11px' : '12px' }} />
-                <Area
-                  yAxisId="left"
-                  type="monotone"
-                  dataKey="orderCount"
-                  name="Orders"
-                  stroke={ORDERS_COLOR}
-                  strokeWidth={3}
-                  fill="url(#colorOrders)"
-                  dot={{ r: 0 }}
-                  activeDot={{ r: 6, strokeWidth: 0, fill: ORDERS_COLOR }}
-                />
-                <Area
-                  yAxisId="right"
-                  type="monotone"
-                  dataKey="totalValue"
-                  name="Sales"
-                  stroke={SALES_COLOR}
-                  strokeWidth={3}
-                  fill="url(#colorSales)"
-                  dot={{ r: 0 }}
-                  activeDot={{ r: 6, strokeWidth: 0, fill: SALES_COLOR }}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </TabsContent>
-
-          <TabsContent value="trend" className="mt-0">
-            <ResponsiveContainer
-              width="100%"
-              height={280}
-              className="sm:h-[320px] md:h-[350px] lg:h-[400px]"
-            >
-              <LineChart
-                data={formattedData}
-                margin={{ top: windowSize.width < 640 ? 10 : 20, right: windowSize.width < 640 ? 5 : 10, left: 0, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.2} />
-                <XAxis
-                  dataKey="formattedDate"
-                  axisLine={false}
-                  tickLine={false}
-                  tickMargin={10}
-                  interval={xAxisInterval}
-                  tick={<CustomAxisTick />}
-                  height={80}
-                />
-                <YAxis
-                  yAxisId="left"
-                  orientation="left"
-                  axisLine={false}
-                  tickLine={false}
-                  tickMargin={10}
-                  tick={{ fontSize: 12, fill: "currentColor" }}
-                />
-                <YAxis
-                  yAxisId="right"
-                  orientation="right"
-                  axisLine={false}
-                  tickLine={false}
-                  tickMargin={10}
-                  tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
-                  tick={{ fontSize: 12, fill: "currentColor" }}
-                />
-                <Tooltip content={<CustomTooltip />} />
-                <Legend verticalAlign="top" height={windowSize.width < 640 ? 28 : 36} iconType="circle" iconSize={windowSize.width < 640 ? 8 : 10} wrapperStyle={{ fontSize: windowSize.width < 640 ? '11px' : '12px' }} />
                 <Line
                   yAxisId="left"
                   type="monotone"
@@ -309,6 +239,7 @@ export default function Last30DaysDeliveredChart({
                   name="Orders"
                   stroke={ORDERS_COLOR}
                   strokeWidth={3}
+                  fill="url(#trendOrders)"
                   dot={{ fill: ORDERS_COLOR, r: 4, strokeWidth: 2 }}
                   activeDot={{ r: 6, strokeWidth: 0, fill: ORDERS_COLOR }}
                 />
@@ -319,6 +250,7 @@ export default function Last30DaysDeliveredChart({
                   name="Sales"
                   stroke={SALES_COLOR}
                   strokeWidth={3}
+                  fill="url(#trendSales)"
                   dot={{ fill: SALES_COLOR, r: 4, strokeWidth: 2 }}
                   activeDot={{ r: 6, strokeWidth: 0, fill: SALES_COLOR }}
                 />

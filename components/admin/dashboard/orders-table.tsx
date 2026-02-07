@@ -27,7 +27,7 @@ export default function OrdersTable() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [totalOrders, setTotalOrders] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
-  const [limit] = useState<number>(10);
+  const [limit] = useState<number>(8);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 

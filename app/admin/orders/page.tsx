@@ -14,7 +14,7 @@ export default async function OrdersPage({
   const limit =
     typeof resolvedParams.limit === "string"
       ? Number.parseInt(resolvedParams.limit)
-      : 10;
+      : 14;
 
   return (
     <div className="md:p-4 p-2 border rounded-sm">

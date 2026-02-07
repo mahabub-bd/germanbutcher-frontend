@@ -1,4 +1,4 @@
-import { CheckCircle, Clock, Truck, XCircle } from "lucide-react";
+import { CheckCircle, Clock, Package, Truck, XCircle } from "lucide-react";
 import { OrderStatus } from "./types";
 
 const getOrderStatusColor = (status: string) => {
@@ -38,8 +38,9 @@ const getStatusIcon = (status: string) => {
     case "completed":
       return <CheckCircle className="size-4 mr-1" />;
     case OrderStatus.PENDING:
-    case OrderStatus.PROCESSING:
       return <Clock className="size-4 mr-1" />;
+    case OrderStatus.PROCESSING:
+      return <Package className="size-4 mr-1" />;
     case OrderStatus.CANCELLED:
     case "failed":
       return <XCircle className="size-4 mr-1" />;
