@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -42,6 +43,30 @@ const SALES_COLOR_LIGHT = "#34d399"; // Emerald-400
 export default function Last30DaysDeliveredChart({
   chartData,
 }: Last30DaysDeliveredChartProps) {
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== "undefined" ? window.innerWidth : 1200,
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Calculate interval based on screen width
+  const getXAxisInterval = () => {
+    const { width } = windowSize;
+    if (width < 640) return 4; // Show every 5th label on mobile
+    if (width < 768) return 3; // Show every 4th label on small tablets
+    if (width < 1024) return 2; // Show every 3rd label on tablets
+    return 0; // Show all labels on desktop
+  };
+
+  const xAxisInterval = getXAxisInterval();
+
   const totalOrders = chartData.reduce((sum, item) => sum + item.orderCount, 0);
   const totalSales = chartData.reduce((sum, item) => sum + item.totalValue, 0);
   const avgOrders = totalOrders / (chartData.length || 1);
@@ -134,27 +159,27 @@ export default function Last30DaysDeliveredChart({
   };
 
   return (
-    <Card className="w-full border-2 shadow-lg">
+    <Card className="w-full border-2 shadow-lg overflow-hidden">
       <Tabs defaultValue="area" className="w-full">
         <CardHeader>
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div className="flex-1">
-              <CardTitle className="text-xl font-bold">Last 30 Days</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-lg sm:text-xl font-bold">Last 30 Days</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 Daily order count and revenue trends
               </CardDescription>
             </div>
-            <TabsList className="bg-gray-100 dark:bg-gray-800">
-              <TabsTrigger value="area" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700">
+            <TabsList className="bg-gray-100 dark:bg-gray-800 w-full sm:w-auto overflow-x-auto">
+              <TabsTrigger value="area" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 text-xs sm:text-sm flex-1 sm:flex-initial">
                 Area
               </TabsTrigger>
-              <TabsTrigger value="trend" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700">
+              <TabsTrigger value="trend" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 text-xs sm:text-sm flex-1 sm:flex-initial">
                 Trend
               </TabsTrigger>
-              <TabsTrigger value="orders" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700">
+              <TabsTrigger value="orders" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 text-xs sm:text-sm flex-1 sm:flex-initial">
                 Orders
               </TabsTrigger>
-              <TabsTrigger value="sales" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700">
+              <TabsTrigger value="sales" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 text-xs sm:text-sm flex-1 sm:flex-initial">
                 Sales
               </TabsTrigger>
             </TabsList>
@@ -166,12 +191,12 @@ export default function Last30DaysDeliveredChart({
           <TabsContent value="area" className="mt-0">
             <ResponsiveContainer
               width="100%"
-              height={350}
-              className="md:h-[400px]"
+              height={280}
+              className="sm:h-[320px] md:h-[350px] lg:h-[400px]"
             >
               <AreaChart
                 data={formattedData}
-                margin={{ top: 20, right: 10, left: 0, bottom: 5 }}
+                margin={{ top: windowSize.width < 640 ? 10 : 20, right: windowSize.width < 640 ? 5 : 10, left: 0, bottom: 5 }}
               >
                 <defs>
                   <linearGradient id="colorOrders" x1="0" y1="0" x2="0" y2="1">
@@ -189,7 +214,7 @@ export default function Last30DaysDeliveredChart({
                   axisLine={false}
                   tickLine={false}
                   tickMargin={10}
-                  interval={0}
+                  interval={xAxisInterval}
                   tick={<CustomAxisTick />}
                   height={80}
                 />
@@ -211,7 +236,7 @@ export default function Last30DaysDeliveredChart({
                   tick={{ fontSize: 12, fill: "currentColor" }}
                 />
                 <Tooltip content={<CustomTooltip />} />
-                <Legend verticalAlign="top" height={36} iconType="circle" iconSize={10} />
+                <Legend verticalAlign="top" height={windowSize.width < 640 ? 28 : 36} iconType="circle" iconSize={windowSize.width < 640 ? 8 : 10} wrapperStyle={{ fontSize: windowSize.width < 640 ? '11px' : '12px' }} />
                 <Area
                   yAxisId="left"
                   type="monotone"
@@ -241,12 +266,12 @@ export default function Last30DaysDeliveredChart({
           <TabsContent value="trend" className="mt-0">
             <ResponsiveContainer
               width="100%"
-              height={350}
-              className="md:h-[400px]"
+              height={280}
+              className="sm:h-[320px] md:h-[350px] lg:h-[400px]"
             >
               <LineChart
                 data={formattedData}
-                margin={{ top: 20, right: 10, left: 0, bottom: 5 }}
+                margin={{ top: windowSize.width < 640 ? 10 : 20, right: windowSize.width < 640 ? 5 : 10, left: 0, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.2} />
                 <XAxis
@@ -254,7 +279,7 @@ export default function Last30DaysDeliveredChart({
                   axisLine={false}
                   tickLine={false}
                   tickMargin={10}
-                  interval={0}
+                  interval={xAxisInterval}
                   tick={<CustomAxisTick />}
                   height={80}
                 />
@@ -276,7 +301,7 @@ export default function Last30DaysDeliveredChart({
                   tick={{ fontSize: 12, fill: "currentColor" }}
                 />
                 <Tooltip content={<CustomTooltip />} />
-                <Legend verticalAlign="top" height={36} iconType="circle" iconSize={10} />
+                <Legend verticalAlign="top" height={windowSize.width < 640 ? 28 : 36} iconType="circle" iconSize={windowSize.width < 640 ? 8 : 10} wrapperStyle={{ fontSize: windowSize.width < 640 ? '11px' : '12px' }} />
                 <Line
                   yAxisId="left"
                   type="monotone"
@@ -304,12 +329,12 @@ export default function Last30DaysDeliveredChart({
           <TabsContent value="orders" className="mt-0">
             <ResponsiveContainer
               width="100%"
-              height={350}
-              className="md:h-[400px]"
+              height={280}
+              className="sm:h-[320px] md:h-[350px] lg:h-[400px]"
             >
               <BarChart
                 data={formattedData}
-                margin={{ top: 20, right: 10, left: 0, bottom: 5 }}
+                margin={{ top: windowSize.width < 640 ? 10 : 20, right: windowSize.width < 640 ? 5 : 10, left: 0, bottom: 5 }}
               >
                 <defs>
                   <linearGradient id="barOrders" x1="0" y1="0" x2="0" y2="1">
@@ -323,7 +348,7 @@ export default function Last30DaysDeliveredChart({
                   axisLine={false}
                   tickLine={false}
                   tickMargin={10}
-                  interval={0}
+                  interval={xAxisInterval}
                   tick={<CustomAxisTick />}
                   height={80}
                 />
@@ -334,7 +359,7 @@ export default function Last30DaysDeliveredChart({
                   name="Orders"
                   fill="url(#barOrders)"
                   radius={[6, 6, 0, 0]}
-                  barSize={12}
+                  barSize={windowSize.width < 640 ? 8 : 12}
                 />
               </BarChart>
             </ResponsiveContainer>
@@ -343,12 +368,12 @@ export default function Last30DaysDeliveredChart({
           <TabsContent value="sales" className="mt-0">
             <ResponsiveContainer
               width="100%"
-              height={350}
-              className="md:h-[400px]"
+              height={280}
+              className="sm:h-[320px] md:h-[350px] lg:h-[400px]"
             >
               <BarChart
                 data={formattedData}
-                margin={{ top: 20, right: 10, left: 0, bottom: 5 }}
+                margin={{ top: windowSize.width < 640 ? 10 : 20, right: windowSize.width < 640 ? 5 : 10, left: 0, bottom: 5 }}
               >
                 <defs>
                   <linearGradient id="barSales" x1="0" y1="0" x2="0" y2="1">
@@ -362,7 +387,7 @@ export default function Last30DaysDeliveredChart({
                   axisLine={false}
                   tickLine={false}
                   tickMargin={10}
-                  interval={0}
+                  interval={xAxisInterval}
                   tick={<CustomAxisTick />}
                   height={80}
                 />
@@ -379,7 +404,7 @@ export default function Last30DaysDeliveredChart({
                   name="Sales"
                   fill="url(#barSales)"
                   radius={[6, 6, 0, 0]}
-                  barSize={12}
+                  barSize={windowSize.width < 640 ? 8 : 12}
                 />
               </BarChart>
             </ResponsiveContainer>

@@ -93,7 +93,7 @@ export default function TopSaleProductsList() {
 
   if (loading) {
     return (
-      <Card className="w-full">
+      <Card className="w-full overflow-hidden">
         <div className="flex justify-center items-center min-h-[200px]">
           <LoadingIndicator message="Loading top selling products..." />
         </div>
@@ -102,20 +102,20 @@ export default function TopSaleProductsList() {
   }
 
   return (
-    <Card className="w-full">
+    <Card className="w-full overflow-hidden">
       <CardHeader>
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div className="flex-1">
-            <CardTitle className="text-xl font-bold">Top Selling Products</CardTitle>
-            <CardDescription>Products sorted by sales count</CardDescription>
+            <CardTitle className="text-lg sm:text-xl font-bold">Top Selling Products</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">Products sorted by sales count</CardDescription>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Select
               value={limit.toString()}
               onValueChange={(v) => setLimit(parseInt(v))}
             >
-              <SelectTrigger className="w-[130px] h-9">
+              <SelectTrigger className="w-[100px] sm:w-[130px] h-8 sm:h-9 text-xs sm:text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -130,19 +130,19 @@ export default function TopSaleProductsList() {
       </CardHeader>
 
       <CardContent>
-        <div className="rounded-lg border overflow-x-auto">
+        <div className="overflow-x-auto -mx-4 sm:mx-0">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[60px] text-xs">#</TableHead>
+                <TableHead className="w-[50px] sm:w-[60px] text-xs">#</TableHead>
                 <TableHead className="text-xs">Product</TableHead>
                 <TableHead className="hidden md:table-cell text-xs">
                   Category
                 </TableHead>
                 <TableHead className="text-center text-xs">Sold</TableHead>
                 <TableHead className="text-right text-xs">Price</TableHead>
-                <TableHead className="text-right text-xs">Stock</TableHead>
-                <TableHead className="text-right text-xs w-[60px]">
+                <TableHead className="text-right text-xs hidden sm:table-cell">Stock</TableHead>
+                <TableHead className="text-right text-xs w-[50px] sm:w-[60px]">
                   View
                 </TableHead>
               </TableRow>
@@ -153,76 +153,76 @@ export default function TopSaleProductsList() {
                 <TableRow>
                   <TableCell
                     colSpan={7}
-                    className="text-center py-8 text-muted-foreground"
+                    className="text-center py-6 sm:py-8 text-muted-foreground"
                   >
-                    <Package className="h-10 w-10 mx-auto mb-2 opacity-50" />
-                    <p className="font-medium">No products found</p>
+                    <Package className="h-8 w-8 sm:h-10 sm:w-10 mx-auto mb-2 opacity-50" />
+                    <p className="font-medium text-sm">No products found</p>
                   </TableCell>
                 </TableRow>
               ) : (
                 products.map((p, idx) => (
                   <TableRow key={p.id}>
-                    <TableCell className="py-2">{idx + 1}</TableCell>
+                    <TableCell className="py-1.5 sm:py-2 text-xs sm:text-sm">{idx + 1}</TableCell>
 
-                    <TableCell className="py-2">
-                      <div className="flex items-center gap-3">
-                        <div className="relative w-12 h-12 rounded overflow-hidden bg-muted">
+                    <TableCell className="py-1.5 sm:py-2">
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded overflow-hidden bg-muted flex-shrink-0">
                           {p.attachment?.url ? (
                             <Image
                               src={p.attachment.url}
                               alt={p.name}
                               fill
-                              sizes="48px"
+                              sizes="(max-width: 640px) 40px, 48px"
                               style={{ objectFit: "cover" }}
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-xs">
-                              No image
+                            <div className="w-full h-full flex items-center justify-center text-[10px] sm:text-xs">
+                              No img
                             </div>
                           )}
                         </div>
 
-                        <div className="flex flex-col min-w-0">
-                          <span className="font-medium text-sm truncate">
+                        <div className="flex flex-col min-w-0 flex-1">
+                          <span className="font-medium text-xs sm:text-sm truncate">
                             {p.name}
                           </span>
-                          <div className="text-xs text-muted-foreground truncate max-w-[220px]">
+                          <div className="text-[10px] sm:text-xs text-muted-foreground truncate max-w-[150px] sm:max-w-[220px]">
                             <span>{p.brand?.name ?? ""}</span>
                             {p.isFeatured && (
-                              <Badge className="ml-2">Featured</Badge>
+                              <Badge className="ml-1 sm:ml-2 text-[10px] sm:text-xs h-4 sm:h-auto px-1 sm:px-2">Featured</Badge>
                             )}
                           </div>
                         </div>
                       </div>
                     </TableCell>
 
-                    <TableCell className="hidden md:table-cell py-2">
-                      <span className="text-xs">{p.category?.name ?? "—"}</span>
+                    <TableCell className="hidden md:table-cell py-1.5 sm:py-2">
+                      <span className="text-[10px] sm:text-xs">{p.category?.name ?? "—"}</span>
                     </TableCell>
 
-                    <TableCell className="text-center py-2">
-                      <span className="font-bold">{p.saleCount}</span>
+                    <TableCell className="text-center py-1.5 sm:py-2">
+                      <span className="font-bold text-xs sm:text-sm">{p.saleCount}</span>
                     </TableCell>
 
-                    <TableCell className="text-right py-2">
-                      <span className="font-bold text-sm">
+                    <TableCell className="text-right py-1.5 sm:py-2">
+                      <span className="font-bold text-xs sm:text-sm">
                         {formatCurrencyEnglish(p.sellingPrice)}
                       </span>
                     </TableCell>
 
-                    <TableCell className="text-right py-2">
-                      <span className="text-xs">{p.stock}</span>
+                    <TableCell className="text-right py-1.5 sm:py-2 hidden sm:table-cell">
+                      <span className="text-[10px] sm:text-xs">{p.stock}</span>
                     </TableCell>
 
-                    <TableCell className="text-right py-2">
+                    <TableCell className="text-right py-1.5 sm:py-2">
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-7 w-7 p-0"
+                        className="h-6 w-6 sm:h-7 sm:w-7 p-0"
                         asChild
                       >
                         <Link href={`/product/${p.slug}`}>
-                          <Eye className="h-3.5 w-3.5" />
+                          <Eye className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                         </Link>
                       </Button>
                     </TableCell>

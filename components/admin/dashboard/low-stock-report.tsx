@@ -165,7 +165,7 @@ export function LowStockReport({
     );
 
   const renderTableView = () => (
-    <div className="rounded-lg border bg-white dark:bg-gray-950 md:p-4 p-2">
+    <div className="bg-white dark:bg-gray-950">
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>

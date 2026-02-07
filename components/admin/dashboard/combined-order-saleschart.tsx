@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -31,6 +32,19 @@ const SALES_COLOR = "hsl(145, 70%, 50%)"; // Green for sales
 export default function CombinedOrdersSalesChart({
   chartData,
 }: CombinedOrdersSalesChartProps) {
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== "undefined" ? window.innerWidth : 1200,
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const totalOrders = chartData.reduce((sum, item) => sum + item.orderCount, 0);
   const totalSales = chartData.reduce((sum, item) => sum + item.totalValue, 0);
 
@@ -79,21 +93,27 @@ export default function CombinedOrdersSalesChart({
   };
 
   return (
-    <Card className={`w-full `}>
+    <Card className="w-full overflow-hidden">
       <Tabs defaultValue="combined" className="w-full">
         <CardHeader>
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div className="flex-1">
-              <CardTitle className="text-xl font-bold">Orders & Sales Overview</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-lg sm:text-xl font-bold">Orders & Sales Overview</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 {totalOrders.toLocaleString()} orders with{" "}
                 {formatCurrencyEnglish(totalSales)} in sales
               </CardDescription>
             </div>
-            <TabsList>
-              <TabsTrigger value="combined">Combined View</TabsTrigger>
-              <TabsTrigger value="orders">Orders</TabsTrigger>
-              <TabsTrigger value="sales">Sales</TabsTrigger>
+            <TabsList className="bg-gray-100 dark:bg-gray-800 w-full sm:w-auto overflow-x-auto">
+              <TabsTrigger value="combined" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 text-xs sm:text-sm flex-1 sm:flex-initial">
+                Combined
+              </TabsTrigger>
+              <TabsTrigger value="orders" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 text-xs sm:text-sm flex-1 sm:flex-initial">
+                Orders
+              </TabsTrigger>
+              <TabsTrigger value="sales" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 text-xs sm:text-sm flex-1 sm:flex-initial">
+                Sales
+              </TabsTrigger>
             </TabsList>
           </div>
         </CardHeader>
@@ -103,12 +123,12 @@ export default function CombinedOrdersSalesChart({
           <TabsContent value="combined" className="mt-0">
             <ResponsiveContainer
               width="100%"
-              height={350}
-              className="md:h-[400px]"
+              height={280}
+              className="sm:h-[320px] md:h-[350px] lg:h-[400px]"
             >
               <BarChart
                 data={chartData}
-                margin={{ top: 20, right: 0, left: 0, bottom: 5 }}
+                margin={{ top: windowSize.width < 640 ? 10 : 20, right: 0, left: 0, bottom: 5 }}
               >
                 <CartesianGrid
                   strokeDasharray="3 3"
@@ -140,9 +160,10 @@ export default function CombinedOrdersSalesChart({
                 <Tooltip content={<CustomTooltip />} />
                 <Legend
                   verticalAlign="top"
-                  height={36}
+                  height={windowSize.width < 640 ? 28 : 36}
                   iconType="circle"
-                  iconSize={8}
+                  iconSize={windowSize.width < 640 ? 6 : 8}
+                  wrapperStyle={{ fontSize: windowSize.width < 640 ? '11px' : '12px' }}
                 />
                 <Bar
                   yAxisId="left"
@@ -150,7 +171,7 @@ export default function CombinedOrdersSalesChart({
                   name="Orders"
                   fill={ORDERS_COLOR}
                   radius={[4, 4, 0, 0]}
-                  barSize={20}
+                  barSize={windowSize.width < 640 ? 12 : 20}
                 />
                 <Bar
                   yAxisId="right"
@@ -158,7 +179,7 @@ export default function CombinedOrdersSalesChart({
                   name="Sales"
                   fill={SALES_COLOR}
                   radius={[4, 4, 0, 0]}
-                  barSize={20}
+                  barSize={windowSize.width < 640 ? 12 : 20}
                 />
               </BarChart>
             </ResponsiveContainer>
@@ -167,12 +188,12 @@ export default function CombinedOrdersSalesChart({
           <TabsContent value="orders" className="mt-0">
             <ResponsiveContainer
               width="100%"
-              height={350}
-              className="md:h-[400px]"
+              height={280}
+              className="sm:h-[320px] md:h-[350px] lg:h-[400px]"
             >
               <BarChart
                 data={chartData}
-                margin={{ top: 20, right: 0, left: 0, bottom: 5 }}
+                margin={{ top: windowSize.width < 640 ? 10 : 20, right: 0, left: 0, bottom: 5 }}
               >
                 <CartesianGrid
                   strokeDasharray="3 3"
@@ -192,7 +213,7 @@ export default function CombinedOrdersSalesChart({
                   name="Orders"
                   fill={ORDERS_COLOR}
                   radius={[4, 4, 0, 0]}
-                  barSize={30}
+                  barSize={windowSize.width < 640 ? 16 : 30}
                 >
                   {chartData.map((entry, index) => (
                     <text
@@ -224,12 +245,12 @@ export default function CombinedOrdersSalesChart({
           <TabsContent value="sales" className="mt-0">
             <ResponsiveContainer
               width="100%"
-              height={350}
-              className="md:h-[400px]"
+              height={280}
+              className="sm:h-[320px] md:h-[350px] lg:h-[400px]"
             >
               <BarChart
                 data={chartData}
-                margin={{ top: 20, right: 0, left: 0, bottom: 5 }}
+                margin={{ top: windowSize.width < 640 ? 10 : 20, right: 0, left: 0, bottom: 5 }}
               >
                 <CartesianGrid
                   strokeDasharray="3 3"
@@ -254,7 +275,7 @@ export default function CombinedOrdersSalesChart({
                   name="Sales"
                   fill={SALES_COLOR}
                   radius={[4, 4, 0, 0]}
-                  barSize={30}
+                  barSize={windowSize.width < 640 ? 16 : 30}
                 >
                   {chartData.map((entry, index) => (
                     <text

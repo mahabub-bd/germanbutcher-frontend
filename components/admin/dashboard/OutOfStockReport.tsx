@@ -58,7 +58,7 @@ export function OutOfStockReport() {
       {isLoading ? (
         <LoadingIndicator message="Loading out of stock report..." />
       ) : (
-        <div className="rounded-lg border bg-white dark:bg-gray-950  md:p-6 p-2">
+        <div className=" bg-white dark:bg-gray-950  ">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>

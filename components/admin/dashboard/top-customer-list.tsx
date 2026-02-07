@@ -94,24 +94,24 @@ export function TopCustomersList() {
   const getRankBadge = (index: number) => {
     if (index === 0)
       return (
-        <Badge className="bg-yellow-500 text-white h-6">
-          <Award className="h-3 w-3 mr-1" />1
+        <Badge className="bg-yellow-500 text-white h-5 sm:h-6">
+          <Award className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-0.5 sm:mr-1" />1
         </Badge>
       );
     if (index === 1)
       return (
-        <Badge className="bg-gray-400 text-white h-6">
-          <Award className="h-3 w-3 mr-1" />2
+        <Badge className="bg-gray-400 text-white h-5 sm:h-6">
+          <Award className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-0.5 sm:mr-1" />2
         </Badge>
       );
     if (index === 2)
       return (
-        <Badge className="bg-amber-600 text-white h-6">
-          <Award className="h-3 w-3 mr-1" />3
+        <Badge className="bg-amber-600 text-white h-5 sm:h-6">
+          <Award className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-0.5 sm:mr-1" />3
         </Badge>
       );
     return (
-      <Badge variant="outline" className="h-6">
+      <Badge variant="outline" className="h-5 sm:h-6 text-[10px] sm:text-xs">
         {index + 1}
       </Badge>
     );
@@ -119,7 +119,7 @@ export function TopCustomersList() {
 
   if (loading) {
     return (
-      <Card className="w-full">
+      <Card className="w-full overflow-hidden">
         <div className="flex justify-center items-center min-h-[200px]">
           <LoadingIndicator message="Loading top customers..." />
         </div>
@@ -128,20 +128,20 @@ export function TopCustomersList() {
   }
 
   return (
-    <Card className="w-full">
+    <Card className="w-full overflow-hidden">
       <CardHeader>
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div className="flex-1">
-            <CardTitle className="text-xl font-bold">Top Customers</CardTitle>
-            <CardDescription>Best customers by orders and spending</CardDescription>
+            <CardTitle className="text-lg sm:text-xl font-bold">Top Customers</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">Best customers by orders and spending</CardDescription>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <Select
               value={limit.toString()}
               onValueChange={(value) => setLimit(parseInt(value))}
             >
-              <SelectTrigger className="w-[130px] h-9">
+              <SelectTrigger className="w-[100px] sm:w-[130px] h-8 sm:h-9 text-xs sm:text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -156,7 +156,7 @@ export function TopCustomersList() {
               value={sortBy}
               onValueChange={(value: "orders" | "spending") => setSortBy(value)}
             >
-              <SelectTrigger className="w-[130px] h-9">
+              <SelectTrigger className="w-[100px] sm:w-[130px] h-8 sm:h-9 text-xs sm:text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -169,7 +169,7 @@ export function TopCustomersList() {
               value={timeFilter}
               onValueChange={(value: TimeFilter) => setTimeFilter(value)}
             >
-              <SelectTrigger className="w-[140px] h-9">
+              <SelectTrigger className="w-[110px] sm:w-[140px] h-8 sm:h-9 text-xs sm:text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -186,21 +186,21 @@ export function TopCustomersList() {
       </CardHeader>
 
       <CardContent>
-        <div className="rounded-lg border overflow-x-auto">
+        <div className="overflow-x-auto -mx-4 sm:mx-0">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[60px] text-xs h-10">Rank</TableHead>
-                <TableHead className="text-xs h-10">Customer</TableHead>
-                <TableHead className="hidden md:table-cell text-xs h-10">
+                <TableHead className="w-[50px] sm:w-[60px] text-xs h-9 sm:h-10">Rank</TableHead>
+                <TableHead className="text-xs h-9 sm:h-10">Customer</TableHead>
+                <TableHead className="hidden md:table-cell text-xs h-9 sm:h-10">
                   Contact
                 </TableHead>
-                <TableHead className="text-center text-xs h-10">Orders</TableHead>
-                <TableHead className="text-right text-xs h-10">Spent</TableHead>
-                <TableHead className="text-right text-xs h-10 hidden lg:table-cell">
+                <TableHead className="text-center text-xs h-9 sm:h-10">Orders</TableHead>
+                <TableHead className="text-right text-xs h-9 sm:h-10">Spent</TableHead>
+                <TableHead className="text-right text-xs h-9 sm:h-10 hidden lg:table-cell">
                   Avg
                 </TableHead>
-                <TableHead className="text-right text-xs h-10 w-[60px]">
+                <TableHead className="text-right text-xs h-9 sm:h-10 w-[50px] sm:w-[60px]">
                   View
                 </TableHead>
               </TableRow>
@@ -210,27 +210,27 @@ export function TopCustomersList() {
                 <TableRow>
                   <TableCell
                     colSpan={7}
-                    className="text-center py-8 text-muted-foreground"
+                    className="text-center py-6 sm:py-8 text-muted-foreground"
                   >
-                    <Users className="h-10 w-10 mx-auto mb-2 opacity-50" />
-                    <p className="font-medium">No customers found</p>
+                    <Users className="h-8 w-8 sm:h-10 sm:w-10 mx-auto mb-2 opacity-50" />
+                    <p className="font-medium text-sm">No customers found</p>
                   </TableCell>
                 </TableRow>
               ) : (
                 customers.map((customer, index) => (
                   <TableRow key={customer.id}>
                     {/* Rank */}
-                    <TableCell className="py-2">{getRankBadge(index)}</TableCell>
+                    <TableCell className="py-1.5 sm:py-2">{getRankBadge(index)}</TableCell>
 
                     {/* Customer */}
-                    <TableCell className="py-2">
+                    <TableCell className="py-1.5 sm:py-2">
                       <div className="flex flex-col">
                         <div className="flex items-center gap-1">
-                          <span className="font-medium text-sm truncate max-w-[150px]">
+                          <span className="font-medium text-xs sm:text-sm truncate max-w-[100px] sm:max-w-[150px]">
                             {customer.name}
                           </span>
                           {customer.isVerified && (
-                            <Badge variant="default" className="text-xs h-4 px-1">
+                            <Badge variant="default" className="text-[10px] sm:text-xs h-3.5 sm:h-4 px-1">
                               ✓
                             </Badge>
                           )}
@@ -239,18 +239,18 @@ export function TopCustomersList() {
                     </TableCell>
 
                     {/* Contact */}
-                    <TableCell className="hidden md:table-cell py-2">
-                      <span className="text-xs">{customer.mobileNumber}</span>
+                    <TableCell className="hidden md:table-cell py-1.5 sm:py-2">
+                      <span className="text-[10px] sm:text-xs">{customer.mobileNumber}</span>
                     </TableCell>
 
                     {/* Orders */}
-                    <TableCell className="text-center py-2">
+                    <TableCell className="text-center py-1.5 sm:py-2">
                       <div className="flex flex-col items-center">
-                        <span className="font-bold">
+                        <span className="font-bold text-xs sm:text-sm">
                           {customer.statistics.totalOrders}
                         </span>
                         {customer.statistics.pendingOrders > 0 && (
-                          <span className="text-xs text-yellow-600">
+                          <span className="text-[10px] sm:text-xs text-yellow-600">
                             {customer.statistics.pendingOrders}p
                           </span>
                         )}
@@ -258,15 +258,15 @@ export function TopCustomersList() {
                     </TableCell>
 
                     {/* Total Spent */}
-                    <TableCell className="text-right py-2">
-                      <span className="font-bold text-sm">
+                    <TableCell className="text-right py-1.5 sm:py-2">
+                      <span className="font-bold text-xs sm:text-sm">
                         {formatCurrencyEnglish(customer.statistics.totalSpent)}
                       </span>
                     </TableCell>
 
                     {/* Average */}
-                    <TableCell className="text-right py-2 hidden lg:table-cell">
-                      <span className="text-xs text-muted-foreground">
+                    <TableCell className="text-right py-1.5 sm:py-2 hidden lg:table-cell">
+                      <span className="text-[10px] sm:text-xs text-muted-foreground">
                         {customer.statistics.totalOrders > 0
                           ? formatCurrencyEnglish(
                               customer.statistics.averageOrderValue
@@ -276,15 +276,15 @@ export function TopCustomersList() {
                     </TableCell>
 
                     {/* Actions */}
-                    <TableCell className="text-right py-2">
+                    <TableCell className="text-right py-1.5 sm:py-2">
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-7 w-7 p-0"
+                        className="h-6 w-6 sm:h-7 sm:w-7 p-0"
                         asChild
                       >
                         <Link href={`/admin/customer/${customer.id}/view`}>
-                          <Eye className="h-3.5 w-3.5" />
+                          <Eye className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                         </Link>
                       </Button>
                     </TableCell>
