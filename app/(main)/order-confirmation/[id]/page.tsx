@@ -21,6 +21,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrencyEnglish, formatDateTime } from "@/lib/utils";
+import { hasActiveDiscount } from "@/utils/product-utils";
 import { fetchProtectedData } from "@/utils/api-utils";
 import {
   getOrderStatusColor,
@@ -97,7 +98,7 @@ export default async function OrderConfirmationPage({
       const originalItemPrice = item.product.sellingPrice * item.quantity;
       originalSubtotal += originalItemPrice;
 
-      if (item.product.discountValue) {
+      if (item.product.discountValue && hasActiveDiscount(item.product)) {
         let discountAmount = 0;
         if (item.product.discountType === "percentage") {
           discountAmount =
@@ -169,14 +170,17 @@ export default async function OrderConfirmationPage({
               <div>
                 <div className="space-y-4">
                   {order.items.map((item: OrderItem) => {
-                    const discountedPrice = calculateDiscountedPrice(
-                      item.product.sellingPrice,
-                      item.product.discountType ?? "",
-                      (item.product.discountValue ?? 0).toString()
-                    );
                     const hasDiscount =
+                      hasActiveDiscount(item.product) &&
                       item.product.discountValue &&
                       item.product.discountValue > 0;
+                    const discountedPrice = hasDiscount
+                      ? calculateDiscountedPrice(
+                          item.product.sellingPrice,
+                          item.product.discountType ?? "",
+                          (item.product.discountValue ?? 0).toString()
+                        )
+                      : item.product.sellingPrice;
 
                     return (
                       <div

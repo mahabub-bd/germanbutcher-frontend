@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { AddToWishlistButton } from "@/components/wishlist/add-to-wishlist-button";
 import { useCartContext } from "@/contexts/cart-context";
+import { hasActiveDiscount } from "@/utils/product-utils";
 import type { Product, User } from "@/utils/types";
 import {
   Facebook,
@@ -56,18 +57,7 @@ export function ProductPurchaseSection({
     }
   }, [isInCart, cartQuantity]);
 
-  // Check if discount is currently valid
-  const isDiscountValid = () => {
-    if (!product.discountValue || !product.discountStartDate || !product.discountEndDate) {
-      return false;
-    }
-    const now = new Date();
-    const startDate = new Date(product.discountStartDate);
-    const endDate = new Date(product.discountEndDate);
-    return now >= startDate && now <= endDate;
-  };
-
-  const discountAmount = isDiscountValid()
+  const discountAmount = hasActiveDiscount(product)
     ? product.discountType === "fixed"
       ? Number.parseFloat(String(product.discountValue ?? "0"))
       : (product.sellingPrice *

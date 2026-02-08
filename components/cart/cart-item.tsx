@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { useCartContext } from "@/contexts/cart-context";
 import { formatCurrencyEnglish } from "@/lib/utils";
+import { hasActiveDiscount } from "@/utils/product-utils";
 import type { CartItem } from "@/utils/types";
 import { AlertCircle, Loader2, Minus, Plus, Tag, Trash } from "lucide-react";
 import Image from "next/image";
@@ -26,16 +27,8 @@ export function CartItemProduct({ item }: { item: CartItem }) {
     (item.product.stock || 0) > 0 && (item.product.stock || 0) < 10;
   const hasInsufficientStock = localQuantity > (item.product.stock || 0);
 
-  // Discount calculations
-  const now = new Date();
-  const discountStart = new Date(item.product?.discountStartDate || 0);
-  const discountEnd = new Date(item.product?.discountEndDate || 0);
-  const hasActiveDiscount =
-    item.product.discountType &&
-    item.product.discountValue &&
-    now >= discountStart &&
-    now <= discountEnd;
-
+  // Discount calculations using shared utility
+  const hasActiveDiscountProduct = hasActiveDiscount(item.product);
   const discountedPrice = getDiscountedPrice(item.product);
   const hasDiscount = discountedPrice < item.product.sellingPrice;
   const totalPrice = discountedPrice * localQuantity;
@@ -162,7 +155,7 @@ export function CartItemProduct({ item }: { item: CartItem }) {
                   {item.product.name}
                 </h3>
               </Link>
-              {hasActiveDiscount && !isOutOfStock && (
+              {hasActiveDiscountProduct && !isOutOfStock && (
                 <Tag className="h-3 w-3 text-green-600 flex-shrink-0" />
               )}
             </div>
@@ -182,7 +175,7 @@ export function CartItemProduct({ item }: { item: CartItem }) {
                   Low Stock ({item.product.stock})
                 </Badge>
               )}
-              {hasActiveDiscount && !isOutOfStock && (
+              {hasActiveDiscountProduct && !isOutOfStock && (
                 <Badge
                   variant="secondary"
                   className="text-[10px] h-4 text-green-600 bg-green-50"

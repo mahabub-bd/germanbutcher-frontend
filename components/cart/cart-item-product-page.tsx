@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useCartContext } from "@/contexts/cart-context";
 import { formatCurrencyEnglish } from "@/lib/utils";
+import { hasActiveDiscount } from "@/utils/product-utils";
 import type { CartItem } from "@/utils/types";
 
 export function CartItemProductPage({ item }: { item: CartItem }) {
@@ -28,22 +29,14 @@ export function CartItemProductPage({ item }: { item: CartItem }) {
     (item.product.stock || 0) > 0 && (item.product.stock || 0) < 5;
   const hasInsufficientStock = localQuantity > (item.product.stock || 0);
 
-  // Discount calculations
-  const now = new Date();
-  const discountStart = new Date(item.product?.discountStartDate || 0);
-  const discountEnd = new Date(item.product?.discountEndDate || 0);
-  const hasActiveDiscount =
-    item.product.discountType &&
-    item.product.discountValue &&
-    now >= discountStart &&
-    now <= discountEnd;
-
+  // Discount calculations using shared utility
+  const hasActiveDiscountProduct = hasActiveDiscount(item.product);
   const discountedPrice = getDiscountedPrice(item.product);
   const discountAmount = item.product.sellingPrice - discountedPrice;
 
   let originalPriceDisplay = null;
 
-  if (hasActiveDiscount) {
+  if (hasActiveDiscountProduct) {
     originalPriceDisplay = (
       <span className="line-through text-muted-foreground text-sm">
         {formatCurrencyEnglish(item.product.sellingPrice)}
@@ -215,7 +208,7 @@ export function CartItemProductPage({ item }: { item: CartItem }) {
               >
                 {formatCurrencyEnglish(discountedPrice)}
               </span>
-              {hasActiveDiscount && !isOutOfStock && (
+              {hasActiveDiscountProduct && !isOutOfStock && (
                 <span className="text-[11px] text-green-600">
                   Save {formatCurrencyEnglish(discountAmount)}
                 </span>
