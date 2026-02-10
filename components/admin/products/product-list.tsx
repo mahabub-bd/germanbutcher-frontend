@@ -405,13 +405,13 @@ export function ProductList({
                 {formatCurrencyEnglish(product?.sellingPrice)}
               </TableCell>
               <TableCell className="capitalize">
-                {product?.unit?.name}
+                {product?.unit?.name || "-"}
               </TableCell>
               <TableCell className="hidden md:table-cell">
-                {product.brand.name}
+                {product.brand?.name || "-"}
               </TableCell>
               <TableCell className="hidden md:table-cell">
-                {product.category.name}
+                {product.category?.name || "-"}
               </TableCell>
               <TableCell className="hidden md:table-cell">
                 {product.stock}
