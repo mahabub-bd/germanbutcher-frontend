@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useEffect, useState } from "react";
+import type { AnalyticsRequests } from "@/utils/types";
 import {
   Area,
   AreaChart,
@@ -17,7 +17,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import type { AnalyticsRequests } from "@/utils/types";
 
 interface RequestsChartProps {
   data: AnalyticsRequests[];
@@ -26,27 +25,6 @@ interface RequestsChartProps {
 const REQUESTS_COLOR = "#6366f1"; // Indigo-500
 
 export function RequestsChart({ data }: RequestsChartProps) {
-  const [windowSize, setWindowSize] = useState({
-    width: typeof window !== "undefined" ? window.innerWidth : 1200,
-  });
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({ width: window.innerWidth });
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const getXAxisInterval = () => {
-    const { width } = windowSize;
-    if (width < 640) return Math.floor(data.length / 5);
-    if (width < 768) return Math.floor(data.length / 8);
-    if (width < 1024) return Math.floor(data.length / 12);
-    return 0;
-  };
-
   const totalRequests = data.reduce((sum, item) => sum + item.count, 0);
   const avgRequests = data.length > 0 ? Math.round(totalRequests / data.length) : 0;
 
@@ -110,7 +88,6 @@ export function RequestsChart({ data }: RequestsChartProps) {
               axisLine={false}
               tickLine={false}
               tickMargin={10}
-              interval={getXAxisInterval()}
               tick={{ fontSize: 11, fill: "currentColor" }}
             />
             <YAxis
