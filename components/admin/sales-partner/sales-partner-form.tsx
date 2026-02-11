@@ -34,7 +34,7 @@ const salesPartnerSchema = z.object({
     .url("Please enter a valid URL")
     .optional()
     .or(z.literal("")),
-  isActive: z.boolean().default(true),
+  isActive: z.boolean(),
   imageUrl: z.string().optional(),
 });
 

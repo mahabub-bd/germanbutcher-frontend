@@ -37,8 +37,8 @@ const salesPointSchema = z.object({
     .or(z.literal("")),
   contactNumber: z.string().min(1, "Contact number is required"),
   email: z.string().email("Please enter a valid email"),
-  isActive: z.boolean().default(true),
-  order: z.number().min(1, "Order must be at least 1").default(1),
+  isActive: z.boolean(),
+  order: z.number().min(1, "Order must be at least 1"),
 });
 
 type SalesPointFormValues = z.infer<typeof salesPointSchema>;

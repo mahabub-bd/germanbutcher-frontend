@@ -41,7 +41,7 @@ const recipeSchema = z.object({
   title: z.string().min(1, "Title is required"),
   details: z.string().min(1, "Details are required"),
   nutrition_details: z.string().optional(),
-  isPublished: z.boolean().default(false),
+  isPublished: z.boolean(),
   imageUrl: z.string().optional(),
   categoryId: z.coerce.number().min(1, "Category is required"),
 });

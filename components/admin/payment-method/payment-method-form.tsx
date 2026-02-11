@@ -19,7 +19,7 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import * as z from "zod";
+import { z } from "zod";
 
 const paymentMethodSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),

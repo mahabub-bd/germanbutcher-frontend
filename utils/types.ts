@@ -739,3 +739,53 @@ export interface DeliveryManDetailResponse {
   statusCode: number;
   data: DeliveryMan;
 }
+
+// Analytics Types
+export type AnalyticsPeriod = "1h" | "24h" | "7d" | "30d";
+
+export interface AnalyticsOverview {
+  totalRequests: number;
+  uniqueVisitors: number;
+  avgResponseTime: number;
+  requestsPerMinute: number;
+  peakHour: string;
+  topEndpoint: string;
+  period: string;
+}
+
+export interface AnalyticsRequests {
+  time: string;
+  count: number;
+}
+
+export interface PeakTraffic {
+  hour: string;
+  requestCount: number;
+}
+
+export interface VisitorsData {
+  date: string;
+  count: number;
+}
+
+export interface TopEndpoint {
+  endpoint: string;
+  method: string;
+  count: number;
+  avgResponseTime: number;
+}
+
+export interface ResponseTimes {
+  avg: number;
+  min: number;
+  max: number;
+}
+
+export interface AnalyticsDashboardData {
+  overview: AnalyticsOverview;
+  requests: AnalyticsRequests[];
+  peakTraffic: PeakTraffic[];
+  visitors: VisitorsData[];
+  topEndpoints: TopEndpoint[];
+  responseTimes: ResponseTimes;
+}

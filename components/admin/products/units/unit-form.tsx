@@ -18,11 +18,11 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import * as z from "zod";
+import { z } from "zod";
 
 const unitSchema = z.object({
   name: z.string().min(1, "Unit name is required"),
-  isActive: z.boolean().default(true),
+  isActive: z.boolean(),
 });
 
 interface UnitFormProps {

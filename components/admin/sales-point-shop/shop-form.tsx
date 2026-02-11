@@ -40,7 +40,7 @@ const shopSchema = z.object({
   division: z.string().min(1, "Division is required"),
   district: z.string().min(1, "District is required"),
   address: z.string().min(1, "Address is required"),
-  isActive: z.boolean().default(true),
+  isActive: z.boolean(),
 });
 
 type ShopFormValues = z.infer<typeof shopSchema>;

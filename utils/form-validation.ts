@@ -23,7 +23,7 @@ const registerSchema = z
 const brandSchema = z.object({
   name: z.string().min(1, "Brand name is required"),
   description: z.string().optional(),
-  isActive: z.boolean().default(true),
+  isActive: z.boolean(),
   imageUrl: z.string().optional(),
 });
 const bannerSchema = z.object({
@@ -36,7 +36,7 @@ const bannerSchema = z.object({
   type: z.nativeEnum(BannerType, {
     required_error: "Type is required",
   }),
-  isActive: z.boolean().default(true),
+  isActive: z.boolean(),
   displayOrder: z.coerce
     .number()
     .int()
@@ -57,7 +57,7 @@ const userSchema = z.object({
     .min(10, { message: "Please enter a valid mobile number" })
     .startsWith("+880", { message: "Mobile number must start with +880" }),
   roleId: z.string().min(1, { message: "Please select at least one role" }),
-  isVerified: z.boolean().default(false),
+  isVerified: z.boolean(),
 });
 
 const menuSchema = z.object({
@@ -66,9 +66,9 @@ const menuSchema = z.object({
   icon: z.string().optional().nullable(),
   parentId: z.number().nullable().optional(),
   order: z.number().min(0, "Order must be a positive number"),
-  isMainMenu: z.boolean().default(true),
-  isActive: z.boolean().default(true),
-  isAdminMenu: z.boolean().default(false),
+  isMainMenu: z.boolean(),
+  isActive: z.boolean(),
+  isAdminMenu: z.boolean(),
 });
 
 const paymentSchema = z.object({
@@ -98,14 +98,14 @@ const productSchema = z
     productSku: z.string().min(1, "SKU is required"),
     imageUrl: z.string().optional(),
     weight: z.coerce.number().optional(),
-    isActive: z.boolean().default(true),
-    isFeatured: z.boolean().default(false),
+    isActive: z.boolean(),
+    isFeatured: z.boolean(),
     brandId: z.number().min(1, "Brand is required"),
     galleryId: z.number().optional(),
     categoryId: z.coerce.number().min(1, "Category is required"),
 
     supplierId: z.number().min(1, "Supplier is required"),
-    hasDiscount: z.boolean().default(false),
+    hasDiscount: z.boolean(),
     discountType: z.nativeEnum(DiscountType).optional(),
     discountValue: z.coerce.number().optional(),
     discountStartDate: z.date().optional(),
@@ -177,14 +177,14 @@ const roleSchema = z.object({
   description: z
     .string()
     .min(5, { message: "Description must be at least 5 characters" }),
-  isActive: z.boolean().default(true),
+  isActive: z.boolean(),
 });
 const supplierSchema = z.object({
   name: z.string().min(1, "Supplier name is required"),
   email: z.string().email("Invalid email address").min(1, "Email is required"),
   phone: z.string().min(1, "Phone number is required"),
   address: z.string().min(1, "Address is required"),
-  isActive: z.boolean().default(true),
+  isActive: z.boolean(),
   imageUrl: z.string().optional(),
 });
 
@@ -268,7 +268,7 @@ const addressSchema = z.object({
   type: z.enum(["shipping", "billing"], {
     required_error: "Please select an address type",
   }),
-  isDefault: z.boolean().default(false),
+  isDefault: z.boolean(),
 });
 
 const testimonialSchema = z.object({
@@ -293,7 +293,7 @@ const testimonialSchema = z.object({
     .max(5, "Rating cannot exceed 5 stars")
     .int("Rating must be a whole number"),
 
-  isPublish: z.boolean().default(false),
+  isPublish: z.boolean(),
 
   imageUrl: z
     .string()
@@ -311,7 +311,7 @@ const deliveryManSchema = z.object({
     .string()
     .min(10, { message: "Please enter a valid mobile number" })
     .startsWith("+880", { message: "Mobile number must start with +880" }),
-  isActive: z.boolean().default(true),
+  isActive: z.boolean(),
 });
 export {
   addressSchema,

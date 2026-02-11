@@ -40,11 +40,11 @@ const categorySchema = z
   .object({
     name: z.string().min(1, "Category name is required"),
     description: z.string().min(1, "Description is required"),
-    isActive: z.boolean().default(true),
-    isMainCategory: z.boolean().default(false),
+    isActive: z.boolean(),
+    isMainCategory: z.boolean(),
     parentId: z.number().nullable().optional(),
     imageUrl: z.string().optional(),
-    order: z.number().min(0, "Order must be 0 or greater").default(0),
+    order: z.number().min(0, "Order must be 0 or greater"),
   })
   .refine((data) => !(data.isMainCategory && data.parentId), {
     message: "Main category cannot have a parent",

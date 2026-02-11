@@ -20,7 +20,7 @@ import { Section } from "../helper"
 const clientSchema = z.object({
   name: z.string().min(1, "Name is required"),
   order: z.number().min(0, "Order must be 0 or greater"),
-  isActive: z.boolean().default(true),
+  isActive: z.boolean(),
   imageUrl: z.string().optional(),
 })
 

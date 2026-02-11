@@ -33,7 +33,7 @@ import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import * as z from "zod";
+import { z } from "zod";
 
 const addressSchema = z.object({
   address: z.string().min(1, "Address is required").trim(),
@@ -43,7 +43,7 @@ const addressSchema = z.object({
   type: z.enum(["shipping", "billing"], {
     required_error: "Please select an address type",
   }),
-  isDefault: z.boolean().default(false),
+  isDefault: z.boolean(),
 });
 
 type AddressFormData = z.infer<typeof addressSchema>;

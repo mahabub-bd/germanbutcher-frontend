@@ -6,7 +6,11 @@
       "Bash(cat:*)",
       "Bash(npx tsc:*)",
       "Bash(npm run build:*)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(pnpm update:*)",
+      "Bash(pnpm run build)",
+      "Bash(npx patch-package:*)",
+      "Bash(pnpm patch:*)"
     ]
   }
 }
