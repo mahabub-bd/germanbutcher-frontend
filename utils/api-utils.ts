@@ -12,7 +12,19 @@ export type ApiResponse<T = any> = {
 
 export const apiUrl = process.env.NEXT_PUBLIC_API_URL as string;
 
+// Simple in-memory cache for product endpoints
+const productCache = new Map<string, { data: any; timestamp: number }>();
+const CACHE_TTL = 5000; // 5 seconds cache
+
 export async function fetchData<T>(endpoint: string): Promise<T> {
+  // Check cache for product endpoints (both slug and id based)
+  if (endpoint.startsWith('products/slug/') || endpoint.match(/products\/\d+$/)) {
+    const cached = productCache.get(endpoint);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+      return cached.data;
+    }
+  }
+
   const url = `${apiUrl}/${endpoint}`;
 
   try {
@@ -33,7 +45,17 @@ export async function fetchData<T>(endpoint: string): Promise<T> {
     }
 
     const result = await response.json();
-    return result.data;
+    const data = result.data;
+
+    // Cache product slug endpoints for 5 seconds
+    if (endpoint.startsWith('products/slug/')) {
+      productCache.set(endpoint, {
+        data,
+        timestamp: Date.now(),
+      });
+    }
+
+    return data;
   } catch (error: unknown) {
     console.error(`Error fetching data from ${endpoint}:`, error);
     throw error;
