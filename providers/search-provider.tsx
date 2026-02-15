@@ -52,7 +52,7 @@ export function SearchProvider({ children }: { children: React.ReactNode }) {
 
       try {
         const data = await fetchData<Product[]>(
-          `products?search=${encodeURIComponent(searchQuery.trim())}`
+          `products?search=${encodeURIComponent(searchQuery.trim())}&isActive=true`
         );
 
         // Only update if not aborted
