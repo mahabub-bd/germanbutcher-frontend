@@ -37,7 +37,7 @@ interface LowStockReportProps {
 
 export function LowStockReport({
   initialPage = 1,
-  initialLimit = 10,
+  initialLimit = 5,
   initialSearchParams = {},
 }: LowStockReportProps) {
   const router = useRouter();
@@ -147,7 +147,7 @@ export function LowStockReport({
   };
 
   const handleThresholdChange = (value: string) => {
-    const newThreshold = parseInt(value, 10);
+    const newThreshold = parseInt(value, 5);
     setThreshold(newThreshold);
     setCurrentPage(1);
   };
@@ -269,9 +269,8 @@ export function LowStockReport({
                 return (
                   <TableRow
                     key={product.id}
-                    className={`hover:bg-muted/50 ${
-                      product.stock === 0 ? "bg-red-50 dark:bg-red-950/20" : ""
-                    }`}
+                    className={`hover:bg-muted/50 ${product.stock === 0 ? "bg-red-50 dark:bg-red-950/20" : ""
+                      }`}
                   >
                     <TableCell>
                       <ProductImage product={product} height={50} width={50} />

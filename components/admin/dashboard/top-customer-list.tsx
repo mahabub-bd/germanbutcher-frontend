@@ -66,7 +66,7 @@ type TimeFilter =
 export function TopCustomersList() {
   const [customers, setCustomers] = useState<TopCustomer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [limit, setLimit] = useState<number>(10);
+  const [limit, setLimit] = useState<number>(5);
   const [sortBy, setSortBy] = useState<"orders" | "spending">("orders");
   const [timeFilter, setTimeFilter] = useState<TimeFilter>("all_time");
 
