@@ -80,9 +80,13 @@ export function OrderList({
   const [isLoading, setIsLoading] = useState(true);
 
   const updateUrl = useCallback(() => {
+    // Prevent page from exceeding totalPages
+    const safePage = Math.min(currentPage, totalPages);
+    const finalPage = Math.max(1, safePage);
+
     const params = new URLSearchParams();
 
-    params.set("page", currentPage.toString());
+    params.set("page", finalPage.toString());
     params.set("limit", limit.toString());
 
     if (searchQuery) params.set("search", searchQuery);
@@ -90,7 +94,7 @@ export function OrderList({
       params.set("orderStatus", statusFilter);
 
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
-  }, [router, pathname, currentPage, limit, searchQuery, statusFilter]);
+  }, [router, pathname, currentPage, totalPages, limit, searchQuery, statusFilter]);
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -127,12 +131,16 @@ export function OrderList({
     const statusFromUrl = searchParams?.get("orderStatus");
 
     if (pageFromUrl) {
-      setCurrentPage(parseInt(pageFromUrl, 12));
+      const newPage = parseInt(pageFromUrl, 10);
+      // Only update if different to prevent infinite loop
+      if (newPage !== currentPage && newPage > 0) {
+        setCurrentPage(newPage);
+      }
     }
-    if (searchFromUrl) {
+    if (searchFromUrl && searchFromUrl !== searchQuery) {
       setSearchQuery(searchFromUrl);
     }
-    if (statusFromUrl) {
+    if (statusFromUrl && statusFromUrl !== statusFilter) {
       setStatusFilter(statusFromUrl);
     }
   }, [searchParams]);
@@ -240,7 +248,7 @@ export function OrderList({
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              [...Array(5)].map((_, i) => (
+              [...Array(limit)].map((_, i) => (
                 <TableRow key={i}>
                   <TableCell>
                     <div className="h-4 w-20 bg-gray-200 rounded animate-pulse" />

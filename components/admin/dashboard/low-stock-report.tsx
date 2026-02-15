@@ -63,6 +63,9 @@ export function LowStockReport({
   );
 
   const updateUrl = useCallback(() => {
+    // Only update URL if not on dashboard to avoid cluttering the main dashboard URL
+    if (pathname === "/admin/dashboard") return;
+
     const params = new URLSearchParams();
     params.set("page", currentPage.toString());
     params.set("limit", limit.toString());
@@ -106,9 +109,21 @@ export function LowStockReport({
     const pageFromUrl = searchParams?.get("page");
     const searchFromUrl = searchParams?.get("search");
     const thresholdFromUrl = searchParams?.get("threshold");
-    if (pageFromUrl) setCurrentPage(parseInt(pageFromUrl, 10));
-    if (searchFromUrl) setSearchQuery(searchFromUrl);
-    if (thresholdFromUrl) setThreshold(parseInt(thresholdFromUrl, 10));
+    if (pageFromUrl) {
+      const newPage = parseInt(pageFromUrl, 10);
+      if (newPage !== currentPage && newPage > 0) {
+        setCurrentPage(newPage);
+      }
+    }
+    if (searchFromUrl && searchFromUrl !== searchQuery) {
+      setSearchQuery(searchFromUrl);
+    }
+    if (thresholdFromUrl) {
+      const newThreshold = parseInt(thresholdFromUrl, 10);
+      if (newThreshold !== threshold) {
+        setThreshold(newThreshold);
+      }
+    }
   }, [searchParams]);
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import ProductList from "@/components/products/product-list";
 export default function PopularPage() {
   return (
     <div className="container mx-auto ">
-      <ProductList endpoint="products/bestsellers?limit=20">
+      <ProductList endpoint="products/bestsellers?limit=50&isActive=true">
         <HeadingPrimary
           title="POPULAR PRODUCTS"
           subtitle="Discover amazing deals on top products"

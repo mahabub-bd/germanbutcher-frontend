@@ -1,6 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,7 +25,7 @@ import {
 } from "@/components/ui/table";
 import { formatCurrencyEnglish } from "@/lib/utils";
 import { fetchProtectedData } from "@/utils/api-utils";
-import { Eye, Package } from "lucide-react";
+import { Eye, Package, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -64,7 +63,26 @@ interface BestsellerProduct {
   brand?: { id: number; name: string; slug: string } | null;
   category?: Category | null;
   unit?: ProductUnit | null;
+  discountType?: string | null;
+  discountValue?: number | null;
 }
+
+// Helper function to calculate discounted price
+const getDiscountedPrice = (product: BestsellerProduct): number => {
+  if (!product.discountType || !product.discountValue) {
+    return product.sellingPrice;
+  }
+
+  const discountValue = Number(product.discountValue);
+
+  if (product.discountType?.toUpperCase() === "PERCENTAGE") {
+    return product.sellingPrice * (1 - discountValue / 100);
+  } else if (product.discountType?.toUpperCase() === "FIXED") {
+    return Math.max(0, product.sellingPrice - discountValue);
+  }
+
+  return product.sellingPrice;
+};
 
 export default function TopSaleProductsList() {
   const [products, setProducts] = useState<BestsellerProduct[]>([]);
@@ -130,7 +148,7 @@ export default function TopSaleProductsList() {
       </CardHeader>
 
       <CardContent>
-        <div className="overflow-x-auto -mx-4 sm:mx-0">
+        <div className="overflow-x-auto mx-4 sm:mx-2">
           <Table>
             <TableHeader>
               <TableRow>
@@ -140,7 +158,9 @@ export default function TopSaleProductsList() {
                   Category
                 </TableHead>
                 <TableHead className="text-center text-xs">Sold</TableHead>
+                <TableHead className="text-center text-xs">Featured</TableHead>
                 <TableHead className="text-right text-xs">Price</TableHead>
+                <TableHead className="text-right text-xs">Discounted Price</TableHead>
                 <TableHead className="text-right text-xs hidden sm:table-cell">Stock</TableHead>
                 <TableHead className="text-right text-xs w-[50px] sm:w-[60px]">
                   View
@@ -152,7 +172,7 @@ export default function TopSaleProductsList() {
               {products.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={7}
+                    colSpan={9}
                     className="text-center py-6 sm:py-8 text-muted-foreground"
                   >
                     <Package className="h-8 w-8 sm:h-10 sm:w-10 mx-auto mb-2 opacity-50" />
@@ -160,74 +180,103 @@ export default function TopSaleProductsList() {
                   </TableCell>
                 </TableRow>
               ) : (
-                products.map((p, idx) => (
-                  <TableRow key={p.id}>
-                    <TableCell className="py-1.5 sm:py-2 text-xs sm:text-sm">{idx + 1}</TableCell>
+                products.map((p, idx) => {
+                  const discountedPrice = getDiscountedPrice(p);
+                  const hasDiscount = discountedPrice < p.sellingPrice;
 
-                    <TableCell className="py-1.5 sm:py-2">
-                      <div className="flex items-center gap-2 sm:gap-3">
-                        <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded overflow-hidden bg-muted flex-shrink-0">
-                          {p.attachment?.url ? (
-                            <Image
-                              src={p.attachment.url}
-                              alt={p.name}
-                              fill
-                              sizes="(max-width: 640px) 40px, 48px"
-                              style={{ objectFit: "cover" }}
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-[10px] sm:text-xs">
-                              No img
-                            </div>
-                          )}
-                        </div>
+                  return (
+                    <TableRow key={p.id}>
+                      <TableCell className="py-1.5 sm:py-2 text-xs sm:text-sm">{idx + 1}</TableCell>
 
-                        <div className="flex flex-col min-w-0 flex-1">
-                          <span className="font-medium text-xs sm:text-sm truncate">
-                            {p.name}
-                          </span>
-                          <div className="text-[10px] sm:text-xs text-muted-foreground truncate max-w-[150px] sm:max-w-[220px]">
-                            <span>{p.brand?.name ?? ""}</span>
-                            {p.isFeatured && (
-                              <Badge className="ml-1 sm:ml-2 text-[10px] sm:text-xs h-4 sm:h-auto px-1 sm:px-2">Featured</Badge>
+                      <TableCell className="py-1.5 sm:py-2">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded overflow-hidden bg-muted flex-shrink-0">
+                            {p.attachment?.url ? (
+                              <Image
+                                src={p.attachment.url}
+                                alt={p.name}
+                                fill
+                                sizes="(max-width: 640px) 40px, 48px"
+                                style={{ objectFit: "cover" }}
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-[10px] sm:text-xs">
+                                No img
+                              </div>
                             )}
                           </div>
+
+                          <div className="flex flex-col min-w-0 flex-1">
+                            <span className="font-medium text-xs sm:text-sm truncate">
+                              {p.name}
+                            </span>
+                            <div className="text-[10px] sm:text-xs text-muted-foreground truncate max-w-[150px] sm:max-w-[220px]">
+                              <span>{p.brand?.name ?? ""}</span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </TableCell>
+                      </TableCell>
 
-                    <TableCell className="hidden md:table-cell py-1.5 sm:py-2">
-                      <span className="text-[10px] sm:text-xs">{p.category?.name ?? "—"}</span>
-                    </TableCell>
+                      <TableCell className="hidden md:table-cell py-1.5 sm:py-2">
+                        <span className="text-[10px] sm:text-xs">{p.category?.name ?? "—"}</span>
+                      </TableCell>
 
-                    <TableCell className="text-center py-1.5 sm:py-2">
-                      <span className="font-bold text-xs sm:text-sm">{p.saleCount}</span>
-                    </TableCell>
+                      <TableCell className="text-center py-1.5 sm:py-2">
+                        <span className="font-bold text-xs sm:text-sm">{p.saleCount}</span>
+                      </TableCell>
 
-                    <TableCell className="text-right py-1.5 sm:py-2">
-                      <span className="font-bold text-xs sm:text-sm">
-                        {formatCurrencyEnglish(p.sellingPrice)}
-                      </span>
-                    </TableCell>
+                      <TableCell className="text-center py-1.5 sm:py-2">
+                        {p.isFeatured ? (
+                          <div className="flex justify-center">
+                            <Star className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500 fill-yellow-500" />
+                          </div>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
+                      </TableCell>
 
-                    <TableCell className="text-right py-1.5 sm:py-2 hidden sm:table-cell">
-                      <span className="text-[10px] sm:text-xs">{p.stock}</span>
-                    </TableCell>
+                      <TableCell className="text-right py-1.5 sm:py-2">
+                        <span className="font-bold text-xs sm:text-sm">
+                          {formatCurrencyEnglish(p.sellingPrice)}
+                        </span>
+                      </TableCell>
 
-                    <TableCell className="text-right py-1.5 sm:py-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-6 w-6 sm:h-7 sm:w-7 p-0"
-                        asChild
-                      >
-                        <Link href={`/product/${p.slug}`}>
-                          <Eye className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                        </Link>
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
+                      <TableCell className="text-right py-1.5 sm:py-2">
+                        {hasDiscount ? (
+                          <div className="flex flex-col items-end">
+                            <span className="font-bold text-xs sm:text-sm text-green-600 dark:text-green-400">
+                              {formatCurrencyEnglish(discountedPrice)}
+                            </span>
+                            <span className="text-[10px] text-muted-foreground line-through">
+                              {formatCurrencyEnglish(p.sellingPrice)}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="font-bold text-xs sm:text-sm text-muted-foreground">
+                            —
+                          </span>
+                        )}
+                      </TableCell>
+
+                      <TableCell className="text-right py-1.5 sm:py-2 hidden sm:table-cell">
+                        <span className="text-[10px] sm:text-xs">{p.stock}</span>
+                      </TableCell>
+
+                      <TableCell className="text-right py-1.5 sm:py-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 w-6 sm:h-7 sm:w-7 p-0"
+                          asChild
+                        >
+                          <Link href={`/product/${p.slug}`}>
+                            <Eye className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                          </Link>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
               )}
             </TableBody>
           </Table>

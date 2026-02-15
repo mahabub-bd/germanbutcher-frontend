@@ -42,7 +42,7 @@ export default function Home() {
       <section className="lg:py-10 py-5 bg-gray-50">
         <div className="container mx-auto ">
           <ProductList
-            endpoint="products/discounted?page=1&limit=20"
+            endpoint="products/discounted?page=1&limit=20&isActive=true"
             isHomePage
             href="products/special-offers"
           >
@@ -54,7 +54,7 @@ export default function Home() {
       <section className="md:py-10 py-5 ">
         <div className="container mx-auto ">
           <ProductList
-            endpoint="products/bestsellers?limit=20"
+            endpoint="products/bestsellers?limit=20&isActive=true"
             isHomePage
             href="products/popular"
           >

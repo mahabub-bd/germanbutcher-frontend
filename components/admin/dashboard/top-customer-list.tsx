@@ -1,5 +1,7 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,8 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -186,7 +186,7 @@ export function TopCustomersList() {
       </CardHeader>
 
       <CardContent>
-        <div className="overflow-x-auto -mx-4 sm:mx-0">
+        <div className="overflow-x-auto mx-4 sm:mx-2">
           <Table>
             <TableHeader>
               <TableRow>
@@ -269,8 +269,8 @@ export function TopCustomersList() {
                       <span className="text-[10px] sm:text-xs text-muted-foreground">
                         {customer.statistics.totalOrders > 0
                           ? formatCurrencyEnglish(
-                              customer.statistics.averageOrderValue
-                            )
+                            customer.statistics.averageOrderValue
+                          )
                           : "—"}
                       </span>
                     </TableCell>
