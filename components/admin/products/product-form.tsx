@@ -341,6 +341,15 @@ export function ProductForm({
         supplierId: data.supplierId.toString(),
         attachment: attachmentId,
         galleryId: galleryId?.toString() || undefined,
+        // Clear discount fields when hasDiscount is false
+        ...(data.hasDiscount === false
+          ? {
+              discountType: null,
+              discountValue: null,
+              discountStartDate: null,
+              discountEndDate: null,
+            }
+          : {}),
       };
 
       const endpoint =

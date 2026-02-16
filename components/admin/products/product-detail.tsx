@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatCurrencyEnglish, formatDateTime } from "@/lib/utils";
+import { getDiscountedPrice, getDiscountLabel, hasActiveDiscount } from "@/utils/product-utils";
 import type { Product } from "@/utils/types";
 import {
   AlertTriangle,
@@ -64,18 +65,17 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     setCurrentImageIndex(newIndex);
   };
 
-  const hasDiscount =
-    (product.discountType === "fixed" && (product.discountValue ?? 0) > 0) ||
-    (product.discountType === "percentage" && (product.discountValue ?? 0) > 0);
+  const hasActive = hasActiveDiscount(product);
+  const discountedPrice = getDiscountedPrice(product);
+  const discountLabel = getDiscountLabel(product);
 
-  let discountedPrice = product.sellingPrice;
+  // Calculate savings
   let savingsAmount = 0;
   let savingsPercentage = 0;
 
-  if (hasDiscount) {
+  if (hasActive) {
     if (product.discountType === "fixed" && product.discountValue) {
       savingsAmount = product.discountValue;
-      discountedPrice = product.sellingPrice - savingsAmount;
       savingsPercentage = Math.round(
         (savingsAmount / product.sellingPrice) * 100
       );
@@ -84,7 +84,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       savingsAmount = Math.round(
         (savingsPercentage / 100) * product.sellingPrice
       );
-      discountedPrice = product.sellingPrice - savingsAmount;
     }
   }
 
@@ -148,9 +147,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     {allImages.map((image, index) => (
                       <div
                         key={image.id}
-                        className={`relative h-16 w-16 overflow-hidden rounded-md border cursor-pointer transition-all ${
-                          mainImage === image.url ? "ring-2 ring-primary" : ""
-                        }`}
+                        className={`relative h-16 w-16 overflow-hidden rounded-md border cursor-pointer transition-all ${mainImage === image.url ? "border-primary" : ""
+                          }`}
                         onClick={() => handleImageClick(image.url, index)}
                       >
                         <Image
@@ -180,7 +178,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 </Badge>
               )}
 
-              {hasDiscount && (
+              {hasActive && (
                 <Badge className="absolute bottom-2 left-2 z-10 bg-red-500 text-white">
                   {product.discountType === "percentage" ? (
                     <>{product.discountValue}% OFF</>
@@ -211,11 +209,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
             <div className="grid grid-cols-5 gap-2 mt-4">
               <div
-                className={`relative aspect-square overflow-hidden rounded-md border cursor-pointer transition-all ${
-                  mainImage === product.attachment.url
-                    ? "ring-2 ring-primary"
-                    : ""
-                }`}
+                className={`relative aspect-square overflow-hidden rounded-md border cursor-pointer transition-all ${mainImage === product.attachment.url
+                  ? "border-primary"
+                  : ""
+                  }`}
                 onClick={() => handleImageClick(product.attachment.url, 0)}
               >
                 <Image
@@ -231,9 +228,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 product.gallery.attachments.map((image, index) => (
                   <div
                     key={image.id}
-                    className={`relative aspect-square overflow-hidden rounded-md border cursor-pointer transition-all ${
-                      mainImage === image.url ? "ring-2 ring-primary" : ""
-                    }`}
+                    className={`relative aspect-square overflow-hidden rounded-md border cursor-pointer transition-all ${mainImage === image.url ? "border-primary" : ""
+                      }`}
                     onClick={() => handleImageClick(image.url, index + 1)}
                   >
                     <Image
@@ -395,7 +391,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 <div>
                   <p className="text-sm text-muted-foreground">Selling Price</p>
                   <div className="flex items-baseline gap-2">
-                    {hasDiscount ? (
+                    {hasActive ? (
                       <>
                         <p className="text-xl font-bold text-primary">
                           {formatCurrencyEnglish(discountedPrice)}
@@ -421,7 +417,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   </p>
                 </div>
 
-                {hasDiscount && (
+                {hasActive && (
                   <div>
                     <p className="text-sm text-muted-foreground">Discount</p>
                     <div className="flex items-center gap-2">
@@ -465,7 +461,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   </div>
                 )}
 
-                {hasDiscount &&
+                {hasActive &&
                   product.discountStartDate &&
                   product.discountEndDate && (
                     <div>
@@ -549,7 +545,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     </p>
                     <p className="font-medium">
                       {formatCurrencyEnglish(
-                        hasDiscount
+                        hasActive
                           ? discountedPrice * product.stock
                           : product.sellingPrice * product.stock
                       )}
@@ -571,12 +567,12 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     </p>
                     <p className="font-medium">
                       {Math.round(
-                        (((hasDiscount
+                        (((hasActive
                           ? discountedPrice
                           : product.sellingPrice) -
                           product.purchasePrice) /
                           product.purchasePrice) *
-                          100
+                        100
                       )}
                       %
                     </p>
@@ -587,8 +583,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     </p>
                     <p className="font-medium">
                       {formatCurrencyEnglish(
-                        (hasDiscount ? discountedPrice : product.sellingPrice) -
-                          product.purchasePrice
+                        (hasActive ? discountedPrice : product.sellingPrice) -
+                        product.purchasePrice
                       )}
                     </p>
                   </div>
