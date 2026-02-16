@@ -10,6 +10,7 @@ import { OrderSummary } from "@/components/admin/orders/order-summary";
 import { OrderTimeline } from "@/components/admin/orders/order-timeline";
 import { ShippingAddress } from "@/components/admin/orders/shipping-address";
 import { formatCurrencyEnglish, formatDateTime } from "@/lib/utils";
+import { fetchOrderById } from "@/utils/api-utils";
 import type { Order, OrderItem } from "@/utils/types";
 import { pdf } from "@react-pdf/renderer";
 import { CreditCard } from "lucide-react";
@@ -23,13 +24,27 @@ interface OrderViewProps {
 
 export default function OrderView({ order, onBack }: OrderViewProps) {
   const [currentOrder, setCurrentOrder] = useState<Order>(order);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleCancelSuccess = async () => {
+    setIsRefreshing(true);
+    try {
+      // Refetch the order to get updated status
+      const updatedOrder = await fetchOrderById(order.id.toString());
+      setCurrentOrder(updatedOrder as Order);
+    } catch (error) {
+      console.error("Failed to refresh order:", error);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   const handleGeneratePDF = async () => {
-    const blob = await pdf(<OrderPDFDocument order={order} />).toBlob();
+    const blob = await pdf(<OrderPDFDocument order={currentOrder} />).toBlob();
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `German-Butcher-Invoice-${order.orderNo}.pdf`;
+    link.download = `German-Butcher-Invoice-${currentOrder.orderNo}.pdf`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -50,7 +65,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Order #${order.orderNo}</title>
+  <title>Order #${currentOrder.orderNo}</title>
   <style>
     @media print {
       @page {
@@ -151,25 +166,25 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
 
   <div class="separator"></div>
 
-  <div class="row"><span>Order #:</span><span class="bold">${order.orderNo}</span></div>
-  <div class="row"><span>Date:</span><span>${formatDateTime(order.createdAt)}</span></div>
+  <div class="row"><span>Order #:</span><span class="bold">${currentOrder.orderNo}</span></div>
+  <div class="row"><span>Date:</span><span>${formatDateTime(currentOrder.createdAt)}</span></div>
 
   <div class="separator"></div>
 
   <!-- Customer Info -->
   <div class="bold">CUSTOMER DETAILS</div>
   <div style="margin-top: 4px;">
-  <div><strong>Name :</strong> ${order.user.name || ""}</div>
-  <div><strong>Email :</strong> ${order.user.email || "N/A"}</div>
-  <div><strong>Mobile Number :</strong> ${order.user.mobileNumber || "N/A"}</div>
+  <div><strong>Name :</strong> ${currentOrder.user.name || ""}</div>
+  <div><strong>Email :</strong> ${currentOrder.user.email || "N/A"}</div>
+  <div><strong>Mobile Number :</strong> ${currentOrder.user.mobileNumber || "N/A"}</div>
   </div>
 
   ${
-    order.address
+    currentOrder.address
       ? `
       <div class="small" style="margin-top: 3px;">
         <strong>Shipping Address:</strong><br>
-      ${order.address.address},  ${order.address.area}, ${order.address.city},
+      ${currentOrder.address.address},  ${currentOrder.address.area}, ${currentOrder.address.city},
       </div>
       `
       : ""
@@ -180,7 +195,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
   <!-- Order Items -->
   <div class="bold">ORDER ITEMS</div>
 
-  ${order.items
+  ${currentOrder.items
     .map((item: OrderItem) => {
       const unitPrice =
         Number(item.unitPrice) || Number(item.product.sellingPrice) || 0;
@@ -216,24 +231,24 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
   }
 
   ${
-    order.coupon && orderSummary.couponDiscount > 0
-      ? `<div class="row"><span>Coupon (${order.coupon.code}):</span><span>-${formatCurrencyEnglish(orderSummary.couponDiscount)}</span></div>`
+    currentOrder.coupon && orderSummary.couponDiscount > 0
+      ? `<div class="row"><span>Coupon (${currentOrder.coupon.code}):</span><span>-${formatCurrencyEnglish(orderSummary.couponDiscount)}</span></div>`
       : ""
   }
 
-  <div class="row"><span>Shipping (${order.shippingMethod.name}):</span><span>${formatCurrencyEnglish(orderSummary.shippingCost)}</span></div>
+  <div class="row"><span>Shipping (${currentOrder.shippingMethod.name}):</span><span>${formatCurrencyEnglish(orderSummary.shippingCost)}</span></div>
 
   <div class="separator"></div>
 
   <div class="row bold" style="font-size:13px;"><span>TOTAL:</span><span>${formatCurrencyEnglish(orderSummary.total)}</span></div>
 
   ${
-    order.paymentStatus === "pending"
-      ? `<div class="row" style="color:#d00;"><span>DUE:</span><span class="bold">${formatCurrencyEnglish(order.totalValue - order.paidAmount)}</span></div>`
+    currentOrder.paymentStatus === "pending"
+      ? `<div class="row" style="color:#d00;"><span>DUE:</span><span class="bold">${formatCurrencyEnglish(currentOrder.totalValue - currentOrder.paidAmount)}</span></div>`
       : ""
   }
 
-  <div class="row"><span>Payment:</span><span class="bold">${order.paymentStatus.toUpperCase()}</span></div>
+  <div class="row"><span>Payment:</span><span class="bold">${currentOrder.paymentStatus.toUpperCase()}</span></div>
 
   <div class="separator"></div>
 
@@ -265,25 +280,25 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
   };
 
   const calculateOrderSummary = () => {
-    const itemsSubtotal = order.items.reduce((sum, item) => {
+    const itemsSubtotal = currentOrder.items.reduce((sum, item) => {
       const itemTotal =
         Number(item.totalPrice) ||
         (Number(item.unitPrice) || 0) * item.quantity;
       return sum + itemTotal;
     }, 0);
 
-    const productDiscountTotal = order.items.reduce((sum, item) => {
+    const productDiscountTotal = currentOrder.items.reduce((sum, item) => {
       const discountTotal = (item.unitDiscount || 0) * item.quantity;
       return sum + Number(discountTotal);
     }, 0);
 
     const originalSubtotal = itemsSubtotal + productDiscountTotal;
 
-    const couponDiscount = Number(order.totalDiscount) - productDiscountTotal;
+    const couponDiscount = Number(currentOrder.totalDiscount) - productDiscountTotal;
 
-    const shippingCost = Number(order.shippingMethod.cost);
+    const shippingCost = Number(currentOrder.shippingMethod.cost);
 
-    const total = Number(order.totalValue);
+    const total = Number(currentOrder.totalValue);
 
     return {
       originalSubtotal,
@@ -296,40 +311,39 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
   };
 
   return (
-    <div className="container mx-auto py-4 space-y-4">
-      <div className="space-y-3">
-        <OrderActions
-          order={order}
-          onGeneratePDF={handleGeneratePDF}
-          onThermalPrint={handleThermalPrint}
-          onBack={onBack}
-        />
+    <div className="container mx-auto py-4 space-y-6">
+      <OrderActions
+        order={currentOrder}
+        onGeneratePDF={handleGeneratePDF}
+        onThermalPrint={handleThermalPrint}
+        onBack={onBack}
+        onCancelSuccess={handleCancelSuccess}
+      />
 
-        <OrderStatusBadges
-          orderStatus={order.orderStatus}
-          paymentStatus={order.paymentStatus}
-        />
-      </div>
+      <OrderStatusBadges
+        orderStatus={currentOrder.orderStatus}
+        paymentStatus={currentOrder.paymentStatus}
+      />
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         <div className="xl:col-span-2 space-y-4">
-          <OrderItems items={order.items} />
+          <OrderItems items={currentOrder.items} />
 
-          <OrderTimeline order={order} />
+          <OrderTimeline order={currentOrder} />
 
-          {order.payments && (
+          {currentOrder.payments && currentOrder.payments.length > 0 && (
             <div className="border rounded-lg bg-card shadow-sm overflow-hidden">
               <div className="px-4 py-3 border-b">
                 <h3 className="text-sm font-semibold flex items-center">
                   <CreditCard className="size-4 mr-1.5 text-primary" />
                   Payment History
                   <span className="ml-2 text-xs text-muted-foreground">
-                    ({order.payments.length})
+                    ({currentOrder.payments.length})
                   </span>
                 </h3>
               </div>
               <div className="p-4">
-                <PaymentsTable payments={order.payments} />
+                <PaymentsTable payments={currentOrder.payments} />
               </div>
             </div>
           )}
@@ -338,8 +352,8 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
         <div className="space-y-4">
           <CustomerInfo
             user={{
-              ...order.user,
-              mobileNumber: order.user.mobileNumber,
+              ...currentOrder.user,
+              mobileNumber: currentOrder.user.mobileNumber,
             }}
           />
 
@@ -351,19 +365,19 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
           />
 
           <ShippingAddress
-            address={order.address}
-            userName={order.user.name}
-            userMobileNumber={order.user.mobileNumber}
+            address={currentOrder.address}
+            userName={currentOrder.user.name}
+            userMobileNumber={currentOrder.user.mobileNumber}
           />
 
           <OrderSummary
-            items={order.items}
-            shippingMethod={order.shippingMethod}
-            coupon={order.coupon}
-            totalDiscount={order.totalDiscount}
-            totalValue={order.totalValue}
-            paidAmount={order.paidAmount}
-            paymentStatus={order.paymentStatus}
+            items={currentOrder.items}
+            shippingMethod={currentOrder.shippingMethod}
+            coupon={currentOrder.coupon}
+            totalDiscount={currentOrder.totalDiscount}
+            totalValue={currentOrder.totalValue}
+            paidAmount={currentOrder.paidAmount}
+            paymentStatus={currentOrder.paymentStatus}
           />
         </div>
       </div>

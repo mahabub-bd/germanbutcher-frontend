@@ -368,6 +368,14 @@ export async function fetchOrderById(id: string) {
   return fetchData(`orders/${id}`);
 }
 
+export async function cancelOrder(
+  orderId: number,
+  reason: string,
+  notes?: string
+): Promise<ApiResponse> {
+  return patchData(`orders/${orderId}/cancel`, { reason, notes });
+}
+
 export async function fetchProductBySlug(slug: string) {
   return fetchData(`products/${slug}`);
 }

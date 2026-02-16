@@ -1,8 +1,19 @@
 "use client";
 
+import {
+  CancelOrderModal,
+  canCancelOrder,
+} from "@/components/admin/orders/cancel-order-modal";
 import { Button } from "@/components/ui/button";
 import type { Order } from "@/utils/types";
-import { ArrowLeft, Clock, Download, Pencil, Printer } from "lucide-react";
+import {
+  ArrowLeft,
+  Clock,
+  Download,
+  FileEdit,
+  Printer,
+  X,
+} from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -11,6 +22,7 @@ interface OrderActionsProps {
   onGeneratePDF: () => Promise<void>;
   onThermalPrint: () => void;
   onBack?: () => void;
+  onCancelSuccess?: () => void;
 }
 
 export function OrderActions({
@@ -18,9 +30,13 @@ export function OrderActions({
   onGeneratePDF,
   onThermalPrint,
   onBack,
+  onCancelSuccess,
 }: OrderActionsProps) {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [isPrinting, setIsPrinting] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+
+  const canCancel = canCancelOrder(order);
 
   const handleGeneratePDF = async () => {
     setIsGeneratingPDF(true);
@@ -41,80 +57,120 @@ export function OrderActions({
   };
 
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div className="flex items-center gap-2.5">
-        {onBack && (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onBack}
-            className="sm:hidden hover:bg-primary/10"
-          >
-            <ArrowLeft className="size-4" />
-          </Button>
-        )}
+    <div className="w-full border rounded-lg bg-card p-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
 
-        <div className="space-y-0.5">
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight">Order Details</h1>
-          <p className="text-xs text-muted-foreground flex items-center gap-1.5">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-primary"></span>
-            Order #{order.orderNo}
-          </p>
+        {/* LEFT SECTION */}
+        <div className="flex items-center gap-3 flex-wrap">
+
+          {onBack && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onBack}
+              className="hover:bg-primary/10"
+            >
+              <ArrowLeft className="size-5" />
+            </Button>
+          )}
+
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className="text-xl font-bold whitespace-nowrap">
+              Order #{order.orderNo}
+            </h1>
+
+
+          </div>
         </div>
-      </div>
 
-      <div className="flex items-center gap-2 flex-wrap">
-        <Link href={`/admin/order/${order.id}/edit`} className="group">
+        {/* RIGHT SECTION - ALL ACTIONS IN ONE LINE */}
+        <div className="flex items-center gap-2 flex-wrap justify-end">
+
+          {/* Cancel */}
+          {canCancel ? (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => setShowCancelModal(true)}
+              className="gap-2"
+            >
+              <X className="size-4" />
+              Cancel
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              disabled
+              className="gap-2 opacity-50"
+            >
+              <X className="size-4" />
+              {order.orderStatus}
+            </Button>
+          )}
+
+          {/* Edit */}
+          <Link href={`/admin/order/${order.id}/edit`}>
+            <Button size="sm" className="gap-2">
+              <FileEdit className="size-4" />
+              Edit
+            </Button>
+          </Link>
+
+          {/* Print */}
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-xs hover:bg-primary hover:text-primary-foreground"
+            onClick={handleThermalPrint}
+            disabled={isPrinting}
+            className="gap-2"
           >
-            <Pencil className="size-3.5 mr-1.5" />
-            Edit
+            {isPrinting ? (
+              <>
+                <Clock className="size-4 animate-spin" />
+                Printing...
+              </>
+            ) : (
+              <>
+                <Printer className="size-4" />
+                Print
+              </>
+            )}
           </Button>
-        </Link>
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleThermalPrint}
-          disabled={isPrinting}
-          className="h-8 text-xs hover:bg-primary hover:text-primary-foreground"
-        >
-          {isPrinting ? (
-            <>
-              <Clock className="size-3.5 mr-1.5 animate-spin" />
-              Printing...
-            </>
-          ) : (
-            <>
-              <Printer className="size-3.5 mr-1.5" />
-              Print
-            </>
-          )}
-        </Button>
-
-        <Button
-          variant="default"
-          size="sm"
-          onClick={handleGeneratePDF}
-          disabled={isGeneratingPDF}
-          className="h-8 text-xs"
-        >
-          {isGeneratingPDF ? (
-            <>
-              <Clock className="size-3.5 mr-1.5 animate-spin" />
-              PDF...
-            </>
-          ) : (
-            <>
-              <Download className="size-3.5 mr-1.5" />
-              PDF
-            </>
-          )}
-        </Button>
+          {/* PDF */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleGeneratePDF}
+            disabled={isGeneratingPDF}
+            className="gap-2"
+          >
+            {isGeneratingPDF ? (
+              <>
+                <Clock className="size-4 animate-spin" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <Download className="size-4" />
+                PDF
+              </>
+            )}
+          </Button>
+        </div>
       </div>
+
+      <CancelOrderModal
+        order={order}
+        open={showCancelModal}
+        onOpenChange={setShowCancelModal}
+        onCancelSuccess={() => {
+          onCancelSuccess?.();
+          setShowCancelModal(false);
+        }}
+      />
     </div>
   );
+
 }
