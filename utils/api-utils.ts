@@ -365,7 +365,7 @@ export function buildQueryString(
 }
 
 export async function fetchOrderById(id: string) {
-  return fetchData(`orders/${id}`);
+  return fetchProtectedData(`orders/${id}`);
 }
 
 export async function cancelOrder(
@@ -374,6 +374,19 @@ export async function cancelOrder(
   notes?: string
 ): Promise<ApiResponse> {
   return patchData(`orders/${orderId}/cancel`, { reason, notes });
+}
+
+export interface RefundRequest {
+  paymentId: number;
+  refund_amount: number;
+  refund_remarks?: string;
+  bank_tran_id: string;
+  tran_id: string;
+  refe_id: string;
+}
+
+export async function initiateRefund(refundData: RefundRequest): Promise<ApiResponse> {
+  return postData("payment/refund", refundData);
 }
 
 export async function fetchProductBySlug(slug: string) {

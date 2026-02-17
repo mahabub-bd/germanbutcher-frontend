@@ -512,6 +512,7 @@ export interface OrderPayment {
   amount: string;
   paymentDate: string;
   sslPaymentId: string | null;
+  bankTranId?: string | null;
   createdAt: string;
   updatedAt: string;
   order: Order;
@@ -519,6 +520,9 @@ export interface OrderPayment {
   createdBy: User;
   notes?: string;
   updatedBy: User;
+  paymentType?: PaymentType;
+  originalPaymentId?: number | null;
+  originalPayment?: OrderPayment | null;
 }
 export interface OrderSummary {
   year: number;
@@ -665,6 +669,11 @@ export enum OrderStatus {
   SHIPPED = "shipped",
   DELIVERED = "delivered",
   CANCELLED = "cancelled",
+}
+
+export enum PaymentType {
+  PAYMENT = "PAYMENT",
+  REFUND = "REFUND",
 }
 
 // WebSocket Notification Types

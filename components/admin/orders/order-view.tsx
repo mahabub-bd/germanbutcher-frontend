@@ -5,7 +5,6 @@ import { CustomerInfo } from "@/components/admin/orders/customer-info";
 import { DeliveryManSection } from "@/components/admin/orders/delivery-man-section";
 import { OrderActions } from "@/components/admin/orders/order-actions";
 import { OrderItems } from "@/components/admin/orders/order-items";
-import { OrderStatusBadges } from "@/components/admin/orders/order-status-badges";
 import { OrderSummary } from "@/components/admin/orders/order-summary";
 import { OrderTimeline } from "@/components/admin/orders/order-timeline";
 import { ShippingAddress } from "@/components/admin/orders/shipping-address";
@@ -318,11 +317,7 @@ export default function OrderView({ order, onBack }: OrderViewProps) {
         onThermalPrint={handleThermalPrint}
         onBack={onBack}
         onCancelSuccess={handleCancelSuccess}
-      />
-
-      <OrderStatusBadges
-        orderStatus={currentOrder.orderStatus}
-        paymentStatus={currentOrder.paymentStatus}
+        onRefundSuccess={handleCancelSuccess}
       />
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">

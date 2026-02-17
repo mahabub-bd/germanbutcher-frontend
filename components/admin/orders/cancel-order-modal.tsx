@@ -85,12 +85,13 @@ export function CancelOrderModal({
       if (response?.statusCode === 200) {
         toast.success(
           `Order ${response.data.orderNo} cancelled successfully${isPaidOrder
-            ? ". Refund will be processed in 5-7 business days."
+            ? ". You can process a refund using the Refund button."
             : ""
           }`
         );
         onCancelSuccess();
         onOpenChange(false);
+
         // Reset form
         setReason("");
         setNotes("");
