@@ -11,6 +11,7 @@ import type { Order } from "@/utils/types";
 import {
   ArrowLeft,
   Clock,
+  CreditCard,
   Download,
   FileEdit,
   Printer,
@@ -22,7 +23,7 @@ import { useState } from "react";
 
 /**
  * Check if an order can be refunded
- * Order must have payments and be either paid or cancelled
+ * Order must have payments and be either paid or cancelled, but not delivered
  */
 export function canRefundOrder(order: Order): boolean {
   const hasPayments = !!(order.payments && order.payments.length > 0);
@@ -31,8 +32,9 @@ export function canRefundOrder(order: Order): boolean {
     order.paymentStatus === "paid" ||
     order.paymentStatus === "completed" ||
     order.orderStatus === "cancelled";
+  const isNotDelivered = order.orderStatus !== "delivered";
 
-  return hasPayments && hasPaidAmount && isPaidOrCancelled;
+  return hasPayments && hasPaidAmount && isPaidOrCancelled && isNotDelivered;
 }
 
 interface OrderActionsProps {
@@ -116,7 +118,7 @@ export function OrderActions({
               className="gap-1.5 h-8 text-xs"
             >
               <RefreshCw className="size-3.5" />
-              <span className=" xs:inline">Refund</span>
+              <span className="xs:inline">Refund</span>
             </Button>
           )}
 
@@ -129,7 +131,7 @@ export function OrderActions({
               className="gap-1.5 h-8 text-xs"
             >
               <X className="size-3.5" />
-              <span className="hidden xs:inline">Cancel</span>
+              <span className="xs:inline">Cancel</span>
             </Button>
           ) : (
             <Button
@@ -144,12 +146,24 @@ export function OrderActions({
           )}
 
           {/* Edit */}
-          <Link href={`/admin/order/${order.id}/edit`}>
-            <Button size="sm" className="gap-1.5 h-8 text-xs">
-              <FileEdit className="size-3.5" />
-              <span className="hidden xs:inline">Edit</span>
-            </Button>
-          </Link>
+          {order.orderStatus !== "delivered" && (
+            <Link href={`/admin/order/${order.id}/edit`}>
+              <Button size="sm" className="gap-1.5 h-8 text-xs">
+                <FileEdit className="size-3.5" />
+                <span className="xs:inline">Edit</span>
+              </Button>
+            </Link>
+          )}
+
+          {/* Update Payment */}
+          {order.paymentStatus !== "completed" && (
+            <Link href={`/admin/order/${order.id}/payment`}>
+              <Button size="sm" className="gap-1.5 h-8 text-xs">
+                <CreditCard className="size-3.5" />
+                <span className="xs:inline">Payment</span>
+              </Button>
+            </Link>
+          )}
 
           {/* Print */}
           <Button
@@ -162,12 +176,12 @@ export function OrderActions({
             {isPrinting ? (
               <>
                 <Clock className="size-3.5 animate-spin" />
-                <span className="hidden xs:inline">Printing...</span>
+                <span className="xs:inline">Printing...</span>
               </>
             ) : (
               <>
                 <Printer className="size-3.5" />
-                <span className="hidden xs:inline">Print</span>
+                <span className=" xs:inline">Print Invoice</span>
               </>
             )}
           </Button>
@@ -183,12 +197,12 @@ export function OrderActions({
             {isGeneratingPDF ? (
               <>
                 <Clock className="size-3.5 animate-spin" />
-                <span className="hidden xs:inline">Generating...</span>
+                <span className="xs:inline">Generating...</span>
               </>
             ) : (
               <>
                 <Download className="size-3.5" />
-                <span className="hidden xs:inline">PDF</span>
+                <span className="xs:inline">PDF</span>
               </>
             )}
           </Button>
