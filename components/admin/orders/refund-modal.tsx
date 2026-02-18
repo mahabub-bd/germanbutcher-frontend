@@ -152,7 +152,7 @@ export function RefundModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <RefreshCw className="h-5 w-5" />
@@ -167,7 +167,7 @@ export function RefundModal({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
             {/* Order Summary */}
             <div className="rounded-lg border bg-muted/50 p-3">
-              <div className="grid grid-cols-2 gap-2 text-sm">
+              <div className="grid grid-cols-1 gap-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Order No:</span>
                   <span className="font-medium">#{order.orderNo}</span>
@@ -184,96 +184,104 @@ export function RefundModal({
                 </div>
               </div>
             </div>
+            <div className="grid grid-cols-2 gap-4">
 
+              <FormField
+                control={form.control}
+                name="refund_amount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Refund Amount *</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        max={maxRefundable}
+                        placeholder="Enter refund amount"
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Maximum refundable amount:{" "}
+                      {formatCurrencyEnglish(maxRefundable)}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Bank Transaction ID */}
+              <FormField
+                control={form.control}
+                name="bank_tran_id"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Bank Transaction ID *</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Enter bank transaction ID"
+                      />
+                    </FormControl>
+                    {firstPayment?.bankTranId && (
+                      <FormDescription>
+                        From payment.bankTranId
+                      </FormDescription>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* SSL Transaction ID */}
+              <FormField
+                control={form.control}
+                name="tran_id"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>SSL Transaction ID *</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Enter SSL transaction ID"
+                      />
+                    </FormControl>
+                    {firstPayment?.sslPaymentId && (
+                      <FormDescription>
+                        SSL Payment ID: {firstPayment.sslPaymentId}
+                      </FormDescription>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Reference ID */}
+              <FormField
+                control={form.control}
+                name="refe_id"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Reference ID *</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Enter reference ID"
+                      />
+                    </FormControl>
+                    {firstPayment?.paymentNumber && (
+                      <FormDescription>
+                        Payment Number: {firstPayment.paymentNumber}
+                      </FormDescription>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             {/* Refund Amount */}
-            <FormField
-              control={form.control}
-              name="refund_amount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Refund Amount *</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      max={maxRefundable}
-                      placeholder="Enter refund amount"
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Maximum refundable amount:{" "}
-                    {formatCurrencyEnglish(maxRefundable)}
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
-            {/* Bank Transaction ID */}
-            <FormField
-              control={form.control}
-              name="bank_tran_id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Bank Transaction ID *</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Enter bank transaction ID"
-                    />
-                  </FormControl>
-                  {firstPayment?.bankTranId && (
-                    <FormDescription>
-                      From payment.bankTranId
-                    </FormDescription>
-                  )}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* SSL Transaction ID */}
-            <FormField
-              control={form.control}
-              name="tran_id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>SSL Transaction ID *</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Enter SSL transaction ID"
-                    />
-                  </FormControl>
-                  {firstPayment?.sslPaymentId && (
-                    <FormDescription>
-                      SSL Payment ID: {firstPayment.sslPaymentId}
-                    </FormDescription>
-                  )}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Reference ID */}
-            <FormField
-              control={form.control}
-              name="refe_id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Reference ID *</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Enter reference ID"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
             {/* Refund Remarks (Optional) */}
             <FormField
