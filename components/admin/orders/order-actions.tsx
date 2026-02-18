@@ -156,7 +156,7 @@ export function OrderActions({
           )}
 
           {/* Update Payment */}
-          {order.paymentStatus !== "completed" && (
+          {order.paymentStatus !== "completed" && order.paymentStatus !== "need_refund" && (
             <Link href={`/admin/order/${order.id}/payment`}>
               <Button size="sm" className="gap-1.5 h-8 text-xs">
                 <CreditCard className="size-3.5" />
