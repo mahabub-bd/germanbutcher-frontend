@@ -123,7 +123,7 @@ export function OrderActions({
           )}
 
           {/* Cancel */}
-          {canCancel ? (
+          {canCancel && (
             <Button
               variant="destructive"
               size="sm"
@@ -133,20 +133,10 @@ export function OrderActions({
               <X className="size-3.5" />
               <span className="xs:inline">Cancel</span>
             </Button>
-          ) : (
-            <Button
-              variant="outline"
-              size="sm"
-              disabled
-              className="gap-1.5 h-8 text-xs opacity-50 capitalize"
-            >
-              <X className="size-3.5" />
-              {order.orderStatus}
-            </Button>
           )}
 
           {/* Edit */}
-          {order.orderStatus !== "delivered" && (
+          {order.orderStatus !== "delivered" && order.orderStatus !== "cancelled" && (
             <Link href={`/admin/order/${order.id}/edit`}>
               <Button size="sm" className="gap-1.5 h-8 text-xs">
                 <FileEdit className="size-3.5" />
@@ -156,7 +146,7 @@ export function OrderActions({
           )}
 
           {/* Update Payment */}
-          {order.paymentStatus !== "completed" && order.paymentStatus !== "need_refund" && (
+          {order.paymentStatus !== "completed" && order.paymentStatus !== "need_refund" && order.paymentStatus !== "refund_complete" && order.orderStatus !== "cancelled" && (
             <Link href={`/admin/order/${order.id}/payment`}>
               <Button size="sm" className="gap-1.5 h-8 text-xs">
                 <CreditCard className="size-3.5" />
