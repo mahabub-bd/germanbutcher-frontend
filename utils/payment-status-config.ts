@@ -1,7 +1,7 @@
 import { CheckCircle, Clock, XCircle } from "lucide-react";
-import { PaymentStatus, PaymentStatusConfig } from "./types";
+import { PaymentStatusConfig, PaymentStatusOption } from "./types";
 
-export const PAYMENT_STATUS_CONFIG: Record<PaymentStatus, PaymentStatusConfig> =
+export const PAYMENT_STATUS_CONFIG: Record<PaymentStatusOption, PaymentStatusConfig> =
   {
     success: {
       title: "Payment Successful!",

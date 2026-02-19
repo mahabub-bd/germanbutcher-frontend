@@ -3,12 +3,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { formatCurrencyEnglish, formatDateTime } from "@/lib/utils";
 import { PAYMENT_STATUS_CONFIG } from "@/utils/payment-status-config";
-import { Order, OrderItem, PaymentStatus } from "@/utils/types";
+import { Order, OrderItem, PaymentStatusOption } from "@/utils/types";
 import { CreditCard, Mail, MapPin, Package, Phone, Tag } from "lucide-react";
 
 interface PaymentStatusPageProps {
   order: Order;
-  status: PaymentStatus;
+  status: PaymentStatusOption;
   orderId: string;
 }
 

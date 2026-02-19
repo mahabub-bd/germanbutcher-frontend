@@ -634,7 +634,7 @@ export interface FAQItem {
   category: string;
 }
 
-export type PaymentStatus = "success" | "failed" | "canceled";
+export type PaymentStatusOption = "success" | "failed" | "canceled";
 
 export interface PaymentStatusConfig {
   title: string;
@@ -674,6 +674,18 @@ export enum OrderStatus {
 export enum PaymentType {
   PAYMENT = "PAYMENT",
   REFUND = "REFUND",
+}
+
+export enum PaymentStatus {
+  PENDING = "pending",
+  COMPLETED = "completed",
+  PARTIAL = "partial",
+  PAID = "paid",
+  FAILED = "failed",
+  REFUNDED = "refunded",
+  NEED_REFUND = "need_refund",
+  REFUND_COMPLETE = "refund_complete",
+  PARTIAL_REFUND = "partial_refund",
 }
 
 // WebSocket Notification Types
