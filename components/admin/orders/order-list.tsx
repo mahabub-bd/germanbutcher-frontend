@@ -316,7 +316,13 @@ export function OrderList({
               orders.map((order) => (
                 <TableRow key={order.id} className="hover:bg-muted/50">
                   <TableCell className="font-mono text-sm">
-                    #{order.orderNo}
+                    <Link
+                      href={`/admin/order/${order.id}/view`}
+                      className="flex items-center gap-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+
+                      {order.orderNo}
+                    </Link>
                   </TableCell>
                   <TableCell>
                     <div className="space-y-1">
@@ -527,12 +533,11 @@ export function OrderList({
                             setStatusFilter(status);
                             setCurrentPage(1);
                           }}
-                          className={`text-xs py-1.5 px-2 rounded-md border capitalize ${
-                            statusFilter === status ||
-                            (!statusFilter && status === "all")
+                          className={`text-xs py-1.5 px-2 rounded-md border capitalize ${statusFilter === status ||
+                              (!statusFilter && status === "all")
                               ? "bg-blue-50 border-blue-200 dark:bg-blue-900/30 dark:border-blue-800 text-blue-600 dark:text-blue-400"
                               : "bg-gray-50 dark:bg-neutral-800 border-gray-200 dark:border-neutral-700"
-                          }`}
+                            }`}
                         >
                           {status}
                         </button>
