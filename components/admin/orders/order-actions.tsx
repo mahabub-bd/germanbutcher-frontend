@@ -171,7 +171,7 @@ export function OrderActions({
             ) : (
               <>
                 <Printer className="size-3.5" />
-                <span className=" xs:inline">Print Invoice</span>
+                <span className=" xs:inline">Print</span>
               </>
             )}
           </Button>

@@ -1,4 +1,15 @@
-import { CheckCircle, Clock, Package, RefreshCw, Truck, XCircle } from "lucide-react";
+import {
+  Banknote,
+  CheckCircle,
+  Clock,
+  CreditCard,
+  Package,
+  RefreshCw,
+  Smartphone,
+  Truck,
+  Wallet,
+  XCircle,
+} from "lucide-react";
 import { OrderStatus } from "./types";
 
 /**
@@ -131,9 +142,33 @@ const getPaymentMethodColor = (method: string): string => {
   }
 };
 
+/**
+ * Get icon for payment method
+ */
+const getPaymentMethodIcon = (method: string): React.ReactNode => {
+  if (!method) return null;
+
+  switch (method.toLowerCase()) {
+    case "cash on delivery":
+    case "cod":
+      return <Banknote className="size-3" />;
+    case "sslcommerz":
+    case "ssl_commarz":
+    case "ssl commerz":
+      return <CreditCard className="size-3" />;
+    case "bkash":
+    case "nagad":
+    case "rocket":
+      return <Smartphone className="size-3" />;
+    default:
+      return <Wallet className="size-3" />;
+  }
+};
+
 export {
   getOrderStatusColor,
   getPaymentMethodColor,
+  getPaymentMethodIcon,
   getPaymentStatusColor,
   getStatusDotColor,
   getStatusIcon

@@ -23,10 +23,15 @@ import {
 import {
   formatCurrencyEnglish,
   formatDateTime,
-  getStatusBadgeColor,
 } from "@/lib/utils";
 import { fetchDataPagination } from "@/utils/api-utils";
-import { getPaymentMethodColor } from "@/utils/order-helper";
+import {
+  getOrderStatusColor,
+  getPaymentMethodColor,
+  getPaymentMethodIcon,
+  getPaymentStatusColor,
+  getStatusIcon,
+} from "@/utils/order-helper";
 import type { Order } from "@/utils/types";
 import {
   DollarSign,
@@ -331,17 +336,23 @@ export function OrderList({
                   <TableCell className="hidden md:table-cell">
                     <Badge
                       variant="secondary"
-                      className={getStatusBadgeColor(order.orderStatus)}
+                      className={`capitalize ${getOrderStatusColor(order.orderStatus)}`}
                     >
-                      {order.orderStatus}
+                      <span className="flex items-center gap-1.5">
+                        {getStatusIcon(order.orderStatus)}
+                        {order.orderStatus}
+                      </span>
                     </Badge>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     <Badge
                       variant="secondary"
-                      className={getStatusBadgeColor(order.paymentStatus)}
+                      className={`capitalize ${getPaymentStatusColor(order.paymentStatus)}`}
                     >
-                      {order.paymentStatus}
+                      <span className="flex items-center gap-1.5">
+                        {getStatusIcon(order.paymentStatus)}
+                        {order.paymentStatus}
+                      </span>
                     </Badge>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
@@ -349,7 +360,10 @@ export function OrderList({
                       variant="outline"
                       className={`capitalize ${getPaymentMethodColor(order.paymentMethod?.name)}`}
                     >
-                      {order.paymentMethod?.name || "N/A"}
+                      <span className="flex items-center gap-1.5">
+                        {getPaymentMethodIcon(order.paymentMethod?.name || "")}
+                        {order.paymentMethod?.name || "N/A"}
+                      </span>
                     </Badge>
                   </TableCell>
 

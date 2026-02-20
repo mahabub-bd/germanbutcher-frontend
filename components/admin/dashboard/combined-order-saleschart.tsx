@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -11,6 +10,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatCurrencyEnglish } from "@/lib/utils";
 import { OrderSummary } from "@/utils/types";
+import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -215,28 +215,7 @@ export default function CombinedOrdersSalesChart({
                   radius={[4, 4, 0, 0]}
                   barSize={windowSize.width < 640 ? 16 : 30}
                 >
-                  {chartData.map((entry, index) => (
-                    <text
-                      key={`label-${index}`}
-                      x={
-                        index * (100 / chartData.length) +
-                        100 / chartData.length / 2
-                      }
-                      y={
-                        350 -
-                        (entry.orderCount /
-                          Math.max(...chartData.map((d) => d.orderCount))) *
-                          300 -
-                        10
-                      }
-                      fill="#374151"
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      fontSize={12}
-                    >
-                      {entry.orderCount}
-                    </text>
-                  ))}
+
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
@@ -277,28 +256,7 @@ export default function CombinedOrdersSalesChart({
                   radius={[4, 4, 0, 0]}
                   barSize={windowSize.width < 640 ? 16 : 30}
                 >
-                  {chartData.map((entry, index) => (
-                    <text
-                      key={`label-${index}`}
-                      x={
-                        index * (100 / chartData.length) +
-                        100 / chartData.length / 2
-                      }
-                      y={
-                        350 -
-                        (entry.totalValue /
-                          Math.max(...chartData.map((d) => d.totalValue))) *
-                          300 -
-                        10
-                      }
-                      fill="#374151"
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      fontSize={12}
-                    >
-                      {`$${(entry.totalValue / 1000).toFixed(0)}k`}
-                    </text>
-                  ))}
+
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
