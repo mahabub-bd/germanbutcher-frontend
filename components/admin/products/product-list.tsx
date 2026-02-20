@@ -247,10 +247,10 @@ export function ProductList({
       <h3 className="text-lg font-semibold">No products found</h3>
       <p className="text-sm text-muted-foreground mt-2">
         {searchQuery ||
-        categoryFilter ||
-        brandFilter ||
-        statusFilter ||
-        featuredFilter
+          categoryFilter ||
+          brandFilter ||
+          statusFilter ||
+          featuredFilter
           ? "No products match your search criteria. Try different filters."
           : "Get started by adding your first product."}
       </p>
@@ -261,21 +261,21 @@ export function ProductList({
         statusFilter ||
         featuredFilter
       ) && (
-        <Button asChild className="mt-4">
-          <Link href="/products/add">
-            <Plus className="mr-2 h-4 w-4" /> Add Product
-          </Link>
-        </Button>
-      )}
+          <Button asChild className="mt-4">
+            <Link href="/products/add">
+              <Plus className="mr-2 h-4 w-4" /> Add Product
+            </Link>
+          </Button>
+        )}
       {(searchQuery ||
         categoryFilter ||
         brandFilter ||
         statusFilter ||
         featuredFilter) && (
-        <Button variant="outline" className="mt-4" onClick={clearFilters}>
-          Clear Filters
-        </Button>
-      )}
+          <Button variant="outline" className="mt-4" onClick={clearFilters}>
+            Clear Filters
+          </Button>
+        )}
     </div>
   );
 
@@ -494,8 +494,8 @@ export function ProductList({
                     <Filter className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-[200px]">
-                  <div className="grid gap-3 p-2">
+                <DropdownMenuContent align="end" className="w-[400px]">
+                  <div className="grid grid-cols-2 gap-3 p-3">
                     <div className="space-y-1">
                       <h4 className="text-xs font-semibold">Category</h4>
                       <Select
@@ -505,7 +505,7 @@ export function ProductList({
                           setCurrentPage(1);
                         }}
                       >
-                        <SelectTrigger className="h-8">
+                        <SelectTrigger className="h-9 w-full">
                           <SelectValue placeholder="All Categories" />
                         </SelectTrigger>
                         <SelectContent>
@@ -531,7 +531,7 @@ export function ProductList({
                           setCurrentPage(1);
                         }}
                       >
-                        <SelectTrigger className="h-8">
+                        <SelectTrigger className="h-9 w-full">
                           <SelectValue placeholder="All Brands" />
                         </SelectTrigger>
                         <SelectContent>
@@ -557,7 +557,7 @@ export function ProductList({
                           setCurrentPage(1);
                         }}
                       >
-                        <SelectTrigger className="h-8">
+                        <SelectTrigger className="h-9 w-full">
                           <SelectValue placeholder="All Status" />
                         </SelectTrigger>
                         <SelectContent>
@@ -577,7 +577,7 @@ export function ProductList({
                           setCurrentPage(1);
                         }}
                       >
-                        <SelectTrigger className="h-8">
+                        <SelectTrigger className="h-9 w-full">
                           <SelectValue placeholder="All" />
                         </SelectTrigger>
                         <SelectContent>
@@ -592,15 +592,17 @@ export function ProductList({
                       brandFilter ||
                       statusFilter ||
                       featuredFilter) && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={clearFilters}
-                        className="mt-2"
-                      >
-                        Reset Filters
-                      </Button>
-                    )}
+                        <div className="col-span-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={clearFilters}
+                            className="w-full mt-2"
+                          >
+                            Reset Filters
+                          </Button>
+                        </div>
+                      )}
                   </div>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -641,7 +643,7 @@ export function ProductList({
                   color="text-orange-600 dark:text-orange-400"
                   gradient="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20"
                 />
-              
+
               </div>
               <div className="mt-6">{renderTableView()}</div>
             </>

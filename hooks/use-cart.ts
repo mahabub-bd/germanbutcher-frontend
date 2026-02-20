@@ -20,7 +20,7 @@ import {
   saveCouponToLocalStorage,
 } from "@/utils/cart-storage";
 import { serverRevalidate } from "@/utils/revalidatePath";
-import type { Cart, Product } from "@/utils/types";
+import type { Cart, CartItem, Product } from "@/utils/types";
 
 type UseCartProps = {
   serverCart?: Cart;
@@ -362,17 +362,20 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
     const items =
       isLoggedIn && serverCart ? serverCart.items : localCart?.items || [];
 
-    const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-    const productCount = items.length; 
+    // Filter out inactive products from calculations
+    const activeItems = items.filter((item) => item.product.isActive !== false);
 
-    const originalSubtotal = items.reduce((sum, item) => {
+    const itemCount = activeItems.reduce((sum, item) => sum + item.quantity, 0);
+    const productCount = activeItems.length;
+
+    const originalSubtotal = activeItems.reduce((sum, item) => {
       const price = isLoggedIn
         ? item.product.sellingPrice
         : (item as LocalCartItem).product.sellingPrice;
       return sum + price * item.quantity;
     }, 0);
 
-    const discountedSubtotal = items.reduce((sum, item) => {
+    const discountedSubtotal = activeItems.reduce((sum, item) => {
       const product = isLoggedIn
         ? item.product
         : (item as LocalCartItem).product;
@@ -412,7 +415,7 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
   const refreshCartProductData = async (storedCart: LocalCart) => {
     try {
       // Fetch current product data for all items in cart
-      const updatedItems = await Promise.all(
+      const itemResults = await Promise.all(
         storedCart.items.map(async (item) => {
           try {
             // Fetch current product data from API
@@ -421,9 +424,17 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
             );
             if (response.ok) {
               const currentProduct = await response.json();
+              const productData = currentProduct.data || currentProduct;
+
+              // Check if product is active
+              if (productData.isActive === false) {
+                // Return null to indicate this item should be removed
+                return null;
+              }
+
               return {
                 ...item,
-                product: currentProduct.data || currentProduct,
+                product: productData,
               };
             }
           } catch (error) {
@@ -436,6 +447,12 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
         })
       );
 
+      // Filter out null values (inactive products) and undefined values
+      const updatedItems = itemResults.filter(
+        (item): item is (typeof itemResults)[0] & NonNullable<typeof itemResults[0]> =>
+          item !== null && item !== undefined
+      );
+
       const updatedCart = {
         ...storedCart,
         items: updatedItems,
@@ -445,9 +462,22 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
       setLocalCart(updatedCart);
       saveCartToLocalStorage(updatedCart);
 
+      // Notify user about removed products (inactive)
+      const removedCount = storedCart.items.length - updatedItems.length;
+      if (removedCount > 0) {
+        toast.info("Cart updated", {
+          description: `${removedCount} unavailable item(s) removed from your cart`,
+        });
+      }
+
       // Notify user about price updates
-      const priceChanges = updatedItems.filter((item, index) => {
-        const oldPrice = getDiscountedPrice(storedCart.items[index].product);
+      const priceChanges = updatedItems.filter((item) => {
+        const oldItem = storedCart.items.find(
+          (oldItem) => oldItem.productId === item.productId
+        );
+        if (!oldItem) return false;
+
+        const oldPrice = getDiscountedPrice(oldItem.product);
         const newPrice = getDiscountedPrice(item.product);
         return oldPrice !== newPrice;
       });
@@ -464,6 +494,54 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
     }
   };
 
+  const removeInactiveProducts = async () => {
+    const items = isLoggedIn && serverCart ? serverCart.items : localCart?.items || [];
+
+    // Find inactive products
+    const inactiveItems = items.filter((item) => item.product.isActive === false);
+
+    if (inactiveItems.length === 0) {
+      return; // No inactive items to remove
+    }
+
+    setIsLoading(true);
+
+    try {
+      if (isLoggedIn) {
+        // Remove inactive items from server cart
+        for (const item of inactiveItems) {
+          const itemId = (item as CartItem).id || item.product.id;
+          await deleteData("cart/items", itemId);
+        }
+
+        serverRevalidate("/");
+        serverRevalidate("/cart");
+        serverRevalidate("/checkout");
+      } else {
+        // Remove inactive items from local cart
+        const activeItems = items.filter((item) => item.product.isActive !== false) as LocalCartItem[];
+        const updatedCart: LocalCart = {
+          items: activeItems,
+          lastUpdated: Date.now(),
+        };
+
+        setLocalCart(updatedCart);
+        saveCartToLocalStorage(updatedCart);
+      }
+
+      toast.info("Cart updated", {
+        description: `${inactiveItems.length} unavailable item(s) removed from your cart`,
+      });
+    } catch (error) {
+      console.error("Error removing inactive products:", error);
+      toast.error("Failed to update cart", {
+        description: "Please try again later",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     cart: isLoggedIn ? serverCart : { items: localCart?.items || [] },
     isLoading,
@@ -476,5 +554,6 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
     removeCoupon,
     getCartTotals,
     getDiscountedPrice,
+    removeInactiveProducts,
   };
 }

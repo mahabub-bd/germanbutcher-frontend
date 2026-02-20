@@ -25,6 +25,7 @@ type CartContextType = {
     productDiscounts: number;
   };
   getDiscountedPrice: (product: Product) => number;
+  removeInactiveProducts: () => Promise<void>;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);

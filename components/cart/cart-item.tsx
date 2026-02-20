@@ -21,8 +21,9 @@ export function CartItemProduct({ item }: { item: CartItem }) {
 
   const itemId = item.id || item.product.id;
 
-  // Stock check
+  // Stock check and active status check
   const isOutOfStock = (item.product.stock || 0) === 0;
+  const isProductInactive = item.product.isActive === false;
   const isLowStock =
     (item.product.stock || 0) > 0 && (item.product.stock || 0) < 10;
   const hasInsufficientStock = localQuantity > (item.product.stock || 0);
@@ -107,6 +108,64 @@ export function CartItemProduct({ item }: { item: CartItem }) {
   const handleImageLoad = () => {
     setIsImageLoading(false);
   };
+
+  // If product is inactive, show a warning message
+  if (isProductInactive) {
+    return (
+      <div className="flex gap-3 opacity-60 bg-red-50/30 p-2 rounded-md">
+        {/* Product Image */}
+        <div className="relative aspect-[16/9] w-24 flex-shrink-0 overflow-hidden rounded-md border">
+          {isImageLoading && (
+            <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+              <Loader2 className="h-5 w-5 text-gray-400 animate-spin" />
+            </div>
+          )}
+
+          <Image
+            src={item.product.attachment?.url || "/placeholder.svg"}
+            alt={item.product.name}
+            fill
+            className="object-cover grayscale"
+            sizes="96px"
+            onLoad={handleImageLoad}
+          />
+          <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+            <Badge variant="destructive" className="text-[8px] px-1 py-0">
+              Inactive
+            </Badge>
+          </div>
+        </div>
+
+        {/* Product Details */}
+        <div className="flex flex-1 flex-col justify-center">
+          <div className="flex items-center gap-1.5 mb-1">
+            <h3 className="text-sm font-medium text-muted-foreground line-clamp-1">
+              {item.product.name}
+            </h3>
+          </div>
+
+          <div className="flex items-center gap-1 text-red-600 text-[11px] mb-2">
+            <AlertCircle className="h-2.5 w-2.5 flex-shrink-0" />
+            <span className="line-clamp-1">Product no longer available</span>
+          </div>
+
+          <button
+            onClick={handleRemoveItem}
+            disabled={isRemoving}
+            className="text-xs text-muted-foreground hover:text-destructive flex items-center gap-1"
+            aria-label="Remove item"
+          >
+            {isRemoving ? (
+              <Loader2 className="h-3 w-3 animate-spin" />
+            ) : (
+              <Trash className="h-3 w-3" />
+            )}
+            <span>Remove</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`flex gap-3 ${isOutOfStock ? "opacity-60" : ""}`}>

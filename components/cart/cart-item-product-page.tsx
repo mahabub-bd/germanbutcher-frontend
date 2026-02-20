@@ -23,8 +23,9 @@ export function CartItemProductPage({ item }: { item: CartItem }) {
 
   const itemId = item.id || item.product.id;
 
-  // Stock check
+  // Stock check and active status check
   const isOutOfStock = (item.product.stock || 0) === 0;
+  const isProductInactive = item.product.isActive === false;
   const isLowStock =
     (item.product.stock || 0) > 0 && (item.product.stock || 0) < 5;
   const hasInsufficientStock = localQuantity > (item.product.stock || 0);
@@ -110,6 +111,70 @@ export function CartItemProductPage({ item }: { item: CartItem }) {
   const handleImageLoad = () => {
     setIsImageLoading(false);
   };
+
+  // If product is inactive, show a warning message but don't render the full item
+  if (isProductInactive) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center border-b py-3 opacity-60 bg-red-50/30">
+        <div className="md:col-span-2">
+          <div className="aspect-[3/2] w-full overflow-hidden rounded border bg-muted relative">
+            {isImageLoading && (
+              <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+                <Loader2 className="h-6 w-6 text-gray-400 animate-spin" />
+              </div>
+            )}
+            <Image
+              src={item.product.attachment?.url || "/placeholder.svg"}
+              alt={item.product.name}
+              fill
+              className="object-cover grayscale"
+              sizes="(max-width: 768px) 100vw, 16vw"
+              onLoad={handleImageLoad}
+            />
+            <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+              <Badge variant="destructive" className="text-[10px] px-1.5 py-0">
+                Unavailable
+              </Badge>
+            </div>
+          </div>
+        </div>
+
+        <div className="md:col-span-10">
+          <div className="flex items-center justify-between">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <h3 className="font-medium text-sm text-muted-foreground">
+                  {item.product.name}
+                </h3>
+                <Badge variant="destructive" className="text-[10px] px-1.5 py-0">
+                  Inactive
+                </Badge>
+              </div>
+              <div className="flex items-center gap-1 text-red-600 text-xs">
+                <AlertCircle className="h-3 w-3" />
+                <span>This product is no longer available</span>
+              </div>
+            </div>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleRemove}
+              disabled={isRemoving}
+              className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10 disabled:opacity-50 flex-shrink-0"
+            >
+              {isRemoving ? (
+                <Loader2 className="h-3 w-3 animate-spin" />
+              ) : (
+                <Trash2 className="h-3 w-3" />
+              )}
+              <span className="sr-only">Remove item</span>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

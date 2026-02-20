@@ -22,6 +22,7 @@ export function CartPage({ cart }: { cart?: Cart }) {
     appliedCoupon,
     applyCoupon: applyCartCoupon,
     removeCoupon,
+    removeInactiveProducts,
   } = useCartContext();
   const [isRemovingAll, setIsRemovingAll] = useState(false);
   const [couponCode, setCouponCode] = useState("");
@@ -48,6 +49,11 @@ export function CartPage({ cart }: { cart?: Cart }) {
   const handleRemoveCoupon = () => {
     removeCoupon();
     setCouponCode("");
+  };
+
+  const handleCheckout = async () => {
+    // Remove inactive products before proceeding to checkout
+    await removeInactiveProducts();
   };
 
   const handleRemoveAll = async () => {
@@ -212,7 +218,9 @@ export function CartPage({ cart }: { cart?: Cart }) {
               size="lg"
               className="mt-6 w-full bg-primaryColor hover:bg-secondaryColor"
             >
-              <Link href="/checkout">Proceed to Checkout</Link>
+              <Link href="/checkout" onClick={handleCheckout}>
+                Proceed to Checkout
+              </Link>
             </Button>
           </div>
         </div>

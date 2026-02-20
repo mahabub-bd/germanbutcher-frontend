@@ -37,6 +37,7 @@ export function CartButtonHeader({
     applyCoupon: applyCartCoupon,
     removeCoupon,
     getCartTotals,
+    removeInactiveProducts,
   } = useCartContext();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -87,6 +88,12 @@ export function CartButtonHeader({
     } finally {
       setIsRemovingAll(false);
     }
+  };
+
+  const handleCheckout = async () => {
+    // Remove inactive products before proceeding to checkout
+    await removeInactiveProducts();
+    setIsOpen(false);
   };
 
   return (
@@ -266,7 +273,7 @@ export function CartButtonHeader({
                   asChild
                   className="w-full sm:flex-1 h-9 bg-primaryColor hover:bg-secondaryColor"
                 >
-                  <Link href="/checkout" onClick={() => setIsOpen(false)}>
+                  <Link href="/checkout" onClick={handleCheckout}>
                     Proceed to Checkout
                   </Link>
                 </Button>

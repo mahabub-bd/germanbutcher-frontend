@@ -1,6 +1,7 @@
 "use client";
 
 import { logout } from "@/actions/auth";
+import { clearLocalCart, clearLocalCoupon } from "@/utils/cart-storage";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -207,6 +208,11 @@ const AuthBtn: React.FC<AuthBtnProps> = ({
 
     try {
       setIsLoggingOut(true);
+
+      // Clear local storage cart and coupon
+      clearLocalCart();
+      clearLocalCoupon();
+
       const result: authResponse = await logout();
 
       if (result.statusCode === 200) {
