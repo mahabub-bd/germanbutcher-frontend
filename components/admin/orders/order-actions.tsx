@@ -40,7 +40,7 @@ export function canRefundOrder(order: Order): boolean {
 interface OrderActionsProps {
   order: Order;
   onGeneratePDF: () => Promise<void>;
-  onThermalPrint: () => void;
+  onThermalPrint?: () => void;
   onBack?: () => void;
   onCancelSuccess?: () => void;
   onRefundSuccess?: () => void;
@@ -72,6 +72,7 @@ export function OrderActions({
   };
 
   const handleThermalPrint = () => {
+    if (!onThermalPrint) return;
     setIsPrinting(true);
     try {
       onThermalPrint();
@@ -155,26 +156,28 @@ export function OrderActions({
             </Link>
           )}
 
-          {/* Print */}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleThermalPrint}
-            disabled={isPrinting}
-            className="gap-1.5 h-8 text-xs"
-          >
-            {isPrinting ? (
-              <>
-                <Clock className="size-3.5 animate-spin" />
-                <span className="xs:inline">Printing...</span>
-              </>
-            ) : (
-              <>
-                <Printer className="size-3.5" />
-                <span className=" xs:inline">Print</span>
-              </>
-            )}
-          </Button>
+          {/* Print - Only show if onThermalPrint is provided */}
+          {onThermalPrint && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleThermalPrint}
+              disabled={isPrinting}
+              className="gap-1.5 h-8 text-xs"
+            >
+              {isPrinting ? (
+                <>
+                  <Clock className="size-3.5 animate-spin" />
+                  <span className="xs:inline">Printing...</span>
+                </>
+              ) : (
+                <>
+                  <Printer className="size-3.5" />
+                  <span className=" xs:inline">Print</span>
+                </>
+              )}
+            </Button>
+          )}
 
           {/* PDF */}
           <Button
