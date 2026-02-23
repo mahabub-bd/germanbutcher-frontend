@@ -25,6 +25,7 @@ export default function CategoryCard({ category }: CategoryCardProps) {
             <Image
               src={category?.attachment?.url || "/category-placeholder.svg"}
               alt={`${category?.name} category`}
+              title={`${category?.name} category`}
               fill
               className="object-cover transition-transform duration-200 group-hover:scale-105"
               loading="lazy"

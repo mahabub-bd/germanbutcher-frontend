@@ -14,7 +14,8 @@ export function DesktopHeader() {
             <div className="p-2">
               <Image
                 src={GermanbutcherLogo || "/placeholder.svg"}
-                alt="P logo"
+                alt="German Butcher Logo"
+                title="German Butcher Logo"
                 width={80}
                 height={80}
                 className="w-10 h-10 lg:w-20 lg:h-20"

@@ -80,6 +80,7 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
         <Image
           src={selectedImage || "/placeholder.svg"}
           alt={product.name}
+          title={product.name}
           fill
           className="object-cover transition-transform duration-300 aspect-[3/2]"
           onLoad={handleMainImageLoad}
@@ -138,6 +139,7 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
           <Image
             src={product?.attachment?.url || "/placeholder.svg"}
             alt={product?.name}
+            title={product?.name}
             fill
             className="object-cover"
             onLoad={() => handleThumbnailLoad(product?.attachment?.url)}
@@ -162,6 +164,7 @@ export function ProductImageGallery({ product }: ProductImageGalleryProps) {
             <Image
               src={image.url || "/placeholder.svg"}
               alt={image.fileName}
+              title={image.fileName}
               fill
               className="object-cover aspect-[3/2]"
               onLoad={() => handleThumbnailLoad(image.url)}

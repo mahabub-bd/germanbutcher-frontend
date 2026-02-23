@@ -60,6 +60,7 @@ export async function SalesPartnersCompact({
                 <Image
                   src={partner.Image?.url || "/placeholder.svg"}
                   alt={`${partner.name} logo`}
+                  title={`${partner.name} logo`}
                   fill
                   className="object-contain transition-all duration-300 
                            group-hover:scale-110"

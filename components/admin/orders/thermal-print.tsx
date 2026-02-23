@@ -146,7 +146,7 @@ export function ThermalPrint({ order, onSuccess }: ThermalPrintProps) {
 
   <!-- Header -->
   <div class="center">
-    <img class="logo" src="/images/logo3.png" alt="Logo" />
+    <img class="logo" src="/images/logo3.png" alt="German Butcher Logo" title="German Butcher" />
     <div class="large">GERMAN BUTCHER</div>
     <div class="small" style="margin-top: 2px;">House-56/B, Road-132, Gulshan-1, Dhaka</div>
     <div class="small">Mobile: 01404-009000</div>
@@ -200,9 +200,9 @@ export function ThermalPrint({ order, onSuccess }: ThermalPrintProps) {
       return `
         <div class="item-row">
           <div class="item-line">
-            <span class="item-name">${item.product.name}</span>
-            <span class="item-qty">${item.quantity} × ${weight}${unitName}</span>
-            <span class="item-price">${formatCurrencyEnglish(totalPrice)}</span>
+            <span class="item-name" title="${item.product.name}">${item.product.name}</span>
+            <span class="item-qty" title="Quantity: ${item.quantity} × ${weight}${unitName}">${item.quantity} × ${weight}${unitName}</span>
+            <span class="item-price" title="Price: ${formatCurrencyEnglish(totalPrice)}">${formatCurrencyEnglish(totalPrice)}</span>
           </div>
         </div>
       `;

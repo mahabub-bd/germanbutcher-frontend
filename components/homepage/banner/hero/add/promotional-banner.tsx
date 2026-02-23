@@ -97,6 +97,7 @@ const PromotionalCarousel = ({
                     <Image
                       src={banner.image?.url || "/placeholder.svg"}
                       alt={banner.title}
+                      title={banner.title}
                       fill
                       sizes="(max-width: 768px) 100vw, 600px"
                       className="object-contain object-center"

@@ -128,20 +128,19 @@ export default function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8  lg:gap-8">
           {/* Logo Section - Mobile: full width, Desktop: 20% */}
           <div
-            className="
-    col-span-1 lg:col-span-2 
+            className="col-span-1 lg:col-span-2 
     flex flex-row md:flex-col
     items-center lg:items-start
     justify-center
     space-y-0 md:space-y-4
-    order-1
-  "
+    order-1"
           >
             {/* Logo Container */}
             <div className="p-2 sm:p-2">
               <Image
                 src={GermanbutcherLogo || "/placeholder.svg"}
                 alt="German Butcher Logo"
+                title="German Butcher Logo"
                 width={100}
                 height={100}
                 className="w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] object-contain"

@@ -262,6 +262,7 @@ export const CarouselBanner = ({
                   "/placeholder.svg?height=600&width=1200&query=banner"
                 }
                 alt={slide.title || ""}
+                title={slide.title || ""}
                 fill
                 className="object-cover object-center"
                 priority={priority && idx === 0}

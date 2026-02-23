@@ -17,6 +17,7 @@ export default function BrandCard({ brand }: { brand: Brand }) {
           <Image
             src={brand?.attachment?.url || "/placeholder.svg"}
             alt={brand.name}
+            title={brand.name}
             fill
             sizes="(max-width: 640px) 100px, (max-width: 768px) 120px, (max-width: 1024px) 140px, 145px"
             className="object-contain transition-opacity duration-300 opacity-90 hover:opacity-100"

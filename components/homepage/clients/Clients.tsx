@@ -55,6 +55,7 @@ export default async function ClientMarquee({ children }: ClientMarqueeProps) {
               <Image
                 src={client.Image?.url || "/placeholder.svg"}
                 alt={`${client.name} logo`}
+                title={`${client.name} logo`}
                 width={144}
                 height={96}
                 className="h-full w-full object-contain transition-opacity duration-300 hover:opacity-100 dark:brightness-0 dark:invert"

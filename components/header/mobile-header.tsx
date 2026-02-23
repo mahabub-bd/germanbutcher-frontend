@@ -25,6 +25,7 @@ export async function MobileHeader() {
                 "/placeholder.svg"
               }
               alt="German Butcher logo"
+              title="German Butcher logo"
               width={60}
               height={60}
               className="max-w-full max-h-full object-contain"

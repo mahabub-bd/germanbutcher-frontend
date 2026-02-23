@@ -20,6 +20,7 @@ const Copyright = () => {
                 <Image
                   src={OnlinePayment}
                   alt="Online Payment Methods"
+                  title="Online Payment Methods"
                   className="w-full h-auto"
                 />
               </div>
