@@ -12,6 +12,7 @@ export default async function BrandPage({
     minPrice?: string;
     maxPrice?: string;
     featured?: string;
+    tags?: string;
   }>;
 }) {
   const queryParams = {
@@ -20,6 +21,7 @@ export default async function BrandPage({
     minPrice: (await searchParams).minPrice,
     maxPrice: (await searchParams).maxPrice,
     featured: (await searchParams).featured,
+    tags: (await searchParams).tags,
   };
 
   const url = `brands?${buildQueryString(queryParams)}`;

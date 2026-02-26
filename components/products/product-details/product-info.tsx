@@ -78,23 +78,44 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
   return (
     <div className="bg-white rounded-lg border shadow-sm p-4 md:p-6 space-y-4">
-      {/* Brand & Category */}
-      <div className="flex flex-wrap items-center gap-2">
-        <Link
-          href={`/brands/${product.brand.slug}`}
-          className="flex items-center gap-1.5 border border-red-200 bg-red-50 text-primaryColor px-2.5 py-1 rounded-full text-xs font-medium hover:bg-red-100 transition"
-        >
-          <Tag className="w-3.5 h-3.5" />
-          {product.brand.name}
-        </Link>
+      {/* Brand, Category & Tags */}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+        {/* Brand & Category */}
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            href={`/brands/${product.brand.slug}`}
+            className="flex items-center gap-1.5 border border-red-200 bg-red-50 text-primaryColor px-2.5 py-1 rounded-full text-xs font-medium hover:bg-red-100 transition"
+          >
+            <Tag className="w-3.5 h-3.5" />
+            {product.brand.name}
+          </Link>
 
-        <Link
-          href={`/categories/${product.category.slug}`}
-          className="flex items-center gap-1.5 border border-gray-200 bg-gray-50 text-gray-700 px-2.5 py-1 rounded-full text-xs font-medium hover:bg-gray-100 transition"
-        >
-          <Star className="w-3.5 h-3.5" />
-          {product.category.name}
-        </Link>
+          <Link
+            href={`/categories/${product.category.slug}`}
+            className="flex items-center gap-1.5 border border-gray-200 bg-gray-50 text-gray-700 px-2.5 py-1 rounded-full text-xs font-medium hover:bg-gray-100 transition"
+          >
+            <Star className="w-3.5 h-3.5" />
+            {product.category.name}
+          </Link>
+        </div>
+
+        {/* Tags */}
+        {product.tags && product.tags.length > 0 && (
+          <div className="flex flex-col sm:items-end gap-2">
+
+            <div className="flex flex-wrap gap-2 sm:justify-end">
+              {product.tags.map((tag) => (
+                <Link
+                  key={tag}
+                  href={`/products?tags=${tag}`}
+                  className="flex items-center gap-1.5 border-2 border-red-200 bg-white text-primaryColor px-3 py-0.5 rounded-full text-sm font-medium hover:border-primaryColor hover:bg-red-50 hover:shadow-sm transition-all capitalize"
+                >
+                  {tag}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Title */}
@@ -111,9 +132,8 @@ export function ProductInfo({ product }: ProductInfoProps) {
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-baseline gap-2">
           <span
-            className={`text-2xl sm:text-3xl font-bold ${
-              isOutOfStock ? "text-gray-400" : "text-primaryColor"
-            }`}
+            className={`text-2xl sm:text-3xl font-bold ${isOutOfStock ? "text-gray-400" : "text-primaryColor"
+              }`}
           >
             ৳{finalPrice.toFixed(2)}
           </span>
@@ -162,8 +182,8 @@ export function ProductInfo({ product }: ProductInfoProps) {
             {isOutOfStock
               ? "Unavailable"
               : isLowStock
-              ? `Low Stock (${stockQuantity})`
-              : "Available"}
+                ? `Low Stock (${stockQuantity})`
+                : "Available"}
           </span>
         </div>
       </div>

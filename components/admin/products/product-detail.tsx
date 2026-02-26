@@ -88,8 +88,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-6">
+    <div className="container mx-auto px-4 py-4">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center text-sm text-muted-foreground">
           <Link href="/admin/products/products-list">
             <Button variant="ghost" size="sm" className="gap-1">
@@ -116,11 +116,11 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Product Images Section */}
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-4">
           <div className="bg-white ">
-            <div className="relative aspect-square overflow-hidden rounded-md border bg-background/50">
+            <div className="relative aspect-[3/2] overflow-hidden rounded-md border bg-background/50">
               <div className="absolute inset-0 bg-background/5 backdrop-blur-[1px] z-0"></div>
 
               <Dialog>
@@ -139,7 +139,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                       src={mainImage || "/placeholder.svg"}
                       alt={product.name}
                       fill
-                      className="object-contain"
+                      className="object-cover z-10"
                       priority
                     />
                   </div>
@@ -147,7 +147,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     {allImages.map((image, index) => (
                       <div
                         key={image.id}
-                        className={`relative h-16 w-16 overflow-hidden rounded-md border cursor-pointer transition-all ${mainImage === image.url ? "border-primary" : ""
+                        className={`relative aspect-[3/2] w-16 overflow-hidden rounded-md border cursor-pointer transition-all ${mainImage === image.url ? "border-primary" : ""
                           }`}
                         onClick={() => handleImageClick(image.url, index)}
                       >
@@ -167,7 +167,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 src={mainImage || "/placeholder.svg"}
                 alt={product.name}
                 fill
-                className="object-contain z-10"
+                className="object-cover z-10"
                 priority
               />
 
@@ -209,7 +209,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
             <div className="grid grid-cols-5 gap-2 mt-4">
               <div
-                className={`relative aspect-square overflow-hidden rounded-md border cursor-pointer transition-all ${mainImage === product.attachment.url
+                className={`relative aspect-[3/2] overflow-hidden rounded-md border cursor-pointer transition-all ${mainImage === product.attachment.url
                   ? "border-primary"
                   : ""
                   }`}
@@ -228,7 +228,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 product.gallery.attachments.map((image, index) => (
                   <div
                     key={image.id}
-                    className={`relative aspect-square overflow-hidden rounded-md border cursor-pointer transition-all ${mainImage === image.url ? "border-primary" : ""
+                    className={`relative aspect-[3/2] overflow-hidden rounded-md border cursor-pointer transition-all ${mainImage === image.url ? "border-primary" : ""
                       }`}
                     onClick={() => handleImageClick(image.url, index + 1)}
                   >
@@ -243,9 +243,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-lg border shadow-sm">
-            <h2 className="text-lg font-semibold mb-3">Product Status</h2>
-            <div className="space-y-4">
+          <div className="bg-white p-3 rounded-lg border shadow-sm">
+            <h2 className="text-base font-semibold mb-2">Product Status</h2>
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Status</span>
                 {product.isActive ? (
@@ -328,32 +328,47 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         </div>
 
         {/* Product Details Section */}
-        <div className="md:col-span-2 space-y-6">
-          <div className="bg-white p-4 rounded-lg border shadow-sm">
-            <h2 className="text-lg font-semibold mb-3">Product Information</h2>
-            <div className="space-y-6">
+        <div className="md:col-span-2 space-y-4">
+          <div className="bg-white p-3 rounded-lg border shadow-sm">
+            <h2 className="text-base font-semibold mb-2">Product Information</h2>
+            <div className="space-y-4">
               <div>
-                <h1 className="text-2xl font-bold">{product.name}</h1>
-                <div className="flex flex-wrap items-center gap-2 mt-2">
-                  <Badge variant="outline" className="flex items-center gap-1">
-                    <Tag className="h-3 w-3" />
+                <h1 className="text-xl font-bold">{product.name}</h1>
+                <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                  <Badge variant="outline" className="flex items-center gap-1 text-xs px-2 py-0.5">
+                    <Tag className="h-2.5 w-2.5" />
                     {product.productSku}
                   </Badge>
-                  <Badge variant="outline" className="flex items-center gap-1">
-                    <Package className="h-3 w-3" />
+                  <Badge variant="outline" className="flex items-center gap-1 text-xs px-2 py-0.5">
+                    <Package className="h-2.5 w-2.5" />
                     {product.unit.name}
                   </Badge>
                   {product.weight && (
                     <Badge
                       variant="outline"
-                      className="flex items-center gap-1"
+                      className="flex items-center gap-1 text-xs px-2 py-0.5"
                     >
-                      <Weight className="h-3 w-3" />
+                      <Weight className="h-2.5 w-2.5" />
                       {product.weight}g
                     </Badge>
                   )}
                 </div>
               </div>
+
+              {/* Tags */}
+              {product.tags && product.tags.length > 0 && (
+                <div className="flex flex-wrap items-center gap-2 mt-3">
+                  {product.tags.map((tag) => (
+                    <Link
+                      key={tag}
+                      href={`/products?tags=${tag}`}
+                      className="flex items-center gap-1.5 border-2 border-red-200 bg-white text-primaryColor px-3 py-0.5 rounded-full text-sm font-medium hover:border-primaryColor hover:bg-red-50 hover:shadow-sm transition-all capitalize"
+                    >
+                      {tag}
+                    </Link>
+                  ))}
+                </div>
+              )}
 
               <div className="flex items-center gap-4">
                 <div className="flex items-center">
@@ -387,21 +402,21 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <p className="text-sm text-muted-foreground">Selling Price</p>
+                  <p className="text-xs text-muted-foreground">Selling Price</p>
                   <div className="flex items-baseline gap-2">
                     {hasActive ? (
                       <>
-                        <p className="text-xl font-bold text-primary">
+                        <p className="text-lg font-bold text-primary">
                           {formatCurrencyEnglish(discountedPrice)}
                         </p>
-                        <p className="text-sm text-muted-foreground line-through">
+                        <p className="text-xs text-muted-foreground line-through">
                           {formatCurrencyEnglish(product.sellingPrice)}
                         </p>
                       </>
                     ) : (
-                      <p className="text-xl font-bold text-primary">
+                      <p className="text-lg font-bold text-primary">
                         {formatCurrencyEnglish(product.sellingPrice)}
                       </p>
                     )}
@@ -409,25 +424,25 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 </div>
 
                 <div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     Purchase Price
                   </p>
-                  <p className="text-xl font-medium">
+                  <p className="text-lg font-medium">
                     {formatCurrencyEnglish(product.purchasePrice)}
                   </p>
                 </div>
 
                 {hasActive && (
                   <div>
-                    <p className="text-sm text-muted-foreground">Discount</p>
-                    <div className="flex items-center gap-2">
+                    <p className="text-xs text-muted-foreground">Discount</p>
+                    <div className="flex items-center gap-1.5">
                       {product.discountType === "fixed" ? (
                         <>
                           <Badge
                             variant="outline"
-                            className="flex items-center gap-1 bg-red-50 text-red-600 border-red-200"
+                            className="flex items-center gap-1 bg-red-50 text-red-600 border-red-200 text-xs px-2 py-0.5"
                           >
-                            <Tag className="h-3 w-3" />
+                            <Tag className="h-2.5 w-2.5" />
                             {formatCurrencyEnglish(
                               product.discountValue ?? 0
                             )}{" "}
@@ -435,7 +450,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                           </Badge>
                           <Badge
                             variant="outline"
-                            className="bg-red-50 text-red-600 border-red-200"
+                            className="bg-red-50 text-red-600 border-red-200 text-xs px-2 py-0.5"
                           >
                             {savingsPercentage}% Savings
                           </Badge>
@@ -444,14 +459,14 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                         <>
                           <Badge
                             variant="outline"
-                            className="flex items-center gap-1 bg-red-50 text-red-600 border-red-200"
+                            className="flex items-center gap-1 bg-red-50 text-red-600 border-red-200 text-xs px-2 py-0.5"
                           >
-                            <Percent className="h-3 w-3" />
+                            <Percent className="h-2.5 w-2.5" />
                             {product.discountValue}% OFF
                           </Badge>
                           <Badge
                             variant="outline"
-                            className="bg-red-50 text-red-600 border-red-200"
+                            className="bg-red-50 text-red-600 border-red-200 text-xs px-2 py-0.5"
                           >
                             Save {formatCurrencyEnglish(savingsAmount)}
                           </Badge>
@@ -465,11 +480,11 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   product.discountStartDate &&
                   product.discountEndDate && (
                     <div>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-xs text-muted-foreground">
                         Discount Period
                       </p>
-                      <p className="font-medium flex items-center gap-1">
-                        <Calendar className="h-3 w-3 text-muted-foreground" />
+                      <p className="text-sm font-medium flex items-center gap-1">
+                        <Calendar className="h-2.5 w-2.5 text-muted-foreground" />
                         {formatDateTime(product.discountStartDate)} -{" "}
                         {formatDateTime(product.discountEndDate)}
                       </p>
@@ -478,10 +493,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </div>
 
               <div>
-                <p className="text-sm text-muted-foreground mb-1">
+                <p className="text-xs text-muted-foreground mb-1">
                   Description
                 </p>
-                <p className="text-sm leading-relaxed">{product.description}</p>
+                <p className="text-xs leading-relaxed">{product.description}</p>
               </div>
             </div>
           </div>
@@ -516,9 +531,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="details" className="space-y-4 pt-4">
-              <div className="bg-white p-4 rounded-lg border shadow-sm">
-                <div className="grid grid-cols-2 gap-4">
+            <TabsContent value="details" className="space-y-3 pt-2">
+              <div className="bg-white p-3 rounded-lg border shadow-sm">
+                <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
                     <p className="text-sm text-muted-foreground">SKU</p>
                     <p className="font-medium">{product.productSku}</p>
@@ -590,12 +605,38 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   </div>
                 </div>
               </div>
+
+              {/* Tags Section */}
+              {product.tags && product.tags.length > 0 && (
+                <div className="bg-white p-3 rounded-lg border shadow-sm mt-3">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Tag className="h-3.5 w-3.5 text-muted-foreground" />
+                      <h3 className="text-sm font-semibold">Product Tags</h3>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {product.tags.map((tag) => (
+                        <Link
+                          key={tag}
+                          href={`/products?tags=${tag}`}
+                          className="inline-flex items-center gap-1 border-2 border-red-200 bg-white text-primaryColor px-2.5 py-0.5 rounded-full text-xs font-medium hover:border-primaryColor hover:bg-red-50 hover:shadow-sm transition-all capitalize"
+                        >
+                          {tag}
+                        </Link>
+                      ))}
+                    </div>
+                    <p className="text-[10px] text-muted-foreground">
+                      Click on a tag to view all products with this tag
+                    </p>
+                  </div>
+                </div>
+              )}
             </TabsContent>
 
-            <TabsContent value="productDetails" className="pt-4">
-              <div className="bg-white p-4 rounded-lg border shadow-sm">
-                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                  <FileText className="h-5 w-5" />
+            <TabsContent value="productDetails" className="pt-2">
+              <div className="bg-white p-3 rounded-lg border shadow-sm">
+                <h3 className="font-semibold text-base mb-3 flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
                   Product Details
                 </h3>
                 {product.productDetails ? (
@@ -604,10 +645,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     dangerouslySetInnerHTML={{ __html: product.productDetails }}
                   />
                 ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>No detailed product information available.</p>
-                    <p className="text-sm mt-1">
+                  <div className="text-center py-6 text-muted-foreground">
+                    <FileText className="h-10 w-10 mx-auto mb-3 opacity-50" />
+                    <p className="text-sm">No detailed product information available.</p>
+                    <p className="text-xs mt-1">
                       Add product details in the edit form to provide more
                       information about this product.
                     </p>
@@ -616,11 +657,11 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </div>
             </TabsContent>
 
-            <TabsContent value="supplier" className="pt-4">
-              <div className="bg-white p-4 rounded-lg border shadow-sm">
-                <div className="flex items-center gap-4">
+            <TabsContent value="supplier" className="pt-2">
+              <div className="bg-white p-3 rounded-lg border shadow-sm">
+                <div className="flex items-center gap-3">
                   {product.supplier.attachment && (
-                    <div className="relative h-16 w-16 overflow-hidden rounded-lg border">
+                    <div className="relative h-12 w-12 overflow-hidden rounded-lg border">
                       <Image
                         src={
                           product.supplier.attachment.url || "/placeholder.svg"
@@ -632,10 +673,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     </div>
                   )}
                   <div>
-                    <h3 className="font-semibold text-lg">
+                    <h3 className="font-semibold text-base">
                       {product.supplier.name}
                     </h3>
-                    <div className="grid grid-cols-1 gap-1 mt-2">
+                    <div className="grid grid-cols-1 gap-1 mt-1.5">
                       <p className="text-sm flex items-center gap-2">
                         <Building className="h-4 w-4 text-muted-foreground" />
                         {product.supplier.address}
@@ -654,9 +695,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </div>
             </TabsContent>
 
-            <TabsContent value="history" className="pt-4">
-              <div className="bg-white p-4 rounded-lg border shadow-sm">
-                <div className="space-y-4">
+            <TabsContent value="history" className="pt-2">
+              <div className="bg-white p-3 rounded-lg border shadow-sm">
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="font-medium">Created by</p>
@@ -735,13 +776,13 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </div>
             </TabsContent>
 
-            <TabsContent value="inventory" className="pt-4">
-              <div className="bg-white p-4 rounded-lg border shadow-sm">
-                <div className="space-y-4">
+            <TabsContent value="inventory" className="pt-2">
+              <div className="bg-white p-3 rounded-lg border shadow-sm">
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium">Current Stock</p>
-                      <p className="text-2xl font-bold mt-1">
+                      <p className="text-sm font-medium">Current Stock</p>
+                      <p className="text-xl font-bold mt-1">
                         {product.stock} {product.unit.name}s
                       </p>
                     </div>
@@ -749,7 +790,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
                   <Separator />
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1">
                       <p className="text-sm text-muted-foreground">
                         Low Stock Alert

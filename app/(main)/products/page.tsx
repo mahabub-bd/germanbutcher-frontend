@@ -2,21 +2,26 @@ import { CategoryFilters } from "@/components/products/filter/category-filters";
 import ProductBarList from "@/components/products/product-grid";
 import { SortBar } from "@/components/products/sort-bar";
 import { formatSlugToTitle } from "@/lib/utils";
-import { fetchData } from "@/utils/api-utils";
+import { fetchData, fetchProtectedData } from "@/utils/api-utils";
 import type { Brand, Category } from "@/utils/types";
 import { ProductsBreadcrumb } from "./product-breadcrumb";
 
 // Combined data fetching
 async function fetchInitialData() {
   try {
-    const [categories, brands] = await Promise.all([
+    const [categories, brands, tags] = await Promise.all([
       fetchData<Category[]>("categories/tree"),
       fetchData<Brand[]>("brands"),
+      fetchProtectedData<string[]>("products/tags").catch(() => []),
     ]);
-    return { categories, brands };
+    return {
+      categories,
+      brands,
+      tags: tags || []
+    };
   } catch (error) {
     console.error("Error fetching initial data:", error);
-    return { categories: [], brands: [] };
+    return { categories: [], brands: [], tags: [] };
   }
 }
 
@@ -41,9 +46,10 @@ export default async function ProductsPage({
     sort?: string;
     minPrice?: string;
     maxPrice?: string;
+    tags?: string;
   }>;
 }) {
-  const { categories, brands } = await fetchInitialData();
+  const { categories, brands, tags } = await fetchInitialData();
 
   const filterParams = {
     limit: (await searchParams).limit || "24",
@@ -54,6 +60,7 @@ export default async function ProductsPage({
     sort: (await searchParams).sort,
     minPrice: (await searchParams).minPrice,
     maxPrice: (await searchParams).maxPrice,
+    tags: (await searchParams).tags,
   };
 
   return (
@@ -101,6 +108,7 @@ export default async function ProductsPage({
           categories={categories}
           brands={brands}
           priceRanges={priceRanges}
+          tags={tags}
           currentCategory={(await searchParams).category}
           currentBrand={(await searchParams).brand}
           currentFeatured={(await searchParams).featured === "true"}
@@ -108,6 +116,7 @@ export default async function ProductsPage({
             min: (await searchParams).minPrice,
             max: (await searchParams).maxPrice,
           }}
+          currentTags={(await searchParams).tags}
         />
         <SortBar currentSort={(await searchParams).sort} />
       </div>
@@ -118,6 +127,7 @@ export default async function ProductsPage({
           categories={categories}
           brands={brands}
           priceRanges={priceRanges}
+          tags={tags}
           currentCategory={(await searchParams).category}
           currentBrand={(await searchParams).brand}
           currentFeatured={(await searchParams).featured === "true"}
@@ -125,6 +135,7 @@ export default async function ProductsPage({
             min: (await searchParams).minPrice,
             max: (await searchParams).maxPrice,
           }}
+          currentTags={(await searchParams).tags}
         />
         <div className="flex-1">
           <ProductBarList filterParams={filterParams} />

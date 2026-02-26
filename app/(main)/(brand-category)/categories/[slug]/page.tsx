@@ -15,6 +15,7 @@ export default async function CategoryPage({
     minPrice?: string;
     maxPrice?: string;
     featured?: string;
+    tags?: string;
   }>;
 }) {
   const { slug } = await params;
@@ -24,6 +25,7 @@ export default async function CategoryPage({
     minPrice: (await searchParams).minPrice,
     maxPrice: (await searchParams).maxPrice,
     featured: (await searchParams).featured,
+    tags: (await searchParams).tags,
   };
 
   const url = `categories?${buildQueryString(queryParams)}`;

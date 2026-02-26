@@ -110,6 +110,7 @@ const productSchema = z
     discountValue: z.coerce.number().optional(),
     discountStartDate: z.date().optional(),
     discountEndDate: z.date().optional(),
+    tags: z.array(z.string()).optional(),
   })
   .superRefine((data, ctx) => {
     if (data.hasDiscount) {

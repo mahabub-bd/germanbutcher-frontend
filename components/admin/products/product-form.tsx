@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Upload } from "lucide-react";
+import { Loader2, Upload, X } from "lucide-react";
 import Image from "next/image";
 import type React from "react";
 import { useEffect, useState } from "react";
@@ -87,6 +87,8 @@ export function ProductForm({
 
   const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>(product?.tags || []);
+  const [tagInput, setTagInput] = useState("");
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
@@ -116,6 +118,7 @@ export function ProductForm({
       discountEndDate: product?.discountEndDate
         ? new Date(product.discountEndDate)
         : undefined,
+      tags: product?.tags || [],
     },
   });
 
@@ -287,6 +290,31 @@ export function ProductForm({
     }
   };
 
+  const handleAddTag = () => {
+    const trimmedTag = tagInput.trim().toLowerCase();
+    if (trimmedTag && !tags.includes(trimmedTag)) {
+      const newTags = [...tags, trimmedTag];
+      setTags(newTags);
+      form.setValue("tags", newTags);
+      setTagInput("");
+    } else if (tags.includes(trimmedTag)) {
+      toast.error("Tag already exists");
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    const newTags = tags.filter((tag) => tag !== tagToRemove);
+    setTags(newTags);
+    form.setValue("tags", newTags);
+  };
+
+  const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAddTag();
+    }
+  };
+
   const handleSubmit = async (data: ProductFormValues) => {
     if (
       selectedMainCategory &&
@@ -434,6 +462,52 @@ export function ProductForm({
                 </FormItem>
               )}
             />
+
+            <FormItem>
+              <FormLabel>Tags</FormLabel>
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Enter tag (e.g., organic, gluten-free)"
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={handleTagInputKeyDown}
+                    className="flex-1"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleAddTag}
+                    className="whitespace-nowrap"
+                  >
+                    Add Tag
+                  </Button>
+                </div>
+                {tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {tags.map((tag) => (
+                      <div
+                        key={tag}
+                        className="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                      >
+                        <span>{tag}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveTag(tag)}
+                          className="hover:bg-primary/20 rounded-full p-0.5 transition"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground">
+                  Add tags to help customers find your products (e.g., organic,
+                  gluten-free, premium)
+                </p>
+              </div>
+            </FormItem>
 
             <FormField
               control={form.control}

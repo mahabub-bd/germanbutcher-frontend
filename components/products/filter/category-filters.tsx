@@ -54,6 +54,7 @@ interface ProductFiltersProps {
   categories: Category[];
   brands: Brand[];
   priceRanges: PriceRange[];
+  tags: string[];
   currentCategory?: string;
   currentBrand?: string;
   currentFeatured?: boolean;
@@ -61,16 +62,19 @@ interface ProductFiltersProps {
     min?: string;
     max?: string;
   };
+  currentTags?: string;
 }
 
 export function CategoryFilters({
   categories,
   brands,
+  priceRanges,
+  tags,
   currentCategory,
   currentBrand,
   currentFeatured,
   currentPriceRange,
-  priceRanges,
+  currentTags,
 }: ProductFiltersProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -90,6 +94,7 @@ export function CategoryFilters({
     currentBrand ? 1 : 0,
     currentFeatured ? 1 : 0,
     currentPriceRange?.min || currentPriceRange?.max ? 1 : 0,
+    currentTags ? 1 : 0,
   ].reduce((a, b) => a + b, 0);
 
   const hasActiveFilters = activeFiltersCount > 0;
@@ -162,14 +167,6 @@ export function CategoryFilters({
     setIsSheetOpen(false);
   };
 
-  // const handleFeaturedChange = (checked: boolean) => {
-  //   const params = {
-  //     featured: checked ? "true" : null,
-  //     page: "1",
-  //   };
-  //   router.push(`${pathname}?${createQueryString(params)}`);
-  //   setIsSheetOpen(false);
-  // };
 
   const handlePriceRangeChange = (value: string) => {
     if (!value) {
@@ -189,6 +186,16 @@ export function CategoryFilters({
       `${pathname}?${createQueryString({
         minPrice: min,
         maxPrice: max,
+        page: "1",
+      })}`
+    );
+    setIsSheetOpen(false);
+  };
+
+  const handleTagsClear = () => {
+    router.push(
+      `${pathname}?${createQueryString({
+        tags: null,
         page: "1",
       })}`
     );
@@ -239,12 +246,6 @@ export function CategoryFilters({
       ? `${currentPriceRange.min}-${currentPriceRange.max}`
       : undefined;
 
-  // const currentCategoryName = currentCategory
-  //   ? categories.find((c) => c.id.toString() === currentCategory)?.name
-  //   : null;
-  // const currentBrandName = currentBrand
-  //   ? brands.find((b) => b.id.toString() === currentBrand)?.name
-  //   : null;
 
   const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(
     null
@@ -286,6 +287,8 @@ export function CategoryFilters({
 
   const FilterContent = () => (
     <>
+
+
       <div className="flex items-center justify-between mb-6 p-4 bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 rounded-lg border border-red-100 dark:border-red-700">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-red-100 dark:bg-red-800/50 rounded-full">
@@ -319,7 +322,7 @@ export function CategoryFilters({
       <div className="space-y-6">
         <Accordion
           type="multiple"
-          defaultValue={["categories", "brands", "price"]}
+          defaultValue={["categories", "brands", "price", "tags"]}
           className="space-y-4"
         >
           <AccordionItem
@@ -360,9 +363,8 @@ export function CategoryFilters({
                           className="h-6 w-6 p-0"
                         >
                           <ChevronRight
-                            className={`h-4 w-4 transition-transform ${
-                              openCategories.has(category.id) ? "rotate-90" : ""
-                            }`}
+                            className={`h-4 w-4 transition-transform ${openCategories.has(category.id) ? "rotate-90" : ""
+                              }`}
                           />
                         </Button>
                       )}
@@ -436,11 +438,10 @@ export function CategoryFilters({
                         className="flex items-center space-x-2"
                       >
                         <RadioGroupItem
-                          value={`${range.min}-${
-                            range.max === Number.POSITIVE_INFINITY
-                              ? "Infinity"
-                              : range.max
-                          }`}
+                          value={`${range.min}-${range.max === Number.POSITIVE_INFINITY
+                            ? "Infinity"
+                            : range.max
+                            }`}
                           id={`price-${range.min}-${range.max}`}
                         />
                         <Label
@@ -528,8 +529,57 @@ export function CategoryFilters({
           </AccordionItem>
 
           <AccordionItem
+            value="tags"
+            className="border border-red-100 dark:border-red-700 rounded-lg px-4 py-2 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/20 dark:to-rose-950/20"
+          >
+            <AccordionTrigger className="text-sm font-medium py-3 hover:no-underline text-red-800 dark:text-red-200">
+              <div className="flex items-center gap-2">
+                <Tag className="h-4 w-4" />
+                Popular Tags
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="space-y-2 pt-2">
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tag) => {
+                    const isActive = currentTags?.split(",").includes(tag) || false;
+                    return (
+                      <Badge
+                        key={tag}
+                        variant={isActive ? "default" : "outline"}
+                        className={`cursor-pointer capitalize transition-all px-3 py-0.5 text-sm font-medium rounded-full ${isActive
+                          ? "bg-primaryColor text-white border-primaryColor hover:bg-primaryColor shadow-md"
+                          : "bg-white text-primaryColor border-2 border-red-200 hover:border-primaryColor hover:bg-red-50 hover:shadow-sm"
+                          }`}
+                        onClick={() => {
+                          const currentTagsArray = currentTags?.split(",").filter(Boolean) || [];
+                          const isTagActive = currentTagsArray.includes(tag);
+                          const newTags = isTagActive
+                            ? currentTagsArray
+                              .filter((t) => t !== tag)
+                              .join(",")
+                            : [...currentTagsArray, tag].join(",");
+                          router.push(
+                            `${pathname}?${createQueryString({
+                              tags: newTags || null,
+                              page: "1",
+                            })}`
+                          );
+                          setIsSheetOpen(false);
+                        }}
+                      >
+                        {tag}
+                      </Badge>
+                    );
+                  })}
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem
             value="brands"
-            className="border border-rose-100 dark:border-rose-700 rounded-lg px-4 py-2 bg-gradient-to-br from-rose-50 to-red-50 dark:from-rose-950/20 dark:to-red-950/20"
+            className="border border-red-100 dark:border-red-700 rounded-lg px-4 py-2 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-950/20 dark:to-rose-950/20"
           >
             <AccordionTrigger className="text-sm font-medium py-3 hover:no-underline text-red-800 dark:text-red-200">
               <div className="flex items-center gap-2">
@@ -564,7 +614,7 @@ export function CategoryFilters({
 
   return (
     <>
-      <ScrollArea className="min-w-76 shadow-none p-2 md:flex hidden absolute top-2">
+      <ScrollArea className="w-80 shadow-none p-2 md:flex hidden absolute top-2">
         <div className="p-2">
           <FilterContent />
         </div>

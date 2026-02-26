@@ -125,6 +125,7 @@ export interface Product {
   saleCount: number;
   isActive: boolean;
   isFeatured: boolean;
+  tags?: string[];
 
   createdAt: string;
   updatedAt: string;
