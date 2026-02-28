@@ -25,6 +25,8 @@ const PDFDownloadLink = dynamic(
 interface MonthlyData {
   year: number;
   month: string;
+  allOrderCount: number;
+  allOrderValue: number;
   orderCount: number;
   totalValue: number;
   cancelOrderCount: number;
@@ -42,6 +44,8 @@ export default function MonthlyOrderReportList({ monthlyData }: Props) {
     setMounted(true);
   }, []);
 
+  const totalAllOrders = monthlyData.reduce((sum, item) => sum + item.allOrderCount, 0);
+  const totalAllOrderValue = monthlyData.reduce((sum, item) => sum + item.allOrderValue, 0);
   const totalOrders = monthlyData.reduce((sum, item) => sum + item.orderCount, 0);
   const totalValue = monthlyData.reduce((sum, item) => sum + item.totalValue, 0);
   const totalCancelled = monthlyData.reduce(
@@ -78,10 +82,25 @@ export default function MonthlyOrderReportList({ monthlyData }: Props) {
 
       {/* Summary */}
       {monthlyData.length > 0 && (
-        <div className="mb-4 grid grid-cols-2 2xl:grid-cols-4 gap-3">
-          
+        <div className="mb-4 grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-3">
           <StatusCard
-            title="Total Orders"
+            title="All Orders"
+            value={totalAllOrders}
+            icon={ShoppingCart}
+            href="#"
+            color="text-blue-600 dark:text-blue-400"
+            gradient="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
+          />
+          <StatusCard
+            title="All Order Value"
+            value={formatCurrencyEnglish(totalAllOrderValue)}
+            icon={DollarSign}
+            href="#"
+            color="text-indigo-600 dark:text-indigo-400"
+            gradient="bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20"
+          />
+          <StatusCard
+            title="Delivered Orders"
             value={totalOrders}
             icon={ShoppingCart}
             href="#"
@@ -89,7 +108,7 @@ export default function MonthlyOrderReportList({ monthlyData }: Props) {
             gradient="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20"
           />
           <StatusCard
-            title="Total Value"
+            title="Delivered Value"
             value={formatCurrencyEnglish(totalValue)}
             icon={DollarSign}
             href="#"
@@ -97,7 +116,7 @@ export default function MonthlyOrderReportList({ monthlyData }: Props) {
             gradient="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20"
           />
           <StatusCard
-            title="Total Cancelled"
+            title="Cancelled Orders"
             value={totalCancelled}
             icon={XCircle}
             href="#"
@@ -105,7 +124,7 @@ export default function MonthlyOrderReportList({ monthlyData }: Props) {
             gradient="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20"
           />
           <StatusCard
-            title="Total Cancel Value"
+            title="Cancelled Value"
             value={formatCurrencyEnglish(totalCancelValue)}
             icon={TrendingDown}
             href="#"
@@ -122,8 +141,10 @@ export default function MonthlyOrderReportList({ monthlyData }: Props) {
             <TableRow>
               <TableHead>Year</TableHead>
               <TableHead>Month</TableHead>
-              <TableHead className="text-right">Total Orders</TableHead>
-              <TableHead className="text-right">Total Value</TableHead>
+              <TableHead className="text-right">All Orders</TableHead>
+              <TableHead className="text-right">All Order Value</TableHead>
+              <TableHead className="text-right">Delivered Orders</TableHead>
+              <TableHead className="text-right">Delivered Value</TableHead>
               <TableHead className="text-right">Cancelled Orders</TableHead>
               <TableHead className="text-right">Cancelled Value</TableHead>
               <TableHead className="text-right">Cancel Rate (%)</TableHead>
@@ -133,7 +154,7 @@ export default function MonthlyOrderReportList({ monthlyData }: Props) {
             {monthlyData.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={7}
+                  colSpan={9}
                   className="text-center py-8 text-muted-foreground"
                 >
                   No data found
@@ -142,13 +163,17 @@ export default function MonthlyOrderReportList({ monthlyData }: Props) {
             ) : (
               monthlyData.map((item, index) => {
                 const cancelRate =
-                  item.orderCount > 0
-                    ? ((item.cancelOrderCount / item.orderCount) * 100).toFixed(1)
+                  item.allOrderCount > 0
+                    ? ((item.cancelOrderCount / item.allOrderCount) * 100).toFixed(1)
                     : "0.0";
                 return (
                   <TableRow key={`${item.year}-${item.month}-${index}`}>
                     <TableCell>{item.year}</TableCell>
                     <TableCell className="capitalize">{item.month}</TableCell>
+                    <TableCell className="text-right">{item.allOrderCount}</TableCell>
+                    <TableCell className="text-right">
+                      {formatCurrencyEnglish(item.allOrderValue)}
+                    </TableCell>
                     <TableCell className="text-right">{item.orderCount}</TableCell>
                     <TableCell className="text-right">
                       {formatCurrencyEnglish(item.totalValue)}
@@ -165,8 +190,8 @@ export default function MonthlyOrderReportList({ monthlyData }: Props) {
                           parseFloat(cancelRate) > 10
                             ? "text-red-600 font-semibold"
                             : parseFloat(cancelRate) > 5
-                            ? "text-orange-600 font-semibold"
-                            : "text-green-600 font-semibold"
+                              ? "text-orange-600 font-semibold"
+                              : "text-green-600 font-semibold"
                         }
                       >
                         {cancelRate}%

@@ -12,6 +12,8 @@ import {
 interface MonthlyData {
   year: number;
   month: string;
+  allOrderCount: number;
+  allOrderValue: number;
   orderCount: number;
   totalValue: number;
   cancelOrderCount: number;
@@ -139,12 +141,13 @@ const styles = StyleSheet.create({
 
 const formatCurrency = (num: number) =>
   num?.toLocaleString("en-BD", {
-    style: "currency",
-    currency: "BDT",
     minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   });
 
 export function MonthlyOrderPDF({ monthlyData }: Props) {
+  const totalAllOrders = monthlyData.reduce((sum, item) => sum + item.allOrderCount, 0);
+  const totalAllOrderValue = monthlyData.reduce((sum, item) => sum + item.allOrderValue, 0);
   const totalOrders = monthlyData.reduce((sum, item) => sum + item.orderCount, 0);
   const totalValue = monthlyData.reduce((sum, item) => sum + item.totalValue, 0);
   const totalCancelled = monthlyData.reduce(
@@ -182,8 +185,10 @@ export function MonthlyOrderPDF({ monthlyData }: Props) {
         <View style={styles.tableHeader}>
           <Text style={styles.tableHeaderText}>Year</Text>
           <Text style={styles.tableHeaderText}>Month</Text>
-          <Text style={styles.headerTextRight}>Orders</Text>
-          <Text style={styles.headerTextRight}>Total Value</Text>
+          <Text style={styles.headerTextRight}>All Orders</Text>
+          <Text style={styles.headerTextRight}>All Value</Text>
+          <Text style={styles.headerTextRight}>Delivered</Text>
+          <Text style={styles.headerTextRight}>Delivered Value</Text>
           <Text style={styles.headerTextRight}>Cancelled</Text>
           <Text style={styles.headerTextRight}>Cancel Value</Text>
           <Text style={styles.headerTextRight}>Cancel Rate</Text>
@@ -192,8 +197,8 @@ export function MonthlyOrderPDF({ monthlyData }: Props) {
         {/* Table Rows */}
         {monthlyData.map((item, index) => {
           const cancelRate =
-            item.orderCount > 0
-              ? ((item.cancelOrderCount / item.orderCount) * 100).toFixed(1)
+            item.allOrderCount > 0
+              ? ((item.cancelOrderCount / item.allOrderCount) * 100).toFixed(1)
               : "0.0";
           return (
             <View
@@ -202,6 +207,10 @@ export function MonthlyOrderPDF({ monthlyData }: Props) {
             >
               <Text style={styles.cell}>{item.year}</Text>
               <Text style={styles.cell}>{item.month}</Text>
+              <Text style={styles.cellRight}>{item.allOrderCount}</Text>
+              <Text style={styles.cellRight}>
+                {formatCurrency(item.allOrderValue)}
+              </Text>
               <Text style={styles.cellRight}>{item.orderCount}</Text>
               <Text style={styles.cellRight}>
                 {formatCurrency(item.totalValue)}
@@ -224,21 +233,31 @@ export function MonthlyOrderPDF({ monthlyData }: Props) {
               <Text style={styles.summaryValue}>{monthlyData.length}</Text>
             </View>
             <View style={styles.summaryBox}>
-              <Text style={styles.summaryLabel}>Total Orders</Text>
+              <Text style={styles.summaryLabel}>All Orders</Text>
+              <Text style={styles.summaryValue}>{totalAllOrders}</Text>
+            </View>
+            <View style={styles.summaryBox}>
+              <Text style={styles.summaryLabel}>All Order Value</Text>
+              <Text style={styles.summaryValue}>
+                {formatCurrency(totalAllOrderValue)}
+              </Text>
+            </View>
+            <View style={styles.summaryBox}>
+              <Text style={styles.summaryLabel}>Delivered Orders</Text>
               <Text style={styles.summaryValue}>{totalOrders}</Text>
             </View>
             <View style={styles.summaryBox}>
-              <Text style={styles.summaryLabel}>Total Value</Text>
+              <Text style={styles.summaryLabel}>Delivered Value</Text>
               <Text style={styles.summaryValue}>
                 {formatCurrency(totalValue)}
               </Text>
             </View>
             <View style={styles.summaryBox}>
-              <Text style={styles.summaryLabel}>Total Cancelled</Text>
+              <Text style={styles.summaryLabel}>Cancelled Orders</Text>
               <Text style={styles.summaryValue}>{totalCancelled}</Text>
             </View>
             <View style={styles.summaryBox}>
-              <Text style={styles.summaryLabel}>Total Cancel Value</Text>
+              <Text style={styles.summaryLabel}>Cancelled Value</Text>
               <Text style={styles.summaryValue}>
                 {formatCurrency(totalCancelValue)}
               </Text>
