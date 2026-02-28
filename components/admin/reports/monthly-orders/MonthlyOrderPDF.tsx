@@ -186,11 +186,11 @@ export function MonthlyOrderPDF({ monthlyData }: Props) {
           <Text style={styles.tableHeaderText}>Year</Text>
           <Text style={styles.tableHeaderText}>Month</Text>
           <Text style={styles.headerTextRight}>All Orders</Text>
-          <Text style={styles.headerTextRight}>All Value</Text>
+          <Text style={styles.headerTextRight}>Amount</Text>
           <Text style={styles.headerTextRight}>Delivered</Text>
-          <Text style={styles.headerTextRight}>Delivered Value</Text>
+          <Text style={styles.headerTextRight}>Amount</Text>
           <Text style={styles.headerTextRight}>Cancelled</Text>
-          <Text style={styles.headerTextRight}>Cancel Value</Text>
+          <Text style={styles.headerTextRight}>Amount</Text>
           <Text style={styles.headerTextRight}>Cancel Rate</Text>
         </View>
 
@@ -237,7 +237,7 @@ export function MonthlyOrderPDF({ monthlyData }: Props) {
               <Text style={styles.summaryValue}>{totalAllOrders}</Text>
             </View>
             <View style={styles.summaryBox}>
-              <Text style={styles.summaryLabel}>All Order Value</Text>
+              <Text style={styles.summaryLabel}>Amount</Text>
               <Text style={styles.summaryValue}>
                 {formatCurrency(totalAllOrderValue)}
               </Text>
@@ -247,7 +247,7 @@ export function MonthlyOrderPDF({ monthlyData }: Props) {
               <Text style={styles.summaryValue}>{totalOrders}</Text>
             </View>
             <View style={styles.summaryBox}>
-              <Text style={styles.summaryLabel}>Delivered Value</Text>
+              <Text style={styles.summaryLabel}>Amount</Text>
               <Text style={styles.summaryValue}>
                 {formatCurrency(totalValue)}
               </Text>
@@ -257,7 +257,7 @@ export function MonthlyOrderPDF({ monthlyData }: Props) {
               <Text style={styles.summaryValue}>{totalCancelled}</Text>
             </View>
             <View style={styles.summaryBox}>
-              <Text style={styles.summaryLabel}>Cancelled Value</Text>
+              <Text style={styles.summaryLabel}>Amount</Text>
               <Text style={styles.summaryValue}>
                 {formatCurrency(totalCancelValue)}
               </Text>
