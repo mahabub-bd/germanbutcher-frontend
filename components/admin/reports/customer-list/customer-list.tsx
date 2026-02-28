@@ -1,7 +1,7 @@
 "use client";
 
 import { DateRangePreset } from "@/common/enums";
-import { StatusCard } from "@/components/admin/dashboard/status-card";
+import StatsCard from "@/components/admin/dashboard/stats-card";
 import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
@@ -31,7 +31,7 @@ import {
   subWeeks,
   subYears,
 } from "date-fns";
-import { DollarSign, ShoppingCart, TrendingUp, Users } from "lucide-react";
+import { ShoppingCart, TrendingUp, Users } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -164,9 +164,9 @@ export default function CustomerListReport({
   const dateRange =
     summary?.from && summary?.to && mounted
       ? `${format(new Date(summary.from), "PPp")} - ${format(
-          new Date(summary.to),
-          "PPp"
-        )}`
+        new Date(summary.to),
+        "PPp"
+      )}`
       : "All Time";
 
   return (
@@ -252,43 +252,43 @@ export default function CustomerListReport({
       {/* Summary */}
       {summary && (
         <div className="mb-4 grid grid-cols-2 2xl:grid-cols-4 gap-3">
-          <StatusCard
+          <StatsCard
             title="Total Customers"
-            value={summary.totalCustomers}
+            value={String(summary.totalCustomers)}
+            count={String(summary.totalOrders)}
+            description="Registered customers"
             icon={Users}
-            href="#"
-            color="text-blue-600 dark:text-blue-400"
-            gradient="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
+            bgColor="blue"
           />
-          <StatusCard
+          <StatsCard
             title="Total Orders"
-            value={summary.totalOrders}
+            value={String(summary.totalOrders)}
+            count={formatCurrencyEnglish(summary.totalOrderValue)}
+            description="All customer orders"
             icon={ShoppingCart}
-            href="#"
-            color="text-green-600 dark:text-green-400"
-            gradient="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20"
+            bgColor="green"
           />
-          <StatusCard
+          <StatsCard
             title="Total Order Value"
             value={formatCurrencyEnglish(summary.totalOrderValue)}
-            icon={DollarSign}
-            href="#"
-            color="text-purple-600 dark:text-purple-400"
-            gradient="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20"
+            count={String(summary.totalCustomers)}
+            description="Sum of all orders"
+            icon={ShoppingCart}
+            bgColor="purple"
           />
-          <StatusCard
+          <StatsCard
             title="Avg Per Customer"
             value={
               summary.totalCustomers > 0
                 ? formatCurrencyEnglish(
-                    summary.totalOrderValue / summary.totalCustomers
-                  )
+                  summary.totalOrderValue / summary.totalCustomers
+                )
                 : "৳0"
             }
             icon={TrendingUp}
-            href="#"
-            color="text-orange-600 dark:text-orange-400"
-            gradient="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20"
+            count={String(summary.totalCustomers)}
+            description="Average order value"
+            bgColor="orange"
           />
         </div>
       )}

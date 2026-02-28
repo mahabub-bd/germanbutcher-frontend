@@ -1,6 +1,6 @@
 "use client";
 
-import { StatusCard } from "@/components/admin/dashboard/status-card";
+import StatsCard from "@/components/admin/dashboard/stats-card";
 import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatCurrencyEnglish } from "@/lib/utils";
-import { DollarSign, ShoppingCart, TrendingDown, XCircle } from "lucide-react";
+import { ShoppingCart, XCircle } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { MonthlyOrderPDF } from "./MonthlyOrderPDF";
@@ -82,54 +82,30 @@ export default function MonthlyOrderReportList({ monthlyData }: Props) {
 
       {/* Summary */}
       {monthlyData.length > 0 && (
-        <div className="mb-4 grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-3">
-          <StatusCard
+        <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+          <StatsCard
             title="All Orders"
-            value={totalAllOrders}
-            icon={ShoppingCart}
-            href="#"
-            color="text-blue-600 dark:text-blue-400"
-            gradient="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
-          />
-          <StatusCard
-            title="All Order Value"
             value={formatCurrencyEnglish(totalAllOrderValue)}
-            icon={DollarSign}
-            href="#"
-            color="text-indigo-600 dark:text-indigo-400"
-            gradient="bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20"
-          />
-          <StatusCard
-            title="Delivered Orders"
-            value={totalOrders}
+            count={String(totalAllOrders)}
+            description="All orders regardless of status"
             icon={ShoppingCart}
-            href="#"
-            color="text-green-600 dark:text-green-400"
-            gradient="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20"
+            bgColor="blue"
           />
-          <StatusCard
-            title="Delivered Value"
+          <StatsCard
+            title="Delivered Orders"
             value={formatCurrencyEnglish(totalValue)}
-            icon={DollarSign}
-            href="#"
-            color="text-purple-600 dark:text-purple-400"
-            gradient="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20"
+            count={String(totalOrders)}
+            description="Successfully delivered orders"
+            icon={ShoppingCart}
+            bgColor="green"
           />
-          <StatusCard
+          <StatsCard
             title="Cancelled Orders"
-            value={totalCancelled}
-            icon={XCircle}
-            href="#"
-            color="text-red-600 dark:text-red-400"
-            gradient="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20"
-          />
-          <StatusCard
-            title="Cancelled Value"
             value={formatCurrencyEnglish(totalCancelValue)}
-            icon={TrendingDown}
-            href="#"
-            color="text-orange-600 dark:text-orange-400"
-            gradient="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20"
+            count={String(totalCancelled)}
+            description="Cancelled orders"
+            icon={XCircle}
+            bgColor="red"
           />
         </div>
       )}
@@ -142,11 +118,11 @@ export default function MonthlyOrderReportList({ monthlyData }: Props) {
               <TableHead>Year</TableHead>
               <TableHead>Month</TableHead>
               <TableHead className="text-right">All Orders</TableHead>
-              <TableHead className="text-right">All Order Value</TableHead>
-              <TableHead className="text-right">Delivered Orders</TableHead>
-              <TableHead className="text-right">Delivered Value</TableHead>
-              <TableHead className="text-right">Cancelled Orders</TableHead>
-              <TableHead className="text-right">Cancelled Value</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
+              <TableHead className="text-right">Delivered</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
+              <TableHead className="text-right">Cancelled</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
               <TableHead className="text-right">Cancel Rate (%)</TableHead>
             </TableRow>
           </TableHeader>

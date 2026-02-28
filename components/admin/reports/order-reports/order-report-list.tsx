@@ -1,7 +1,7 @@
 "use client";
 
 import { DateRangePreset, OrderStatus } from "@/common/enums";
-import { StatusCard } from "@/components/admin/dashboard/status-card";
+import StatsCard from "@/components/admin/dashboard/stats-card";
 import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
@@ -31,7 +31,7 @@ import {
   subWeeks,
   subYears,
 } from "date-fns";
-import { DollarSign, Eye, Percent, ShoppingCart, Wallet } from "lucide-react";
+import { Eye, ShoppingCart, Wallet } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -295,37 +295,37 @@ export default function OrderReportList({
       {/* Summary */}
       {orders.length > 0 && (
         <div className="mb-4 grid grid-cols-2 2xl:grid-cols-4 gap-3">
-          <StatusCard
+          <StatsCard
             title="Total Orders"
-            value={totalOrders}
+            value={formatCurrencyEnglish(totalValue)}
+            count={String(totalOrders)}
+            description="All orders in this period"
             icon={ShoppingCart}
-            href="#"
-            color="text-blue-600 dark:text-blue-400"
-            gradient="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
+            bgColor="blue"
           />
-          <StatusCard
+          <StatsCard
             title="Total Value"
             value={formatCurrencyEnglish(totalValue)}
-            icon={DollarSign}
-            href="#"
-            color="text-green-600 dark:text-green-400"
-            gradient="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20"
+            count={String(totalOrders)}
+            description="Sum of order values"
+            icon={ShoppingCart}
+            bgColor="green"
           />
-          <StatusCard
+          <StatsCard
             title="Total Discount"
             value={formatCurrencyEnglish(totalDiscount)}
-            icon={Percent}
-            href="#"
-            color="text-orange-600 dark:text-orange-400"
-            gradient="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20"
+            count={String(totalOrders)}
+            description="Total discounts given"
+            icon={Wallet}
+            bgColor="orange"
           />
-          <StatusCard
+          <StatsCard
             title="Total Paid"
             value={formatCurrencyEnglish(totalPaid)}
+            count={String(totalOrders)}
+            description="Total amount paid"
             icon={Wallet}
-            href="#"
-            color="text-purple-600 dark:text-purple-400"
-            gradient="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20"
+            bgColor="purple"
           />
         </div>
       )}
