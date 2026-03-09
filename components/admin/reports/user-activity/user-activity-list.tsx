@@ -122,7 +122,10 @@ export function UserActivityList({
   };
 
   const getActionColor = (action: string) => {
-    switch (action.toUpperCase()) {
+    // Extract HTTP method from action string (e.g., "PATCH /v1/orders/:id/cancel" -> "PATCH")
+    const httpMethod = action.split(' ')[0].toUpperCase();
+
+    switch (httpMethod) {
       case "GET":
         return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
       case "POST":
@@ -131,9 +134,38 @@ export function UserActivityList({
         return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
       case "DELETE":
         return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
+      case "PUT":
+        return "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400";
       default:
         return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
     }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "success":
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
+      case "failed":
+      case "error":
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
+    }
+  };
+
+  const formatAction = (action: string) => {
+    // Split action into method and path
+    const parts = action.split(' ');
+    if (parts.length >= 2) {
+      const [method, ...pathParts] = parts;
+      return {
+        method: method.toUpperCase(),
+        path: pathParts.join(' ')
+      };
+    }
+    return { method: action, path: '' };
   };
 
   const renderEmptyState = () => (
@@ -190,61 +222,92 @@ export function UserActivityList({
         <TableHeader>
           <TableRow>
             <TableHead>Date & Time</TableHead>
-
             <TableHead className="hidden md:table-cell">Action</TableHead>
-            <TableHead>Path</TableHead>
+            <TableHead>Entity</TableHead>
+            <TableHead className="hidden md:table-cell">Status</TableHead>
+            <TableHead className="hidden md:table-cell">Message</TableHead>
             <TableHead className="hidden md:table-cell">IP Address</TableHead>
             <TableHead>User</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {activities.map((activity: UserActivity) => (
-            <TableRow key={activity.id}>
-              <TableCell className="text-sm">
-                {formatDateTime(activity.createdAt)}
-              </TableCell>
+          {activities.map((activity: UserActivity) => {
+            const { method, path } = formatAction(activity.action);
+            return (
+              <TableRow key={activity.id}>
+                <TableCell className="text-sm">
+                  {formatDateTime(activity.createdAt)}
+                </TableCell>
 
-              <TableCell className="hidden md:table-cell">
-                <Badge className={getActionColor(activity.action)}>
-                  {activity.action}
-                </Badge>
-              </TableCell>
-              <TableCell className="hidden md:table-cell font-mono text-xs">
-                {activity.details || "N/A"}
-              </TableCell>
-              <TableCell className="hidden md:table-cell font-mono text-xs">
-                {activity.ipAddress || "N/A"}
-              </TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
-                    <User className="h-4 w-4" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="font-medium text-sm">
-                      {activity.user?.name || "Unknown User"}
+                <TableCell className="hidden md:table-cell">
+                  <div className="flex flex-col gap-1">
+                    <Badge className={getActionColor(activity.action)}>
+                      {method}
+                    </Badge>
+                    <span className="text-xs text-muted-foreground font-mono">
+                      {path}
                     </span>
                   </div>
-                </div>
-              </TableCell>
-              <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal className="h-4 w-4" />
-                      <span className="sr-only">Open menu</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
-                      <Eye className="mr-2 h-4 w-4" /> View Details
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          ))}
+                </TableCell>
+
+                <TableCell>
+                  <div className="flex flex-col">
+                    <span className="font-medium text-sm">{activity.entityType}</span>
+                    {activity.entityId && (
+                      <span className="text-xs text-muted-foreground">ID: {activity.entityId}</span>
+                    )}
+                  </div>
+                </TableCell>
+
+                <TableCell className="hidden md:table-cell">
+                  <Badge className={getStatusColor(activity.status)}>
+                    {activity.status}
+                  </Badge>
+                </TableCell>
+
+                <TableCell className="hidden md:table-cell text-sm max-w-xs truncate">
+                  {activity.message}
+                </TableCell>
+
+                <TableCell className="hidden md:table-cell font-mono text-xs">
+                  {activity.ipAddress || "N/A"}
+                </TableCell>
+
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
+                      <User className="h-4 w-4" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-medium text-sm">
+                        {activity.user?.name || "Unknown User"}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {activity.userType}
+                      </span>
+                    </div>
+                  </div>
+                </TableCell>
+
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">Open menu</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => router.push(`/admin/reports/activities/${activity.id}`)}>
+                        <Eye className="mr-2 h-4 w-4" /> View Details
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>

@@ -542,12 +542,24 @@ export interface Subscriber {
 
 export interface UserActivity {
   id: number;
+  userType: string;
   action: string;
-  details: string;
-  ipAddress: string | null;
-  userAgent: string | null;
+  entityType: string;
+  entityId: number | null;
+  oldValue: any;
+  newValue: any;
+  ipAddress: string;
+  userAgent: string;
+  requestId: string;
+  sessionId: string | null;
+  status: string;
+  message: string;
   createdAt: string;
-  user: User;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+  };
 }
 
 export interface Recipe {
