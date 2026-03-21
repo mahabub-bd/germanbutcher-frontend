@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon, Loader2 } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { type Resolver, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -42,7 +42,7 @@ interface PaymentMethod {
   name: string;
 }
 
-type PaymentFormValues = z.infer<typeof paymentSchema>;
+type PaymentFormValues = z.output<typeof paymentSchema>;
 
 interface PaymentFormProps {
   purchaseId: number;
@@ -77,7 +77,7 @@ export function PaymentForm({ purchaseId, maxAmount }: PaymentFormProps) {
   }, []);
 
   const form = useForm<PaymentFormValues>({
-    resolver: zodResolver(paymentSchema),
+    resolver: zodResolver(paymentSchema) as Resolver<PaymentFormValues>,
     defaultValues: {
       amount: maxAmount,
       paymentDate: new Date(),
@@ -261,7 +261,7 @@ export function PaymentForm({ purchaseId, maxAmount }: PaymentFormProps) {
                   <FormControl>
                     <Textarea
                       placeholder="Enter any additional notes"
-                      className="min-h-[100px] w-full"
+                      className="min-h-25 w-full"
                       {...field}
                     />
                   </FormControl>

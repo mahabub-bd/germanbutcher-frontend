@@ -39,10 +39,15 @@ const bannerSchema = z.object({
     message: "Type is required"
   }),
   isActive: z.boolean(),
-  displayOrder: z
-    .number()
-    .int()
-    .min(0, "Display order must be a positive number"),
+  displayOrder: z.any()
+    .transform((val) => {
+      const num = typeof val === 'string' ? parseInt(val, 10) : val;
+      if (typeof num !== 'number' || isNaN(num)) {
+        throw new Error("Display order must be a number");
+      }
+      return num as number;
+    })
+    .pipe(z.number().int().min(0, "Display order must be a positive number")),
   imageUrl: z.string().optional(),
 });
 
@@ -74,11 +79,17 @@ const menuSchema = z.object({
 });
 
 const paymentSchema = z.object({
-  amount: z.number().min(0.01, "Amount must be greater than 0"),
-  paymentDate: z.date({
-    message: "Payment date is required"
-  }),
-  paymentMethodId: z.number().min(1, "Payment method is required"),
+  amount: z.union([z.string(), z.number()])
+    .transform((val) => typeof val === 'string' ? parseFloat(val) : val)
+    .pipe(z.number().min(0.01, "Amount must be greater than 0")),
+  paymentDate: z.union([z.string(), z.date()])
+    .transform((val) => typeof val === 'string' ? new Date(val) : val)
+    .pipe(z.date({
+      message: "Payment date is required"
+    })),
+  paymentMethodId: z.union([z.string(), z.number()])
+    .transform((val) => typeof val === 'string' ? parseInt(val, 10) : val)
+    .pipe(z.number().min(1, "Payment method is required")),
   referenceNumber: z.string().optional(),
   notes: z.string().optional(),
 });
@@ -88,28 +99,48 @@ const productSchema = z
     name: z.string().min(1, "Product name is required"),
     description: z.string().min(1, "Description is required"),
     productDetails: z.string().optional(),
-    sellingPrice: z
-      .number()
-      .min(0.01, "Unit price must be greater than 0"),
-    purchasePrice: z
-      .number()
-      .min(0.01, "Unit price must be greater than 0"),
-    stock: z.number().int().nonnegative("Stock cannot be negative"),
-    unitId: z.number().min(1, "Unit is required"),
+    sellingPrice: z.union([z.string(), z.number()])
+      .transform((val) => typeof val === 'string' ? parseFloat(val) : val)
+      .pipe(z.number().min(0.01, "Unit price must be greater than 0")),
+    purchasePrice: z.union([z.string(), z.number()])
+      .transform((val) => typeof val === 'string' ? parseFloat(val) : val)
+      .pipe(z.number().min(0.01, "Unit price must be greater than 0")),
+    stock: z.union([z.string(), z.number()])
+      .transform((val) => typeof val === 'string' ? parseInt(val, 10) : val)
+      .pipe(z.number().int().nonnegative("Stock cannot be negative")),
+    unitId: z.union([z.string(), z.number()])
+      .transform((val) => typeof val === 'string' ? parseInt(val, 10) : val)
+      .pipe(z.number().min(1, "Unit is required")),
     productSku: z.string().min(1, "SKU is required"),
     imageUrl: z.string().optional(),
-    weight: z.number().optional(),
+    weight: z.union([z.string(), z.number(), z.null(), z.undefined()])
+      .transform((val) => val === null || val === undefined ? undefined : (typeof val === 'string' ? parseFloat(val) : val))
+      .pipe(z.number().optional()),
     isActive: z.boolean(),
     isFeatured: z.boolean(),
-    brandId: z.number().min(1, "Brand is required"),
-    galleryId: z.number().optional(),
-    categoryId: z.number().min(1, "Category is required"),
-    supplierId: z.number().min(1, "Supplier is required"),
+    brandId: z.union([z.string(), z.number()])
+      .transform((val) => typeof val === 'string' ? parseInt(val, 10) : val)
+      .pipe(z.number().min(1, "Brand is required")),
+    galleryId: z.union([z.string(), z.number(), z.null(), z.undefined()])
+      .transform((val) => val === null || val === undefined ? undefined : (typeof val === 'string' ? parseInt(val, 10) : val))
+      .pipe(z.number().optional()),
+    categoryId: z.union([z.string(), z.number()])
+      .transform((val) => typeof val === 'string' ? parseInt(val, 10) : val)
+      .pipe(z.number().min(1, "Category is required")),
+    supplierId: z.union([z.string(), z.number()])
+      .transform((val) => typeof val === 'string' ? parseInt(val, 10) : val)
+      .pipe(z.number().min(1, "Supplier is required")),
     hasDiscount: z.boolean(),
     discountType: z.nativeEnum(DiscountType).optional(),
-    discountValue: z.number().optional(),
-    discountStartDate: z.date().optional(),
-    discountEndDate: z.date().optional(),
+    discountValue: z.union([z.string(), z.number(), z.null(), z.undefined()])
+      .transform((val) => val === null || val === undefined ? undefined : (typeof val === 'string' ? parseFloat(val) : val))
+      .pipe(z.number().optional()),
+    discountStartDate: z.union([z.string(), z.date(), z.null(), z.undefined()])
+      .transform((val) => val === null || val === undefined ? undefined : (typeof val === 'string' ? new Date(val) : val))
+      .pipe(z.date().optional()),
+    discountEndDate: z.union([z.string(), z.date(), z.null(), z.undefined()])
+      .transform((val) => val === null || val === undefined ? undefined : (typeof val === 'string' ? new Date(val) : val))
+      .pipe(z.date().optional()),
     tags: z.array(z.string()).optional(),
   })
   .superRefine((data, ctx) => {
@@ -157,17 +188,27 @@ const productSchema = z
   });
 
 const purchaseSchema = z.object({
-  supplierId: z.number().min(1, "Supplier is required"),
+  supplierId: z.union([z.string(), z.number()])
+    .transform((val) => typeof val === 'string' ? parseInt(val, 10) : val)
+    .pipe(z.number().min(1, "Supplier is required")),
   items: z
     .array(
       z.object({
-        productId: z.number().min(1, "Product is required"),
-        quantity: z.number().min(1, "Minimum quantity is 1"),
-        unitPrice: z.number().min(0.01, "Minimum price is 0.01"),
+        productId: z.union([z.string(), z.number()])
+          .transform((val) => typeof val === 'string' ? parseInt(val, 10) : val)
+          .pipe(z.number().min(1, "Product is required")),
+        quantity: z.union([z.string(), z.number()])
+          .transform((val) => typeof val === 'string' ? parseInt(val, 10) : val)
+          .pipe(z.number().min(1, "Minimum quantity is 1")),
+        unitPrice: z.union([z.string(), z.number()])
+          .transform((val) => typeof val === 'string' ? parseFloat(val) : val)
+          .pipe(z.number().min(0.01, "Minimum price is 0.01")),
       })
     )
     .min(1, "At least one item required"),
-  purchaseDate: z.date(),
+  purchaseDate: z.union([z.string(), z.date()])
+    .transform((val) => typeof val === 'string' ? new Date(val) : val)
+    .pipe(z.date()),
   status: z.enum(["pending", "shipped", "delivered", "cancelled"]),
   notes: z.string().optional(),
 });
@@ -194,27 +235,42 @@ const supplierSchema = z.object({
 const couponSchema = z.object({
   code: z.string().min(3, "Code must be at least 3 characters"),
   discountType: z.enum(["percentage", "fixed"]),
-  value: z
-    .number()
-    .min(0.01, "Value must be greater than 0")
-    .refine((val) => val >= 0, "Value cannot be negative"),
-  maxDiscountAmount: z
-    .number()
-    .min(0, "Maximum discount amount cannot be negative")
-    .optional()
-    .nullable(),
-  minOrderAmount: z
-    .number()
-    .min(0, "Minimum order amount cannot be negative")
-    .optional()
-    .nullable(),
-  maxUsage: z.number().min(1, "Max usage must be at least 1").optional(),
-  validFrom: z.date({
-    message: "Start date is required"
-  }),
-  validUntil: z.date({
-    message: "End date is required"
-  }),
+  value: z.union([z.string(), z.number()])
+    .transform((val) => typeof val === 'string' ? parseFloat(val) : val)
+    .pipe(z.number()
+      .min(0.01, "Value must be greater than 0")
+      .refine((val) => val >= 0, "Value cannot be negative")),
+  maxDiscountAmount: z.union([z.string(), z.number(), z.null(), z.undefined()])
+    .transform((val) => {
+      if (val === null || val === undefined) return null;
+      const num = typeof val === 'string' ? parseFloat(val) : val;
+      if (num < 0) throw new Error("Maximum discount amount cannot be negative");
+      return num;
+    })
+    .nullable()
+    .optional(),
+  minOrderAmount: z.union([z.string(), z.number(), z.null(), z.undefined()])
+    .transform((val) => {
+      if (val === null || val === undefined) return null;
+      const num = typeof val === 'string' ? parseFloat(val) : val;
+      if (num < 0) throw new Error("Minimum order amount cannot be negative");
+      return num;
+    })
+    .nullable()
+    .optional(),
+  maxUsage: z.union([z.string(), z.number(), z.undefined()])
+    .transform((val) => val === undefined ? undefined : (typeof val === 'string' ? parseInt(val, 10) : val))
+    .pipe(z.number().min(1, "Max usage must be at least 1").optional()),
+  validFrom: z.union([z.string(), z.date()])
+    .transform((val) => typeof val === 'string' ? new Date(val) : val)
+    .pipe(z.date({
+      message: "Start date is required"
+    })),
+  validUntil: z.union([z.string(), z.date()])
+    .transform((val) => typeof val === 'string' ? new Date(val) : val)
+    .pipe(z.date({
+      message: "End date is required"
+    })),
   isActive: z.boolean(),
 });
 
@@ -222,18 +278,16 @@ const discountFormSchema = z.object({
   discountType: z.nativeEnum(DiscountType, {
     message: "Please select a discount type"
   }),
-  discountValue: z
-    .number({
-      message: "Please enter a discount value"
-    })
-    .positive("Discount must be greater than 0"),
-  startDate: z.date({
-    message: "Please select a start date"
-  }),
-  endDate: z.date({
-    message: "Please select an end date"
-  }),
-  productIds: z.array(z.number()).min(1, "Please select at least one product"),
+  discountValue: z.union([z.string(), z.number()])
+    .transform((val) => typeof val === 'string' ? parseFloat(val) : val)
+    .refine((val) => val > 0, { message: "Discount must be greater than 0" }),
+  startDate: z.union([z.string(), z.date()])
+    .transform((val) => typeof val === 'string' ? new Date(val) : val),
+  endDate: z.union([z.string(), z.date()])
+    .transform((val) => typeof val === 'string' ? new Date(val) : val),
+  productIds: z.array(z.union([z.string(), z.number()])
+    .transform((val) => typeof val === 'string' ? parseInt(val, 10) : val)
+  ).min(1, "Please select at least one product"),
 });
 
 const orderSchema = z.object({

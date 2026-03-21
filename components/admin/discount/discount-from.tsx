@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { type Resolver, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -30,7 +30,7 @@ import Link from "next/link";
 import { InfoBox, Section } from "../helper";
 import { ProductSelector } from "./product-selector";
 
-type DiscountFormValues = z.infer<typeof discountFormSchema>;
+type DiscountFormValues = z.output<typeof discountFormSchema>;
 
 interface DiscountFormProps {
   mode: "create" | "edit";
@@ -45,7 +45,7 @@ export function DiscountForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<DiscountFormValues>({
-    resolver: zodResolver(discountFormSchema),
+    resolver: zodResolver(discountFormSchema) as Resolver<DiscountFormValues>,
     defaultValues: {
       discountType: DiscountType.PERCENTAGE,
       discountValue: 0,
@@ -289,7 +289,7 @@ export function DiscountForm({
                       <div>Discounted Price</div>
                     </div>
                     <Separator />
-                    <div className="max-h-[200px] overflow-y-auto">
+                    <div className="max-h-50 overflow-y-auto">
                       {selectedProducts.map((product) => {
                         const discountValue =
                           form.getValues("discountValue") || 0;

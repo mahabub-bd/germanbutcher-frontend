@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { type Resolver, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -32,7 +32,7 @@ import { purchaseSchema } from "@/utils/form-validation";
 import type { Product, Purchase, Supplier } from "@/utils/types";
 import { LoadingIndicator } from "../loading-indicator";
 
-type PurchaseFormValues = z.infer<typeof purchaseSchema>;
+type PurchaseFormValues = z.output<typeof purchaseSchema>;
 
 interface PurchaseFormProps {
   mode: "create" | "edit";
@@ -48,7 +48,7 @@ export function PurchaseForm({ mode, purchase }: PurchaseFormProps) {
   const [isProductsLoading, setIsProductsLoading] = useState(false);
 
   const form = useForm<PurchaseFormValues>({
-    resolver: zodResolver(purchaseSchema),
+    resolver: zodResolver(purchaseSchema) as Resolver<PurchaseFormValues>,
     defaultValues: {
       supplierId: purchase?.supplier?.id || undefined,
       items: purchase?.items?.map((item) => ({

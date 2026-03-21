@@ -32,7 +32,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { type Resolver, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Section } from "../helper";
@@ -43,10 +43,12 @@ const recipeSchema = z.object({
   nutrition_details: z.string().optional(),
   isPublished: z.boolean(),
   imageUrl: z.string().optional(),
-  categoryId: z.number().min(1, "Category is required"),
+  categoryId: z.union([z.string(), z.number()])
+    .transform((val) => typeof val === 'string' ? parseInt(val, 10) : val)
+    .pipe(z.number()),
 });
 
-type RecipeFormValues = z.infer<typeof recipeSchema>;
+type RecipeFormValues = z.output<typeof recipeSchema>;
 
 interface RecipeFormProps {
   mode: "create" | "edit";
@@ -65,7 +67,7 @@ export function RecipeForm({ mode, recipe }: RecipeFormProps) {
 
 
   const form = useForm<RecipeFormValues>({
-    resolver: zodResolver(recipeSchema),
+    resolver: zodResolver(recipeSchema) as Resolver<RecipeFormValues>,
     defaultValues: {
       title: recipe?.title || "",
       details: recipe?.details || "",

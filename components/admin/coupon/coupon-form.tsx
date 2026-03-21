@@ -26,7 +26,7 @@ import type { Coupon } from "@/utils/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Calendar, DollarSign, Settings, Tag } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { type Resolver, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type * as z from "zod";
 
@@ -38,9 +38,10 @@ interface CouponFormProps {
 
 export function CouponForm({ coupon, mode, onSuccess }: CouponFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  type CouponFormValues = z.output<typeof couponSchema>;
 
-  const form = useForm<z.infer<typeof couponSchema>>({
-    resolver: zodResolver(couponSchema),
+  const form = useForm<CouponFormValues>({
+    resolver: zodResolver(couponSchema) as Resolver<CouponFormValues>,
     defaultValues: {
       code: coupon?.code || "",
       discountType: coupon?.discountType || "percentage",
@@ -58,7 +59,7 @@ export function CouponForm({ coupon, mode, onSuccess }: CouponFormProps) {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof couponSchema>) => {
+  const onSubmit = async (values: CouponFormValues) => {
     setIsSubmitting(true);
     try {
       if (mode === "create") {

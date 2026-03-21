@@ -5,7 +5,7 @@ import { Loader2, Upload, X } from "lucide-react";
 import Image from "next/image";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { type Resolver, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
 
@@ -55,7 +55,7 @@ import RichTextEditor from "@/components/ui/jodit-editor";
 import { productSchema } from "@/utils/form-validation";
 import { Section } from "../helper";
 
-type ProductFormValues = z.infer<typeof productSchema>;
+type ProductFormValues = z.output<typeof productSchema>;
 
 interface ProductFormProps {
   mode: "create" | "edit";
@@ -91,7 +91,7 @@ export function ProductForm({
   const [tagInput, setTagInput] = useState("");
 
   const form = useForm<ProductFormValues>({
-    resolver: zodResolver(productSchema),
+    resolver: zodResolver(productSchema) as Resolver<ProductFormValues>,
     defaultValues: {
       name: product?.name || "",
       description: product?.description || "",
@@ -454,7 +454,7 @@ export function ProductForm({
                   <FormControl>
                     <Textarea
                       placeholder="Enter product description"
-                      className="min-h-[100px]"
+                      className="min-h-25"
                       {...field}
                     />
                   </FormControl>
