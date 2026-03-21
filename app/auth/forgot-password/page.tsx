@@ -41,9 +41,9 @@ const resetSchema = z
     confirmPassword: z.string().min(1, "Please confirm your password"),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords don't match",
     path: ["confirmPassword"],
-  });
+    message: "Passwords don't match"
+});
 
 type PhoneFormValues = z.infer<typeof phoneSchema>;
 type ResetFormValues = z.infer<typeof resetSchema>;

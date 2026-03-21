@@ -30,9 +30,7 @@ import { Section } from "../helper";
 const salesPointSchema = z.object({
   name: z.string().min(1, "Sales point name is required"),
   description: z.string().optional(),
-  website: z
-    .string()
-    .url("Please enter a valid URL")
+  website: z.string().url("Please enter a valid URL")
     .optional()
     .or(z.literal("")),
   contactNumber: z.string().min(1, "Contact number is required"),
@@ -177,7 +175,7 @@ export function SalesPointForm({ mode, salesPoint }: SalesPointFormProps) {
                   <FormControl>
                     <Textarea
                       placeholder="Enter sales point description"
-                      className="min-h-[100px]"
+                      className="min-h-25"
                       {...field}
                     />
                   </FormControl>

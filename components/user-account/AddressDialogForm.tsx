@@ -41,8 +41,8 @@ const addressSchema = z.object({
   division: z.string().min(1, "Division is required"),
   city: z.string().min(1, "City is required").trim(),
   type: z.enum(["shipping", "billing"], {
-    required_error: "Please select an address type",
-  }),
+      error: (issue) => issue.input === undefined ? "Please select an address type" : undefined
+}),
   isDefault: z.boolean(),
 });
 

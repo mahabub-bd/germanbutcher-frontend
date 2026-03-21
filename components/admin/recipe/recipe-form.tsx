@@ -43,7 +43,7 @@ const recipeSchema = z.object({
   nutrition_details: z.string().optional(),
   isPublished: z.boolean(),
   imageUrl: z.string().optional(),
-  categoryId: z.coerce.number().min(1, "Category is required"),
+  categoryId: z.number().min(1, "Category is required"),
 });
 
 type RecipeFormValues = z.infer<typeof recipeSchema>;
@@ -227,7 +227,7 @@ export function RecipeForm({ mode, recipe }: RecipeFormProps) {
                     <FormControl>
                       <Textarea
                         placeholder="Enter recipe details, ingredients, and instructions"
-                        className="w-full min-h-[150px]"
+                        className="w-full min-h-37.5"
                         {...field}
                       />
                     </FormControl>

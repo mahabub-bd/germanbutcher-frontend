@@ -47,9 +47,9 @@ const categorySchema = z
     order: z.number().min(0, "Order must be 0 or greater"),
   })
   .refine((data) => !(data.isMainCategory && data.parentId), {
-    message: "Main category cannot have a parent",
     path: ["parentId"],
-  });
+      error: "Main category cannot have a parent"
+});
 
 type CategoryFormValues = z.infer<typeof categorySchema>;
 
@@ -225,7 +225,7 @@ export function CategoryForm({ mode, category }: CategoryFormProps) {
                   <FormControl>
                     <Textarea
                       placeholder="Enter category description"
-                      className="min-h-[100px]"
+                      className="min-h-25"
                       {...field}
                     />
                   </FormControl>

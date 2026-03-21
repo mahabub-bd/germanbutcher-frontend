@@ -38,16 +38,14 @@ const accountSchema = z
       .min(10, "Contact number must be at least 10 digits")
       .max(15, "Contact number must be less than 15 digits")
       .regex(/^[0-9+\-\s()]+$/, "Invalid phone number format"),
-    email: z
-      .string()
-      .email("Please enter a valid email address")
+    email: z.string().email("Please enter a valid email address")
       .min(1, "Email is required"),
     password: z
       .string()
       .optional()
       .refine((val) => !val || val === "********" || val.length >= 8, {
-        message: "Password must be at least 8 characters if provided",
-      }),
+          message: "Password must be at least 8 characters if provided"
+    }),
     confirmPassword: z.string().optional(),
   })
   .refine(
@@ -62,8 +60,8 @@ const accountSchema = z
       return true;
     },
     {
-      message: "Passwords don't match",
       path: ["confirmPassword"],
+      message: "Passwords don't match"
     }
   );
 
@@ -152,13 +150,13 @@ function FormField({
           />
           {error && (
             <div className="flex items-start gap-3 text-sm text-red-600 bg-red-50 p-3 rounded-lg">
-              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           )}
         </div>
       ) : (
-        <div className="min-h-[48px] flex items-center px-4 py-3 bg-gray-50 rounded-lg border">
+        <div className="min-h-12 flex items-center px-4 py-3 bg-gray-50 rounded-lg border">
           <p className="text-sm text-gray-800 font-medium">
             {value || "Not provided"}
           </p>
@@ -208,7 +206,7 @@ function PasswordField({
             {label}
           </label>
         </div>
-        <div className="min-h-[48px] flex items-center px-4 py-3 bg-gray-50 rounded-lg border">
+        <div className="min-h-12 flex items-center px-4 py-3 bg-gray-50 rounded-lg border">
           <p className="text-sm text-gray-800 font-medium">••••••••••••</p>
         </div>
       </div>
@@ -260,7 +258,7 @@ function PasswordField({
         </div>
         {error && (
           <div className="flex items-start gap-3 text-sm text-red-600 bg-red-50 p-3 rounded-lg">
-            <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
             <span>{error}</span>
           </div>
         )}
@@ -491,7 +489,7 @@ export default function AccountInfo({ user }: AccountInfoProps) {
                   label="Password"
                   name="password"
                   register={register}
-                  error={errors.password?.message}
+                  error={errors.password?.message as string | undefined}
                   placeholder="Leave blank to keep current password"
                   description="Must be at least 8 characters long"
                   isEditing={isEditing}
@@ -514,7 +512,7 @@ export default function AccountInfo({ user }: AccountInfoProps) {
               {isEditing && (
                 <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
                   <div className="flex items-start gap-3">
-                    <Shield className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <Shield className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                     <div className="space-y-2">
                       <h4 className="text-sm font-medium text-amber-800">
                         Password Security Tips

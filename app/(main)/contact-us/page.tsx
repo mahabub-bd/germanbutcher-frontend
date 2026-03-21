@@ -127,7 +127,7 @@ const ContactPage = () => {
                     }
                     className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors group"
                   >
-                    <div className="flex-shrink-0 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-gray-200 transition-colors">
+                    <div className="shrink-0 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-gray-200 transition-colors">
                       <IconComponent className="w-5 h-5 text-gray-600" />
                     </div>
                     <div className="flex-1">

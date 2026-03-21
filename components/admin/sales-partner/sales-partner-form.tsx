@@ -29,9 +29,7 @@ const salesPartnerSchema = z.object({
   name: z.string().min(1, "Name is required"),
   order: z.number().min(0, "Order must be 0 or greater"),
   description: z.string().min(1, "Description is required"),
-  website: z
-    .string()
-    .url("Please enter a valid URL")
+  website: z.string().url("Please enter a valid URL")
     .optional()
     .or(z.literal("")),
   isActive: z.boolean(),
@@ -206,7 +204,7 @@ export function SalesPartnerForm({
                     <Textarea
                       placeholder="Enter partner description"
                       {...field}
-                      className="w-full min-h-[100px]"
+                      className="w-full min-h-25"
                     />
                   </FormControl>
                   <FormMessage />
