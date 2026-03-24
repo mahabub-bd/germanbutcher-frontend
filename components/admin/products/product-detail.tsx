@@ -120,7 +120,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         {/* Product Images Section */}
         <div className="flex flex-col gap-4">
           <div className="bg-white ">
-            <div className="relative aspect-[3/2] overflow-hidden rounded-md border bg-background/50">
+            <div className="relative aspect-3/2 overflow-hidden rounded-md border bg-background/50">
               <div className="absolute inset-0 bg-background/5 backdrop-blur-[1px] z-0"></div>
 
               <Dialog>
@@ -139,6 +139,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                       src={mainImage || "/placeholder.svg"}
                       alt={product.name}
                       fill
+                      sizes="(max-width: 768px) 100vw, 56rem"
                       className="object-cover z-10"
                       priority
                     />
@@ -147,7 +148,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     {allImages.map((image, index) => (
                       <div
                         key={image.id}
-                        className={`relative aspect-[3/2] w-16 overflow-hidden rounded-md border cursor-pointer transition-all ${mainImage === image.url ? "border-primary" : ""
+                        className={`relative aspect-3/2 w-16 overflow-hidden rounded-md border cursor-pointer transition-all ${mainImage === image.url ? "border-primary" : ""
                           }`}
                         onClick={() => handleImageClick(image.url, index)}
                       >
@@ -155,6 +156,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                           src={image.url || "/placeholder.svg"}
                           alt={`${product.name} image ${index + 1}`}
                           fill
+                          sizes="64px"
                           className="object-cover"
                         />
                       </div>
@@ -167,6 +169,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 src={mainImage || "/placeholder.svg"}
                 alt={product.name}
                 fill
+                sizes="100vw"
                 className="object-cover z-10"
                 priority
               />
@@ -209,7 +212,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
             <div className="grid grid-cols-5 gap-2 mt-4">
               <div
-                className={`relative aspect-[3/2] overflow-hidden rounded-md border cursor-pointer transition-all ${mainImage === product.attachment.url
+                className={`relative aspect-3/2 overflow-hidden rounded-md border cursor-pointer transition-all ${mainImage === product.attachment.url
                   ? "border-primary"
                   : ""
                   }`}
@@ -219,6 +222,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   src={product.attachment.url || "/placeholder.svg"}
                   alt={`${product.name} main image`}
                   fill
+                  sizes="20vw"
                   className="object-cover hover:scale-105 transition-transform duration-300"
                 />
               </div>
@@ -228,7 +232,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 product.gallery.attachments.map((image, index) => (
                   <div
                     key={image.id}
-                    className={`relative aspect-[3/2] overflow-hidden rounded-md border cursor-pointer transition-all ${mainImage === image.url ? "border-primary" : ""
+                    className={`relative aspect-3/2 overflow-hidden rounded-md border cursor-pointer transition-all ${mainImage === image.url ? "border-primary" : ""
                       }`}
                     onClick={() => handleImageClick(image.url, index + 1)}
                   >
@@ -236,6 +240,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                       src={image.url || "/placeholder.svg"}
                       alt={`${product.name} gallery image`}
                       fill
+                      sizes="20vw"
                       className="object-cover hover:scale-105 transition-transform duration-300"
                     />
                   </div>
@@ -378,6 +383,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                         src={product.brand.attachment.url || "/placeholder.svg"}
                         alt={product.brand.name}
                         fill
+                        sizes="32px"
                         className="object-cover"
                       />
                     </div>
@@ -394,6 +400,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                         }
                         alt={product.category.name}
                         fill
+                        sizes="32px"
                         className="object-cover"
                       />
                     </div>
@@ -668,6 +675,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                         }
                         alt={product.supplier.name}
                         fill
+                        sizes="48px"
                         className="object-cover"
                       />
                     </div>
@@ -712,6 +720,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                               }
                               alt={product.createdBy.name}
                               fill
+                              sizes="24px"
                               className="object-cover"
                             />
                           </div>
@@ -745,6 +754,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                               }
                               alt={product.updatedBy.name}
                               fill
+                              sizes="24px"
                               className="object-cover"
                             />
                           </div>

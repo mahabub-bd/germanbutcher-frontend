@@ -190,7 +190,7 @@ export default async function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className={fontVariables}>
+      <body className={fontVariables} suppressHydrationWarning>
         <Toaster richColors />
 
         <NotificationProvider>

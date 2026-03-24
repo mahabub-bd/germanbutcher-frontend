@@ -150,7 +150,7 @@ export function SidebarMenu({
           </div>
           {!collapsed && index % 2 === 0 && (
             <div className="ml-6 mt-1 border-l border-primaryColor/20 pl-3 space-y-1">
-              {Array(Math.floor(Math.random() * 3) + 1)
+              {Array((index % 3) + 1)
                 .fill(0)
                 .map((_, subIndex) => (
                   <div key={`sub-${index}-${subIndex}`} className="px-3 py-1">
@@ -174,8 +174,8 @@ export function SidebarMenu({
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 pt-4 flex flex-col border-r bg-gradient-to-b from-white via-orange-50/30 to-red-50/40 transition-all duration-300 ease-in-out",
-          collapsed ? "w-[70px]" : "w-[250px]",
+          "fixed inset-y-0 left-0 z-40 pt-4 flex flex-col border-r bg-linear-to-b from-white via-orange-50/30 to-red-50/40 transition-all duration-300 ease-in-out",
+          collapsed ? "w-17.5" : "w-62.5",
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
           className
         )}
@@ -242,7 +242,7 @@ export function SidebarMenu({
                                 className={cn(
                                   "group flex h-10 items-center rounded-md px-3 py-2 text-sm font-medium transition-colors",
                                   isActive || isSubActive
-                                    ? "bg-gradient-to-r from-primaryColor to-secondaryColor text-white font-semibold shadow-sm"
+                                    ? "bg-linear-to-r from-primaryColor to-secondaryColor text-white font-semibold shadow-sm"
                                     : "text-gray-700 hover:bg-primaryColor/10 hover:text-primaryColor",
                                   collapsed
                                     ? "justify-center"
@@ -281,7 +281,7 @@ export function SidebarMenu({
                                 className={cn(
                                   "group flex h-10 items-center rounded-md px-3 py-2 text-sm font-medium transition-colors",
                                   isActive
-                                    ? "bg-gradient-to-r from-primaryColor to-secondaryColor text-white font-semibold shadow-sm"
+                                    ? "bg-linear-to-r from-primaryColor to-secondaryColor text-white font-semibold shadow-sm"
                                     : "text-gray-700 hover:bg-primaryColor/10 hover:text-primaryColor",
                                   collapsed ? "justify-center" : "justify-start"
                                 )}
@@ -384,7 +384,7 @@ export function SidebarMenu({
                         referrerPolicy="no-referrer"
                       />
                     )}
-                    <AvatarFallback className="text-xs font-medium bg-gradient-to-br from-primaryColor to-secondaryColor text-white">
+                    <AvatarFallback className="text-xs font-medium bg-linear-to-br from-primaryColor to-secondaryColor text-white">
                       {user?.name ? getInitials(user.name) : "US"}
                     </AvatarFallback>
                   </Avatar>

@@ -125,9 +125,12 @@ export function ProductForm({
   useEffect(() => {
     const initializeCategories = async () => {
       if (mode === "edit" && product?.category) {
+        // Get the parent ID from the nested parent object or directly from parentId
+        const parentId = (product.category as any).parent?.id || product.category?.parentId;
+
         const mainCategory = categories.find(
           (c) =>
-            c.id === product.category?.parentId ||
+            c.id === parentId ||
             (c.isMainCategory && c.id === product.category?.id)
         );
 
@@ -135,7 +138,7 @@ export function ProductForm({
           setSelectedMainCategory(mainCategory.id);
           await fetchSubCategories(mainCategory.id);
 
-          if (product.category.parentId) {
+          if (parentId) {
             form.setValue("categoryId", product.category.id);
           }
         }
@@ -683,7 +686,7 @@ export function ProductForm({
                     </SelectTrigger>
                     <SelectContent>
                       {categories
-                        .filter((c) => c.isMainCategory)
+                        .filter((c) => c.isMainCategory || !c.parentId)
                         .map((category) => (
                           <SelectItem
                             key={category.id}
@@ -922,6 +925,7 @@ export function ProductForm({
                               src={imagePreview || "/placeholder.svg"}
                               alt="Product preview"
                               fill
+                              sizes="128px"
                               className="object-contain"
                             />
                           </div>
@@ -978,6 +982,7 @@ export function ProductForm({
                                 src={preview || "/placeholder.svg"}
                                 alt={`Gallery image ${index + 1}`}
                                 fill
+                                sizes="128px"
                                 className="object-contain"
                               />
                             </div>
@@ -1016,6 +1021,7 @@ export function ProductForm({
                               }
                               alt={`New gallery image ${index + 1}`}
                               fill
+                              sizes="100vw"
                               className="object-cover"
                             />
                           </div>
