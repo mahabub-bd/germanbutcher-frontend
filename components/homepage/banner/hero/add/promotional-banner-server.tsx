@@ -17,13 +17,13 @@ interface PromotionalCarouselProps {
 
 async function getBanners(activeOnly = true): Promise<Banner[]> {
   try {
-    const response = (await fetchPublicData(
+    const banners = await fetchPublicData<Banner[]>(
       "banners?type=promotional&position=middle"
-    )) as { data: Banner[] };
+    );
 
     return activeOnly
-      ? response.data.filter((banner) => banner.isActive)
-      : response.data;
+      ? banners.filter((banner) => banner.isActive)
+      : banners;
   } catch (error) {
     console.error("Failed to fetch promotional banners:", error);
     return [];

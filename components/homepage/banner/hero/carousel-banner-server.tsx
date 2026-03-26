@@ -9,13 +9,13 @@ interface CarouselBannerProps {
 
 async function getBanners(activeOnly = true): Promise<Banner[]> {
   try {
-    const response = (await fetchPublicData(
+    const banners = await fetchPublicData<Banner[]>(
       "banners?type=main&position=top"
-    )) as { data: Banner[] };
+    );
 
     return activeOnly
-      ? response.data.filter((b) => b.isActive)
-      : response.data;
+      ? banners.filter((b) => b.isActive)
+      : banners;
   } catch (error) {
     console.error("Failed to fetch banners:", error);
     return [];

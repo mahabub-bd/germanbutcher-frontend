@@ -75,7 +75,7 @@ export function TestimonialSectionClient({
               {testimonials.map((testimonial) => (
                 <div
                   key={testimonial.id}
-                  className="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-2"
+                  className="w-full sm:w-1/2 lg:w-1/3 shrink-0 px-2"
                 >
                   <TestimonialCard testimonial={testimonial} />
                 </div>
@@ -92,7 +92,7 @@ export function TestimonialSectionClient({
               className={`p-3 rounded-full shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-red-200 ${
                 currentIndex === 0
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-gradient-to-r from-red-500 to-yellow-500 text-white hover:shadow-2xl hover:scale-110"
+                  : "bg-linear-to-r from-red-500 to-yellow-500 text-white hover:shadow-2xl hover:scale-110"
               }`}
               aria-label="Previous testimonials"
             >
@@ -110,7 +110,7 @@ export function TestimonialSectionClient({
                   className={`h-3 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-300
                     ${
                       currentIndex === index
-                        ? "w-12 bg-gradient-to-r from-red-500 to-yellow-500 shadow-lg"
+                        ? "w-12 bg-linear-to-r from-red-500 to-yellow-500 shadow-lg"
                         : "w-3 bg-gray-300 hover:bg-gray-400"
                     }`}
                   aria-label={`Go to testimonial group ${index + 1}`}
@@ -125,7 +125,7 @@ export function TestimonialSectionClient({
               className={`p-3 rounded-full shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-red-200 ${
                 currentIndex >= testimonials.length - visibleCount
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-gradient-to-r from-red-500 to-yellow-500 text-white hover:shadow-2xl hover:scale-110"
+                  : "bg-linear-to-r from-red-500 to-yellow-500 text-white hover:shadow-2xl hover:scale-110"
               }`}
               aria-label="Next testimonials"
             >

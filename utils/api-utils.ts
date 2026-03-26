@@ -166,7 +166,9 @@ export async function fetchPublicData<T>(endpoint: string): Promise<T> {
     }
 
     const result = await response.json();
-    return result;
+    const data = result.data; // Extract data property like fetchData does
+
+    return data;
   } catch (error: unknown) {
     console.error(`Error fetching public data from ${endpoint}:`, error);
     throw error;

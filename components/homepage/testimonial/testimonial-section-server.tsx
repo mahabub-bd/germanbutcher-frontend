@@ -1,4 +1,3 @@
-import { HeadingPrimary } from "@/components/common/heading-primary";
 import { fetchPublicData } from "@/utils/api-utils";
 import { Testimonial } from "@/utils/types";
 import { TestimonialSectionClient } from "./testimonial-section-client";
