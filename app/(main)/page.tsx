@@ -11,6 +11,14 @@ import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
 import { TestimonialSection } from "@/components/homepage/testimonial/testimonial-section";
 import ProductList from "@/components/products/product-list";
 
+export const revalidate = 60; // Revalidate every 60 seconds
+
+export const metadata = {
+  title: "German Butcher - Premium Quality Meat Products",
+  description: "Discover premium quality meat products at German Butcher. Fresh cuts, sausages, and more delivered to your doorstep.",
+  keywords: "german butcher, meat products, fresh meat, sausages, premium quality",
+};
+
 export default function Home() {
   return (
     <main className="min-h-screen">
