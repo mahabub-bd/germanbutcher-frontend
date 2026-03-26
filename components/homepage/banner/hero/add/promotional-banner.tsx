@@ -19,7 +19,7 @@ interface PromotionalCarouselProps {
 }
 
 const CarouselSkeleton = React.memo(() => (
-  <div className="relative overflow-hidden w-full h-[250px] bg-gray-100 animate-pulse rounded-lg" />
+  <div className="relative overflow-hidden w-full h-62.5 bg-gray-100 animate-pulse rounded-lg" />
 ));
 CarouselSkeleton.displayName = "CarouselSkeleton";
 
@@ -66,7 +66,7 @@ const PromotionalCarousel = ({
 
   if (error || banners.length === 0) {
     return (
-      <div className="h-[250px] flex items-center justify-center bg-gray-100 rounded-lg text-gray-500">
+      <div className="h-62.5 flex items-center justify-center bg-gray-100 rounded-lg text-gray-500">
         {error || "No banners available"}
       </div>
     );
@@ -85,13 +85,13 @@ const PromotionalCarousel = ({
           {banners.map((banner) => (
             <CarouselItem
               key={banner.id}
-              className="pl-0.5 md:pl-4 md:basis-1/2 basis-full"
+              className="relative pl-0.5 md:pl-4 md:basis-1/2 basis-full"
             >
-              <div className="relative w-full h-[180px] sm:h-[200px] md:h-[220px] rounded-sm overflow-hidden">
+              <div className="relative w-full h-45 sm:h-50 md:h-55 rounded-sm overflow-hidden">
                 {banner.targetUrl ? (
                   <Link
                     href={banner.targetUrl}
-                    className="block w-full h-full"
+                    className="relative block w-full h-full"
                     aria-label={banner.title}
                   >
                     <Image

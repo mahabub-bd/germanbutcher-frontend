@@ -93,7 +93,7 @@ export default function ProductCard({
     >
       <Link href={`/product/${product?.slug}`} className="block">
         {/* Image Container */}
-        <div className="w-full aspect-[3/2] bg-gray-100 overflow-hidden relative mb-3">
+        <div className="w-full aspect-3/2 bg-gray-100 overflow-hidden relative mb-3">
           {product?.attachment?.url && (
             <Image
               src={product.attachment.url}
@@ -108,7 +108,7 @@ export default function ProductCard({
             />
           )}
           {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           {/* Out of Stock Overlay */}
           {isOutOfStock && (
             <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
@@ -125,15 +125,15 @@ export default function ProductCard({
           {isDiscountActive &&
             product.discountType &&
             product.discountValue && (
-              <div className="absolute top-[2px] right-[2px] z-10">
+              <div className="absolute top-0.5 right-0.5 z-10">
                 <div className="relative w-18 h-18 animate-[spin_3s_linear_infinite]">
                   {/* Outer ring */}
                   <div className="absolute inset-0 rounded-full border-4 border-dashed border-primaryColor/30 animate-[spin_4s_linear_infinite_reverse]"></div>
 
                   {/* Main badge with 3D effect */}
-                  <div className="absolute inset-2 bg-gradient-to-br from-red-800 via-primaryColor to-orange-800 rounded-full shadow-[0_0_20px_rgba(239,68,68,0.5)] transform hover:scale-110 transition-transform duration-300">
+                  <div className="absolute inset-2 bg-linear-to-br from-red-800 via-primaryColor to-orange-800 rounded-full shadow-[0_0_20px_rgba(239,68,68,0.5)] transform hover:scale-110 transition-transform duration-300">
                     {/* Inner shine effect */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent rounded-full"></div>
+                    <div className="absolute inset-0 bg-linear-to-tr from-white/20 to-transparent rounded-full"></div>
                   </div>
 
                   {/* Content - counter-rotate to keep text upright */}

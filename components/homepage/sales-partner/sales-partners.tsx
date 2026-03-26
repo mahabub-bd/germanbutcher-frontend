@@ -50,10 +50,10 @@ export async function SalesPartnersCompact({
           {salesPartners.slice(0, 12).map((partner, index) => (
             <div
               key={partner.Id}
-              className="group flex items-center justify-center 
-                         aspect-[3/2]
+              className="group relative flex items-center justify-center
+                         aspect-3/2
                          bg-white rounded-lg shadow-sm border border-primaryColor/20
-                         hover:shadow-md hover:border-gray-200 
+                         hover:shadow-md hover:border-gray-200
                          transition-all duration-300 hover:scale-105 p-3 sm:p-4"
             >
               <div className="relative w-full h-full">

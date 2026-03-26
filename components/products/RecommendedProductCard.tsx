@@ -40,8 +40,8 @@ export default async function RecommendedProductCard({
         className="flex flex-col w-full h-full"
       >
         {/* Image Container */}
-        <div className="w-[180px] h-[140px] absolute -top-[90px] left-1/2 -translate-x-1/2 bg-gray-100 rounded-md overflow-hidden mb-3">
-          <div>
+        <div className="w-45 h-35 absolute -top-22.5 left-1/2 -translate-x-1/2 bg-gray-100 rounded-md overflow-hidden mb-3">
+          <div className="relative w-full h-full">
             {product?.attachment?.url && (
               <Image
                 src={product.attachment.url}

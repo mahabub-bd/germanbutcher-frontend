@@ -27,7 +27,7 @@ export function CategoryCard({
     >
       <div className="flex w-full items-center justify-center">
         <div
-          className={`relative md:w-[160px] md:h-[160px] w-[120px] h-[120px] rounded-full p-2 flex items-center justify-center   transition-all duration-300 `}
+          className={`relative md:w-40 md:h-40 w-30 h-30 rounded-full p-2 flex items-center justify-center   transition-all duration-300 `}
         >
           <Image
             src={category?.attachment?.url || "/category-placeholder.svg"}
@@ -43,7 +43,7 @@ export function CategoryCard({
       {/* Category Name */}
       <div className="p-2 text-center">
         <h3
-          className={`text-md sm:text-lg font-semibold md:text-xl transition-colors line-clamp-2 h-[50px] flex items-center justify-center ${
+          className={`text-md sm:text-lg font-semibold md:text-xl transition-colors line-clamp-2 h-12.5 flex items-center justify-center ${
             isActive ? "text-secondaryColor" : "text-primaryColor "
           }`}
         >

@@ -20,7 +20,7 @@ export default function CategoryCard({ category }: CategoryCardProps) {
       prefetch={true}
     >
       <div className="flex w-full items-center justify-center">
-        <div className="relative md:w-[180px] md:h-[180px] w-[96px] h-[96px] rounded-full p-2 flex items-center justify-center group-hover:border-primary transition-colors duration-200">
+        <div className="relative md:w-45 md:h-45 w-24 h-24 rounded-full p-2 flex items-center justify-center group-hover:border-primary transition-colors duration-200">
           <div className="relative w-full h-full rounded-full overflow-hidden bg-gray-100">
             <Image
               src={category?.attachment?.url || "/category-placeholder.svg"}
@@ -37,7 +37,7 @@ export default function CategoryCard({ category }: CategoryCardProps) {
       </div>
 
       <div className="p-2 text-center">
-        <h3 className="text-base sm:text-base font-semibold md:text-lg text-primaryColor group-hover:text-primary transition-colors duration-200 line-clamp-2 min-h-[40px] flex items-center justify-center">
+        <h3 className="text-base sm:text-base font-semibold md:text-lg text-primaryColor group-hover:text-primary transition-colors duration-200 line-clamp-2 min-h-10 flex items-center justify-center">
           {category?.name}
         </h3>
       </div>

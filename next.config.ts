@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
         hostname: "germanbutcher.s3.ap-southeast-1.amazonaws.com",
       },
     ],
+    qualities: [70, 75, 85, 100],
   },
 };
 

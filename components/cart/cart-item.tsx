@@ -114,7 +114,7 @@ export function CartItemProduct({ item }: { item: CartItem }) {
     return (
       <div className="flex gap-3 opacity-60 bg-red-50/30 p-2 rounded-md">
         {/* Product Image */}
-        <div className="relative aspect-[16/9] w-24 flex-shrink-0 overflow-hidden rounded-md border">
+        <div className="relative aspect-video w-24 shrink-0 overflow-hidden rounded-md border">
           {isImageLoading && (
             <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
               <Loader2 className="h-5 w-5 text-gray-400 animate-spin" />
@@ -145,7 +145,7 @@ export function CartItemProduct({ item }: { item: CartItem }) {
           </div>
 
           <div className="flex items-center gap-1 text-red-600 text-[11px] mb-2">
-            <AlertCircle className="h-2.5 w-2.5 flex-shrink-0" />
+            <AlertCircle className="h-2.5 w-2.5 shrink-0" />
             <span className="line-clamp-1">Product no longer available</span>
           </div>
 
@@ -172,7 +172,7 @@ export function CartItemProduct({ item }: { item: CartItem }) {
       {/* Product Image with Link */}
       <Link
         href={`/product/${item.product.slug}`}
-        className="relative aspect-[16/9] w-24 flex-shrink-0 overflow-hidden rounded-md border hover:border-primaryColor transition-colors block"
+        className="relative aspect-video w-24 shrink-0 overflow-hidden rounded-md border hover:border-primaryColor transition-colors block"
       >
         {/* Loading Skeleton */}
         {isImageLoading && (
@@ -215,7 +215,7 @@ export function CartItemProduct({ item }: { item: CartItem }) {
                 </h3>
               </Link>
               {hasActiveDiscountProduct && !isOutOfStock && (
-                <Tag className="h-3 w-3 text-green-600 flex-shrink-0" />
+                <Tag className="h-3 w-3 text-green-600 shrink-0" />
               )}
             </div>
 
@@ -247,7 +247,7 @@ export function CartItemProduct({ item }: { item: CartItem }) {
             {/* Stock Warnings */}
             {hasInsufficientStock && !isOutOfStock && (
               <div className="flex items-center gap-1 text-red-600 text-[11px] mb-1">
-                <AlertCircle className="h-2.5 w-2.5 flex-shrink-0" />
+                <AlertCircle className="h-2.5 w-2.5 shrink-0" />
                 <span>Only {item.product.stock} available</span>
               </div>
             )}
@@ -255,7 +255,7 @@ export function CartItemProduct({ item }: { item: CartItem }) {
             {/* Out of Stock Message */}
             {isOutOfStock && (
               <div className="flex items-center gap-1 text-red-600 text-[11px] mb-1">
-                <AlertCircle className="h-2.5 w-2.5 flex-shrink-0" />
+                <AlertCircle className="h-2.5 w-2.5 shrink-0" />
                 <span className="line-clamp-1">
                   Out of stock. Restocking soon!
                 </span>

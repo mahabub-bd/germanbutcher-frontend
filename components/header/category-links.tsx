@@ -18,7 +18,7 @@ function CategorySkeleton() {
       {Array.from({ length: 18 }).map((_, index) => (
         <div
           key={index}
-          className="group flex flex-col items-center p-2 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-100 animate-pulse"
+          className="group flex flex-col items-center p-2 rounded-2xl bg-linear-to-br from-gray-50 to-gray-100 border border-gray-100 animate-pulse"
         >
           {/* Image placeholder */}
           <div className="w-20 h-20 rounded-full bg-gray-300 mb-3 shadow-sm relative overflow-hidden" />
@@ -27,7 +27,7 @@ function CategorySkeleton() {
           <div className="h-4 w-20 rounded-md bg-gray-300" />
 
           {/* Optional subtle shine effect placeholder */}
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+          <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
         </div>
       ))}
     </div>
@@ -49,7 +49,7 @@ function CategoryError({ onRetry }: { onRetry: () => void }) {
       </p>
       <button
         onClick={onRetry}
-        className="px-6 py-3 bg-gradient-to-r from-primaryColor to-primaryColor/90 text-white rounded-xl font-medium hover:shadow-lg hover:scale-105 transition-all duration-200"
+        className="px-6 py-3 bg-linear-to-r from-primaryColor to-primaryColor/90 text-white rounded-xl font-medium hover:shadow-lg hover:scale-105 transition-all duration-200"
       >
         Try Again
       </button>
@@ -96,7 +96,7 @@ function CategoryItem({
             className="object-cover"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-primaryColor/10 to-primaryColor/20 flex items-center justify-center">
+          <div className="w-full h-full bg-linear-to-br from-primaryColor/10 to-primaryColor/20 flex items-center justify-center">
             <span className="text-primaryColor text-lg font-bold">
               {category.name.charAt(0).toUpperCase()}
             </span>
@@ -141,7 +141,7 @@ export function CategoryLinks({ onCategoryClick }: CategoryLinksProps) {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-gray-900 font-bold text-xl">Categories</h2>
-          <div className="h-1 w-12 bg-gradient-to-r from-primaryColor to-primaryColor/50 rounded-full" />
+          <div className="h-1 w-12 bg-linear-to-r from-primaryColor to-primaryColor/50 rounded-full" />
         </div>
         <CategorySkeleton />
       </div>
@@ -164,7 +164,7 @@ export function CategoryLinks({ onCategoryClick }: CategoryLinksProps) {
           <span className="text-xs text-gray-500 font-medium">
             {categories.length} available
           </span>
-          <div className="h-1 w-8 bg-gradient-to-r from-primaryColor to-primaryColor/50 rounded-full" />
+          <div className="h-1 w-8 bg-linear-to-r from-primaryColor to-primaryColor/50 rounded-full" />
         </div>
       </div>
 
