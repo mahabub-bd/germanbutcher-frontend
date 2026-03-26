@@ -1,31 +1,18 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { fetchDataPagination } from "@/utils/api-utils";
 import type { Banner } from "@/utils/types";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { memo, useEffect, useRef, useState, type TouchEvent } from "react";
 
-interface AnimatedCarouselProps {
+interface CarouselBannerClientProps {
+  banners: Banner[];
   autoPlayInterval?: number;
   showControls?: boolean;
-  activeOnly?: boolean;
   priority?: boolean;
 }
-
-const CarouselSkeleton = memo(() => (
-  <div className="relative overflow-hidden w-full h-100 sm:h-100 max-h-100 bg-gray-100 animate-pulse">
-    <div className="absolute inset-0 bg-linear-to-r from-gray-200 via-gray-100 to-gray-200 bg-size-[200%_100%]" />
-    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-      {[...Array(3)].map((_, i) => (
-        <div key={i} className="w-2 h-2 bg-gray-300 rounded-full" />
-      ))}
-    </div>
-  </div>
-));
-CarouselSkeleton.displayName = "CarouselSkeleton";
 
 const ControlButton = memo(
   ({
@@ -54,15 +41,12 @@ const ControlButton = memo(
 );
 ControlButton.displayName = "ControlButton";
 
-export const CarouselBanner = ({
+export function CarouselBannerClient({
+  banners,
   autoPlayInterval = 2000,
   showControls = true,
-  activeOnly = true,
   priority = true,
-}: AnimatedCarouselProps) => {
-  const [banners, setBanners] = useState<Banner[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+}: CarouselBannerClientProps) {
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -71,38 +55,6 @@ export const CarouselBanner = ({
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
   const touchThreshold = 50; // px
-
-  useEffect(() => {
-    let isMounted = true;
-    const fetchBanners = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-
-        const response = (await fetchDataPagination(
-          "banners?type=main&position=top"
-        )) as { data: Banner[] };
-
-        if (!isMounted) return;
-        const filtered = activeOnly
-          ? response.data.filter((b) => b.isActive)
-          : response.data;
-        setBanners(filtered);
-        setCurrent(0);
-      } catch (err) {
-        if (!isMounted) return;
-        console.error("Failed to fetch banners:", err);
-        setError("Failed to load banners");
-      } finally {
-        if (isMounted) setIsLoading(false);
-      }
-    };
-
-    fetchBanners();
-    return () => {
-      isMounted = false;
-    };
-  }, [activeOnly]);
 
   // autoplay
   useEffect(() => {
@@ -180,30 +132,10 @@ export const CarouselBanner = ({
     touchEndX.current = null;
   };
 
-  if (isLoading) return <CarouselSkeleton />;
-
-  if (error || banners.length === 0)
-    return (
-      <div className="relative overflow-hidden w-full h-100 sm:h-100 max-h-100 bg-gray-100 flex items-center justify-center">
-        <div className="text-center p-8">
-          <p className="text-gray-500 mb-4">
-            {error || "No banners available"}
-          </p>
-          <Button
-            onClick={() => window.location.reload()}
-            variant="outline"
-            className="text-sm min-w-11 min-h-11"
-          >
-            Retry
-          </Button>
-        </div>
-      </div>
-    );
-
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-87.5 sm:h-100 max-h-125 2xl:h-125 focus-within:outline-none"
+      className="relative w-full h-[350px] sm:h-[400px] max-h-[500px] 2xl:h-[500px] focus-within:outline-none"
       role="region"
       aria-label="Featured banners carousel"
       aria-live="polite"
@@ -221,7 +153,6 @@ export const CarouselBanner = ({
           transition: opacity 700ms ease-in-out;
           will-change: opacity;
         }
-        /* small decorative dots (optional) */
         .dots {
           display: flex;
           gap: 0.5rem;
@@ -271,7 +202,7 @@ export const CarouselBanner = ({
                 quality={idx === 0 ? 85 : 70}
               />
               {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               {/* Content */}
               <div className="absolute top-0 left-0 p-3 sm:p-4 lg:p-6 xl:p-8 w-full h-full text-white">
                 <div className="flex container items-center justify-center sm:justify-start h-full xl:px-24">
@@ -351,6 +282,4 @@ export const CarouselBanner = ({
       </div>
     </section>
   );
-};
-
-export default CarouselBanner;
+}

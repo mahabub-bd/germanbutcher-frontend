@@ -1,15 +1,9 @@
+export const dynamic = "force-dynamic";
+
 import MonthlyOrderReportList from "@/components/admin/reports/monthly-orders/monthly-order-list";
 import { fetchProtectedData } from "@/utils/api-utils";
 
-interface ResolvedSearchParams {
-  [key: string]: string | string[] | undefined;
-}
-
-interface Props {
-  searchParams: Promise<ResolvedSearchParams>;
-}
-
-export default async function MonthlyOrderReportPage({ searchParams }: Props) {
+export default async function MonthlyOrderReportPage() {
   let monthlyData: any[] = [];
 
   try {

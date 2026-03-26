@@ -1,33 +1,20 @@
 "use client";
 
 import { HeadingPrimary } from "@/components/common/heading-primary";
-import { fetchData } from "@/utils/api-utils";
 import { Testimonial } from "@/utils/types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { TestimonialCard } from "./testimonial-card";
 
-export function TestimonialSection() {
+interface TestimonialSectionClientProps {
+  testimonials: Testimonial[];
+}
+
+export function TestimonialSectionClient({
+  testimonials,
+}: TestimonialSectionClientProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleCount, setVisibleCount] = useState(3);
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-
-  useEffect(() => {
-    const fetchTestimonials = async () => {
-      try {
-        const response: Testimonial[] = await fetchData(
-          "testimonials?isPublish=true"
-        );
-        setTestimonials(response);
-      } catch (err) {
-        console.error("Error fetching testimonials:", err);
-
-        setTestimonials([]);
-      }
-    };
-
-    fetchTestimonials();
-  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -88,7 +75,7 @@ export function TestimonialSection() {
               {testimonials.map((testimonial) => (
                 <div
                   key={testimonial.id}
-                  className="w-full sm:w-1/2 lg:w-1/3 shrink-0 px-2"
+                  className="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-2"
                 >
                   <TestimonialCard testimonial={testimonial} />
                 </div>
@@ -105,7 +92,7 @@ export function TestimonialSection() {
               className={`p-3 rounded-full shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-red-200 ${
                 currentIndex === 0
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-linear-to-r from-red-500 to-yellow-500 text-white hover:shadow-2xl hover:scale-110"
+                  : "bg-gradient-to-r from-red-500 to-yellow-500 text-white hover:shadow-2xl hover:scale-110"
               }`}
               aria-label="Previous testimonials"
             >
@@ -123,7 +110,7 @@ export function TestimonialSection() {
                   className={`h-3 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-300
                     ${
                       currentIndex === index
-                        ? "w-12 bg-linear-to-r from-red-500 to-yellow-500 shadow-lg"
+                        ? "w-12 bg-gradient-to-r from-red-500 to-yellow-500 shadow-lg"
                         : "w-3 bg-gray-300 hover:bg-gray-400"
                     }`}
                   aria-label={`Go to testimonial group ${index + 1}`}
@@ -138,7 +125,7 @@ export function TestimonialSection() {
               className={`p-3 rounded-full shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-red-200 ${
                 currentIndex >= testimonials.length - visibleCount
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-linear-to-r from-red-500 to-yellow-500 text-white hover:shadow-2xl hover:scale-110"
+                  : "bg-gradient-to-r from-red-500 to-yellow-500 text-white hover:shadow-2xl hover:scale-110"
               }`}
               aria-label="Next testimonials"
             >

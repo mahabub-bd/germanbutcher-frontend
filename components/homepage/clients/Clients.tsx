@@ -1,5 +1,5 @@
 import { Marquee } from "@/components/ui/marquee";
-import { fetchData } from "@/utils/api-utils";
+import { fetchPublicData } from "@/utils/api-utils";
 import { Client } from "@/utils/types";
 import Image from "next/image";
 import type React from "react";
@@ -10,7 +10,7 @@ interface ClientMarqueeProps {
 
 async function getClients(): Promise<Client[]> {
   try {
-    const response = await fetchData("clients");
+    const response = await fetchPublicData("clients");
     if (Array.isArray(response)) {
       return response as Client[];
     } else {

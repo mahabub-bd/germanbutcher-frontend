@@ -1,4 +1,4 @@
-import { fetchData } from "@/utils/api-utils";
+import { fetchPublicData } from "@/utils/api-utils";
 import { SalesPartner } from "@/utils/types";
 import Image from "next/image";
 import type React from "react";
@@ -10,7 +10,7 @@ interface SalesPartnersProps {
 
 async function getSalesPartners(): Promise<SalesPartner[]> {
   try {
-    const response = await fetchData("sales-partners");
+    const response = await fetchPublicData("sales-partners");
     if (Array.isArray(response)) {
       return response as SalesPartner[];
     } else {

@@ -1,6 +1,6 @@
 import { HeadingPrimary } from "@/components/common/heading-primary";
-import PromotionalCarousel from "@/components/homepage/banner/hero/add/promotional-banner";
-import CarouselBanner from "@/components/homepage/banner/hero/carousel-banner";
+import { PromotionalCarousel } from "@/components/homepage/banner/hero/add/promotional-banner-server";
+import { CarouselBanner } from "@/components/homepage/banner/hero/carousel-banner-server";
 import BrandList from "@/components/homepage/brands/brand-list";
 import CategoryList from "@/components/homepage/Category/category-list";
 
@@ -8,7 +8,7 @@ import Client from "@/components/homepage/clients/Clients";
 import CustomerLoveSection from "@/components/homepage/customer-love/customer-love-section";
 import { SalesPartnersCompact } from "@/components/homepage/sales-partner/sales-partners";
 import { NewsletterSection } from "@/components/homepage/subscriber/newsletter";
-import { TestimonialSection } from "@/components/homepage/testimonial/testimonial-section";
+import { TestimonialSection } from "@/components/homepage/testimonial/testimonial-section-server";
 import ProductList from "@/components/products/product-list";
 
 export const revalidate = 60; // Revalidate every 60 seconds

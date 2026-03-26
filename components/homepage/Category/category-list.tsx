@@ -8,7 +8,7 @@ function CategoryCardSkeleton() {
   return (
     <div className="group block rounded-lg overflow-hidden animate-pulse">
       <div className="flex w-full items-center justify-center">
-        <div className="relative md:w-[150px] md:h-[150px] w-[100px] h-[100px] rounded-full p-2 flex items-center justify-center border-2 border-dashed border-gray-200">
+        <div className="relative md:w-37.5 md:h-37.5 w-25 h-25 rounded-full p-2 flex items-center justify-center border-2 border-dashed border-gray-200">
           <div className="w-full h-full rounded-full bg-gray-200" />
         </div>
       </div>

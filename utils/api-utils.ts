@@ -138,6 +138,40 @@ export async function fetchDataPagination<T>(endpoint: string): Promise<T> {
     throw error;
   }
 }
+
+// Public fetch function for non-authenticated endpoints (supports ISR)
+export async function fetchPublicData<T>(endpoint: string): Promise<T> {
+  const url = `${apiUrl}/${endpoint}`;
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      next: { revalidate: 60 }, // Enable ISR with 60s revalidation
+    });
+
+    if (!response.ok) {
+      let errorMessage;
+      try {
+        const errorData = await response.json();
+        errorMessage =
+          errorData.message ||
+          errorData.error ||
+          `HTTP error! Status: ${response.status}`;
+      } catch {
+        errorMessage = `HTTP error! Status: ${response.status}`;
+      }
+      throw new Error(errorMessage);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error: unknown) {
+    console.error(`Error fetching public data from ${endpoint}:`, error);
+    throw error;
+  }
+}
 export async function postData<T = any>(
   endpoint: string,
   values?: any
