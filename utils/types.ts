@@ -576,6 +576,16 @@ export interface Recipe {
   updatedBy: User;
 }
 
+export enum ActionTaken {
+  REPLIED_VIA_EMAIL = "replied_via_email",
+  CALLED_CUSTOMER = "called_customer",
+  PROVIDED_PRODUCT_INFO = "provided_product_info",
+  ISSUE_RESOLVED = "issue_resolved",
+  ORDER_PLACED = "order_placed",
+  REFUND_PROCESSED = "refund_processed",
+  OTHER = "other",
+}
+
 export interface ContactMessage {
   id: number;
   name: string;
@@ -583,6 +593,8 @@ export interface ContactMessage {
   mobile?: string;
   message: string;
   contactStatus: "pending" | "in_progress" | "resolved" | "closed";
+  actionTaken?: ActionTaken | null;
+  responseNotes?: string | null;
   createdAt: string;
   updatedAt: string;
   handledById?: number | null;
