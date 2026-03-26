@@ -20,7 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { deleteData, fetchProtectedData, fetchDataPagination, patchData } from "@/utils/api-utils";
+import { deleteData, fetchDataPagination, fetchProtectedData, patchData } from "@/utils/api-utils";
 import type { ContactMessage } from "@/utils/types";
 import { ActionTaken } from "@/utils/types";
 import {
@@ -28,23 +28,23 @@ import {
   CheckCircle,
   Clock,
   Eye,
+  FileText,
   Filter,
   Mail,
   MessageSquare,
   MoreHorizontal,
+  Package,
   Phone,
+  PhoneCall,
+  RefreshCw,
   Search,
+  Send,
+  ShoppingCart,
   Trash2,
   XCircle,
-  FileText,
-  Package,
-  RefreshCw,
-  ShoppingCart,
-  PhoneCall,
-  Send,
 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import DeleteConfirmationDialog from "../delete-confirmation-dialog";
 import { LoadingIndicator } from "../loading-indicator";
@@ -68,7 +68,7 @@ interface StatusUpdateModalProps {
   onUpdateStatus: (status: ContactStatus) => void;
   onActionChange: (action: ActionTaken | "") => void;
   onNotesChange: (notes: string) => void;
-  responseNotesRef: React.RefObject<HTMLTextAreaElement>;
+  responseNotesRef: React.RefObject<HTMLTextAreaElement | null>;
   formatDate: (date: string) => string;
   getStatusBadge: (status: string) => React.ReactNode;
 }
@@ -115,9 +115,9 @@ function StatusUpdateModal({
 
         <div className="flex-1 overflow-y-auto p-5 space-y-4">
           {/* Customer Info */}
-          <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-neutral-800 dark:to-neutral-850 rounded-lg p-4 border border-gray-200 dark:border-neutral-700">
+          <div className="bg-linear-to-br from-slate-50 to-slate-100 dark:from-neutral-800 dark:to-neutral-850 rounded-lg p-4 border border-gray-200 dark:border-neutral-700">
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-linear-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shrink-0">
                 <span className="text-sm font-bold text-white">{message.name.charAt(0).toUpperCase()}</span>
               </div>
               <div className="flex-1 min-w-0">
@@ -146,7 +146,7 @@ function StatusUpdateModal({
 
           {/* Current Status */}
           <div className="flex items-center gap-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg p-3 border border-amber-200 dark:border-amber-800">
-            <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+            <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
             <div className="flex-1">
               <p className="text-xs text-amber-900 dark:text-amber-100 font-medium">Current: {message.contactStatus.replace("_", " ")}</p>
             </div>
