@@ -23,18 +23,14 @@ import { useState } from "react";
 
 /**
  * Check if an order can be refunded
- * Order must have payments and be either paid or cancelled, but not delivered
+ * Order must have payment status of "need_refund" and have payments with paid amount
  */
 export function canRefundOrder(order: Order): boolean {
   const hasPayments = !!(order.payments && order.payments.length > 0);
   const hasPaidAmount = order.paidAmount > 0;
-  const isPaidOrCancelled =
-    order.paymentStatus === "paid" ||
-    order.paymentStatus === "completed" ||
-    order.orderStatus === "cancelled";
-  const isNotDelivered = order.orderStatus !== "delivered";
+  const isNeedRefund = order.paymentStatus === "need_refund";
 
-  return hasPayments && hasPaidAmount && isPaidOrCancelled && isNotDelivered;
+  return hasPayments && hasPaidAmount && isNeedRefund;
 }
 
 interface OrderActionsProps {
@@ -61,6 +57,7 @@ export function OrderActions({
 
   const canCancel = canCancelOrder(order);
   const canRefund = canRefundOrder(order);
+  const isNeedRefundOnly = order.paymentStatus === "need_refund";
 
   const handleGeneratePDF = async () => {
     setIsGeneratingPDF(true);
@@ -110,95 +107,114 @@ export function OrderActions({
 
         {/* Right Section: Action Buttons */}
         <div className="flex items-center gap-1.5 flex-wrap">
-          {/* Refund */}
-          {canRefund && (
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => setShowRefundModal(true)}
-              className="gap-1.5 h-8 text-xs"
-            >
-              <RefreshCw className="size-3.5" />
-              <span className="xs:inline">Refund</span>
-            </Button>
-          )}
-
-          {/* Cancel */}
-          {canCancel && (
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => setShowCancelModal(true)}
-              className="gap-1.5 h-8 text-xs"
-            >
-              <X className="size-3.5" />
-              <span className="xs:inline">Cancel</span>
-            </Button>
-          )}
-
-          {/* Edit */}
-          {order.orderStatus !== "delivered" && order.orderStatus !== "cancelled" && (
-            <Link href={`/admin/order/${order.id}/edit`}>
-              <Button size="sm" className="gap-1.5 h-8 text-xs">
-                <FileEdit className="size-3.5" />
-                <span className="xs:inline">Edit</span>
-              </Button>
-            </Link>
-          )}
-
-          {/* Update Payment */}
-          {order.paymentStatus !== "completed" && order.paymentStatus !== "need_refund" && order.paymentStatus !== "refund_complete" && order.orderStatus !== "cancelled" && (
-            <Link href={`/admin/order/${order.id}/payment`}>
-              <Button size="sm" className="gap-1.5 h-8 text-xs">
-                <CreditCard className="size-3.5" />
-                <span className="xs:inline">Payment</span>
-              </Button>
-            </Link>
-          )}
-
-          {/* Print - Only show if onThermalPrint is provided */}
-          {onThermalPrint && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleThermalPrint}
-              disabled={isPrinting}
-              className="gap-1.5 h-8 text-xs"
-            >
-              {isPrinting ? (
-                <>
-                  <Clock className="size-3.5 animate-spin" />
-                  <span className="xs:inline">Printing...</span>
-                </>
-              ) : (
-                <>
-                  <Printer className="size-3.5" />
-                  <span className=" xs:inline">Print</span>
-                </>
+          {isNeedRefundOnly ? (
+            <>
+              {/* Only show Refund button when payment status is need_refund */}
+              {canRefund && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setShowRefundModal(true)}
+                  className="gap-1.5 h-8 text-xs"
+                >
+                  <RefreshCw className="size-3.5" />
+                  <span className="xs:inline">Refund</span>
+                </Button>
               )}
-            </Button>
-          )}
+            </>
+          ) : (
+            <>
+              {/* Refund */}
+              {canRefund && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setShowRefundModal(true)}
+                  className="gap-1.5 h-8 text-xs"
+                >
+                  <RefreshCw className="size-3.5" />
+                  <span className="xs:inline">Refund</span>
+                </Button>
+              )}
 
-          {/* PDF */}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleGeneratePDF}
-            disabled={isGeneratingPDF}
-            className="gap-1.5 h-8 text-xs"
-          >
-            {isGeneratingPDF ? (
-              <>
-                <Clock className="size-3.5 animate-spin" />
-                <span className="xs:inline">Generating...</span>
-              </>
-            ) : (
-              <>
-                <Download className="size-3.5" />
-                <span className="xs:inline">PDF</span>
-              </>
-            )}
-          </Button>
+              {/* Cancel */}
+              {canCancel && (
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => setShowCancelModal(true)}
+                  className="gap-1.5 h-8 text-xs"
+                >
+                  <X className="size-3.5" />
+                  <span className="xs:inline">Cancel</span>
+                </Button>
+              )}
+
+              {/* Edit */}
+              {order.orderStatus !== "delivered" && order.orderStatus !== "cancelled" && (
+                <Link href={`/admin/order/${order.id}/edit`}>
+                  <Button size="sm" className="gap-1.5 h-8 text-xs">
+                    <FileEdit className="size-3.5" />
+                    <span className="xs:inline">Edit</span>
+                  </Button>
+                </Link>
+              )}
+
+              {/* Update Payment */}
+              {order.paymentStatus !== "completed" && order.paymentStatus !== "need_refund" && order.paymentStatus !== "refund_complete" && order.orderStatus !== "cancelled" && (
+                <Link href={`/admin/order/${order.id}/payment`}>
+                  <Button size="sm" className="gap-1.5 h-8 text-xs">
+                    <CreditCard className="size-3.5" />
+                    <span className="xs:inline">Payment</span>
+                  </Button>
+                </Link>
+              )}
+
+              {/* Print - Only show if onThermalPrint is provided */}
+              {onThermalPrint && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleThermalPrint}
+                  disabled={isPrinting}
+                  className="gap-1.5 h-8 text-xs"
+                >
+                  {isPrinting ? (
+                    <>
+                      <Clock className="size-3.5 animate-spin" />
+                      <span className="xs:inline">Printing...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Printer className="size-3.5" />
+                      <span className=" xs:inline">Print</span>
+                    </>
+                  )}
+                </Button>
+              )}
+
+              {/* PDF */}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleGeneratePDF}
+                disabled={isGeneratingPDF}
+                className="gap-1.5 h-8 text-xs"
+              >
+                {isGeneratingPDF ? (
+                  <>
+                    <Clock className="size-3.5 animate-spin" />
+                    <span className="xs:inline">Generating...</span>
+                  </>
+                ) : (
+                  <>
+                    <Download className="size-3.5" />
+                    <span className="xs:inline">PDF</span>
+                  </>
+                )}
+              </Button>
+            </>
+          )}
         </div>
       </div>
 
