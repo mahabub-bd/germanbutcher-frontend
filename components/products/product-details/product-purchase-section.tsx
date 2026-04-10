@@ -1,22 +1,13 @@
 "use client";
 
+import { Facebook, Linkedin } from "@/components/icons/brand-icons";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { AddToWishlistButton } from "@/components/wishlist/add-to-wishlist-button";
 import { useCartContext } from "@/contexts/cart-context";
 import { hasActiveDiscount } from "@/utils/product-utils";
 import type { Product, User } from "@/utils/types";
-import {
-  Facebook,
-  Linkedin,
-  Loader2,
-  Mail,
-  MessageCircle,
-  Minus,
-  Plus,
-  Share2,
-  ShoppingCart,
-} from "lucide-react";
+import { Loader2, Mail, MessageCircle, Minus, Plus, Share2, ShoppingCart } from "lucide-react";
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -192,7 +183,7 @@ export function ProductPurchaseSection({
               >
                 <Minus className="w-4 h-4" />
               </Button>
-              <div className="px-2 py-1 font-semibold text-base min-w-[4rem] text-center bg-white border-x border-gray-200">
+              <div className="px-2 py-1 font-semibold text-base min-w-4 text-center bg-white border-x border-gray-200">
                 {isUpdating ? (
                   <Loader2 className="w-4 h-4 mx-auto animate-spin" />
                 ) : (

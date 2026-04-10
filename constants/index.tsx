@@ -12,14 +12,8 @@ import {
   TokyoKitchen,
 } from "@/public/images";
 import { FAQItem, SisterConcern } from "@/utils/types";
-import {
-  Facebook,
-  Instagram,
-  Mail,
-  MapPin,
-  Phone,
-  Youtube,
-} from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
+import { Facebook, Instagram, Youtube } from "@/components/icons/brand-icons";
 
 export type FeatureData = {
   iconSrc: string;
