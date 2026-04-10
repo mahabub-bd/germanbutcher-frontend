@@ -180,16 +180,6 @@ export default async function RootLayout({
     <html lang="en" className={fontVariables}>
       <GoogleTagManager gtmId="GTM-5H5N8NBL" />
       <GoogleAnalytics gaId="G-JP7KEDH4NK" />
-      <head>
-        {/* Preload the local font for better performance */}
-        <link
-          rel="preload"
-          href="/font/CastorTwoW01-Regular.woff"
-          as="font"
-          type="font/woff"
-          crossOrigin="anonymous"
-        />
-      </head>
       <body className={fontVariables} suppressHydrationWarning>
         <Toaster richColors />
 

@@ -27,7 +27,7 @@ export function ProductPurchaseSection({
   user,
 }: ProductPurchaseSectionProps) {
 
-  
+
   const { addItem, updateItemQuantity, cart } = useCartContext();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -52,8 +52,8 @@ export function ProductPurchaseSection({
     ? product.discountType === "fixed"
       ? Number.parseFloat(String(product.discountValue ?? "0"))
       : (product.sellingPrice *
-          Number.parseFloat(String(product.discountValue ?? "0"))) /
-        100
+        Number.parseFloat(String(product.discountValue ?? "0"))) /
+      100
     : 0;
 
   const finalPrice = product.sellingPrice - discountAmount;
@@ -233,7 +233,7 @@ export function ProductPurchaseSection({
         {/* Action Buttons */}
         <div className="space-y-3 grid md:grid-cols-2 grid-cols-1 gap-8">
           <Button
-            className="w-full bg-gradient-to-r from-primaryColor to-secondaryColor hover:from-secondaryColor hover:to-primaryColor text-white py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+            className="w-full bg-linear-to-r from-primaryColor to-secondaryColor hover:from-secondaryColor hover:to-primaryColor text-white py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
             disabled={product.stock === 0 || isAddingToCart || isUpdating}
             onClick={handleAddToCart}
           >
