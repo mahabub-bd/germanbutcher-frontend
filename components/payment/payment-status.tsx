@@ -28,7 +28,16 @@ export default function PaymentStatusPage({
       const originalItemPrice = item.product.sellingPrice * item.quantity;
       originalSubtotal += originalItemPrice;
 
-      if (item.product.discountValue) {
+      // Only calculate discount if it's valid and not expired
+      const hasValidDiscount =
+        item.product.discountValue &&
+        item.product.discountValue > 0 &&
+        item.product.discountStartDate &&
+        item.product.discountEndDate &&
+        new Date(item.product.discountStartDate) <= new Date() &&
+        new Date(item.product.discountEndDate) >= new Date();
+
+      if (hasValidDiscount) {
         let discountAmount = 0;
         if (item.product.discountType === "percentage") {
           discountAmount =
@@ -212,13 +221,24 @@ export default function PaymentStatusPage({
             </CardHeader>
             <CardContent className="space-y-4">
               {order.items.map((item: OrderItem) => {
-                const discountedPrice = calculateDiscountedPrice(
-                  item.product.sellingPrice,
-                  item.product.discountType ?? "",
-                  (item.product.discountValue ?? 0).toString()
-                );
-                const hasDiscount =
-                  item.product.discountValue && item.product.discountValue > 0;
+                // Check if discount is valid and not expired
+                const hasValidDiscount =
+                  item.product.discountValue &&
+                  item.product.discountValue > 0 &&
+                  item.product.discountStartDate &&
+                  item.product.discountEndDate &&
+                  new Date(item.product.discountStartDate) <= new Date() &&
+                  new Date(item.product.discountEndDate) >= new Date();
+
+                const discountedPrice = hasValidDiscount
+                  ? calculateDiscountedPrice(
+                      item.product.sellingPrice,
+                      item.product.discountType ?? "",
+                      (item.product.discountValue ?? 0).toString()
+                    )
+                  : item.product.sellingPrice;
+
+                const hasDiscount = hasValidDiscount;
 
                 return (
                   <div
