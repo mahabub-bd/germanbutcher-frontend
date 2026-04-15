@@ -750,9 +750,14 @@ export function ProductForm({
                     <FormControl>
                       <Input
                         type="number"
-                        step="0.01"
-                        placeholder="0.00"
+                        step="1"
+                        min="0"
+                        placeholder="0"
                         {...field}
+                        onChange={(e) => {
+                          const value = parseInt(e.target.value);
+                          field.onChange(isNaN(value) ? 0 : value);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
@@ -768,9 +773,14 @@ export function ProductForm({
                     <FormControl>
                       <Input
                         type="number"
-                        step="0.01"
-                        placeholder="0.00"
+                        step="1"
+                        min="0"
+                        placeholder="0"
                         {...field}
+                        onChange={(e) => {
+                          const value = parseInt(e.target.value);
+                          field.onChange(isNaN(value) ? 0 : value);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />

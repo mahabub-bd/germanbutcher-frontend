@@ -100,11 +100,11 @@ const productSchema = z
     description: z.string().min(1, "Description is required"),
     productDetails: z.string().optional(),
     sellingPrice: z.union([z.string(), z.number()])
-      .transform((val) => typeof val === 'string' ? parseFloat(val) : val)
-      .pipe(z.number().min(0.01, "Unit price must be greater than 0")),
+      .transform((val) => typeof val === 'string' ? parseInt(val) : val)
+      .pipe(z.number().int().min(1, "Sale price must be a whole number greater than 0")),
     purchasePrice: z.union([z.string(), z.number()])
-      .transform((val) => typeof val === 'string' ? parseFloat(val) : val)
-      .pipe(z.number().min(0.01, "Unit price must be greater than 0")),
+      .transform((val) => typeof val === 'string' ? parseInt(val) : val)
+      .pipe(z.number().int().min(1, "Purchase price must be a whole number greater than 0")),
     stock: z.union([z.string(), z.number()])
       .transform((val) => typeof val === 'string' ? parseInt(val, 10) : val)
       .pipe(z.number().int().nonnegative("Stock cannot be negative")),
