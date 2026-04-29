@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { User } from "@/utils/types";
 
@@ -121,29 +120,6 @@ export default function AdminProfileView({ user }: AdminProfileViewProps) {
               </div>
             </div>
 
-            <Separator />
-
-            <div className="space-y-2">
-              <h3 className="text-sm font-medium">Quick Stats</h3>
-              <div className="grid grid-cols-2 gap-2">
-                <div className="rounded-md bg-muted p-2">
-                  <p className="text-xs text-muted-foreground">Products</p>
-                  <p className="text-lg font-bold">128</p>
-                </div>
-                <div className="rounded-md bg-muted p-2">
-                  <p className="text-xs text-muted-foreground">Orders</p>
-                  <p className="text-lg font-bold">1,024</p>
-                </div>
-                <div className="rounded-md bg-muted p-2">
-                  <p className="text-xs text-muted-foreground">Customers</p>
-                  <p className="text-lg font-bold">512</p>
-                </div>
-                <div className="rounded-md bg-muted p-2">
-                  <p className="text-xs text-muted-foreground">Revenue</p>
-                  <p className="text-lg font-bold">$24.5k</p>
-                </div>
-              </div>
-            </div>
           </CardContent>
         </Card>
 

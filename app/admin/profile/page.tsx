@@ -1,6 +1,6 @@
 import { getUser } from "@/actions/auth";
 import AdminProfileView from "@/components/admin/profile/admin-profile-view";
-import { fetchData } from "@/utils/api-utils";
+import { fetchProtectedData } from "@/utils/api-utils";
 import { User } from "@/utils/types";
 import { notFound } from "next/navigation";
 
@@ -11,7 +11,7 @@ export const metadata = {
 
 export default async function AdminProfilePage() {
   const user = await getUser();
-  const userdata = await fetchData<User>(`users/${user?.id}`);
+  const userdata = await fetchProtectedData<User>(`users/${user?.id}`);
 
   if (!user || !user.isAdmin) {
     notFound();

@@ -331,37 +331,37 @@ export function DeliveryManDetail() {
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 pt-2">
                             <div className="p-2 rounded-lg bg-blue-500/5 border border-blue-500/20">
                               <p className="text-xs font-medium text-blue-700 mb-0.5">
-                                Customer
+                                Order Value
                               </p>
-                              <p className="font-semibold capitalize text-xs">
-                                {order.user?.name || "N/A"}
+                              <p className="font-semibold text-xs">
+                                ৳{Number(order.totalValue).toLocaleString()}
                               </p>
                               <p className="text-xs text-muted-foreground">
-                                {order.user?.mobileNumber || "N/A"}
+                                {order.totalDiscount > 0 ? `Discount: ৳${Number(order.totalDiscount).toLocaleString()}` : "No discount"}
                               </p>
                             </div>
 
                             <div className="p-2 rounded-lg bg-green-500/5 border border-green-500/20">
                               <p className="text-xs font-medium text-green-700 mb-0.5">
-                                Payment Method
+                                Payment Status
                               </p>
                               <p className="font-semibold capitalize text-xs">
-                                {order.paymentMethod.name}
+                                {order.paymentStatus}
                               </p>
                               <p className="text-xs text-muted-foreground">
-                                Paid: ৳{order.paidAmount}
+                                Paid: ৳{Number(order.paidAmount).toLocaleString()}
                               </p>
                             </div>
 
                             <div className="p-2 rounded-lg bg-purple-500/5 border border-purple-500/20">
                               <p className="text-xs font-medium text-purple-700 mb-0.5">
-                                Delivery Address
+                                Order Status
                               </p>
                               <p className="font-semibold capitalize text-xs">
-                                {order.address.address}, {order.address.area}
+                                {order.orderStatus}
                               </p>
-                              <p className="text-xs text-muted-foreground capitalize">
-                                {order.address.city}, {order.address.division}
+                              <p className="text-xs text-muted-foreground">
+                                Updated: {formatDateTime(order.updatedAt)}
                               </p>
                             </div>
                           </div>

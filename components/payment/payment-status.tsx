@@ -153,7 +153,7 @@ export default function PaymentStatusPage({
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${config.bgGradient} p-4`}>
+    <div className={`min-h-screen bg-linear-to-br ${config.bgGradient} p-4`}>
       <div className="container mx-auto py-8">
         {/* Status Header */}
         <div className="text-center mb-8">
