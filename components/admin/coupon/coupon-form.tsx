@@ -59,7 +59,10 @@ export function CouponForm({ coupon, mode, onSuccess }: CouponFormProps) {
       minOrderAmount: coupon?.minOrderAmount
         ? Number(coupon.minOrderAmount)
         : null,
-      excludedItemIds: coupon?.excludedItemIds || [],
+      // Map excludedItems to excludedItemIds for the form
+      excludedItemIds: coupon?.excludedItems
+        ? coupon.excludedItems.map((item) => item.id)
+        : coupon?.excludedItemIds || [],
     },
   });
 

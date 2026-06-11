@@ -426,6 +426,7 @@ export interface Coupon {
   validUntil: Date;
   isActive: boolean;
   excludedItemIds?: number[];
+  excludedItems?: Product[];
   createdAt: Date;
   updatedAt: Date;
 }

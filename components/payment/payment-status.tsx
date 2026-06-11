@@ -315,7 +315,7 @@ export default function PaymentStatusPage({
                       Coupon Discount ({order.coupon.code}):
                     </span>
                     <span className="text-green-600">
-                      -{formatCurrencyEnglish(order.coupon.value)}
+                      -{formatCurrencyEnglish(orderSummary.couponDiscount)}
                     </span>
                   </div>
                 )}

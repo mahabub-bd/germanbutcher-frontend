@@ -3,10 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import {
-  applyCoupon as applyCouponApi,
-  validateCoupon,
-} from "@/lib/coupon-service";
+import { applyCoupon as applyCouponApi } from "@/lib/coupon-service";
 import { deleteData, patchData, postData } from "@/utils/api-utils";
 import {
   backendCouponToLocalCoupon,
@@ -96,10 +93,14 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
 
           if (appliedCoupon) {
             try {
-              await applyCouponApi(
-                appliedCoupon.code,
-                getCartTotals().discountedSubtotal
-              );
+              // Build cartItems array from local cart for coupon application
+              const cartItems = localCart.items
+                .filter((item) => item.product?.isActive !== false)
+                .map((item) => ({
+                  productId: item.productId,
+                  price: item.product.sellingPrice,
+                }));
+              await applyCouponApi(appliedCoupon.code, cartItems);
             } catch (error) {
               console.error("Error syncing coupon:", error);
             }
@@ -303,12 +304,19 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
     setIsLoading(true);
 
     try {
-      const validationRes = await validateCoupon(code);
-      if (validationRes.statusCode !== 200) {
-        throw new Error(validationRes.message || "Coupon validation failed");
-      }
+      // Get cart items with product data
+      const items =
+        isLoggedIn && serverCart ? serverCart.items : localCart?.items || [];
+      const activeItems = items.filter((item) => item.product.isActive !== false);
 
-      const applyRes = await applyCouponApi(code, subtotal);
+      // Build cartItems array with productId and price
+      const cartItems = activeItems.map((item) => ({
+        productId: item.product.id,
+        price: item.product.sellingPrice,
+      }));
+
+      // Apply coupon with cart items
+      const applyRes = await applyCouponApi(code, cartItems);
 
       if (applyRes.statusCode === 200 && applyRes.data) {
         const couponData = backendCouponToLocalCoupon(
@@ -326,7 +334,15 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
           serverRevalidate("/checkout");
         }
 
-        toast.success("Coupon applied successfully");
+        // Show success message with excluded products info if any
+        if (applyRes.data.excludedProducts && applyRes.data.excludedProducts.length > 0) {
+          const excludedNames = applyRes.data.excludedProducts.map((p) => p.name).join(", ");
+          toast.success("Coupon applied successfully", {
+            description: `Discount not applicable for: ${excludedNames}`,
+          });
+        } else {
+          toast.success("Coupon applied successfully");
+        }
         return;
       } else {
         throw new Error(applyRes.message || "Failed to apply coupon");
@@ -338,8 +354,7 @@ export function useCart({ serverCart, isLoggedIn }: UseCartProps) {
         clearLocalCoupon();
       }
 
-    toast.error(error instanceof Error ? error.message : "Invalid coupon code");
-    
+      toast.error(error instanceof Error ? error.message : "Invalid coupon code");
     } finally {
       setIsLoading(false);
     }
