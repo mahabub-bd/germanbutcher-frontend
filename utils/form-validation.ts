@@ -272,6 +272,7 @@ const couponSchema = z.object({
       message: "End date is required"
     })),
   isActive: z.boolean(),
+  excludedItemIds: z.array(z.number()).optional(),
 });
 
 const discountFormSchema = z.object({

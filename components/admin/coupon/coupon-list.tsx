@@ -25,6 +25,7 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock,
+  Eye,
   MoreHorizontal,
   Pencil,
   Plus,
@@ -247,6 +248,13 @@ export function CouponList() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link
+                          href={`/admin/marketing/coupon/${coupon?.code}/usage-logs`}
+                        >
+                          <Eye className="mr-2 h-4 w-4" /> Usage Logs
+                        </Link>
+                      </DropdownMenuItem>
                       <DropdownMenuItem asChild>
                         <Link
                           href={`/admin/marketing/coupon/${coupon?.code}/edit`}

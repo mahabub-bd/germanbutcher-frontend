@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { MultiSelect } from "@/components/ui/multi-select";
 import {
   Select,
   SelectContent,
@@ -20,12 +21,12 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { patchData, postData } from "@/utils/api-utils";
+import { patchData, postData, fetchProtectedData } from "@/utils/api-utils";
 import { couponSchema } from "@/utils/form-validation";
-import type { Coupon } from "@/utils/types";
+import type { Coupon, Product } from "@/utils/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Calendar, DollarSign, Settings, Tag } from "lucide-react";
-import { useState } from "react";
+import { Box, Calendar, DollarSign, Settings, Tag } from "lucide-react";
+import { useEffect, useState } from "react";
 import { type Resolver, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type * as z from "zod";
@@ -38,6 +39,8 @@ interface CouponFormProps {
 
 export function CouponForm({ coupon, mode, onSuccess }: CouponFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [products, setProducts] = useState<{ value: number; label: string }[]>([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
   type CouponFormValues = z.output<typeof couponSchema>;
 
   const form = useForm<CouponFormValues>({
@@ -56,16 +59,46 @@ export function CouponForm({ coupon, mode, onSuccess }: CouponFormProps) {
       minOrderAmount: coupon?.minOrderAmount
         ? Number(coupon.minOrderAmount)
         : null,
+      excludedItemIds: coupon?.excludedItemIds || [],
     },
   });
+
+  // Fetch products for the multi-select
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setIsLoadingProducts(true);
+      try {
+        const response = await fetchProtectedData("products");
+        const productList = (response as Product[]).map((product) => ({
+          value: product.id,
+          label: product.name,
+        }));
+        setProducts(productList);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        toast.error("Failed to load products");
+      } finally {
+        setIsLoadingProducts(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const onSubmit = async (values: CouponFormValues) => {
     setIsSubmitting(true);
     try {
+      // Convert Date objects to ISO strings for API
+      const submitData = {
+        ...values,
+        validFrom: values.validFrom ? values.validFrom.toISOString() : undefined,
+        validUntil: values.validUntil ? values.validUntil.toISOString() : undefined,
+      };
+
       if (mode === "create") {
-        await postData("coupons", values);
+        await postData("coupons", submitData);
       } else if (mode === "edit" && coupon) {
-        await patchData(`coupons/${coupon.id}`, values);
+        await patchData(`coupons/${coupon.id}`, submitData);
       }
       onSuccess();
     } catch (error) {
@@ -127,19 +160,19 @@ export function CouponForm({ coupon, mode, onSuccess }: CouponFormProps) {
               </h3>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
               <FormField
                 control={form.control}
                 name="discountType"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel>Type</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select type" />
                         </SelectTrigger>
                         <SelectContent>
@@ -159,7 +192,7 @@ export function CouponForm({ coupon, mode, onSuccess }: CouponFormProps) {
                 control={form.control}
                 name="value"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel>
                       {form.watch("discountType") === "percentage"
                         ? "Discount (%)"
@@ -167,6 +200,7 @@ export function CouponForm({ coupon, mode, onSuccess }: CouponFormProps) {
                     </FormLabel>
                     <FormControl>
                       <Input
+                        className="w-full"
                         type="number"
                         step={
                           form.watch("discountType") === "percentage"
@@ -180,17 +214,16 @@ export function CouponForm({ coupon, mode, onSuccess }: CouponFormProps) {
                   </FormItem>
                 )}
               />
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <FormField
                 control={form.control}
                 name="minOrderAmount"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel>Min Order (৳)</FormLabel>
                     <FormControl>
                       <Input
+                        className="w-full"
                         type="number"
                         step="0.01"
                         {...field}
@@ -206,15 +239,16 @@ export function CouponForm({ coupon, mode, onSuccess }: CouponFormProps) {
                 )}
               />
 
-              {form.watch("discountType") === "percentage" && (
+              {form.watch("discountType") === "percentage" ? (
                 <FormField
                   control={form.control}
                   name="maxDiscountAmount"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="w-full">
                       <FormLabel>Max Discount (৳)</FormLabel>
                       <FormControl>
                         <Input
+                          className="w-full"
                           type="number"
                           step="0.01"
                           {...field}
@@ -229,6 +263,13 @@ export function CouponForm({ coupon, mode, onSuccess }: CouponFormProps) {
                     </FormItem>
                   )}
                 />
+              ) : (
+                <div className="FormItem w-full">
+                  <FormLabel>Max Discount (৳)</FormLabel>
+                  <div className="text-sm text-muted-foreground italic">
+                    N/A for fixed
+                  </div>
+                </div>
               )}
             </div>
           </section>
@@ -331,6 +372,40 @@ export function CouponForm({ coupon, mode, onSuccess }: CouponFormProps) {
                 )}
               />
             </div>
+          </section>
+
+          <Separator />
+
+          {/* Excluded Products */}
+          <section className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Box className="h-4 w-4 text-primary" />
+              <h3 className="font-semibold text-sm uppercase tracking-wide">
+                Excluded Products
+              </h3>
+            </div>
+
+            <FormField
+              control={form.control}
+              name="excludedItemIds"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Products to Exclude from Discount</FormLabel>
+                  <FormControl>
+                    <MultiSelect
+                      options={products}
+                      selected={field.value || []}
+                      onChange={field.onChange}
+                      placeholder="Select products to exclude..."
+                      disabled={isLoadingProducts}
+                    />
+                  </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Select products that should not receive this discount
+                  </p>
+                </FormItem>
+              )}
+            />
           </section>
         </div>
 

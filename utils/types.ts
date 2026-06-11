@@ -425,8 +425,64 @@ export interface Coupon {
   validFrom: Date;
   validUntil: Date;
   isActive: boolean;
+  excludedItemIds?: number[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface CouponUsageLog {
+  id: number;
+  couponCode: string;
+  discountAmount: number | string;
+  orderTotal: number | string;
+  discountType: "percentage" | "fixed";
+  discountValue: number | string;
+  createdAt: string;
+  coupon: {
+    id: number;
+    code: string;
+    discountType: "percentage" | "fixed";
+    value: number | string;
+    maxDiscountAmount?: number | string | null;
+    minOrderAmount?: number | string | null;
+    timesUsed?: number;
+    maxUsage?: number;
+    validFrom?: string;
+    validUntil?: string;
+    isActive: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+  };
+  order: {
+    id: number;
+    orderNo: string;
+    orderStatus: string;
+    paymentStatus: string;
+    totalValue: number | string;
+    totalDiscount: number | string;
+    paidAmount?: number | string;
+    createdAt: string;
+    updatedAt?: string;
+  };
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    mobileNumber: string;
+    profilePhoto?: {
+      id: number;
+      url: string;
+      fileName: string;
+    };
+  };
+}
+
+export interface CouponUsageStats {
+  couponCode: string;
+  totalUses: number;
+  totalDiscountGiven: string;
+  avgDiscountAmount: string;
+  totalOrderValue: string;
 }
 
 export interface ShippingMethod {
