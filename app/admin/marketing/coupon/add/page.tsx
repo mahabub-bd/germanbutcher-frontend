@@ -1,5 +1,3 @@
-"use client";
-
 import { CouponForm } from "@/components/admin/coupon/coupon-form";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardTitle } from "@/components/ui/card";
@@ -16,7 +14,7 @@ export default function AddCouponPage() {
   };
 
   return (
-    <div className=" space-y-6 border rounded-sm">
+    <div className="space-y-6 border rounded-sm">
       <div className="md:p-4 p-2">
         <div className="flex justify-between items-center mb-6">
           <div>
@@ -26,9 +24,7 @@ export default function AddCouponPage() {
             </CardDescription>
           </div>
           <Button asChild variant="outline">
-            <Link href="/admin/marketing/coupon/coupon-list">
-              Back to Coupon List
-            </Link>
+            <Link href="/admin/coupons">Back to Coupon List</Link>
           </Button>
         </div>
       </div>

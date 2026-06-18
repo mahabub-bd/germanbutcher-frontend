@@ -32,6 +32,7 @@ import {
   Tag,
   Trash2,
   XCircle,
+  FileText,
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -285,12 +286,24 @@ export function CouponList() {
   return (
     <>
       <div className="w-full md:p-6 p-2">
-        <PageHeader
-          title="Coupons"
-          description="Manage discount coupons and promotions"
-          actionLabel="Add Coupon"
-          actionHref="/admin/marketing/coupon/add"
-        />
+        <div className="flex items-center justify-between mb-6">
+          <PageHeader
+            title="Coupons"
+            description="Manage discount coupons and promotions"
+            actionLabel="Add Coupon"
+            actionHref="/admin/marketing/coupon/add"
+          />
+          <Button
+            variant="outline"
+            className="ml-2"
+            asChild
+          >
+            <Link href="/admin/marketing/coupon/usage-logs">
+              <FileText className="mr-2 h-4 w-4" />
+              View All Usage Logs
+            </Link>
+          </Button>
+        </div>
 
         {/* Summary Cards */}
         {coupons.length > 0 && (
