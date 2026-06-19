@@ -1,3 +1,5 @@
+"use client";
+
 import { CouponForm } from "@/components/admin/coupon/coupon-form";
 import { LoadingIndicator } from "@/components/admin/loading-indicator";
 import { Button } from "@/components/ui/button";

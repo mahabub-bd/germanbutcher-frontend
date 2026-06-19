@@ -1,3 +1,5 @@
+"use client";
+
 import { CouponForm } from "@/components/admin/coupon/coupon-form";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardTitle } from "@/components/ui/card";
