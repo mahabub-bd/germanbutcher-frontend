@@ -1,13 +1,7 @@
-import React from "react";
-
-export default function AuthLayout({
+export default function Layout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="flex  flex-col items-center justify-center 2xl:py-20 py-5">
-      {children}
-    </div>
-  );
+  return children;
 }

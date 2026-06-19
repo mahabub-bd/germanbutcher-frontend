@@ -4,7 +4,7 @@ import { mobileLogin, verifyOtp } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type React from "react";
 import { useEffect, useState } from "react";
@@ -60,7 +60,7 @@ export default function MobileLoginFormWithServerActions() {
       }
 
       toast.info("OTP Sent", {
-        description: `OTP Send to ${formattedNumber}`,
+        description: `OTP sent to ${formattedNumber}`,
       });
 
       setShowOtpForm(true);
@@ -85,7 +85,19 @@ export default function MobileLoginFormWithServerActions() {
     if (value && index < 5) {
       const nextInput = document.getElementById(`otp-${index + 1}`);
       if (nextInput) {
-        nextInput.focus();
+        (nextInput as HTMLInputElement).focus();
+      }
+    }
+  };
+
+  const handleOtpKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      const prevInput = document.getElementById(`otp-${index - 1}`);
+      if (prevInput) {
+        (prevInput as HTMLInputElement).focus();
       }
     }
   };
@@ -132,21 +144,29 @@ export default function MobileLoginFormWithServerActions() {
     }
   };
 
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {!showOtpForm ? (
-        <form onSubmit={handleSendOtp} className="space-y-4">
+        <form onSubmit={handleSendOtp} className="space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="phone">Mobile Number</Label>
+            <Label htmlFor="phone" className="text-gray-700 font-medium">
+              Mobile Number
+            </Label>
             <div className="flex">
-              <div className="flex items-center justify-center px-3 border border-r-0 rounded-l-md bg-muted text-muted-foreground">
+              <div className="flex items-center justify-center px-4 h-9  border border-r-0 rounded-l-md bg-gray-50 text-gray-600 font-medium select-none">
                 +880
               </div>
               <Input
                 id="phone"
                 type="tel"
                 placeholder="1XXXXXXXXX"
-                className="rounded-l-none"
+                className="rounded-l-none h-9 border-gray-200 focus:border-primaryColor focus:ring-primaryColor/20"
                 value={phoneNumber}
                 onChange={handlePhoneNumberChange}
                 maxLength={10}
@@ -154,11 +174,16 @@ export default function MobileLoginFormWithServerActions() {
                 disabled={isLoading}
               />
             </div>
-            <p className="text-xs text-muted-foreground">
-              Enter your 10-digit mobile number without the country code
+            <p className="text-xs text-gray-500">
+              Enter your 10-digit mobile number starting with 1
             </p>
           </div>
-          <Button type="submit" className="w-full" disabled={isLoading}>
+
+          <Button
+            type="submit"
+            className="w-full h-9 bg-primaryColor text-white hover:bg-primaryColor/90 font-medium shadow-lg shadow-primaryColor/20 transition-all"
+            disabled={isLoading}
+          >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -170,12 +195,27 @@ export default function MobileLoginFormWithServerActions() {
           </Button>
         </form>
       ) : (
-        <form onSubmit={handleVerifyOtp} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="otp-0">Enter Verification Code</Label>
-            <p className="text-sm text-muted-foreground mb-2">
-              We&apos;ve sent a 6-digit code to +880 {phoneNumber}
-            </p>
+        <form onSubmit={handleVerifyOtp} className="space-y-5">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setShowOtpForm(false)}
+                className="p-1 -ml-1 hover:bg-gray-100 rounded-full transition-colors"
+                disabled={isLoading}
+              >
+                <ArrowLeft className="h-5 w-5 text-gray-600" />
+              </button>
+              <div>
+                <Label className="text-gray-700 font-medium">
+                  Enter Verification Code
+                </Label>
+                <p className="text-sm text-gray-500 mt-1">
+                  Sent to <span className="font-medium text-gray-700">+880 {phoneNumber}</span>
+                </p>
+              </div>
+            </div>
+
             <div className="flex gap-2 justify-between">
               {otp.map((digit, index) => (
                 <Input
@@ -186,34 +226,36 @@ export default function MobileLoginFormWithServerActions() {
                   maxLength={1}
                   value={digit}
                   onChange={(e) => handleOtpChange(index, e.target.value)}
-                  className="w-12 h-12 text-center text-lg"
+                  onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                  className="w-12 h-12 text-center text-xl font-semibold border-gray-200 focus:border-primaryColor focus:ring-primaryColor/20"
                   required
                   disabled={isLoading}
                 />
               ))}
             </div>
+
+            <div className="flex justify-center">
+              <Button
+                type="button"
+                variant="link"
+                className="p-0 h-auto text-sm text-gray-600 hover:text-gray-900"
+                onClick={handleSendOtp}
+                disabled={!otpExpired || isLoading}
+              >
+                {otpExpired ? (
+                  "Resend OTP"
+                ) : (
+                  <>Resend in <span className="font-mono ml-1">{formatTime(timer)}</span></>
+                )}
+              </Button>
+            </div>
           </div>
-          <div className="flex justify-between items-center">
-            <Button
-              type="button"
-              variant="link"
-              className="p-0 h-auto"
-              onClick={() => setShowOtpForm(false)}
-              disabled={isLoading}
-            >
-              Change Number
-            </Button>
-            <Button
-              type="button"
-              variant="link"
-              className="p-0 h-auto"
-              onClick={handleSendOtp}
-              disabled={!otpExpired || isLoading}
-            >
-              {otpExpired ? "Resend OTP" : `Resend in ${timer}s`}
-            </Button>
-          </div>
-          <Button type="submit" className="w-full" disabled={isLoading}>
+
+          <Button
+            type="submit"
+            className="w-full h-9 bg-primaryColor text-white hover:bg-primaryColor/90 font-medium shadow-lg shadow-primaryColor/20 transition-all"
+            disabled={isLoading}
+          >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
