@@ -77,9 +77,11 @@ export default function EmailLoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email" className="text-gray-700 font-medium">
+          Email Address
+        </Label>
         <Input
           id="email"
           type="email"
@@ -88,12 +90,19 @@ export default function EmailLoginForm() {
           onChange={(e) => setEmail(e.target.value)}
           required
           disabled={isLoading}
+          className="h-9 border-gray-200 focus:border-primaryColor focus:ring-primaryColor/20"
         />
       </div>
+
       <div className="space-y-2">
         <div className="flex justify-between items-center">
-          <Label htmlFor="password">Password</Label>
-          <Link className="p-0 h-auto text-xs" href="/auth/forgot-password">
+          <Label htmlFor="password" className="text-gray-700 font-medium">
+            Password
+          </Label>
+          <Link
+            className="text-sm text-primaryColor hover:text-primaryColor/80 transition-colors font-medium"
+            href="/auth/forgot-password"
+          >
             Forgot password?
           </Link>
         </div>
@@ -104,37 +113,37 @@ export default function EmailLoginForm() {
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="pr-10"
+            className="h-9 pr-12 border-gray-200 focus:border-primaryColor focus:ring-primaryColor/20"
             required
             disabled={isLoading}
           />
-          <Button
+          <button
             type="button"
-            variant="ghost"
-            size="icon"
-            className="absolute right-0 top-0 h-full px-3"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
             onClick={() => setShowPassword(!showPassword)}
             disabled={isLoading}
           >
             {showPassword ? (
-              <EyeOffIcon className="h-4 w-4 text-muted-foreground" />
+              <EyeOffIcon className="h-5 w-5" />
             ) : (
-              <EyeIcon className="h-4 w-4 text-muted-foreground" />
+              <EyeIcon className="h-5 w-5" />
             )}
-            <span className="sr-only">
-              {showPassword ? "Hide password" : "Show password"}
-            </span>
-          </Button>
+          </button>
         </div>
       </div>
-      <Button type="submit" className="w-full" disabled={isLoading}>
+
+      <Button
+        type="submit"
+        className="w-full h-9 bg-primaryColor text-white hover:bg-primaryColor/90 font-medium shadow-lg shadow-primaryColor/20 transition-all"
+        disabled={isLoading}
+      >
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Signing In...
           </>
         ) : (
-          "Sign In with Email"
+          "Sign In"
         )}
       </Button>
     </form>

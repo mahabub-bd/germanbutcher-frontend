@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { CouponUsageLogList } from "@/components/admin/coupon/coupon-usage-log-list";
 import { LoadingIndicator } from "@/components/admin/loading-indicator";
@@ -47,7 +47,7 @@ export default function CouponUsageLogsPage() {
   }
 
   return (
-    <div className=" space-y-6 border rounded-sm">
+    <div className="space-y-6 border rounded-sm">
       <CouponUsageLogList couponCode={code} />
     </div>
   );

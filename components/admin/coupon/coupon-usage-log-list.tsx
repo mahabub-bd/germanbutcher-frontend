@@ -4,6 +4,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Table,
   TableBody,
   TableCell,
@@ -11,10 +17,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  getAllCouponUsageLogs,
+  getCouponUsageLogsByCode,
+  getCouponUsageStats,
+} from "@/lib/coupon-usage-log-service";
 import { formatDateTime } from "@/lib/utils";
-import { fetchProtectedData } from "@/utils/api-utils";
 import { CouponUsageLog } from "@/utils/types";
-import { ArrowLeft, Calendar, DollarSign, Package, User } from "lucide-react";
+import { ArrowLeft, Calendar, DollarSign, Eye, MoreHorizontal, Package, User } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -34,24 +44,16 @@ export function CouponUsageLogList({ couponCode }: { couponCode?: string }) {
   const fetchLogs = async () => {
     setIsLoading(true);
     try {
-      const endpoint = couponCode
-        ? `coupon-usage-logs/coupon/${couponCode}`
-        : "coupon-usage-logs";
-      const response = await fetchProtectedData(endpoint);
-      setLogs(response as CouponUsageLog[]);
+      const logs = couponCode
+        ? await getCouponUsageLogsByCode(couponCode)
+        : await getAllCouponUsageLogs();
+      setLogs(logs);
 
       // Fetch stats if couponCode is provided
       if (couponCode) {
         try {
-          const statsResponse = await fetchProtectedData(
-            `coupon-usage-logs/stats/${couponCode}`
-          );
-          setStats(statsResponse as {
-            totalUses: number;
-            totalDiscountGiven: number | string;
-            avgDiscountAmount: number | string;
-            totalOrderValue: number | string;
-          });
+          const statsData = await getCouponUsageStats(couponCode);
+          setStats(statsData);
         } catch (error) {
           console.error("Error fetching stats:", error);
         }
@@ -115,8 +117,9 @@ export function CouponUsageLogList({ couponCode }: { couponCode?: string }) {
           description={couponCode ? "View coupon usage history and statistics" : "View all coupon usage history"}
         />
         <Button className="ml-2 bg-primaryColor text-primary-foreground hover:bg-primary/90" asChild>
-          <Link href="/admin/marketing/coupon">
-            <ArrowLeft className="h-4 w-4" />
+          <Link href="/admin/marketing/coupon/coupon-list">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Coupons
           </Link>
         </Button>
       </div>
@@ -185,6 +188,7 @@ export function CouponUsageLogList({ couponCode }: { couponCode?: string }) {
                 <TableHead>Order Status</TableHead>
                 <TableHead>Payment Status</TableHead>
                 <TableHead>Used At</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -237,6 +241,32 @@ export function CouponUsageLogList({ couponCode }: { couponCode?: string }) {
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
                     {formatDateTime(log.createdAt)}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Open menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem asChild>
+                          <Link
+                            href={`/admin/marketing/coupon/usage-logs/${log.id}/view`}
+                          >
+                            <Eye className="mr-2 h-4 w-4" /> View Details
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link
+                            href={`/admin/order-management/orders/${log.order.id}`}
+                          >
+                            <Package className="mr-2 h-4 w-4" /> View Order
+                          </Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}
